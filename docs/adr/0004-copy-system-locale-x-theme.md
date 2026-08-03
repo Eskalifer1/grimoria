@@ -1,0 +1,5 @@
+# UI copy sourced from a locale × theme resource from day one
+
+All UI text is accessed through a lookup (e.g. `t(key)`), backed by a resource keyed as `[locale][theme][key]` — even though v1 ships a single locale. Two axes exist because dark-fantasy re-skinning (theme) and localization (future feature #11) are independent concerns that would otherwise collide: hardcoding strings now and retrofitting an i18n layer later would mean touching every UI string a second time. Adding a locale later is then just adding a column to the resource, not restructuring how copy is consumed.
+
+**i18n library: `next-intl`**, adopted from day one even though v1 ships a single locale — the whole point of fixing the `[locale][theme][key]` shape early is to avoid retrofitting an i18n layer later, so bringing in the library at the same time is consistent with that reasoning rather than deferring it. `next-intl` is built for the Next.js App Router (server components, typed messages) rather than retrofitted onto it, unlike `i18next`/`react-i18next` which target the Pages Router more naturally.
