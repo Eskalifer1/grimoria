@@ -20,12 +20,24 @@ The app runs at http://localhost:3000.
 
 ## Scripts
 
-| Script            | What it does                                    |
-| ----------------- | ----------------------------------------------- |
-| `yarn dev`        | Development server                              |
-| `yarn build`      | Production build                                |
-| `yarn start`      | Serve the production build                      |
-| `yarn spellcheck` | cspell over the repo (code, docs, UI copy)      |
+| Script              | What it does                                            |
+| ------------------- | ------------------------------------------------------- |
+| `yarn dev`          | Development server                                      |
+| `yarn build`        | Production build                                        |
+| `yarn start`        | Serve the production build                              |
+| `yarn lint`         | Biome linter only                                       |
+| `yarn lint:fix`     | Biome linter, applying safe fixes                       |
+| `yarn format`       | Biome formatter, writing changes                        |
+| `yarn format:check` | Biome formatter in check mode                           |
+| `yarn check`        | Biome formatter + linter + import sorting, read-only    |
+| `yarn check:fix`    | The same, applying every safe fix                       |
+| `yarn ci`           | What CI runs — never writes to disk                     |
+| `yarn spellcheck`   | cspell over the repo (code, docs, UI copy)              |
+
+Biome is the single formatter and linter here; there is no Prettier or ESLint.
+Import order is enforced as an assist action, so the editor's "Format Document"
+alone won't fix it — run `yarn check:fix` (or let the committed workspace
+settings organize imports on save).
 
 ## Documentation
 

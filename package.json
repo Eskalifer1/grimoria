@@ -6,6 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "format": "biome format --write",
+    "format:check": "biome format",
+    "check": "biome check",
+    "check:fix": "biome check --write",
+    "ci": "biome ci",
     "spellcheck": "cspell lint --no-progress --show-suggestions"
   },
   "dependencies": {
@@ -14,6 +21,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.6",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",

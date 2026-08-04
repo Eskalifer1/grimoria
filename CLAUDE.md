@@ -4,6 +4,12 @@ This file loads into every session's context — keep it short. Details live in 
 
 Next.js (App Router) with Payload CMS 3 embedded (no separate backend or deployable — ADR-0005), Postgres on Neon, single Next.js project with no monorepo/workspaces (ADR-0006), `next-intl` for the locale × theme copy system from day one (ADR-0004), Tailwind CSS v4 + shadcn/ui for styling, custom gated `/admin/*` (ADR-0001) rather than Payload's built-in admin UI. Reasoning for each: `docs/adr/`.
 
+## Formatting & linting
+
+Biome is the single formatter and linter (no ESLint, no Prettier) — `biome.json`.
+Import order is an assist action, not formatting: `yarn check` is the honest
+check, `yarn check:fix` the honest fix. CI runs `yarn ci`.
+
 ## Package manager
 
 Yarn 4, pinned by `packageManager` + a committed release in `.yarn/releases` (no Corepack — `yarnPath` in `.yarnrc.yml` is what resolves `yarn` to 4.x). `nodeLinker: node-modules`, because Next.js and Payload don't expect Plug'n'Play.
