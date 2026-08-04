@@ -1,0 +1,68 @@
+# Project dictionary for Grimoria. One word per line, lower-case unless the
+# casing is part of the name. Keep the sections sorted.
+#
+# Add a word here when it is genuinely part of the project's vocabulary. For a
+# one-off (a quoted URL slug, a fixture string), prefer an inline
+# `cspell:ignore` comment in that file instead.
+
+# --- Product and dark-fantasy vocabulary ---
+arcane
+divination
+grimoire
+grimoires
+Grimoria
+incantation
+mage
+mages
+necromancer
+rune
+runes
+scrying
+sigil
+sigils
+spellbook
+warlock
+
+# --- Technology and tool names ---
+biome
+cspell
+dependabot
+neon
+nextjs
+payload
+payloadcms
+payloads
+playwright
+postgrest
+sentry
+shadcn
+supabase
+tailwindcss
+turbopack
+vercel
+vitest
+
+# --- Agent/process vocabulary (skills, workflow docs) ---
+ack
+acks
+subtasking
+wayfinder
+wayfinding
+
+# --- Config keys, CLI flags and file names ---
+autofix
+jsonc
+nodeLinker
+noopener
+noreferrer
+tsbuildinfo
+tsconfig
+yarnrc
+
+# --- Names ---
+Eskalifer
+
+# --- General English the bundled dictionaries happen to miss ---
+branchable
+lockdown
+logomark

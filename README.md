@@ -20,11 +20,12 @@ The app runs at http://localhost:3000.
 
 ## Scripts
 
-| Script       | What it does                          |
-| ------------ | ------------------------------------- |
-| `yarn dev`   | Development server                    |
-| `yarn build` | Production build                      |
-| `yarn start` | Serve the production build            |
+| Script            | What it does                                    |
+| ----------------- | ----------------------------------------------- |
+| `yarn dev`        | Development server                              |
+| `yarn build`      | Production build                                |
+| `yarn start`      | Serve the production build                      |
+| `yarn spellcheck` | cspell over the repo (code, docs, UI copy)      |
 
 ## Documentation
 

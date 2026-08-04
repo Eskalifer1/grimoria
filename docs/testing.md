@@ -6,4 +6,4 @@ Payload access-control logic (`Role`, `Visibility`) is tested against a real Pos
 
 ## CI required checks
 
-On every PR: install → `biome check` → `tsc --noEmit` → cspell → Vitest → `next build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage stabilizes.
+On every PR: install → `biome check` → `tsc --noEmit` → `yarn spellcheck` (cspell) → Vitest → `next build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage stabilizes.

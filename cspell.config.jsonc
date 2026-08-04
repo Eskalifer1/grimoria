@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+
+  // Check everything tracked in the repo rather than an allow-list of paths, so
+  // that new source, docs and UI copy resources (`messages/**`) are covered the
+  // moment they're added instead of when someone remembers to update this file.
+  // `**` skips dot-directories, so `.claude/**` (agent config, hooks, skills)
+  // is listed explicitly.
+  "files": ["**", ".claude/**"],
+  "useGitignore": true,
+  "ignorePaths": [
+    ".git/**",
+    ".yarn/**",
+    "yarn.lock",
+    "public/**",
+    "src/app/favicon.ico",
+    ".cspell/**",
+    ".claude/.docs-sync-acks/**"
+  ],
+
+  // Invented dark-fantasy vocabulary and technology names live here, not inline
+  // as `cspell:ignore` comments — a shared list is reviewable and reusable.
+  "dictionaryDefinitions": [
+    {
+      "name": "grimoria",
+      "path": "./.cspell/grimoria.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["grimoria"]
+}
