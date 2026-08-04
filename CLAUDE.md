@@ -6,7 +6,9 @@ Next.js (App Router) with Payload CMS 3 embedded (no separate backend or deploya
 
 ## Package manager
 
-Yarn.
+Yarn 4, pinned by `packageManager` + a committed release in `.yarn/releases` (no Corepack — `yarnPath` in `.yarnrc.yml` is what resolves `yarn` to 4.x). `nodeLinker: node-modules`, because Next.js and Payload don't expect Plug'n'Play.
+
+Yarn quarantines npm releases from the last few days. On `all versions ... are quarantined`, take the newest version that resolves rather than disabling the gate.
 
 ## Keep docs current
 
@@ -21,5 +23,5 @@ A `PreToolUse` hook on `git commit` denies a commit that stages non-doc changes 
 - **Exploring the codebase, using domain vocabulary, or checking prior decisions**: `docs/agents/domain.md` (how to consume `CONTEXT.md` and `docs/adr/`)
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` as it's actually built, not speculatively ahead of time
 - **Writing or running tests, or touching CI config**: `docs/testing.md`
-- **Creating a branch or a commit**: `docs/git-workflow.md`
+- **Creating a branch, committing (user commits, agent proposes the title), or closing an issue after commit**: `docs/git-workflow.md`
 - **Scoping a new review skill for this project**: `docs/agents/review-skills-roadmap.md`
