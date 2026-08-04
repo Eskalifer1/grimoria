@@ -31,7 +31,7 @@ What kind of work the issue represents:
 ## Workflow labels (outside the three dimensions)
 
 - `epic` — parent task that has subtasks now or will get them later, for quickly finding epics. Applies to a top-level feature issue that hasn't been broken down yet, and equally to a non-top-level issue that outgrows a single ticket and gets its own sub-issue breakdown directly, without going through `/to-spec` + `/to-tickets` (see the exception below — it replaces what an earlier draft of this doc called a "bare stub").
-- `ready-for-agent` — fully specified, ready for an AFK agent. Apply once a sub-issue has enough detail (acceptance criteria settled, no open questions) that an agent can pick it up and implement without further clarification — this is the label `/implement` should look for when picking work autonomously.
+- `ready-for-agent` — fully specified, ready for an AFK agent. Apply once a sub-issue has enough detail (acceptance criteria settled, no open questions) that an agent can pick it up and implement without further clarification. This label is **load-bearing**, not descriptive: it's the gate between the two sessions of the task flow (#66). A grilling session ends by writing its conclusions as a comment and applying this label; an implementation session refuses to start without it. Absent on a non-`epic` issue means "grill this first", not "implement it carefully".
 
 ## Not part of the taxonomy
 

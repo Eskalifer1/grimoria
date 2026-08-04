@@ -45,6 +45,7 @@ vitest
 # --- Agent/process vocabulary (skills, workflow docs) ---
 ack
 acks
+frontmatter
 subtasking
 wayfinder
 wayfinding
@@ -61,6 +62,7 @@ yarnrc
 
 # --- Names ---
 Eskalifer
+mattpocock
 
 # --- General English the bundled dictionaries happen to miss ---
 branchable
