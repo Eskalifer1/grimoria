@@ -1,4 +1,25 @@
 {
+  "permissions": {
+    "deny": [
+      "Bash(git push *--force*)",
+      "Bash(git push *-f *)",
+      "Bash(git push *-f)",
+      "Bash(git reset *--hard*)",
+      "Bash(git clean *-f*)",
+      "Bash(git clean *--force*)",
+      "Bash(git branch *-D*)",
+
+      "Bash(sudo *)",
+      "Bash(npm publish*)",
+      "Bash(yarn npm publish*)",
+      "Bash(vercel *--prod*)",
+
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(**/*.pem)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
