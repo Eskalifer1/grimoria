@@ -2,9 +2,31 @@
 
 Feature branches merge into `dev`; `dev` merges into `main` roughly weekly. `main` deploys continuously to Vercel production. Neon has two branches (`main`, `dev`), not one per PR. No pre-commit hooks currently.
 
-Commits follow Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, …).
-
 Branch off `dev`, not `main`.
+
+## Commit messages
+
+Conventional Commits. These ten types, no others:
+
+| Type | Use it when |
+| --- | --- |
+| `feat:` | new user-visible behavior |
+| `fix:` | shipped behavior was wrong |
+| `perf:` | same behavior, faster |
+| `refactor:` | restructured, behavior identical |
+| `style:` | formatter ran, no logic changed |
+| `test:` | tests only |
+| `docs:` | documentation only |
+| `ci:` | CI configuration only |
+| `chore:` | tooling, config, dependencies, repo upkeep |
+| `revert:` | undoing an earlier commit |
+
+`style:` is not about styling — palette, spacing and theming are `feat:`/`fix:`.
+
+The type describes the primary change, not every file touched: a `chore:` commit
+that also updates README stays `chore:`.
+
+Scopes (`feat(notes):`) are optional.
 
 ## Who commits
 
