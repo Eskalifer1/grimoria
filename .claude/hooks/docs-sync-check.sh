@@ -10,6 +10,14 @@ cd "${CLAUDE_PROJECT_DIR:-.}"
 input_json=$(cat 2>/dev/null || true)
 command_text=$(printf '%s' "$input_json" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
+# A PreToolUse `matcher` only matches the tool name, so this fires on every Bash
+# call — the "is this a commit?" filter has to live here. Bail before touching
+# the ack dir: acking on an unrelated command would spend this check's one
+# warning and let the real commit through silently.
+if ! printf '%s' "$command_text" | grep -qE '(^|[;&|(]|&&)[[:space:]]*git[[:space:]]+([^[:space:]|;&]+[[:space:]]+)*commit([[:space:]]|$)'; then
+  exit 0
+fi
+
 staged=$(git diff --cached --name-only 2>/dev/null || true)
 
 # `-a`/`--all` auto-stages tracked modifications as part of running the commit
