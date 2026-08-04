@@ -4,6 +4,8 @@ Feature branches merge into `dev`; `dev` merges into `main` roughly weekly. `mai
 
 Branch off `dev`, not `main`.
 
+**Not set up yet**: neither `dev` nor `main` exists — the repo's default branch is `master`, and branch protection is still to be configured (#43). Until that lands, work goes directly into `master`. The paragraph above describes the target, not today.
+
 ## Commit messages
 
 Conventional Commits. These ten types, no others:

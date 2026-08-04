@@ -12,9 +12,11 @@ A user-selectable `Theme` (see `CONTEXT.md`) that fully re-skins the product —
 
 ## How it's built
 
-Copy is sourced through a `locale × theme` resource (see the copy-system ADR) rather than hardcoded strings, so adding this theme doesn't require a separate one-off mechanism from whatever localization eventually uses.
+Copy is sourced through a `locale × theme` resource (see the copy-system ADR) rather than hardcoded strings, so adding this theme doesn't require a separate one-off mechanism from whatever localization eventually uses. Concretely, each theme is a full message catalog — `messages/en/dark-fantasy.json` alongside `messages/en/standard.json` — and the theme decides which one loads, so no component names a theme.
 
-**Storage**: logged-in users' choice persists on their User profile (syncs across devices); guests get a client-side cookie/localStorage value so the public notes page still respects their preference.
+**Storage**: logged-in users' choice persists on their User profile (syncs across devices); guests get a cookie, so the public notes page still respects their preference. It has to be a cookie rather than `localStorage` because the server resolves copy before rendering — see the copy-system ADR.
+
+**Switching**: the toggle has to reach the server and re-render, not just flip client state. Styling is CSS custom properties and would repaint on its own, but the copy would stay in the old tonality — so a half-switched page is the failure mode to watch for.
 
 ## Copy mapping (draft — expand as UI surfaces get built)
 

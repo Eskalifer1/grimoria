@@ -1,0 +1,11 @@
+{
+  "common": {
+    "appName": "Grimoria",
+    "tagline": "A grimoire binding to memory every spell you have ever learned."
+  },
+  "home": {
+    "title": "My grimoire",
+    "empty": "No spells are bound to your grimoire yet.",
+    "createNote": "Inscribe a spell"
+  }
+}

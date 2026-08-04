@@ -17,7 +17,8 @@
     "public/**",
     "src/app/favicon.ico",
     ".cspell/**",
-    ".claude/.docs-sync-acks/**"
+    ".claude/skills/**",
+    ".claude/hooks/**"
   ],
 
   // Invented dark-fantasy vocabulary and technology names live here, not inline

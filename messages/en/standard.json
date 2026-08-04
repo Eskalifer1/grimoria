@@ -1,0 +1,11 @@
+{
+  "common": {
+    "appName": "Grimoria",
+    "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
+  },
+  "home": {
+    "title": "My notes",
+    "empty": "You haven't written anything down yet.",
+    "createNote": "Create a note"
+  }
+}

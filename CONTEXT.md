@@ -17,7 +17,7 @@ An enum on User determining permission level: `user` (default), `moderator`, `ad
 _Avoid_: isAdmin flag, permission level (as a separate concept from Role).
 
 **Theme**:
-A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Persisted on the User profile when logged in; stored client-side (cookie/localStorage) for guests. Orthogonal to locale — see the copy system ADR. The dark-fantasy flavor mapping itself (what each term becomes) is documented separately, not here — this glossary stays implementation/flavor-free.
+A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Persisted on the User profile when logged in; stored in a cookie for guests — the server resolves copy, so it has to be able to read the theme (not `localStorage`) before rendering. Orthogonal to locale — see the copy system ADR. The dark-fantasy flavor mapping itself (what each term becomes) is documented separately, not here — this glossary stays implementation/flavor-free.
 _Avoid_: Skin (as the stored value's name — "Theme" is the field, dark-fantasy re-skinning is the feature built on top of it).
 
 **Note**:
