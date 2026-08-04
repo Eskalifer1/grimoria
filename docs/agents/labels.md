@@ -30,7 +30,7 @@ What kind of work the issue represents:
 
 ## Workflow labels (outside the three dimensions)
 
-- `epic` — parent task that has subtasks now or will get them later, for quickly finding epics. This is the label for a top-level feature issue that hasn't been broken down yet (see the exception below — it replaces what an earlier draft of this doc called a "bare stub").
+- `epic` — parent task that has subtasks now or will get them later, for quickly finding epics. Applies to a top-level feature issue that hasn't been broken down yet, and equally to a non-top-level issue that outgrows a single ticket and gets its own sub-issue breakdown directly, without going through `/to-spec` + `/to-tickets` (see the exception below — it replaces what an earlier draft of this doc called a "bare stub").
 - `ready-for-agent` — fully specified, ready for an AFK agent. Apply once a sub-issue has enough detail (acceptance criteria settled, no open questions) that an agent can pick it up and implement without further clarification — this is the label `/implement` should look for when picking work autonomously.
 
 ## Not part of the taxonomy
@@ -43,10 +43,10 @@ Use GitHub's **native issue dependencies**, not a label — see `docs/agents/iss
 
 ## Ticket depth policy
 
-- **Project Setup** epic (tooling, lint, CI/CD, test infra skeleton, security infra skeleton, skills, design system foundations): full detailed sub-issue breakdown, since this work starts immediately.
+- **Project Setup** epic (tooling, lint, CI/CD, test infra skeleton, security infra skeleton, skills, design system foundations): full detailed sub-issue breakdown, since this work starts immediately. A Project Setup sub-issue that itself turns out to span too many distinct concerns for one ticket can be broken down the same way — it picks up the `epic` label (see the exception below) and gets its own sub-issues parented to it, rather than staying flat under Project Setup directly.
 - **All product features** (core and future alike): a single issue — title + a short body capturing any decisions already resolved for that feature (e.g. content format, visibility rules) — no subtask breakdown. Subtasking happens later, per-feature, in a dedicated session closer to implementation.
 - A feature that's really an enhancement to a bigger feature (e.g. RTE is an enhancement to Notes) is a line in the parent issue's body, not its own issue.
 
 ## Exception: epic issues carry only `priority:*` and `epic`
 
-A top-level feature issue gets **only** the `epic` label plus a `priority:*` label — no `area` and no `type`, since the issue hasn't been broken down yet and usually spans both frontend and backend. `area`/`type` only get assigned once the feature is actually taken through `/to-spec` + `/to-tickets`: each resulting sub-issue then gets its own `area` (frontend sub-issue vs. backend sub-issue) and `type` label. Don't tag the parent with both `frontend` and `backend` as a shortcut — wait for the real breakdown.
+An issue carrying the `epic` label gets **only** `epic` plus a `priority:*` label — no `area` and no `type` — for as long as it hasn't been broken down into its own sub-issues, since it usually spans more than one area/type. This covers both a top-level feature issue (broken down via `/to-spec` + `/to-tickets`) and a non-top-level issue that outgrows a single ticket and gets its own sub-issue breakdown directly. Once broken down, `area`/`type` get assigned only to the resulting sub-issues, never to the parent `epic` issue itself. Don't tag the parent with more than one `area` (e.g. both `frontend` and `backend`) as a shortcut — wait for the real breakdown.
