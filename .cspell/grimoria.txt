@@ -52,6 +52,7 @@ wayfinding
 
 # --- Config keys, CLI flags and file names ---
 autofix
+cooldown
 jsonc
 nodeLinker
 noopener
@@ -68,3 +69,4 @@ mattpocock
 branchable
 lockdown
 logomark
+triaging

@@ -29,5 +29,6 @@ A `PreToolUse` hook on `git commit` denies a commit that stages non-doc changes 
 - **Exploring the codebase, using domain vocabulary, or checking prior decisions**: `docs/agents/domain.md` (how to consume `CONTEXT.md` and `docs/adr/`)
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` as it's actually built, not speculatively ahead of time
 - **Writing or running tests, or touching CI config**: `docs/testing.md`
+- **Changing how dependencies get updated, or triaging a Dependabot PR**: `docs/dependency-updates.md`
 - **Creating a branch, committing (user commits, agent proposes the title), or closing an issue after commit**: `docs/git-workflow.md`
 - **Scoping a new review skill for this project**: `docs/agents/review-skills-roadmap.md`

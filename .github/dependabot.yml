@@ -1,0 +1,61 @@
+# Dependabot version updates.
+#
+# This file governs *version* updates only — routine bumps because a newer
+# release exists. Security updates (bumps because a CVE was published against
+# the installed version) are a separate feature, enabled in repository
+# Settings → Code security; they ignore the schedule, the grouping and the
+# open-PR limit below, and arrive as individual PRs as soon as an advisory
+# lands.
+#
+# Shape of the noise this config aims for: one grouped PR per month for
+# minor/patch, plus a separate PR per major so breaking changes get read.
+
+version: 2
+
+updates:
+  - package-ecosystem: npm # covers Yarn 4 via yarn.lock
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    # Yarn quarantines npm releases from the last few days, so a PR bumping to
+    # a same-week release would fail `yarn install` in CI. Waiting out the
+    # quarantine window keeps those PRs installable. Does not apply to
+    # security updates.
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+    commit-message:
+      prefix: chore # `chore(deps):` / `chore(deps-dev):` — see docs/git-workflow.md
+      include: scope
+    labels:
+      - chore
+      - infra
+    groups:
+      # Everything safe-ish in one PR. Majors are deliberately absent: they
+      # fall out of the group and open as individual PRs.
+      npm-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: / # resolves to .github/workflows
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+    labels:
+      - chore
+      - infra
+    groups:
+      # Action majors are usually a tag bump (`actions/checkout@v5`), not a
+      # rewrite, so they ride along in the same PR.
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
