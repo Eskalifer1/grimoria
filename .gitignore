@@ -42,3 +42,7 @@ next-env.d.ts
 
 # docs-sync hook bookkeeping (see .claude/hooks/docs-sync-check.sh)
 .claude/.docs-sync-acks/
+
+# ~/.gitignore_global ignores .claude/skills/ everywhere; undo that here
+!.claude/skills/
+!.claude/skills/docs-sync/
