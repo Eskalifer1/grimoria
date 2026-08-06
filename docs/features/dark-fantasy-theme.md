@@ -10,6 +10,42 @@ A user-selectable `Theme` (see `CONTEXT.md`) that fully re-skins the product —
 - Full copy re-mapping across the site — every UI string changes, not just headline nouns.
 - Applies to the whole client app. Admin (`/admin/*`) is deliberately excluded — see ADR-0001; the theme provider is scoped to the non-admin route group.
 
+## Visual direction
+
+Settled. The full written description lives in `design/dark-fantasy-design.md` — that file
+is the input to building the design system, and the place to look before designing or
+implementing any dark-fantasy surface. Its load-bearing decisions:
+
+- **Two material worlds.** Dark atmospheric *Chrome* (sidebar, lists, modals) and a
+  light vellum *Page* that holds the Note body and nothing else. Every component is
+  specified twice; a control on one is never the other recoloured. The Page exists so
+  long-form reading is never compromised by theme decoration — a product requirement, not a
+  preference.
+- **Red is ink, violet is light.** Red belongs to content and the Page (drop caps,
+  rubrication, tag outlines, destructive actions) and never glows. Violet belongs to the
+  Chrome (active nav, focus, halos, emitting edges) and never prints. The field beneath both
+  is a neutral warm-leaning near-black, not a violet-black.
+- **Depth without 3D.** Atmospheric imagery bleeding behind mastheads and dissolving; five
+  receding planes with no two adjacent ones sharing a brightness; one light origin per
+  screen; borders that are lit gradients rather than uniform grey rules.
+- **Runes as the signature motif** — carving that glows from within, used for per-Note
+  sigils, dividers, empty states, and focus. Never in place of readable text.
+- **The Note body font is not this theme's to choose.** One reading serif — **Literata** —
+  sets the Note body under *both* Themes, so switching Theme never changes what long-form
+  reading feels like. This theme may not override it for decoration. It is the single
+  exception to the rule that dark-fantasy re-skins everything, and it exists for the same
+  reason the Page does. Everything else in the chrome — display serif, interface sans,
+  monospace — remains this theme's own.
+
+Concrete values — palette, scales, component tokens — are deliberately *not* fixed here.
+They are the output of the design-system work (#54), not its input. Literata is the
+exception because it is a cross-theme constraint rather than a token of this theme: it is
+settled in #53, which owns the Note content font for both Themes.
+
+Structure — shells, the sidebar and its two modes, the absence of a global top bar — is not
+this theme's either. It is shared with `standard` and documented in
+`docs/features/site-layout.md`.
+
 ## How it's built
 
 Copy is sourced through a `locale × theme` resource (see the copy-system ADR) rather than hardcoded strings, so adding this theme doesn't require a separate one-off mechanism from whatever localization eventually uses. Concretely, each theme is a full message catalog — `messages/en/dark-fantasy.json` alongside `messages/en/standard.json` — and the theme decides which one loads, so no component names a theme.
@@ -30,6 +66,10 @@ Copy is sourced through a `locale × theme` resource (see the copy-system ADR) r
 | User / Profile | Mage |
 
 This table is intentionally incomplete — it's seeded from the initial planning conversation, not a finished spec. Expand it as each UI surface actually gets designed/built, so the mapping stays grounded in real screens rather than invented ahead of time.
+
+Strings that appear inside design mockups are **not** entries in this table. Mockups are
+composed against sample copy so the type can be judged; nothing is added here until it is
+actually chosen.
 
 ## Open questions (not yet resolved)
 

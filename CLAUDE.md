@@ -28,6 +28,8 @@ A `PreToolUse` hook on `git commit` denies a commit that stages non-doc changes 
 - **Deciding which labels an issue gets**: `docs/agents/labels.md`
 - **Exploring the codebase, using domain vocabulary, or checking prior decisions**: `docs/agents/domain.md` (how to consume `CONTEXT.md` and `docs/adr/`)
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` as it's actually built, not speculatively ahead of time
+- **Designing or styling any UI surface**: `design/standard-design.md` and `design/dark-fantasy-design.md` — the written look of each Theme. They fix no values; tokens are the design system's output, not these docs'. Structure (shells, sidebar, masthead) is not in them — it is shared by both Themes and lives in `docs/features/site-layout.md`
+- **Generating anything with Claude Design**: feed it the relevant `design/*.md` and the settled structure, not just a reference image. Given only an image it measures that image — reproducing the template's navigation, promo panels, and search chrome as if they were decisions, and leaking one Theme's vocabulary into the other
 - **Writing or running tests, or touching CI config**: `docs/testing.md`
 - **Changing how dependencies get updated, or triaging a Dependabot PR**: `docs/dependency-updates.md`
 - **Creating a branch, committing (user commits, agent proposes the title), or closing an issue after commit**: `docs/git-workflow.md`

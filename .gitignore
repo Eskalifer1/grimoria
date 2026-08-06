@@ -46,3 +46,9 @@ next-env.d.ts
 # ~/.gitignore_global ignores .claude/skills/ everywhere; undo that here
 !.claude/skills/
 !.claude/skills/docs-sync/
+
+# design working images (mockups/references — the written design is committed, the pixels aren't)
+design/*.png
+design/*.jpg
+design/*.jpeg
+design/*.webp
