@@ -24,7 +24,10 @@ implementing any dark-fantasy surface. Its load-bearing decisions:
 - **Red is ink, violet is light.** Red belongs to content and the Page (drop caps,
   rubrication, tag outlines, destructive actions) and never glows. Violet belongs to the
   Chrome (active nav, focus, halos, emitting edges) and never prints. The field beneath both
-  is a neutral warm-leaning near-black, not a violet-black.
+  is a neutral warm-leaning near-black, not a violet-black — a violet field would make the
+  accent vanish into its own backdrop. This is the same two-accent split `standard` uses
+  (action accent vs. content accent, `design/token-contract.md`); only the hues swap sides,
+  which is why one token contract serves both Themes.
 - **Depth without 3D.** Atmospheric imagery bleeding behind mastheads and dissolving; five
   receding planes with no two adjacent ones sharing a brightness; one light origin per
   screen; borders that are lit gradients rather than uniform grey rules.
@@ -38,9 +41,16 @@ implementing any dark-fantasy surface. Its load-bearing decisions:
   monospace — remains this theme's own.
 
 Concrete values — palette, scales, component tokens — are deliberately *not* fixed here.
-They are the output of the design-system work (#54), not its input. Literata is the
+They live in `design/dark-fantasy-tokens.md` and are #54's to ratify. Literata is the
 exception because it is a cross-theme constraint rather than a token of this theme: it is
 settled in #53, which owns the Note content font for both Themes.
+
+**Token parity.** Both Themes fill one shared list of semantic token names
+(`design/token-contract.md`), so switching Theme swaps values, never which names exist. Where
+this Theme has something `standard` does not — glow, blur, translucent surfaces — `standard`
+fills those names with `none`, and where `standard` has drop shadows on cards, this Theme
+fills `--shadow-card` with `none`. A component must never branch on which Theme is active;
+if it has to, the contract is missing a name.
 
 Structure — shells, the sidebar and its two modes, the absence of a global top bar — is not
 this theme's either. It is shared with `standard` and documented in

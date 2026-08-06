@@ -124,7 +124,8 @@ decode the interface.
 
 ## 6. Typography
 
-Four voices, from Google Fonts so they load through `next/font`.
+Four voices, from Google Fonts so they load through `next/font`. Two are this theme's own
+and two are shared with `standard` — which two, and why, is in `token-contract.md`.
 
 A **display serif** — high-contrast, classical, set in small capitals with wide tracking
 where it labels rather than titles. It carries the wordmark, page and note titles, section
@@ -139,7 +140,15 @@ never changes what long-form reading feels like. It is chosen for long sessions,
 measure of roughly 68–75 characters and generous leading, and neither theme may override it
 for decoration.
 
-A **monospace** for breadcrumbs, tags, dates, counts, and code.
+A **monospace** for code, inside a Note and out. Like the reading serif it is shared with
+`standard`, and for the same reason: code is content the User wrote, and switching Theme must
+not change how their own work reads.
+
+Metadata — breadcrumbs, tags, dates, counts, section labels — is **not** monospace in this
+theme. It is the interface sans, set small in capitals with wide tracking. This is the one
+place the two themes voice the same role differently, and it is deliberate: a monospace
+label would read as machinery in a theme built out of ink and light, where `standard` uses
+it precisely because that technical note is what keeps it serious.
 
 ---
 
