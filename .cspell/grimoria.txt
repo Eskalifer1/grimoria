@@ -25,6 +25,7 @@ warlock
 
 # --- Technology and tool names ---
 biome
+codegen
 cspell
 dependabot
 neon
@@ -36,6 +37,7 @@ playwright
 postgrest
 sentry
 shadcn
+SIGSEGV
 supabase
 tailwindcss
 turbopack
@@ -67,6 +69,7 @@ mattpocock
 
 # --- General English the bundled dictionaries happen to miss ---
 branchable
+extensionless
 lockdown
 logomark
 triaging

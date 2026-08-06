@@ -6,4 +6,4 @@ Payload access-control logic (`Role`, `Visibility`) is tested against a real Pos
 
 ## CI required checks
 
-On every PR: install → `yarn ci` (`biome ci` — formatting, lint and import order, never writing to disk) → `tsc --noEmit` → `yarn spellcheck` (cspell) → Vitest → `next build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage stabilizes.
+On every PR: install → `yarn ci` (`biome ci` — formatting, lint and import order, never writing to disk) → `yarn typecheck` → `yarn spellcheck` (cspell) → Vitest → `next build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage stabilizes.

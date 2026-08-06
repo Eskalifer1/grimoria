@@ -25,6 +25,7 @@ The app runs at http://localhost:3000.
 | `yarn dev`          | Development server                                      |
 | `yarn build`        | Production build                                        |
 | `yarn start`        | Serve the production build                              |
+| `yarn typecheck`    | Next route typegen, then `tsc --noEmit`                 |
 | `yarn lint`         | Biome linter only                                       |
 | `yarn lint:fix`     | Biome linter, applying safe fixes                       |
 | `yarn format`       | Biome formatter, writing changes                        |
