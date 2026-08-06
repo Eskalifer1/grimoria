@@ -128,7 +128,7 @@ Four voices, from Google Fonts so they load through `next/font`. Two are this th
 and two are shared with `standard` — which two, and why, is in `token-contract.md`.
 
 A **display serif** — high-contrast, classical, set in small capitals with wide tracking
-where it labels rather than titles. It carries the wordmark, page and note titles, section
+where it labels rather than titles. It carries page and note titles, section
 headings, and sidebar navigation.
 
 An **interface sans** for everything functional: buttons, form labels, input text, meta
@@ -162,7 +162,7 @@ the only chrome the app carries, and the vertical space a header would have take
 the list.
 
 **The sidebar** carries the primary areas as icon-and-label rows in small-caps display
-type, with the wordmark above and the user and log out below. The active row is marked by a
+type, with the brand mark above and the user and log out below. The active row is marked by a
 lit vertical edge and a faint warm wash, not by a solid fill — light is how this theme says
 *here*. It is the plane nearest the viewer: slightly lighter than the field, with a lit
 edge, and content passes beside it through haze rather than stopping at a rule.
@@ -170,7 +170,7 @@ edge, and content passes beside it through haze rather than stopping at a rule.
 Collapsed to an icon rail the rows lose their labels and keep their lit marking, because a
 rail that cannot show which area is active is a dead strip of icons. As a drawer it is the
 same Chrome brought forward, its edge lit harder against the dimmed field behind it. The
-thin bar that opens the drawer carries the burger and the wordmark, and it is the
+thin bar that opens the drawer carries the burger and the brand mark, and it is the
 shallowest plane in the theme — it holds nothing else.
 
 **The masthead** of a page carries the note count or status in monospace beneath a display

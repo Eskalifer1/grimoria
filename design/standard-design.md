@@ -56,7 +56,7 @@ twice in `dark-fantasy`.
 **Two accents, with different jobs.**
 
 The primary is a deep saturated teal — dark enough to hold white text, and it carries the
-wordmark, the primary button, the active navigation row, and the current sub-item. It is
+brand mark, the primary button, the active navigation row, and the current sub-item. It is
 used sparingly and always means *this is the thing you act on or are looking at*.
 
 The secondary is a violet. It never carries an action, and that restriction is the whole
@@ -112,7 +112,7 @@ round where `dark-fantasy` is cut.
 Three voices, but only two faces belong to the theme.
 
 A **geometric sans** carries both display and interface, separated by weight and size
-rather than by a second family. Heavy and large it is display — page titles, the wordmark,
+rather than by a second family. Heavy and large it is display — page titles,
 card titles, the active navigation label — and its roundness there is a large part of the
 theme's character; at reading weight the same family sets body copy, form labels, and
 buttons, where it is meant to be unremarkable. One family doing both is what keeps the
@@ -140,7 +140,7 @@ settled here. That structure is identical in both themes and is documented in
 `docs/features/site-layout.md`, which is canonical for it. What follows describes only how
 those zones are made out of this theme's material.
 
-**The sidebar** holds identity and navigation: the wordmark at the head, navigation as
+**The sidebar** holds identity and navigation: the brand mark at the head, navigation as
 icon-and-label rows under monospace section labels, and the user and log out at the foot.
 Rows that own sub-items expand into an indented set joined by a hairline spine. The active
 row is a filled pale-tint rounded panel with an accent icon and an accent label; a current
@@ -150,7 +150,7 @@ and it is separated from the field by being brighter than it, not by a border.
 The control that collapses the sidebar sits on its edge, half overhanging it. Collapsed,
 the labels go and the icons hold their centres, so nothing slides sideways when it reopens.
 As a drawer it is the same surface lifted to a higher elevation, carrying its own shadow
-over a scrim; the thin bar that opens it holds the burger and the wordmark and nothing
+over a scrim; the thin bar that opens it holds the burger and the brand mark and nothing
 else, and it is chrome rather than a masthead — it must not grow controls.
 
 **The masthead** of a page carries a large display title with a monospace count or status

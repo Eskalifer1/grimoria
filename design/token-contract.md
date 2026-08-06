@@ -183,7 +183,7 @@ in either Theme — a decision should not have the page reading through it.
 ### Typography
 
 ```
---font-display   names of things: wordmark, page and Note titles, section headings
+--font-display   names of things: page and Note titles, section headings
 --font-ui        functional chrome: buttons, labels, inputs, navigation
 --font-reading   the Note body — the same family in both Themes
 --font-meta      dates, counts, tags, section labels

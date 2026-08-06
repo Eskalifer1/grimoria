@@ -28,7 +28,7 @@ There is a single `Sidebar` component. It is not two components that look alike.
 - **Persistent** — desktop, authenticated User. Always visible beside the content.
 - **Drawer** — opened by a burger, overlaying the content. Used on mobile always, and for
   Guests always, **at any viewport width**. In drawer mode a thin bar carries the burger and
-  the wordmark; without it there is nothing to open the drawer from.
+  the brand mark; without it there is nothing to open the drawer from.
 
 The persistent sidebar collapses to an **icon rail** — icons only, no labels. Width never
 overrides the User's collapse choice: the rail is a decision, not a breakpoint.
@@ -59,7 +59,8 @@ persisted UI preference inherits this rule.
 ## Where the visual side lives
 
 Structure is here; how these zones are made of each Theme's material is in
-`design/standard-design.md` §6 and `design/dark-fantasy-design.md` §7. Those documents fix
+`design/standard-design.md` §6 and `design/dark-fantasy-design.md` §7, and the mark those
+zones carry is in `design/logo.md`. Those documents fix
 no values and defer to this one for structure.
 
 The reference images in `design/` are working files and are **not canonical for structure** —

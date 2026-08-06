@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <title>Grimoria</title>
+  <!-- Grimoria brand mark — `standard` execution.
+       Shared skeleton with grimoria-dark-fantasy.svg; only terminals and rendering differ.
+       Colour: set `color` on the parent — the text-brand token, #0D5A54. -->
+  <g fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M169.5 69.5 128 28 28 128 128 228 228 128 140 128"/>
+    <path d="M123.5 92.5 88 128 123.5 163.5"/>
+  </g>
+</svg>

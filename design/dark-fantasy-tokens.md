@@ -288,7 +288,7 @@ Four voices, all four named in the contract. Two are this Theme's own; two are s
 | `--font-reading` | **Literata** — *shared with `standard`* | 400, 700 + italic |
 | `--font-code` | **JetBrains Mono** — *shared with `standard`* | 400, 700 |
 
-**Playfair Display** carries the wordmark, page and Note titles, section headings, and
+**Playfair Display** carries page and Note titles, section headings, and
 sidebar navigation in small capitals with wide tracking. High-contrast and classical, and it
 holds its weight at small sizes on a dark field where a finer old-style serif would go thin
 and shimmer.
@@ -304,7 +304,7 @@ its code on the vellum sheet, identically in both Themes. See `token-contract.md
 ### Scale
 
 ```
---fs-display: 52px   --fs-body-lg: 20px   --lh-display: 1.08   --ls-wordmark: .18em
+--fs-display: 52px   --fs-body-lg: 20px   --lh-display: 1.08
 --fs-h1:      40px   --fs-body:    17px   --lh-heading: 1.18   --ls-caps:     .14em
 --fs-h2:      32px   --fs-label:   13px   --lh-body:    1.6    --ls-label:    .08em
 --fs-h3:      24px   --fs-micro:   11px   --lh-ui:      1.35

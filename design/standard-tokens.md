@@ -18,7 +18,7 @@ Themes. Only layout metrics are left open — see the last section.
 | Token | Value | Used for |
 |---|---|---|
 | `--teal-900` | `#0A423E` | primary button, hovered |
-| `--teal-700` | `#0D5A54` | brand: wordmark, page title, filled button, active nav label |
+| `--teal-700` | `#0D5A54` | brand: mark, page title, filled button, active nav label |
 | `--teal-600` | `#0F6B63` | brand text needing a step down from `700` |
 | `--teal-400` | `#0FB5A5` | live signal only — selected edge, unread marker, focus ring |
 | `--teal-200` | `#BFE3DE` | soft brand border |
@@ -211,7 +211,7 @@ contract's; `--font-display` and `--font-ui` resolve to one family here, separat
 
 **Plus Jakarta Sans** carries display and interface from one family, separated by weight and
 size rather than by a second face (`standard-design.md` §5). Heavy and large it is display —
-page titles, wordmark, card titles, active nav label; at 400 it is body copy, form labels,
+page titles, card titles, active nav label; at 400 it is body copy, form labels,
 and buttons.
 
 **JetBrains Mono** carries all metadata — dates, counts, tags, sidebar section labels — and
