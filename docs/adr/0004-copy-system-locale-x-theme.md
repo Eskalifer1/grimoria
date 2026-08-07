@@ -8,7 +8,9 @@ All UI text is accessed through a lookup (e.g. `t(key)`), backed by a resource k
 
 `messages/<locale>/<theme>.json` — one full catalog per theme, e.g. `messages/en/standard.json` and `messages/en/dark-fantasy.json`. `en` is the v1 locale and its `standard` catalog is the source of truth for what keys exist.
 
-Theme selects **which catalog is loaded**, not which key is read, so components call `t('home.title')` and never name a theme. Adding a theme is a file; adding a locale is a directory.
+Theme selects **which catalog is loaded**, not which key is read, so components call `t('homePage.title')` and never name a theme. Adding a theme is a file; adding a locale is a directory.
+
+`/admin` is localized too, but it is not themed (ADR-0001), so the theme axis does not apply to it: it gets `messages/<locale>/admin.json`, a sibling of the theme catalogs rather than a namespace inside them. Two things follow, and both are the reason for the split — the client bundle never carries admin copy, and nobody writes dark-fantasy admin strings that no user will ever see.
 
 Both catalogs are complete rather than dark-fantasy being a sparse overlay on standard. An overlay would be shorter, but a key missing from it falls back to standard copy — printing "Create a note" inside the dark-fantasy UI, which is exactly the failure the full re-skin exists to avoid. With parallel catalogs the gap is instead a compile error: `src/i18n/messages.ts` constrains every theme catalog to the `standard` key set, so `tsc` names the missing key. The cost is real and accepted — a new string has to be written in both tonalities at once, and there is no "I'll flavor it later".
 
@@ -26,5 +28,7 @@ Reading a cookie also opts every localized route out of static rendering, and ma
 Routes live under `src/app/[locale]/` with `localePrefix: 'as-needed'`, so v1 URLs stay clean (`/notes`, not `/en/notes`) while the segment already exists. `/en` canonically redirects to `/`. Adding a second locale (#18) is then a change to `src/i18n/routing.ts` rather than moving every route file and rewriting every link — the same retrofit-avoidance argument that motivates the resource shape above, applied to the URL.
 
 `/admin` (ADR-0001) sits outside `[locale]`, and `src/proxy.ts` excludes it along with Payload's API and admin — locale rewriting must never touch the backend. Because the localized layout is the app's only root layout, `/admin` will need to supply its own when it's built (#37).
+
+Sitting outside `[locale]` means `src/i18n/request.ts` does not serve `/admin` and its URL carries no locale segment: its layout supplies `messages/<locale>/admin.json` to the provider itself, and the locale comes from `routing.defaultLocale` until user profiles exist (#32), then from the user. Typed keys stay global — next-intl binds `useTranslations` to a single `Messages` type (`src/global.d.ts`), which cannot be swapped per route tree, so `Messages` covers both key sets and admin keys autocomplete in client components too. That is accepted: the client tree never loads the admin catalog, so a key used in the wrong tree fails on first render.
 
 Navigation inside the localized tree goes through `src/i18n/navigation.ts`, not `next/link` and `next/navigation` directly, which drop the active locale.

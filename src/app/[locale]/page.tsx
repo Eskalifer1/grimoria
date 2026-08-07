@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 // pipeline end to end: switching the `theme` cookie between `standard` and
 // `dark-fantasy` changes every string below without this file changing at all.
 export default function HomePage() {
-  const t = useTranslations('home');
+  const t = useTranslations('homePage');
 
   return (
     <main>

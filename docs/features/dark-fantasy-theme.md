@@ -77,6 +77,12 @@ Copy is sourced through a `locale × theme` resource (see the copy-system ADR) r
 
 This table is intentionally incomplete — it's seeded from the initial planning conversation, not a finished spec. Expand it as each UI surface actually gets designed/built, so the mapping stays grounded in real screens rather than invented ahead of time.
 
+This table is the **vocabulary**. *How* to write a string it doesn't cover — how far the
+flavor goes, what errors and destructive warnings are allowed to become, what register to
+write in — is `docs/agents/coding-standards/i18n.md` §8. A term invented while writing copy
+is added here in the same change, or the next string invents a second word for the same
+thing.
+
 Strings that appear inside design mockups are **not** entries in this table. Mockups are
 composed against sample copy so the type can be judged; nothing is added here until it is
 actually chosen.

@@ -9,7 +9,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
 
   // Theme selects *which catalog is loaded*, not which key is read — so
-  // components call `t('home.title')` and stay unaware that a second tonality
+  // components call `t('homePage.title')` and stay unaware that a second tonality
   // exists. This is the `[locale][theme][key]` shape from ADR-0004 on disk.
   const theme = await resolveTheme();
 

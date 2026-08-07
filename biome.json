@@ -39,6 +39,9 @@
       "preset": "recommended",
       "a11y": {
         "preset": "recommended"
+      },
+      "style": {
+        "noJsxLiterals": "error"
       }
     }
   },
@@ -73,6 +76,26 @@
       "json": {
         "parser": {
           "allowComments": true
+        }
+      }
+    },
+    {
+      "includes": ["messages/**/*.json"],
+      "assist": {
+        "actions": {
+          "source": {
+            "useSortedKeys": "on"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/shared/components/ui/**", "src/app/(payload)/**", "tests/**", "e2e/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noJsxLiterals": "off"
+          }
         }
       }
     },
