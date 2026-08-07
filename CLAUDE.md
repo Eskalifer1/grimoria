@@ -35,6 +35,7 @@ A `PreToolUse` hook on `git commit` denies a commit that stages non-doc changes 
 - **Adding or renaming a design token**: `design/token-contract.md` — the semantic names both Themes fill. A token is added to both value docs in the same change, or not at all; a component that branches on the active Theme means the contract is missing a name
 - **Generating anything with Claude Design**: feed it the relevant `design/*.md` and the settled structure, not just a reference image. Given only an image it measures that image — reproducing the template's navigation, promo panels, and search chrome as if they were decisions, and leaking one Theme's vocabulary into the other
 - **Changing the TypeScript version or a strictness flag**: `docs/adr/0008-typescript-7-strict-config.md` — TypeScript 7 has no Compiler API, so `experimental.useTypeScriptCli` in `next.config.ts` is load-bearing: removing it breaks `next build` outright. It goes away on Next 16.3 (#77), not before
+- **Creating any file under `src/`, or deciding where code belongs** — layers, folder/file naming, imports: `docs/agents/coding-standards/general.md`. The layer rules are lint-enforced (`biome.json` → `overrides`), so guessing fails `yarn check`
 - **Writing or running tests, or touching CI config**: `docs/testing.md`
 - **Changing how dependencies get updated, or triaging a Dependabot PR**: `docs/dependency-updates.md`
 - **Creating a branch, committing (user commits, agent proposes the title), or closing an issue after commit**: `docs/git-workflow.md`

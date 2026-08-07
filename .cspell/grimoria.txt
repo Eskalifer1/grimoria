@@ -59,6 +59,7 @@ jsonc
 nodeLinker
 noopener
 noreferrer
+opengraph
 tsbuildinfo
 tsconfig
 yarnrc
