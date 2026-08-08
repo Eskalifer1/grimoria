@@ -74,3 +74,5 @@ extensionless
 lockdown
 logomark
 triaging
+typechecks
+unrepresentable

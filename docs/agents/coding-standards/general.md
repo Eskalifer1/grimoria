@@ -66,7 +66,7 @@ put two features together, and that is their entire purpose.
 <NoteCard note={note} author={<AuthorChip user={note.author} />} />
 
 // features/note/components/NoteCard/index.tsx — knows nothing about users
-type Props = { note: Note; author: ReactNode };
+interface NoteCardProps { note: Note; author: ReactNode }
 ```
 
 **Two or more features need the same domain primitive → it moves to `entities/`.**

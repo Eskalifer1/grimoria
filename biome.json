@@ -40,8 +40,23 @@
       "a11y": {
         "preset": "recommended"
       },
+      "complexity": {
+        "noBannedTypes": "error"
+      },
       "style": {
-        "noJsxLiterals": "error"
+        "noJsxLiterals": "error",
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "interface"
+          }
+        },
+        "useExportType": "error",
+        "useImportType": "error"
+      },
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noTsIgnore": "error"
       }
     }
   },
