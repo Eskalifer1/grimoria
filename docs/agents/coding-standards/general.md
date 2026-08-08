@@ -503,3 +503,107 @@ unit — and it would be added here by an explicit decision, not assumed.
 
 > A component's `index.tsx` that **contains the component itself** is not a barrel — it
 > is the implementation. This rule targets re-export-only files.
+
+### 10.5 Exports sit at the end
+
+Declarations are written plain, and what leaves the module is collected in one export
+statement at the bottom of the file.
+
+```ts
+function formatNoteDate(value: string): string { ... }
+
+export { formatNoteDate };
+```
+
+The block is the file's public surface in one place, read without scanning the body for
+`export` keywords. `app/` re-exports (§2) are already this shape, and the order inside the
+block is handled by `organizeImports` — do not hand-sort it.
+
+**Partly machine-enforced** — `biome.json` → `style/useExportsLast` fails any file where a
+plain statement follows an export. It cannot see the rest: a lone inline `export function` at
+the end of a file passes it. That half is review.
+
+---
+
+## 11. Comments and documentation
+
+Two different instruments with two different triggers. A comment explains a decision to
+whoever reads the body; JSDoc states a contract to whoever never opens the file.
+
+### 11.1 A comment answers *why*
+
+Code already says what it does and how. A comment earns its place by carrying what the code
+cannot: the reason behind a choice, the constraint that forced it, the cost of changing it.
+
+```ts
+// `as-needed` keeps v1 URLs clean (`/notes`, not `/en/notes`) while the
+// `[locale]` segment already exists, so adding a second locale (#18) is a
+// routing config change rather than moving every route file.
+localePrefix: 'as-needed',
+```
+
+Keep it to a line or three. A comment that has grown into a paragraph is usually a decision,
+and decisions live in `docs/adr/` or a feature doc, with the code pointing at them.
+
+The other case is code that needs a comment to be followed at all. Rename the thing, split
+the function, or give the intermediate value a name — the comment then has nothing to add.
+
+### 11.2 Deferred work is an issue
+
+Work you are not doing now becomes a GitHub issue, and the code carries a comment saying why
+the current state exists, naming the number that will end it:
+
+```ts
+// TypeScript 7 ships no Compiler API, which is what Next normally calls to
+// type-check a build. This makes it shell out to the `tsc` binary instead.
+// Without it `next build` fails outright (ADR-0008). Next 16.3 makes this
+// the default, so it can be deleted on that upgrade — see #77.
+```
+
+A `TODO` is that issue not written: it is invisible to the board, survives forever, and tells
+the next reader nothing about who decided what. Superseded code is deleted outright — `git
+log` is the archive, and a commented-out block only asks every later reader to work out
+whether it still matters.
+
+### 11.3 JSDoc on every export
+
+Every export carries JSDoc. The boundary is the export — the same one that carries the
+explicit return type (`typescript.md` §9) — because what leaves the module is read by people
+and agents who will not open the file. Plain declarations, inline callbacks and local helpers
+are read together with their one caller and need none.
+
+JSDoc carries **what the signature does not**. Name, parameter types and return type already
+show up on hover; repeating them spends the reader's attention to say nothing. Write the
+things a reader cannot see:
+
+- the format or unit of a value — an ISO date string, minutes, cents
+- behavior at the edges: empty input, missing record, a value out of range
+- side effects — a cookie written, a path revalidated, a request fired
+- what it throws, and when
+- why the function exists at all, when that is the part nobody would guess
+
+Tags stay minimal, because TypeScript already holds the rest:
+
+- no types inside tags
+- `@returns`, never `@return`
+- `@param` and `@returns` are the only tags used
+- a parameter whose name says everything is left out of the block entirely; document the ones
+  that don't
+- default values are visible in the signature, so they stay out of the block
+
+`src/shared/lib/assertNever.ts` and `src/i18n/theme.ts` are the shape to copy.
+
+A component is not a function for this rule — its contract is its props interface, and it is
+documented there. See `components.md` §7.
+
+### 11.4 Tests
+
+JSDoc applies to `tests/setup/` and `tests/fixtures/` — shared infrastructure that many spec
+files import, where the contract has to be visible on hover. A spec documents itself through
+its `describe`/`it` titles.
+
+### 11.5 Enforcement
+
+None of §11 is lint-checkable — Biome has no rule for the presence or the content of a
+comment. It holds through review and through `.claude/rules/`, which is why the trigger for
+each instrument is written as a condition rather than a preference.

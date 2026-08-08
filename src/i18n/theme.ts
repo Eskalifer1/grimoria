@@ -1,12 +1,12 @@
 import { cookies } from 'next/headers';
 
-export const themes = ['standard', 'dark-fantasy'] as const;
+const themes = ['standard', 'dark-fantasy'] as const;
 
-export type Theme = (typeof themes)[number];
+type Theme = (typeof themes)[number];
 
-export const defaultTheme: Theme = 'standard';
+const defaultTheme: Theme = 'standard';
 
-export const themeCookieName = 'theme';
+const themeCookieName = 'theme';
 
 function isTheme(value: string | undefined): value is Theme {
   return themes.includes(value as Theme);
@@ -30,9 +30,12 @@ function isTheme(value: string | undefined): value is Theme {
  * accepted deliberately: caching for the public notes page is a separate
  * concern (#46), and there is nothing cacheable to protect yet.
  */
-export async function resolveTheme(): Promise<Theme> {
+async function resolveTheme(): Promise<Theme> {
   const cookieStore = await cookies();
   const value = cookieStore.get(themeCookieName)?.value;
 
   return isTheme(value) ? value : defaultTheme;
 }
+
+export type { Theme };
+export { defaultTheme, resolveTheme, themeCookieName, themes };

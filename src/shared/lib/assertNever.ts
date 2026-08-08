@@ -6,6 +6,8 @@
  *
  * See docs/agents/coding-standards/typescript.md §4.
  */
-export function assertNever(value: never): never {
+function assertNever(value: never): never {
   throw new Error(`Unhandled variant: ${JSON.stringify(value)}`);
 }
+
+export { assertNever };

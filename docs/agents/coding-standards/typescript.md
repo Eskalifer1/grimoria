@@ -139,10 +139,12 @@ pass the resolved shape down. Components never see `number | User`, and never re
 // entities/note/api/getNote.ts
 type NoteWithAuthor = Omit<Note, 'author'> & { author: User };
 
-export async function getNote(id: number): Promise<NoteWithAuthor | null> {
+async function getNote(id: number): Promise<NoteWithAuthor | null> {
   const note = await payload.findByID({ collection: 'notes', id, depth: 1 });
   return typeof note.author === 'object' ? { ...note, author: note.author } : null;
 }
+
+export { getNote };
 ```
 
 ---
@@ -209,10 +211,13 @@ const [name, setName] = useState<string | undefined>(undefined);  // ✓ inferen
 change inside the function fails at the function rather than three files away.
 
 ```ts
-export function formatNoteDate(value: string): string { ... }
+function formatNoteDate(value: string): string { ... }
+
+export { formatNoteDate };
 ```
 
-Non-exported helpers and inline callbacks rely on inference.
+Non-exported helpers and inline callbacks rely on inference. The same boundary carries the
+JSDoc rule — `general.md` §11.
 
 ---
 

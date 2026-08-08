@@ -6,7 +6,7 @@ import type standard from '../../messages/en/standard.json';
  * Every other catalog — other themes now, other locales later (#18) — is
  * checked against it.
  */
-export type Messages = typeof standard;
+type Messages = typeof standard;
 
 /** Only accepts a catalog carrying the full `Messages` key set. */
 type ThemeCatalog<T extends Messages> = T;
@@ -17,4 +17,6 @@ type ThemeCatalog<T extends Messages> = T;
  * quietly print "Create a note" inside the dark-fantasy UI — the exact failure
  * the parallel-catalog shape was chosen to prevent.
  */
-export type DarkFantasyMessages = ThemeCatalog<typeof darkFantasy>;
+type DarkFantasyMessages = ThemeCatalog<typeof darkFantasy>;
+
+export type { DarkFantasyMessages, Messages };

@@ -52,7 +52,9 @@
           }
         },
         "useExportType": "error",
-        "useImportType": "error"
+        "useExportsLast": "error",
+        "useImportType": "error",
+        "useReactFunctionComponents": "error"
       },
       "suspicious": {
         "noExplicitAny": "error",
@@ -110,6 +112,39 @@
         "rules": {
           "style": {
             "noJsxLiterals": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/shared/components/ui/**", "src/app/(payload)/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useExportsLast": "off",
+            "useReactFunctionComponents": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/views/**",
+        "src/features/**",
+        "src/entities/**",
+        "src/shared/components/**",
+        "!src/shared/components/ui/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noExcessiveLinesPerFile": {
+              "level": "error",
+              "options": {
+                "maxLines": 200,
+                "skipBlankLines": true
+              }
+            }
           }
         }
       }
