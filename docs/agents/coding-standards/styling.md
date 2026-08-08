@@ -4,9 +4,12 @@ How code expresses a design decision. What a surface looks like is `design/`; th
 `src/styles/*.css`. This is how code is allowed to say it.
 
 **Tailwind utilities in JSX are the styling mechanism.** No CSS modules, no CSS-in-JS, no
-component stylesheets. A `style` prop is for a value that cannot be known at build time — a
-computed offset, a progress width — never for a colour, spacing step, or font. Handwritten CSS
-lives in `src/styles/` and holds **tokens only**.
+component stylesheets. Handwritten CSS lives in `src/styles/` and holds **tokens only**.
+
+`style` is a lint error (`nursery/noInlineStyles`). A value unknown at build time — a computed
+offset, a progress width — is the one case that survives it, through a `biome-ignore` whose
+reason names the value being computed. Biome rejects a reasonless suppression, so that
+explanation is part of the mechanism rather than a courtesy.
 
 **A value outside the tokens does not compile.** `tokens.css` removes Tailwind's own colour,
 radius, shadow, blur, font and easing scales, so `bg-red-500` and `shadow-lg` fail the build
@@ -24,7 +27,8 @@ collapsing those durations in `globals.css`, so a component carries no `motion-r
 
 **Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
 what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
-value off the scale means, is `design/token-contract.md`.
+value off the scale means, is `design/token-contract.md`. **Breakpoints are Tailwind's own as
+well** — mobile-first, `sm:` upward, no registered custom screen.
 
 **A component never asks which Theme is active.** No `data-theme` condition, no `dark:`
 variant, no Tailwind variant registered for a Theme. Switching Theme is values changing under

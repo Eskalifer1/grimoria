@@ -46,6 +46,9 @@
       "complexity": {
         "noBannedTypes": "error"
       },
+      "nursery": {
+        "noInlineStyles": "error"
+      },
       "style": {
         "noJsxLiterals": "error",
         "useConsistentTypeDefinitions": {
@@ -120,9 +123,22 @@
       }
     },
     {
+      "includes": ["**/*.svg"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noInlineStyles": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": ["src/shared/components/ui/**", "src/app/(payload)/**"],
       "linter": {
         "rules": {
+          "nursery": {
+            "noInlineStyles": "off"
+          },
           "style": {
             "useExportType": "off",
             "useExportsLast": "off",

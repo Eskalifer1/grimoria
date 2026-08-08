@@ -32,6 +32,13 @@ npm updates wait 7 days after release, 14 for majors.
 Without the wait, Dependabot could open a PR for a version `yarn install` then refuses to
 resolve — a red PR caused entirely by timing. Cooldown does not apply to security updates.
 
+## Biome bumps
+
+`nursery/noInlineStyles` in `biome.json` is a nursery rule, so a minor can rename it, promote it
+to a stable group, or drop it. Check the name on every Biome bump: a stale one fails `biome ci`
+outright, and a promotion also invalidates each `biome-ignore lint/nursery/noInlineStyles`
+comment in the codebase.
+
 ## Bot commits
 
 `prefix: chore` for npm (`chore(deps):` / `chore(deps-dev):`) and `prefix: ci` for Actions, both
