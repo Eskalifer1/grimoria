@@ -4,7 +4,7 @@
  * so adding a variant fails `tsc` in every switch that ignores it. The throw covers the
  * runtime case where the data carried a variant the types never knew about.
  *
- * See docs/agents/coding-standards/typescript.md §4.
+ * See docs/agents/coding-standards/typescript.md → Exhaustiveness: assertNever.
  */
 function assertNever(value: never): never {
   throw new Error(`Unhandled variant: ${JSON.stringify(value)}`);

@@ -1,8 +1,9 @@
 /*
  * shadcn/ui speaks its own token names. Translating them here, once, is what
  * keeps `src/shared/components/ui/` unedited and the CLI a working update path
- * (`general.md` §7.1). A primitive needing a name not listed below is a
- * decision about what that name means in both Themes — make it here.
+ * (`general.md` → `shared/components/ui/` — the vendored zone). A primitive
+ * needing a name not listed below is a decision about what that name means in
+ * both Themes — make it here.
  */
 
 /*

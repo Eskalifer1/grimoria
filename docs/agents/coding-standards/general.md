@@ -1,22 +1,14 @@
 # General frontend conventions
 
-> **Scope.** Naming, file/folder organization, and import rules that apply across the
-> whole frontend, independent of any specific stack piece (components, styling, API).
-> Stack-specific rules live in the sibling docs under `docs/agents/coding-standards/`.
->
-> These are settled rules, not options. Where a rule is machine-enforced, the enforcing
-> config is named — that config is the source of truth, not this document.
+Naming, file organization and import rules across the whole frontend. Stack-specific rules
+are the siblings in this folder. Settled rules, not options; where one is machine-enforced the
+config is named, and that config — not this file — is the source of truth.
 
----
+## Layers
 
-## 1. Architecture: layers
-
-The project uses a **feature-based layered structure**, inspired by Feature-Sliced
-Design but deliberately simplified. It is **not** canonical FSD — there is no
-`widgets`/`processes` layer, no `@x` cross-import notation, and no slice-isolation
-linter. Do not introduce FSD concepts beyond what is written here.
-
-### 1.1 The five layers
+A feature-based layered structure, inspired by Feature-Sliced Design but **not** canonical
+FSD: no `widgets`/`processes`, no `@x` notation, no slice-isolation linter. Introduce no FSD
+concept beyond what is written here.
 
 ```
 src/
@@ -27,39 +19,25 @@ src/
   shared/     Reusable code with no business-domain attachment.
 ```
 
-### 1.2 Import direction
+### Import direction
 
-Imports flow **strictly downward**. A layer may only import from layers below it:
+Imports flow strictly downward: `app → views → features → entities → shared`. `shared/`
+never reaches up.
 
-```
-app  →  views  →  features  →  entities  →  shared
-```
+Upward and **sideways** imports are violations, and sideways is forbidden on every layer —
+`features/note/` from `features/user/`, `entities/note/` from `entities/user/`, a screen
+module from another screen module (Next.js composes layouts and pages for you).
 
-- `views/` may import from `features/`, `entities/`, `shared/`.
-- `features/` may import from `entities/` and `shared/`.
-- `entities/` may import from `shared/` **only**.
-- `shared/` imports from `shared/` only. It never reaches up.
+Machine-enforced — `biome.json` → `overrides` → `style/noRestrictedImports`, scoped by source
+path. A violation is a design signal, not a lint error to route around.
 
-Importing upward or sideways is a violation. **Sideways** means between modules of
-the same layer, and it is forbidden on every layer:
+### What to do instead of a sideways import
 
-- **Cross-feature imports.** `features/note/` must not import from `features/user/`.
-- **Cross-entity imports.** `entities/note/` must not import from `entities/user/`.
-- **Cross-view imports.** A screen module never imports another screen module; Next.js
-  composes layouts and pages for you.
+Two problems, two different answers. Picking the wrong one is how this structure rots.
 
-This is **machine-enforced** — `biome.json` → `overrides` → `style/noRestrictedImports`,
-scoped by source path. `yarn check` reports it, `yarn ci` fails on it. Treat a violation
-as a design signal, not as a lint error to work around.
-
-### 1.3 What to do instead of a sideways import
-
-Two different problems get two different answers. Picking the wrong one is how this
-structure rots.
-
-**One feature needs another feature's UI or behavior → compose in `views/`.**
-The feature does not import; it accepts. Screen modules are the only place allowed to
-put two features together, and that is their entire purpose.
+**One feature needs another's UI or behavior → compose in `views/`.** The feature does not
+import; it accepts. Screen modules are the only place two features meet, and that is their
+whole purpose.
 
 ```tsx
 // views/NotesListPage/index.tsx — the composition root
@@ -69,25 +47,20 @@ put two features together, and that is their entire purpose.
 interface NoteCardProps { note: Note; author: ReactNode }
 ```
 
-**Two or more features need the same domain primitive → it moves to `entities/`.**
-Composition cannot answer this one. A domain primitive is often needed deep inside a
-feature's tree, and threading it down through props purely to satisfy the layer rule
-produces a bloated screen module and prop-drilling that exists for no reason but
-structure. `entities/` is where such a primitive lives, and a feature imports it
-directly at any depth (§6).
+**Two features need the same domain primitive → it moves to `entities/`.** Composition
+cannot answer this one: a primitive is often needed deep in a feature's tree, and threading it
+down purely to satisfy the layer rule produces prop-drilling that exists for no reason but
+structure. A feature imports an entity directly, at any depth.
 
-**Domain *types* need neither.** Payload's generated `src/payload-types.ts` is the
-source of truth for collection and document shapes. It sits outside the layers and is
-importable from anywhere, so needing the `User` shape inside `features/note/` is not a
-cross-feature problem at all.
+**Domain _types_ need neither.** `src/payload-types.ts` is the source of truth for collection
+and document shapes. It sits outside the layers and is importable anywhere, so needing `User`
+inside `features/note/` is not a cross-feature problem at all.
 
-### 1.4 Files outside the layers
+### Files outside the layers
 
-Not everything under `src/` is a layer. Most of the paths below are **framework-fixed**:
-the framework or a code generator dictates their location, and moving them breaks the
-build or costs a config override for nothing. One — `src/styles/` — is ours by decision
-rather than by constraint, and is here because what it holds is not code and no layer
-owns it.
+Most are **framework-fixed**: the framework or a generator dictates the location, and moving
+them breaks the build or costs a config override for nothing. `src/styles/` is ours by
+decision — what it holds is not code and no layer owns it.
 
 | Path | Why it's there |
 | --- | --- |
@@ -98,113 +71,72 @@ owns it.
 | `src/collections/` | Payload collection definitions |
 | `src/payload-types.ts` | Generated by Payload — never hand-edited |
 | `src/instrumentation.ts` | Next.js instrumentation hook (Sentry, #41) |
-| `src/styles/` | Design tokens — one file per Theme, so a token added to one and forgotten in the other shows up in the changed-file list. Rules for consuming them: `styling.md` |
+| `src/styles/` | Design tokens, one file per Theme, so a token added to one and forgotten in the other shows up in the changed-file list |
 
-The layer rules do not apply to these, and any layer may import from them.
+Layer rules do not apply to these, and any layer may import them. **The list grows only by an
+explicit decision** — something that seems to need a home at the root of `src/` is a question
+to ask, not a judgment call to make.
 
-**This list only grows by an explicit decision.** If something seems to need a home at
-the root of `src/`, that is a question to ask, not a judgment call to make.
+`@/` resolves to `src/`: `@/features/note/hooks/useNote`, `@/shared/components/Button`.
 
-### 1.5 Path alias
+## `app/` — the routing shell
 
-`@/` resolves to `src/`. Examples: `@/features/note/hooks/useNote`,
-`@/entities/user/components/AuthorChip`, `@/shared/components/Button`.
+Structure inside `app/` is routing structure — route groups (`(app)`, `(public)`, `(auth)`)
+and dynamic segments — never code organization.
 
----
-
-## 2. The `app/` layer (Next.js App Router)
-
-`app/` is a **thin routing shell**. Structure inside it is routing structure — route
-groups (`(app)`, `(public)`, `(auth)`) and dynamic segments — not code organization.
-
-A `page.tsx` renders exactly **one** screen module from `views/`, as a default
-re-export — no wrapper component:
+A `page.tsx` renders exactly one screen module as a default re-export, with no wrapper:
 
 ```tsx
 // app/(app)/notes/page.tsx
 export { NotesListPage as default } from '@/views/NotesListPage';
 ```
 
-Route-specific `metadata` or segment config exports live alongside the re-export in the
-same file; the rendered module stays a plain re-export.
+Route-specific `metadata` or segment config lives alongside the re-export; the rendered module
+stays a plain re-export. Three categories of file, and only the first is a re-export:
 
-Files in `app/` fall into three categories, and only the first is a re-export:
+- **Re-export from `views/`** — `page.tsx`, `layout.tsx`, `not-found.tsx`.
+- **May contain implementation**, because Next.js executes them by filename and they cannot
+  live anywhere else — `error.tsx` and `global-error.tsx` (which carry `"use client"` in that
+  exact file), `loading.tsx`, `route.ts`, and the metadata conventions
+  (`opengraph-image.tsx`, `twitter-image.tsx`, `icon.tsx`, `apple-icon.tsx`, `sitemap.ts`,
+  `robots.ts`).
+- **Vendored generation** — the `(payload)` route group. Generated, not hand-written; none of
+  these conventions apply to it.
 
-**Re-export from `views/`** — `page.tsx`, `layout.tsx`, `not-found.tsx`.
+The second list is **open**: a new Next.js file convention is added to it by an explicit
+decision. It is not a license to put arbitrary implementation in `app/`.
 
-**May contain implementation** — because Next.js executes them by filename and they
-cannot live anywhere else: `error.tsx` and `global-error.tsx` (which must carry
-`"use client"` in this exact file), `loading.tsx`, `route.ts`, and the metadata file
-conventions — `opengraph-image.tsx`, `twitter-image.tsx`, `icon.tsx`, `apple-icon.tsx`,
-`sitemap.ts`, `robots.ts`.
+## `views/` — screen modules
 
-**Vendored generation** — the `(payload)` route group. Generated by Payload, not
-hand-written, and none of these conventions apply to it.
-
-The second list is **open**: when Next.js adds a file convention, or a feature brings a
-new one into the repo, it is added here by an explicit decision. It is not a license to
-put arbitrary implementation in `app/`.
-
----
-
-## 3. The `views/` layer (screen modules)
-
-A **screen module** is the composition root for one rendered surface. Two kinds live
-here:
+A screen module is the composition root for one rendered surface. Two kinds:
 
 - **Pages** — a full screen (`NotesListPage`, `NotePage`).
-- **Shells** — the layouts every page renders inside (`AppShell`, `PublicShell`), as
-  settled in `docs/features/site-layout.md`.
-
-Both are re-exported by the corresponding `app/` file, and both follow the same
-component-folder rules as any other component (§4).
+- **Shells** — the layouts pages render inside (`AppShell`, `PublicShell`), per
+  `docs/features/site-layout.md`.
 
 ```
 views/
   AppShell/index.tsx        → app/(app)/layout.tsx
-  PublicShell/index.tsx     → app/(public)/layout.tsx
   NotesListPage/index.tsx   → app/(app)/notes/page.tsx
 ```
 
-Shells belong here and not in `features/` (a shell composes several features at once,
-which §1.2 forbids a feature from doing) and not in `shared/` (a shell reads `Role` and
-resolves the sidebar collapse state — it is domain-bound, not generic).
+Both are re-exported by the corresponding `app/` file and follow the component-folder rules
+below. Shells live here and not in `features/` (a shell composes several features, which a
+feature may not do) nor in `shared/` (a shell reads `Role` and resolves sidebar collapse
+state — domain-bound, not generic).
 
-> The layer is named `views/` and not `pages/` because `pages/` is a reserved
-> Next.js directory name (the legacy Pages Router) and would be confusing even
-> on the App Router.
+The layer is `views/` rather than `pages/` because `pages/` is a reserved Next.js directory.
 
----
+## Components
 
-## 4. Components
+Every component is a **folder** carrying the PascalCase name of its export, holding
+`index.tsx`. There are no loose `Component.tsx` files. Because the filename is always
+`index.tsx`, the folder name is the searchable identifier — keep it identical to the exported
+name.
 
-### 4.1 One component per folder
-
-Every component lives in its **own folder** containing an `index.tsx` file. There
-are no loose `Component.tsx` files.
-
-```
-NoteCard/
-  index.tsx
-```
-
-The one exception is the vendored shadcn/ui zone — see §7.1.
-
-### 4.2 Naming lives on the folder
-
-The **folder** carries the PascalCase name matching the exported component
-(`NoteCard/`). The file is always `index.tsx`.
-
-Because the filename is always `index.tsx`, filename-based search does not
-identify the component — the **folder name** is the searchable identifier, so
-`git grep`-style navigation relies on the folder, not the file. Keep the folder
-name identical to the component's exported name.
-
-### 4.3 Sub-components
-
-A sub-component private to a parent is a **nested folder inside the parent's
-folder**. Nesting expresses privacy: if it lives inside `NoteCard/`, it belongs
-to `NoteCard`.
+A sub-component private to a parent is a nested folder inside the parent's folder; **nesting
+expresses privacy**. Once a second parent uses it, it is no longer private — promote it to a
+sibling, to `entities/`, or to `shared/`.
 
 ```
 NoteCard/
@@ -213,33 +145,25 @@ NoteCard/
     index.tsx
 ```
 
-If a "sub-component" turns out to be used by more than one parent, it is no
-longer private — promote it (to a sibling in the same feature, to `entities/`, or to
-`shared/`, per §1.3 and §7.2).
-
-### 4.4 Local types
-
-Component types follow a ladder, climbing only when the current rung hurts:
+Component types climb a ladder, only when the current rung hurts:
 
 1. **Inline in `index.tsx`** — the default. Most props types never leave here.
-2. **`NoteCard/types.ts`** — when they are large enough to bury the component, but
-   still belong to that one component.
-3. **`features/<name>/types.ts`** (or `entities/<name>/types.ts`) — when more than one
-   place in the module needs the same type.
+2. **`NoteCard/types.ts`** — large enough to bury the component, still owned by it.
+3. **`features/<name>/types.ts`** — more than one place in the module needs the same type.
 
-Domain shapes are not part of this ladder: they come from `src/payload-types.ts` and
-are never hand-duplicated (see `typescript.md`).
+Domain shapes are not on this ladder: they come from `src/payload-types.ts`
+(`typescript.md`).
 
----
+The one exception to all of the above is the vendored zone, below.
 
-## 5. Feature structure
+## Feature structure
 
-A feature under `features/<name>/` is organized by segment. The standard
-segments are:
+A feature is organized by segment. Create a segment when there is something to put in it;
+do not invent new segment names ad hoc.
 
 ```
 features/note/
-  components/   Components (each in its own folder — §4)
+  components/   Components (each in its own folder)
   hooks/        React hooks
   lib/          Feature-local helpers and non-React logic
   api/          Reads — data access for this feature
@@ -247,34 +171,21 @@ features/note/
   types.ts      Shared types for this feature
 ```
 
-Not every feature needs every segment — create a segment when there is something
-to put in it. Do not invent new top-level segment names ad hoc; if a new segment
-is genuinely needed, decide it explicitly.
+### `actions/` is a security boundary
 
-### 5.1 `actions/` is a security boundary, not a naming preference
+Reads and writes are split because **every export of a `"use server"` file is a publicly
+reachable HTTP endpoint**. Anyone can call it with any arguments; being unreferenced by the UI
+protects nothing. So inside `actions/`: one export per file, and that export is an intended
+endpoint — the companion-helper allowance below never applies here. Helpers a Server Action
+needs live in `lib/` and are imported, never beside the directive.
 
-Reads and writes are split into two segments because **every export of a `"use server"`
-file becomes a publicly reachable HTTP endpoint**. Anyone can call it with any
-arguments; being unreferenced by the UI protects nothing.
+What an action does with its arguments — validation, authorization, revalidation, result
+shape — is `api-local.md`. This is only where the file lives and what it may export.
 
-Inside `actions/`, therefore:
+## Entity structure
 
-- One export per file, and that export is an intended endpoint. The "small companion
-  helpers" allowance of §10.3 does not apply here, ever.
-- Helpers a Server Action needs live in `lib/` and are imported. They never sit in the
-  same file as the directive.
-
-What an action does with its arguments — validation, authorization, revalidation,
-result shape — is settled in `api-local.md`, not here. This section is only about
-where the file lives and what it is allowed to export.
-
----
-
-## 6. Entity structure
-
-An entity under `entities/<name>/` holds **domain primitives**: the small pieces of UI
-and domain reads that more than one feature needs, and that a feature therefore cannot
-own.
+An entity holds **domain primitives**: the small pieces of UI and domain reads that more than
+one feature needs, and that a feature therefore cannot own.
 
 ```
 entities/user/
@@ -284,233 +195,156 @@ entities/user/
   types.ts      Types not derivable from payload-types.ts
 ```
 
-Three rules keep this layer from turning into a second `features/`:
+Three rules keep this from becoming a second `features/`:
 
-- **Rule of two.** An entity is created when a second real consumer appears, never
-  speculatively. Until then the code lives in the one feature that uses it.
-- **Primitives and reads only.** No business flows, no mutations, no orchestration.
-  If it decides something rather than displaying or fetching it, it belongs to a
-  feature.
-- **No cross-entity imports** (§1.2). `entities/note/` does not import
-  `entities/user/`; the feature or screen module above them puts the pieces together.
+- **Rule of two.** An entity appears when a second real consumer does, never speculatively.
+  Until then the code lives in the one feature using it.
+- **Primitives and reads only.** No business flows, no mutations, no orchestration. If it
+  decides something rather than displaying or fetching it, it belongs to a feature.
+- **No cross-entity imports.** The feature or screen module above puts the pieces together.
 
----
+## Shared structure
 
-## 7. Shared structure
-
-`shared/` holds reusable code with no business-domain attachment. That definition is
-what makes `shared/` safe to import from anywhere without thinking — the moment
-something domain-bound lands here, the layer stops meaning anything. Domain code goes
-to `entities/` (§6).
+`shared/` holds reusable code with no business-domain attachment. That definition is what
+makes it safe to import from anywhere without thinking — the moment something domain-bound
+lands here, the layer stops meaning anything. Domain code goes to `entities/`.
 
 ```
 shared/
   components/       Reusable UI, ours
-  components/ui/    Vendored shadcn/ui primitives — see §7.1
+  components/ui/    Vendored shadcn/ui primitives
   hooks/            Generic hooks
   lib/              Generic helpers / utilities
   config/           App-wide configuration
   types/            Cross-cutting types
 ```
 
-### 7.1 `shared/components/ui/` — the vendored zone
+### `shared/components/ui/` — the vendored zone
 
-shadcn/ui is not a dependency, it is generated source. Its files are kebab-case, hold
-several exports each (`card.tsx` exports seven), and are updated by re-running the CLI
-and diffing. Restructuring them to fit §4.1, §8 and §10.3 breaks that update path for
-no benefit.
+shadcn/ui is not a dependency, it is generated source: kebab-case files holding several
+exports each, updated by re-running the CLI and diffing. Restructuring them to fit our rules
+breaks that update path for no benefit. So this one path is an explicit exception zone:
 
-So `shared/components/ui/` is an explicit exception zone:
-
-- Files stay exactly as the CLI generates them: kebab-case, multiple exports, no
+- Files stay exactly as the CLI writes them — kebab-case, multiple exports, no
   folder-plus-`index.tsx`.
-- They are **not** hand-restructured. Fixes go upstream or into a wrapper.
-- The rule of two (§7.2) does not apply — a primitive is installed when it is needed
-  once.
+- They are never hand-restructured. Fixes go upstream or into a wrapper.
+- The rule of two does not apply — a primitive is installed the first time it is needed.
 
-Anything we write ourselves lives **outside** `ui/`, under normal rules — including
-wrappers around a shadcn primitive.
+Anything we write ourselves lives **outside** `ui/` under the ordinary rules, wrappers around
+a primitive included.
 
-`components.json` must pin every alias, or the CLI writes into the wrong tree:
+`components.json` must pin every alias, or the CLI writes into the wrong tree. `utils`
+deliberately points at `shared/lib/cn.ts` (exporting `cn`) rather than a `lib/utils.ts`,
+which is the vague grab-bag name the naming rules forbid.
 
-```jsonc
-{
-  "aliases": {
-    "components": "@/shared/components",
-    "ui": "@/shared/components/ui",
-    "lib": "@/shared/lib",
-    "hooks": "@/shared/hooks",
-    "utils": "@/shared/lib/cn"
-  }
-}
-```
+### When something moves to `shared/`
 
-`utils` deliberately does not point at a `lib/utils.ts`: that is the vague grab-bag name
-§8 forbids. `shared/lib/cn.ts` exports `cn`, and generated components import it from
-there.
+- **Components:** promote only after a second real consumer exists, and only if the component
+  is genuinely domain-agnostic. If the second consumer needs it _because it shows domain
+  data_, the destination is `entities/`. Never "share" a component because it might be reused.
+- **Non-component functions:** a genuinely generic function — a formatter, a guard, a pure
+  helper — may go in `shared/` on first use. The test is "is this inherently generic?", not
+  "might I copy-paste it someday?".
 
-### 7.2 When something moves to `shared/`
+## Naming
 
-- **Components:** promote **only after** a second, real consumer exists, and only if the
-  component is genuinely domain-agnostic. If the second consumer needs it *because it
-  shows domain data*, the destination is `entities/`, not `shared/`. Do not preemptively
-  "share" a component because it might be reused later.
-- **Non-component functions:** a genuinely generic, reusable function (a formatter, a
-  guard, a pure helper) may be placed in `shared/` on first use if it is clearly
-  domain-agnostic and reusable by nature. The test is "is this inherently generic?",
-  not "might I copy-paste it someday?".
+- **Component folders:** PascalCase, matching the export — `NoteCard/`, `AppShell/`.
+- **Every other file** (hooks, utils, actions, config): camelCase, named for its primary
+  subject — `useNoteList.ts`, `formatDate.ts`, `createNote.ts`. These are plain files; only
+  components get the folder-plus-`index.tsx` treatment.
+- A name says what the thing is or does, so a reader understands it without opening the file.
+  Vague names (`data`, `helper`, `utils`, `handleClick2`) fail that test.
 
----
+The vendored zone is exempt from all of it.
 
-## 8. Naming
+## Tests
 
-- **Component folders:** PascalCase, matching the exported component
-  (`NoteCard/`, `NoteCardHeader/`, `AppShell/`).
-- **Everything else** (hooks, utils, actions, config — any non-component file):
-  camelCase, named after its primary subject: `useNoteList.ts`, `formatDate.ts`,
-  `createNote.ts`.
-- Non-component files are **plain files**, not `index` files in a folder. Only
-  components get the folder + `index.tsx` treatment.
-- Names describe what the thing is or does. A reader should understand a
-  component or function's purpose from its name without opening it. Avoid vague
-  names (`data`, `helper`, `utils`, `utils2`, `handleClick2`).
-
-The vendored zone (§7.1) is exempt from all of the above.
-
----
-
-## 9. Tests
-
-Tests live in a **separate tree**, not beside the code under test. Components and
-functions stay uncluttered, and a test file is free to import from any layer — the
-layer restrictions of §1.2 are scoped to `src/` and do not apply to test code.
+Tests live in a **separate tree**, so components stay uncluttered and a test file may import
+from any layer — the layer restrictions are scoped to `src/`.
 
 ```
 tests/                                        Vitest + React Testing Library
   features/note/components/NoteCard.test.tsx
-  entities/user/components/AuthorChip.test.tsx
   shared/lib/formatDate.test.ts
-  setup/
-  fixtures/
+  setup/  fixtures/
 
 e2e/                                          Playwright
   theme-switch.spec.ts
 ```
 
-- **`tests/` mirrors `src/`.** A test's path is derived from the file it tests:
-  `src/features/note/components/NoteCard/index.tsx` →
-  `tests/features/note/components/NoteCard.test.tsx`. Nothing has to be searched for,
-  and a test whose subject was deleted stands out.
-- **The test file is named after its subject**, not after `index`. This is what keeps
+- **`tests/` mirrors `src/`.** A test's path derives from the file it tests, so nothing has to
+  be searched for and a test whose subject was deleted stands out.
+- **The file is named after its subject**, not after `index` — this is what keeps
   `git grep NoteCard` finding both the component and its test.
-- **`e2e/` is separate** from `tests/`: a different runner, a different config, and a
-  different CI job (advisory, not blocking — `docs/testing.md`). E2E specs mirror user
-  journeys, not the source tree.
-- **The cost is real and accepted:** moving or renaming a component means moving its
-  test too, and nothing catches an orphaned test automatically.
+- **`e2e/` is separate**: different runner, different config, different CI job (advisory —
+  `docs/testing.md`). E2E specs mirror user journeys, not the source tree.
+- **The cost is accepted:** renaming a component means moving its test, and nothing catches an
+  orphaned test automatically.
 
-Which layer of test to write for which code is a separate question, answered in
-`docs/testing.md`.
+Colocated tests were considered and rejected (#58): with the folder-plus-`index.tsx` rule they
+produce either `index.test.tsx`, a filename identifying nothing, or a component folder mixing
+private sub-component folders with test files, which weakens nesting-means-privacy.
 
-> Issue #58 recommended colocated test files. Decided against deliberately: with the
-> folder-plus-`index.tsx` rule of §4.1, colocation produces either `index.test.tsx`
-> (a filename that identifies nothing) or a component folder mixing private
-> sub-component folders with test files, which weakens the "nesting means privacy"
-> reading of §4.3.
+Which layer of test to write for which code is `docs/testing.md`.
 
----
+## Imports
 
-## 10. Imports
+**Order is machine-enforced and auto-fixable** — `biome.json` →
+`assist.actions.source.organizeImports`. `yarn check:fix` rewrites it, `yarn ci` fails on it.
+Do not hand-sort, and do not restate the group list anywhere: a second copy drifts from the
+config. Changing the grouping is an edit to `biome.json`, not to this document.
 
-### 10.1 Grouping and order
+### Alias vs. relative
 
-Import order is **machine-enforced and auto-fixable**. The source of truth is
-`biome.json` → `assist.actions.source.organizeImports`; `yarn check:fix` rewrites the
-order, `yarn ci` fails on it. Do not hand-sort, and do not restate the group list
-anywhere else — a second copy will drift from the config.
+A **module** is one directory directly under a layer: `features/<name>`, `entities/<name>`,
+`views/<name>`. The dividing line is the module boundary, never the number of `../` segments.
 
-What it currently produces, for orientation:
+- **Inside its own module:** relative (`../hooks/useNote`, `./NoteCardHeader`), so the module
+  can be renamed or moved without rewriting its internals.
+- **Crossing into another module or layer:** always `@/`.
+- **Inside `shared/`:** always `@/`. It is a collection of independent units rather than a
+  module, so relative paths buy no portability.
 
-```ts
-import { cookies } from 'next/headers';
+Because sideways alias imports are lint-blocked, an `@/features/...` import inside `features/`
+fails `yarn check` — which is what stops this from being decided by taste.
 
-import { z } from 'zod';
+### One primary export per file
 
-import { Button } from '@/shared/components/Button';
+A component `index.tsx` exports one component; a non-component file exports its one primary
+export, named to match the file (`formatDate.ts` → `formatDate`).
 
-import { useNote } from '../hooks/useNote';
+**Small companion helpers** are the one allowance: short, pure, dependency-free helpers that
+naturally travel together may share a thematic file (`date.ts` exporting `formatDate`,
+`parseDate`, `isWeekend`). As soon as one grows dependencies, its own tests, or meaningful
+size, it moves to its own file. This is for trivial companions, not a grab-bag.
 
-import './styles.css';
-```
+Stricter in two places: `actions/`, where an extra export is an extra public endpoint, and the
+vendored zone, where it does not apply at all.
 
-Changing the grouping — adding a dedicated `import type` group, for instance — is an
-edit to `biome.json`, not to this document.
+### No barrel files
 
-### 10.2 Alias vs. relative
+A **barrel** is an `index.ts` whose only job is re-exporting other modules. Import the module
+you actually want instead. The reason is not tree-shaking — Turbopack shakes barrels fine —
+but three concrete costs:
 
-A **module** is one directory directly under a layer: `features/<name>`,
-`entities/<name>`, `views/<name>`.
-
-- **Inside its own module:** relative imports (`../hooks/useNote`, `./NoteCardHeader`).
-  The module stays self-contained — it can be renamed or moved without rewriting its
-  internals. Depth is not the criterion; leaving the module is.
-- **Crossing into another module or layer:** always the `@/` alias.
-- **Inside `shared/`:** always the `@/` alias. `shared/` is not a module but a
-  collection of independent units, so relative paths there buy no portability.
-
-The dividing line is the module boundary, not the number of `../` segments. Because
-sideways alias imports are lint-blocked (§1.2), an `@/features/...` import appearing
-inside `features/` fails `yarn check` — which is also what stops relative-vs-alias from
-being decided by taste.
-
-### 10.3 One primary export per file
-
-A file has **one primary export**.
-
-- Component `index.tsx` → one component. (Satisfied automatically by §4.)
-- A non-component file → its one primary export, named to match the file
-  (`formatDate.ts` → `formatDate`).
-
-**Small companion helpers** are the one allowance: short, pure, dependency-free
-helpers that naturally travel together may share a thematic file
-(`date.ts` exporting `formatDate`, `parseDate`, `isWeekend`). As soon as a helper
-grows its own dependencies, its own tests, or meaningful size, it moves to its
-own file. The thematic file is for genuinely trivial companions, not a
-grab-bag — do not let it accumulate unrelated exports.
-
-Two places where this is stricter than a style rule: `actions/` (§5.1), where an extra
-export is an extra public endpoint, and `shared/components/ui/` (§7.1), where it does
-not apply at all.
-
-### 10.4 No barrel files
-
-A **barrel** is an `index.ts` whose only job is re-exporting other modules. Do not
-create them. Import the module you actually want.
-
-The reason is not tree-shaking — Turbopack shakes barrels fine. It is three concrete
-costs:
-
-1. **Graph size in dev and build.** Every module the barrel touches is pulled into the
-   module graph and held there, whether or not anything uses it.
+1. **Graph size in dev and build.** Every module the barrel touches is pulled into the graph
+   and held there, used or not.
 2. **The `"use client"` boundary.** Importing one component through a barrel drags every
    client component it re-exports into the client graph alongside it.
-3. **Hard build failures.** A barrel that re-exports both a client module and a
-   server-only one pulls `server-only` into a client graph, and the build stops.
+3. **Hard build failures.** A barrel re-exporting both a client and a `server-only` module
+   pulls `server-only` into a client graph, and the build stops.
 
-`optimizePackageImports` in `next.config.ts` addresses this for **third-party** packages
-only. It is not a license to write barrels in our own code.
+`optimizePackageImports` in `next.config.ts` addresses this for **third-party** packages only.
+**There are currently no exceptions**; one would need every re-export on the same side of the
+client/server boundary and consumed as a unit, and would be added here by explicit decision.
 
-**There are currently no exceptions.** If one is ever justified, it would need every
-re-export to sit on the same side of the client/server boundary and to be consumed as a
-unit — and it would be added here by an explicit decision, not assumed.
+A component's `index.tsx` that _contains_ the component is not a barrel — this targets
+re-export-only files.
 
-> A component's `index.tsx` that **contains the component itself** is not a barrel — it
-> is the implementation. This rule targets re-export-only files.
+### Exports sit at the end
 
-### 10.5 Exports sit at the end
-
-Declarations are written plain, and what leaves the module is collected in one export
-statement at the bottom of the file.
+Declarations are written plain, and what leaves the module is collected in one statement at
+the bottom, so the file's public surface reads in one place:
 
 ```ts
 function formatNoteDate(value: string): string { ... }
@@ -518,25 +352,22 @@ function formatNoteDate(value: string): string { ... }
 export { formatNoteDate };
 ```
 
-The block is the file's public surface in one place, read without scanning the body for
-`export` keywords. `app/` re-exports (§2) are already this shape, and the order inside the
-block is handled by `organizeImports` — do not hand-sort it.
+Order inside the block is handled by `organizeImports` — do not hand-sort. **Partly
+machine-enforced**: `style/useExportsLast` fails any file where a plain statement follows an
+export, but a lone inline `export function` at the end of a file passes it. That half is
+review.
 
-**Partly machine-enforced** — `biome.json` → `style/useExportsLast` fails any file where a
-plain statement follows an export. It cannot see the rest: a lone inline `export function` at
-the end of a file passes it. That half is review.
+## Comments and documentation
 
----
+Two instruments, two triggers. A comment explains a decision to whoever reads the body; JSDoc
+states a contract to whoever never opens the file. None of this is lint-checkable — Biome has
+no rule for the presence or content of a comment — so it holds through review and
+`.claude/rules/`.
 
-## 11. Comments and documentation
+### A comment answers _why_
 
-Two different instruments with two different triggers. A comment explains a decision to
-whoever reads the body; JSDoc states a contract to whoever never opens the file.
-
-### 11.1 A comment answers *why*
-
-Code already says what it does and how. A comment earns its place by carrying what the code
-cannot: the reason behind a choice, the constraint that forced it, the cost of changing it.
+Code already says what it does. A comment earns its place by carrying what the code cannot:
+the reason behind a choice, the constraint that forced it, the cost of changing it.
 
 ```ts
 // `as-needed` keeps v1 URLs clean (`/notes`, not `/en/notes`) while the
@@ -545,16 +376,15 @@ cannot: the reason behind a choice, the constraint that forced it, the cost of c
 localePrefix: 'as-needed',
 ```
 
-Keep it to a line or three. A comment that has grown into a paragraph is usually a decision,
-and decisions live in `docs/adr/` or a feature doc, with the code pointing at them.
+Keep it to a line or three. A comment grown into a paragraph is usually a decision, and
+decisions live in `docs/adr/` or a feature doc with the code pointing at them. Where code
+needs a comment to be followed at all, rename the thing, split the function, or name the
+intermediate value — the comment then has nothing left to add.
 
-The other case is code that needs a comment to be followed at all. Rename the thing, split
-the function, or give the intermediate value a name — the comment then has nothing to add.
-
-### 11.2 Deferred work is an issue
+### Deferred work is an issue
 
 Work you are not doing now becomes a GitHub issue, and the code carries a comment saying why
-the current state exists, naming the number that will end it:
+the current state exists, naming the number that ends it:
 
 ```ts
 // TypeScript 7 ships no Compiler API, which is what Next normally calls to
@@ -563,50 +393,34 @@ the current state exists, naming the number that will end it:
 // the default, so it can be deleted on that upgrade — see #77.
 ```
 
-A `TODO` is that issue not written: it is invisible to the board, survives forever, and tells
-the next reader nothing about who decided what. Superseded code is deleted outright — `git
-log` is the archive, and a commented-out block only asks every later reader to work out
-whether it still matters.
+A `TODO` is that issue not written: invisible to the board, immortal, and silent about who
+decided what. Superseded code is deleted outright — `git log` is the archive, and a
+commented-out block only asks every later reader to work out whether it still matters.
 
-### 11.3 JSDoc on every export
+### JSDoc on every export
 
-Every export carries JSDoc. The boundary is the export — the same one that carries the
-explicit return type (`typescript.md` §9) — because what leaves the module is read by people
-and agents who will not open the file. Plain declarations, inline callbacks and local helpers
-are read together with their one caller and need none.
+The boundary is the export — the same one carrying the explicit return type
+(`typescript.md`) — because what leaves the module is read by people and agents who will not
+open the file. Plain declarations, inline callbacks and local helpers are read with their one
+caller and need none.
 
 JSDoc carries **what the signature does not**. Name, parameter types and return type already
-show up on hover; repeating them spends the reader's attention to say nothing. Write the
-things a reader cannot see:
+show on hover; repeating them spends attention to say nothing. Write what a reader cannot see:
 
 - the format or unit of a value — an ISO date string, minutes, cents
 - behavior at the edges: empty input, missing record, a value out of range
 - side effects — a cookie written, a path revalidated, a request fired
 - what it throws, and when
-- why the function exists at all, when that is the part nobody would guess
+- why the function exists at all, when nobody would guess
 
-Tags stay minimal, because TypeScript already holds the rest:
+Tags stay minimal, because TypeScript holds the rest: no types inside tags; `@returns`, never
+`@return`; `@param` and `@returns` are the only tags used; a parameter whose name says
+everything is left out of the block entirely; default values are visible in the signature and
+stay out. `src/shared/lib/assertNever.ts` and `src/i18n/theme.ts` are the shape to copy.
 
-- no types inside tags
-- `@returns`, never `@return`
-- `@param` and `@returns` are the only tags used
-- a parameter whose name says everything is left out of the block entirely; document the ones
-  that don't
-- default values are visible in the signature, so they stay out of the block
+This also covers `tests/setup/` and `tests/fixtures/` — shared infrastructure many specs
+import, where the contract has to be visible on hover. A spec documents itself through its
+`describe`/`it` titles.
 
-`src/shared/lib/assertNever.ts` and `src/i18n/theme.ts` are the shape to copy.
-
-A component is not a function for this rule — its contract is its props interface, and it is
-documented there. See `components.md` §7.
-
-### 11.4 Tests
-
-JSDoc applies to `tests/setup/` and `tests/fixtures/` — shared infrastructure that many spec
-files import, where the contract has to be visible on hover. A spec documents itself through
-its `describe`/`it` titles.
-
-### 11.5 Enforcement
-
-None of §11 is lint-checkable — Biome has no rule for the presence or the content of a
-comment. It holds through review and through `.claude/rules/`, which is why the trigger for
-each instrument is written as a condition rather than a preference.
+A component is not a function for this rule: its contract is its props interface and is
+documented there — `components.md`.

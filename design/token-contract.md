@@ -1,81 +1,61 @@
 # Token contract
 
-The list of semantic token names **both** Themes fill. It exists so that switching Theme is
-swapping values under one set of names, never swapping which names exist.
+The semantic names **both** Themes fill, so switching Theme swaps values and never swaps which
+names exist. This file names things and says what each means; it holds no values, which live
+in `src/styles/standard.css` and `src/styles/dark-fantasy.css`, with the reasoning behind them
+in `standard-tokens.md` and `dark-fantasy-tokens.md`.
 
 ## The rule
 
-Every name below is defined in every Theme. Where a Theme has nothing for a name, the value
-is `none`, `0`, or the nearest neutral — **not** a missing declaration. `standard` has no
-glow, so `--glow-accent-sm: none`; that is a value, and it is the honest one.
+Every name below is defined in every Theme. Where a Theme has nothing for a name the value is
+`none`, `0`, or the nearest neutral — **not** a missing declaration. `standard` has no glow, so
+`--glow-accent-sm: none`; that is a value, and it is the honest one.
 
 Two consequences, and both are the point:
 
-- A component never asks which Theme is active. It reads `--surface-card` and gets the right
-  material. Any `data-theme`-conditional inside a component is a bug against this contract.
-- A new token is added to **both** value documents in the same change, or not at all. A name
-  that exists in one Theme is the drift this file prevents.
+- **A component never asks which Theme is active.** It reads `--surface-card` and gets the
+  right material. Any `data-theme` condition inside a component is a bug against this contract.
+- **A new token is added to both Themes in the same change, or not at all.** A name existing
+  in one Theme is the drift this file prevents.
 
-Values live in `standard-tokens.md` and `dark-fantasy-tokens.md`. This file names things and
-says what each one means; it holds no values.
+## Tiers — where a raw value is allowed
 
----
+**A literal colour appears exactly once, in tier 1, and everything above refers back.**
 
-## Layers — where a raw value is allowed
+**Tier 1 — primitives.** The ramps (`--teal-700`, `--void-veil`, `--vellum-ink`) and the
+scalar scales. The _only_ place a hex, an `rgb()`, a pixel count or a font stack is written
+literally. Primitives are theme-private: neither a component nor the other Theme names one.
 
-Tokens sit in three tiers, and the rule is one sentence: **a literal colour appears exactly
-once, in tier 1, and everything above it refers back.**
+**Tier 2 — semantic.** Every name in this document. Its value is a `var()` onto a primitive, a
+`color-mix()` over one, or a composite built from those. It **never** contains a literal
+colour; `none`, `transparent`, `0` and `1` are not colours and are written directly.
 
-**Tier 1 — primitives.** The ramps: `--teal-700`, `--void-veil`, `--vellum-ink`, and the
-scalar scales for spacing, radii, and duration. This is the *only* place a hex, an `rgb()`,
-a pixel count, or a font stack is written literally. Primitives are theme-private: a
-component never names one, and neither does the other Theme.
-
-**Tier 2 — semantic.** Every name in this document. A semantic token's value is a `var()`
-onto a primitive, a `color-mix()` over one, or a composite (shadow, ring) built from those.
-**It never contains a literal colour.** The keywords `none`, `transparent`, `0`, and `1` are
-not colours and are written directly.
-
-**Tier 3 — components.** Read tier 2 only. A component that reaches for `--teal-700` or
+**Tier 3 — components.** Read tier 2 only. A component reaching for `--teal-700` or
 `--void-veil` has bound itself to one Theme and will be wrong in the other.
 
-### Alpha
+**Alpha** is `color-mix(in srgb, var(--primitive) N%, transparent)`, never a hand-written
+`rgba()` restating the primitive's channels. A copied `rgba(196,169,253,.35)` is not the
+violet — it is a second violet that nothing links to the first, and it will not follow when the
+first changes. `color-mix()` is already a hard requirement of Tailwind v4, so it costs no
+browser support that has not been spent.
 
-A translucent value is `color-mix(in srgb, var(--primitive) N%, transparent)` — never a
-hand-written `rgba()` restating the primitive's channels. A copied `rgba(196,169,253,.35)`
-is not the violet; it is a second violet that nothing links to the first, and it will not
-follow when the first changes.
-
-`color-mix()` is already a hard requirement of Tailwind v4, which this project uses, so it
-costs no browser support that has not already been spent.
-
-### How to check
-
-No line in either value document may declare a token whose value contains `#`, `rgb(`, or
-`rgba(` unless that line is inside a tier-1 ramp table. Everything else resolves through
-`var()`.
-
----
+**How to check:** no tier-2 declaration may contain `#`, `rgb(` or `rgba(`.
 
 ## The two accents
 
-Both Themes have exactly two accents, with the same two roles. Only the hues differ, and
-each Theme's design document explains its own pairing.
+Both Themes have exactly two accents with the same two roles. Only the hues differ.
 
 | Role | What it does | `standard` | `dark-fantasy` |
 |---|---|---|---|
-| **Action** | brand, primary action, active state, focus | deep teal | violet — *the light* |
-| **Content** | emphasis inside what the User wrote | violet | red — *the ink* |
+| **Action** | brand, primary action, active state, focus | deep teal | violet — _the light_ |
+| **Content** | emphasis inside what the User wrote | violet | red — _the ink_ |
 
 The rule that red never glows and violet never prints in `dark-fantasy` is this table read in
-that Theme's material: the action accent is what emits, the content accent is what is
-printed. `standard` obeys the same split without the atmosphere — teal acts, violet is
-content — which is why one contract serves both.
+that Theme's material: the action accent emits, the content accent is printed. `standard`
+obeys the same split without the atmosphere, which is why one contract serves both.
 
-An accent never crosses roles. A content accent that starts carrying a button, or an action
-accent that starts tinting a code block, breaks both Themes at once.
-
----
+**An accent never crosses roles.** A content accent that starts carrying a button, or an action
+accent tinting a code block, breaks both Themes at once.
 
 ## Names
 
@@ -92,23 +72,19 @@ accent that starts tinting a code block, breaks both Themes at once.
 --text-on-inverse     text on that surface
 ```
 
-`--surface-inverse` is what lets **either Theme put text on the opposite value**. In
-`standard`, whose chrome is light, it is near-black and carries tooltips and toasts. In
-`dark-fantasy`, whose chrome is dark, it is the vellum sheet — the same light material the
-Note body sits on. Each Theme therefore has both a light-on-dark and a dark-on-light pairing,
-which is the property this pair exists to guarantee rather than leave to chance.
+`--surface-inverse` is what lets **either Theme put text on the opposite value** — near-black
+in `standard`, the vellum sheet in `dark-fantasy`. Each Theme therefore has both a light-on-dark
+and a dark-on-light pairing, which is the property this pair exists to guarantee rather than
+leave to chance.
 
-`--surface-card` and `--surface-raised` may be translucent. In `dark-fantasy` they are, and
-that is the Theme's primary depth mechanism (`dark-fantasy-design.md` §4) — but never the
-field, never the sidebar, and never the reading sheet, because §8 bars frosted glass as the
-*default* surface. In `standard` both are opaque and the blur tokens below are `0`.
+`--surface-card` and `--surface-raised` may be translucent, and in `dark-fantasy` they are —
+but never the field, never the sidebar, never the reading sheet.
 
 ### The reading sheet — the Page
 
-Where the Note body is set. In `dark-fantasy` this is a light vellum sheet lying on the dark
-field, and it is the Theme's central structural idea. In `standard` the sheet and the chrome
-are the same material, so these resolve to the ordinary white and ink — **the tokens still
-exist**, and components that render Note content read only these.
+Where the Note body is set. In `dark-fantasy` a light vellum sheet on the dark field; in
+`standard` the same material as the chrome. **The tokens exist either way**, and components
+rendering Note content read only these.
 
 ```
 --page-surface        the sheet itself
@@ -119,20 +95,18 @@ exist**, and components that render Note content read only these.
 --page-accent         content accent as it prints on the sheet
 ```
 
-### Text — the Chrome
+### Text, borders, status — the Chrome
 
 ```
 --text-title    --text-brand      action accent as text
 --text-body     --text-accent     content accent as text
 --text-muted    --text-on-brand   text on a filled action
 --text-meta
-```
 
-### Borders
-
-```
 --border-subtle   --border-brand
 --border-strong   --border-disabled
+
+--status-live   --status-idle   --status-done
 ```
 
 ### Interactive states
@@ -147,38 +121,27 @@ exist**, and components that render Note content read only these.
 --focus-ring                   a full box-shadow value, not a colour
 ```
 
-`--focus-ring` is a shadow rather than a colour because `dark-fantasy` focuses with a bloom
-and `standard` with a flat ring. Same name, same slot, different value.
+`--focus-ring` is a shadow rather than a colour because `dark-fantasy` focuses with a bloom and
+`standard` with a flat ring. Same name, same slot, different value.
 
-Disabled is always a colour pair, never an `opacity` rule — see `standard-tokens.md` §2 for
-why.
+**Disabled is always a colour pair, never an `opacity` rule** — `standard-tokens.md` says why.
 
-### Status
+### Elevation, light, translucency
 
-```
---status-live   --status-idle   --status-done
-```
-
-### Elevation and light
-
-`standard` lifts with shadow and has no glow. `dark-fantasy` lifts with light and mostly has
-no shadow. Both fill all six.
+`standard` lifts with shadow and has no glow; `dark-fantasy` lifts with light and mostly has no
+shadow. Both fill all of these.
 
 ```
 --shadow-card    --glow-accent-sm
 --shadow-raised  --glow-accent-md
 --shadow-modal   --glow-text
-```
 
-### Translucency
-
-```
 --scrim-modal   --blur-card   --blur-raised   --blur-modal
 ```
 
-`--blur-card` and `--blur-raised` are backdrop blurs on translucent surfaces; `--blur-modal`
-is the blur applied to what sits *behind* a dialog. A dialog's own body is never translucent
-in either Theme — a decision should not have the page reading through it.
+`--blur-card` and `--blur-raised` are backdrop blurs on translucent surfaces; `--blur-modal` is
+the blur applied to what sits _behind_ a dialog. A dialog's own body is never translucent in
+either Theme — a decision should not have the page reading through it.
 
 ### Typography
 
@@ -190,50 +153,44 @@ in either Theme — a decision should not have the page reading through it.
 --font-code      code, inside a Note and out
 ```
 
-`--font-reading` and `--font-code` are **the same values in both Themes** and are the only
-tokens for which that is true by rule rather than by coincidence. Both live inside the Note
-body, which is content the User wrote; changing Theme must not change what their own writing
-looks like to read. Everything else is the Theme's own.
+`--font-reading` and `--font-code` are **the same values in both Themes**, the only tokens for
+which that is true by rule rather than coincidence. Both live inside the Note body, which is
+content the User wrote; changing Theme must not change what their own writing looks like to
+read.
 
-`--font-display` and `--font-ui` may resolve to the same family — `standard` does exactly
-that, separating display from interface by weight and size instead. Two names still exist,
-because `dark-fantasy` needs them to be different faces.
+`--font-display` and `--font-ui` may resolve to the same family — `standard` does exactly that,
+separating display from interface by weight and size. Two names still exist, because
+`dark-fantasy` needs two faces. `--font-meta` is a monospace in `standard` and a letterspaced
+grotesque in `dark-fantasy`, which is why metadata and code are two roles rather than one
+shared monospace token.
 
-`--font-meta` is a monospace in `standard` and a letterspaced grotesque in `dark-fantasy`.
-That is why metadata and code are two roles rather than one shared monospace token.
+### Radii and motion
 
-### Spacing — one scale, identical in both Themes
+`standard` is round where `dark-fantasy` is cut — one of the sharpest differences between the
+two, carried entirely by these five radii.
 
-**Every gap, pad, and margin in the product is a multiple of 4px.** Spacing is the one group
-whose values are identical in both Themes, not merely the names, which is why it is named
-here rather than in either value document.
+```
+--radius-xs  --radius-sm  --radius-md  --radius-lg  --radius-pill
+
+--dur-fast  --dur  --dur-slow  --ease-standard  --ease-emphasized  --press-scale
+```
+
+`--press-scale` is `dark-fantasy`'s clearest `none`-style value: that Theme shrinks nothing on
+press, so it fills the token with `1` and answers a press by taking light away instead.
+
+### Spacing — one scale, no token
+
+**Every gap, pad and margin in the product is a multiple of 4px**, and this is the one group
+whose _values_ are identical in both Themes rather than just its names — which is why it is
+named here and in neither value document.
 
 Rhythm is structural, not thematic: a Theme changes what a surface is made of, never how far
-apart two things sit. The Themes still *feel* different in density, because they draw from
+apart two things sit. The Themes still feel different in density because they draw from
 different parts of the same scale — `standard` reaches for the wide end, `dark-fantasy` is
 generous vertically and tight horizontally — but neither invents a value the other lacks.
 
 **There is no spacing token, and none is to be added.** Tailwind's spacing utilities already
-*are* this scale — `p-6` is 24px — so a `--space-6` would be a second copy of a value the
-framework holds, and a second copy is a second thing to drift. The rule above is what this
-document contributes; `docs/agents/coding-standards/styling.md` is where it is applied.
+_are_ this scale (`p-6` is 24px), so a `--space-6` would be a second copy of a value the
+framework holds, and a second copy is a second thing to drift.
 
-Anything that is not a multiple of four is either a hairline, a font metric, or a bug.
-
-### Radii — same names, opposite characters
-
-`standard` is round where `dark-fantasy` is cut. This is one of the sharpest differences
-between the two, and it is carried entirely by these five values.
-
-```
---radius-xs  --radius-sm  --radius-md  --radius-lg  --radius-pill
-```
-
-### Motion
-
-```
---dur-fast  --dur  --dur-slow  --ease-standard  --ease-emphasized  --press-scale
-```
-
-`--press-scale` is `dark-fantasy`'s clearest `none`-style value: that Theme shrinks nothing
-on press, so it fills the token with `1` and answers a press by taking light away instead.
+Anything not a multiple of four is a hairline, a font metric, or a bug.
