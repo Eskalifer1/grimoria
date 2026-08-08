@@ -178,7 +178,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**"],
-                    "message": "views/ may import features/, entities/ and shared/ only, and never another screen module — see docs/agents/coding-standards/general.md → Import direction."
+                    "message": "views/ may import features/, entities/ and shared/ only, and never another screen module — see docs/agents/coding-standards/general.md → Layers."
                   }
                 ]
               }
@@ -198,7 +198,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**"],
-                    "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ — see docs/agents/coding-standards/general.md → What to do instead of a sideways import."
+                    "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ — see docs/agents/coding-standards/general.md → Layers."
                   }
                 ]
               }
@@ -218,7 +218,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
-                    "message": "entities/ may import shared/ only, and never another entity — see docs/agents/coding-standards/general.md → Import direction."
+                    "message": "entities/ may import shared/ only, and never another entity — see docs/agents/coding-standards/general.md → Layers."
                   }
                 ]
               }
@@ -238,7 +238,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
-                    "message": "shared/ never reaches up. Domain-bound code belongs in entities/ — see docs/agents/coding-standards/general.md → Import direction."
+                    "message": "shared/ never reaches up. Domain-bound code belongs in entities/ — see docs/agents/coding-standards/general.md → Layers."
                   }
                 ]
               }
