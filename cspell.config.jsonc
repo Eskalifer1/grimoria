@@ -16,6 +16,7 @@
     "yarn.lock",
     "public/**",
     "src/app/favicon.ico",
+    "src/app/(payload)/**",
     ".cspell/**",
     ".claude/skills/**",
     ".claude/hooks/**"

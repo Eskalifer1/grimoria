@@ -4,7 +4,7 @@ Every issue gets exactly one label from each of the three dimensions — **excep
 end. Names are flat, with no `area:`/`type:`/`priority:` prefixes. Project-specific organizing
 labels, separate from the `triage` skill's canonical set (not installed here).
 
-**area** — `frontend` (client/admin UI) · `backend` (Payload collections, access control, API
+**area** — `frontend` (client UI) · `backend` (Payload collections, access control, API
 routes) · `design` (logo, icons, visual identity, meta assets — not code) · `infra` (tooling,
 CI/CD, project setup, skills, config)
 

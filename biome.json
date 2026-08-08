@@ -113,7 +113,7 @@
       }
     },
     {
-      "includes": ["src/shared/components/ui/**", "src/app/(payload)/**", "tests/**", "e2e/**"],
+      "includes": ["src/shared/components/ui/**", "tests/**", "e2e/**"],
       "linter": {
         "rules": {
           "style": {
@@ -133,7 +133,7 @@
       }
     },
     {
-      "includes": ["src/shared/components/ui/**", "src/app/(payload)/**"],
+      "includes": ["src/shared/components/ui/**"],
       "linter": {
         "rules": {
           "nursery": {
@@ -157,6 +157,38 @@
         "actions": {
           "source": {
             "organizeImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/(payload)/**", "src/payload-types.ts"],
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "actions": {
+          "source": {
+            "organizeImports": "off"
+          }
+        }
+      },
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noBannedTypes": "off",
+            "useArrowFunction": "off"
+          },
+          "nursery": {
+            "noInlineStyles": "off"
+          },
+          "style": {
+            "noJsxLiterals": "off",
+            "useConsistentTypeDefinitions": "off",
+            "useExportType": "off",
+            "useExportsLast": "off",
+            "useImportType": "off",
+            "useReactFunctionComponents": "off"
           }
         }
       }

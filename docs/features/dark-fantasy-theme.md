@@ -9,8 +9,8 @@ have bound to memory. Core to v1, not deferred.
 
 - Full visual re-styling: palette, typography, imagery, iconography.
 - Full copy re-mapping: **every** UI string changes, not just headline nouns.
-- The whole client app. `/admin/*` is deliberately excluded (ADR-0001); the Theme provider is
-  scoped to the non-admin route group.
+- The whole client app — every surface under `src/app/(frontend)/`. Payload's admin at `/cms`
+  is untouched by it: a separate route group with its own root layout and its own styles.
 
 The look is settled in `design/dark-fantasy-design.md` — read it before designing or
 implementing any dark-fantasy surface. Values are `src/styles/dark-fantasy.css`, reasoning is

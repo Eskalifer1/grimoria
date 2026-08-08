@@ -60,11 +60,11 @@ clearer.
 
 ## Where the token files live
 
-`src/app/globals.css` imports, in order: `tokens.css` (contract names → Tailwind utilities),
+`src/app/(frontend)/globals.css` imports, in order: `tokens.css` (contract names → Tailwind utilities),
 `standard.css` (values on bare `:root`), `dark-fantasy.css` (values behind
 `:root[data-theme=…]`), `shadcn-adapter.css`.
 
-`standard` sits on bare `:root` so a surface the Theme mechanism does not reach — `/admin`,
-localized but not themed — still renders in a complete Theme. The dark-fantasy selector carries
+`standard` sits on bare `:root` so a surface the Theme mechanism does not reach — anything
+rendered before `data-theme` is resolved — still renders in a complete Theme. The dark-fantasy selector carries
 `:root` deliberately: a bare attribute selector has the same specificity, which would make the
 winner depend on import order.

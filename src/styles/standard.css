@@ -1,7 +1,7 @@
 /*
  * `standard` values — `design/standard-tokens.md`. On bare `:root` so that
- * anything the Theme mechanism does not reach, like `/admin` (ADR-0001),
- * renders in this Theme without asking for it.
+ * anything the Theme mechanism does not reach renders in this Theme without
+ * asking for it.
  */
 
 :root {

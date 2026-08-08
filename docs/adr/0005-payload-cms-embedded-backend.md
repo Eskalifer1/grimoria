@@ -10,4 +10,8 @@ Why, given the project's actual constraints:
 - Payload CMS generates both REST and GraphQL APIs automatically from collection definitions, satisfies the "real API layer" requirement, and — critically — deploys as part of the same Next.js/Vercel project, so there is no second host to pay for.
 - Payload's access-control functions (collection- and field-level) map directly onto `Role` (ADR-0003) and `Visibility` (see `CONTEXT.md`), and its built-in Users collection covers auth, so both authorization and authentication come from the framework rather than hand-written code.
 
-Database hosting: see ADR-0007 (Postgres on Neon). Payload's built-in admin UI is kept only as a maintenance tool; the product-facing admin stays the custom gated `/admin` from ADR-0001.
+Database hosting: see ADR-0007 (Postgres on Neon).
+
+**Payload's built-in admin is the only admin**, at `/cms` (`routes.admin`, which also places `importMap.js`, hence the folder name under `src/app/(payload)/`). No custom one is planned: it would serve the maintainer alone, while Payload already gives full CRUD over every collection, enforces the same access-control functions that guard the APIs, and takes custom pages via `admin.components.views`. A second UI over the same data would spend this project's frontend effort on the surface nobody sees.
+
+The cost, accepted: it shows the data model rather than product concepts, is not themed, and extends only through Payload's component API. Revisit if a `moderator` who is not the maintainer ever has to moderate public Notes — that is a product surface, not a maintenance one.

@@ -70,6 +70,7 @@ wayfinding
 # --- Config keys, CLI flags and file names ---
 autofix
 cooldown
+importmap
 jsonc
 nodeLinker
 noopener

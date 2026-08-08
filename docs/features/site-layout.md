@@ -11,9 +11,8 @@ are deliberately not copied here.
 
 ## Shells
 
-- **App shell** — every authenticated surface, `/admin/*` included. Admin is not a second
-  interface: per ADR-0001 it is ordinary pages of the same app, gated by Role, appearing as an
-  extra navigation group in the same sidebar.
+- **App shell** — every authenticated surface. There is no admin group in it: the only admin is
+  Payload's own at `/cms` (ADR-0005), which is outside the shell entirely and reached directly.
 - **Public shell** — Guest surfaces: the public Note page and, later, Home/About.
 - **Auth pages** — no shell at all; a centered, standalone layout.
 

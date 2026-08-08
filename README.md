@@ -13,10 +13,15 @@ launcher (`yarn` 1.x or Corepack).
 
 ```bash
 yarn install
+cp .env.example .env   # then fill both values in
 yarn dev
 ```
 
-The app runs at http://localhost:3000.
+`PAYLOAD_SECRET` is any long random string (`openssl rand -hex 32`); `DATABASE_URL` points at
+Postgres (Neon, ADR-0007). Without it the app runs, but anything touching the database fails.
+
+The app runs at http://localhost:3000, with Payload's admin at `/cms` — the only admin there
+is, for the maintainer's own use (ADR-0005).
 
 ## Scripts
 
@@ -34,6 +39,9 @@ The app runs at http://localhost:3000.
 | `yarn check:fix`    | The same, applying every safe fix                       |
 | `yarn ci`           | What CI runs — never writes to disk                     |
 | `yarn spellcheck`   | cspell over the repo (code, docs, UI copy)              |
+| `yarn payload`      | Payload's CLI (migrations, `run`, one-off scripts)      |
+| `yarn generate:types` | Regenerate `src/payload-types.ts` from the config     |
+| `yarn generate:importmap` | Regenerate the admin's import map                |
 
 Biome is the single formatter and linter here; there is no Prettier or ESLint.
 Import order is enforced as an assist action, so the editor's "Format Document"

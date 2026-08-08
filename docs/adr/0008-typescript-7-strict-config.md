@@ -53,4 +53,4 @@ On `typescript@7.0.2` and `next@16.2.12`, with both strict flags on: `yarn typec
 
 The lockfile carries all twenty of TypeScript 7's platform binaries, including `linux-x64`, so CI resolves one without extra configuration.
 
-Payload's half is **argued, not executed** — Payload is not installed yet (#30, #32). The evidence above says `payload generate:types` cannot break, but running it once Payload lands is what actually closes the question. That is tracked in #77.
+Payload's half is now **executed, and the argument held**: with `payload@3.87.1` installed (#30), `generate:types` and `generate:importmap` run clean under TypeScript 7, and `yarn typecheck` and `yarn build` pass on the result. The one TypeScript 7 follow-up left is the `useTypeScriptCli` flag (#77).

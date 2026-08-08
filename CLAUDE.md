@@ -5,8 +5,8 @@ trigger applies to the current task.
 
 Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable —
 Postgres on Neon, one project with no monorepo, `next-intl` for the locale × theme copy system
-from day one, Tailwind v4 + shadcn/ui, and a custom gated `/admin/*` rather than Payload's
-built-in admin UI.
+from day one, Tailwind v4 + shadcn/ui, and **no admin of our own** — Payload's built-in admin
+at `/cms` is the admin, kept for the maintainer alone (ADR-0005).
 
 ## Tooling
 

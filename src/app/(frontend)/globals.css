@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-@import "../styles/tokens.css";
-@import "../styles/standard.css";
-@import "../styles/dark-fantasy.css";
-@import "../styles/shadcn-adapter.css";
+@import "../../styles/tokens.css";
+@import "../../styles/standard.css";
+@import "../../styles/dark-fantasy.css";
+@import "../../styles/shadcn-adapter.css";
 
 /*
  * No `prefers-color-scheme` block: `Theme` is a product identity with its own
