@@ -42,7 +42,7 @@ comment in the codebase.
 ## Bot commits
 
 `prefix: chore` for npm (`chore(deps):` / `chore(deps-dev):`) and `prefix: ci` for Actions, both
-within the ten types in `docs/git-workflow.md`. PRs are labelled `chore` + `infra`.
+within the ten types in `docs/git-workflow.md`. PRs are labeled `chore` + `infra`.
 
 ## Still open
 

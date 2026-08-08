@@ -11,7 +11,7 @@ offset, a progress width — is the one case that survives it, through a `biome-
 reason names the value being computed. Biome rejects a reasonless suppression, so that
 explanation is part of the mechanism rather than a courtesy.
 
-**A value outside the tokens does not compile.** `tokens.css` removes Tailwind's own colour,
+**A value outside the tokens does not compile.** `tokens.css` removes Tailwind's own color,
 radius, shadow, blur, font and easing scales, so `bg-red-500` and `shadow-lg` fail the build
 rather than shipping a value nothing links to the design system. Do not add them back: needing
 a value the tokens lack means `design/token-contract.md` is missing a name, and adding one is a

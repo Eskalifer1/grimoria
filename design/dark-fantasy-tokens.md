@@ -12,7 +12,7 @@ app — and built a single-accent crimson system in which red is also the light.
 Theme's accent rule.
 
 The neutral ramp keeps the run's **lightness steps** but not its **temperature**: its voids and
-greys lean cool and violet, which the design document forbids, because the field must be
+grays lean cool and violet, which the design document forbids, because the field must be
 neutral and warm-leaning so violet reads as light falling on a neutral surface rather than a
 tinted background. A violet-black field would make the accent disappear into its own backdrop.
 
@@ -38,7 +38,7 @@ family _was_ the light. A red carrying a glow is a bug, not a variant.
 
 **Vellum is the reading sheet.** `--vellum-ink` on `--vellum-0` is the strongest text contrast
 in the product, which is the point of the sheet existing. **Bone is text on the Chrome** — warm
-off-white, because the source's violet-tinted greys are ruled out for the same reason a violet
+off-white, because the source's violet-tinted grays are ruled out for the same reason a violet
 field is.
 
 `--line-glow` is deliberately **not** a primitive: it is violet at 35%, so it derives from one.
@@ -53,7 +53,7 @@ behind, and a primary action picks up `--glow-accent-sm`. No underlines, no scal
 
 **The primary action is a lit surface, not a saturated one.** Its fill is `--violet-light` with
 near-black on top, so the button reads as _the light_ rather than an object painted in the
-accent colour — which is what "violet is light" means when it becomes a control.
+accent color — which is what "violet is light" means when it becomes a control.
 
 That also fixes an accessibility failure, and this is the part not to undo: saturated
 `--violet-core` as a fill gives only **3.49:1** under near-black text, where `--violet-light`
@@ -61,7 +61,7 @@ gives **9.89:1**. Hover brightens to `--violet-mist` rather than darkening. `--v
 exists only so press has somewhere to go — dropping straight to `--violet-core` was the first
 attempt and fails the same way, 3.49:1 for as long as the pointer is held.
 
-**Disabled is a colour pair, never `opacity`** — which applies harder here: dimming a glowing
+**Disabled is a color pair, never `opacity`** — which applies harder here: dimming a glowing
 control produces a ghost rather than a disabled one.
 
 ## Elevation and light
@@ -72,7 +72,7 @@ the plane-brightness rule and lit edges, and real shadow appears only on things 
 floating.
 
 A glow is a wide dim halo, a medium glow, and a thin bright core — a single stroke never reads
-as emission. The glow tokens are the halo and the glow; the core is the element's own colour.
+as emission. The glow tokens are the halo and the glow; the core is the element's own color.
 
 ### Glass, and where it stops
 

@@ -7,7 +7,7 @@
 
 /*
  * No `prefers-color-scheme` block: `Theme` is a product identity with its own
- * words, not a colour-scheme preference, so an OS setting must never select it.
+ * words, not a color-scheme preference, so an OS setting must never select it.
  */
 
 @layer base {
@@ -19,7 +19,7 @@
 }
 
 /*
- * A shadow rather than a colour because the Themes focus differently, and
+ * A shadow rather than a color because the Themes focus differently, and
  * unlayered so it outranks `@layer utilities` — a vendored primitive's
  * `focus-visible:ring-*` would otherwise win and flatten dark-fantasy's bloom.
  */

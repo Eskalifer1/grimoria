@@ -69,5 +69,5 @@ entries: nothing is added until it is actually chosen.
 
 - Copy for the public listing page, search/filter labels, and admin-adjacent-but-visible
   strings such as error messages.
-- Whether achievements, notifications and other future features get flavour terms now or when
+- Whether achievements, notifications and other future features get flavor terms now or when
   they are built.

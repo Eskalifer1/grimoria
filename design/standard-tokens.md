@@ -8,7 +8,7 @@ CSS cannot say: why a value is what it is, and which are not free to change. Its
 
 **Teal is the action accent** — brand mark, page title, filled button, active nav label. One
 step is reserved: `--teal-400` is the **live signal only** (selected edge, unread marker, focus
-ring), the one colour permitted to feel electric.
+ring), the one color permitted to feel electric.
 
 **Violet is the content accent and never carries an action.** It belongs to what the User wrote:
 code surfaces, emphasis inside a Note, tags. That restriction is the whole point of having it,
@@ -36,13 +36,13 @@ on the sunken surface. **Do not lighten it back.** Verification for the rest of 
 
 ## Interactive states
 
-**Disabled is a colour, never an opacity.** A disabled control takes the neutral surface and
+**Disabled is a color, never an opacity.** A disabled control takes the neutral surface and
 disabled ink, reading as unavailable without dimming its own children — an `opacity` rule fades
 icons, borders and text unevenly and lands differently on every background. The low contrast is
 deliberate: disabled controls are exempt from WCAG 1.4.3, and one that still looks operable is
 the worse failure.
 
-**There is no separate pressed colour.** Press is `--press-scale` with the hover colour held, so
+**There is no separate pressed color.** Press is `--press-scale` with the hover color held, so
 `--action-primary-bg-pressed` repeats the hover value rather than adding a third step that is
 not perceivable at these durations. The token exists because `dark-fantasy` genuinely uses it.
 
@@ -53,7 +53,7 @@ not perceivable at these durations. The token exists because `dark-fantasy` genu
 **Shadow lifts here, and there is no glow** — `--glow-*` are `none`, the mirror of
 `dark-fantasy`'s `--shadow-card: none`. Neither Theme has a missing declaration.
 
-Every shadow is the ink at a low percentage rather than a hand-mixed grey, so the whole set
+Every shadow is the ink at a low percentage rather than a hand-mixed gray, so the whole set
 follows if the ink is retuned. **Different elevations get genuinely different shadows** — a
 card, a popover and a modal must not share one. Every surface is opaque, so the blur tokens are
 `0`.
@@ -64,7 +64,7 @@ card, a popover and a modal must not share one. Every surface is opaque, so the 
 ## Radii and motion
 
 Radii are generous and consistent, and the softness is the point: **round where `dark-fantasy`
-is cut**. Hover is `--dur-fast` on colour and `--dur` on shadow.
+is cut**. Hover is `--dur-fast` on color and `--dur` on shadow.
 
 ## Typography
 

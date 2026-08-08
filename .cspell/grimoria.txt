@@ -44,33 +44,20 @@ turbopack
 vercel
 vitest
 
-# --- Design system: typography, colour and CSS terms ---
-centreline
-centrelines
+# --- Design system: typography, color and CSS terms ---
+centerlines
 desaturated
 letterspaced
 linecap
 linejoin
 literata
 Playfair
-recoloured
 retuned
 rgba
 srgb
 unlayered
 WCAG
 wordmark
-
-# --- British spellings and prose the base dictionary lacks ---
-behaviour
-categorisation
-colour
-colours
-normalised
-parameterised
-regenerable
-roled
-unflavoured
 
 # --- Agent/process vocabulary (skills, workflow docs) ---
 ack
@@ -101,6 +88,8 @@ branchable
 extensionless
 lockdown
 logomark
+regenerable
+roled
 triaging
 typechecks
 unrepresentable

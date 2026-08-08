@@ -5,8 +5,8 @@
        weight breathes, and the edge is worn — hardest at the corners, where the five rubbed
        patches sit. Flat ink, lit faintly along its own contour.
        Worn ink moves toward the ground it sits on, so on this dark Chrome the patches
-       darken; the reference's greys lighten only because its ground is white paper.
-       Colour: override the CSS custom properties logo-ink, logo-edge, logo-scuff.
+       darken; the reference's grays lighten only because its ground is white paper.
+       Color: override the CSS custom properties logo-ink, logo-edge, logo-scuff.
        See design/logo.md. -->
   <defs>
     <filter id="grimoria-halo" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">

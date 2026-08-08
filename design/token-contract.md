@@ -19,17 +19,17 @@ one Theme is the drift this file prevents.
 
 **Motion is muted for both Themes at once.** `prefers-reduced-motion: reduce` collapses the
 `--dur-*` values in `globals.css`, so every transition timed by them shortens with them. Motion
-timed any other way escapes that switch and leaves the preference unhonoured.
+timed any other way escapes that switch and leaves the preference unhonored.
 
 ## Tiers — where a raw value is allowed
 
-**A literal colour appears exactly once, in tier 1, and everything above refers back.**
+**A literal color appears exactly once, in tier 1, and everything above refers back.**
 
 1. **Primitives** — the ramps (`--teal-700`, `--void-veil`) and scalar scales. The only place a
    hex, `rgb()`, pixel count or font stack is written literally. Theme-private: neither a
    component nor the other Theme names one.
 2. **Semantic** — a `var()` onto a primitive, a `color-mix()` over one, or a composite built
-   from those. **Never a literal colour**; `none`, `transparent`, `0` and `1` are not colours.
+   from those. **Never a literal color**; `none`, `transparent`, `0` and `1` are not colors.
 3. **Components** — read tier 2 only. A component reaching for `--teal-700` has bound itself to
    one Theme and will be wrong in the other.
 
@@ -69,12 +69,12 @@ Most names mean what they say. These carry a decision:
   what lets one component sit on either without knowing it moved.
 - **`--surface-card` and `--surface-raised` may be translucent**, and in `dark-fantasy` they
   are. Never the field, never the sidebar, never the reading sheet.
-- **`--focus-ring` is a full box-shadow, not a colour**, because `dark-fantasy` focuses with a
+- **`--focus-ring` is a full box-shadow, not a color**, because `dark-fantasy` focuses with a
   bloom and `standard` with a flat ring.
 - **`--blur-modal` blurs what sits _behind_ a dialog**, where `--blur-card` and `--blur-raised`
   are backdrop blurs on translucent surfaces. A dialog's own body is never translucent — a
   decision should not have the page reading through it.
-- **Disabled is always a colour pair, never an `opacity` rule** — `standard-tokens.md` says why.
+- **Disabled is always a color pair, never an `opacity` rule** — `standard-tokens.md` says why.
 - **`--font-reading` and `--font-code` hold the same values in both Themes**, the only tokens
   for which that is true by rule. Both live inside the Note body, which is content the User
   wrote; changing Theme must not change what their own writing looks like to read. **Neither

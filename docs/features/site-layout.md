@@ -15,7 +15,7 @@ are deliberately not copied here.
   interface: per ADR-0001 it is ordinary pages of the same app, gated by Role, appearing as an
   extra navigation group in the same sidebar.
 - **Public shell** — Guest surfaces: the public Note page and, later, Home/About.
-- **Auth pages** — no shell at all; a centred, standalone layout.
+- **Auth pages** — no shell at all; a centered, standalone layout.
 
 ## One Sidebar, two modes
 

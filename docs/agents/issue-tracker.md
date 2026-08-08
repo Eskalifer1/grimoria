@@ -18,8 +18,8 @@ with `gh pr view 42`, falling back to `gh issue view 42`.
 
 ## Wayfinding operations
 
-Used by `/wayfinder`. The **map** is a single issue labelled `wayfinder:map` holding the Notes
-/ Decisions-so-far / Fog body; **tickets** are its GitHub sub-issues, labelled
+Used by `/wayfinder`. The **map** is a single issue labeled `wayfinder:map` holding the Notes
+/ Decisions-so-far / Fog body; **tickets** are its GitHub sub-issues, labeled
 `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`) and assigned once claimed.
 
 **Blocking uses GitHub's native issue dependencies** — the canonical, UI-visible

@@ -12,10 +12,10 @@ Atmosphere may never cost legibility or the speed of scanning a list.
 ## Two material worlds
 
 The design's central structural idea. **Every component is described for both; a control on
-one is never the other recoloured.**
+one is never the other recolored.**
 
 **The Chrome** is dark and atmospheric — sidebar, note list, modals, menus, notifications.
-Near-black neutral-warm greys, cool light, volumetric depth, things emerging from haze.
+Near-black neutral-warm grays, cool light, volumetric depth, things emerging from haze.
 
 **The Page** is light vellum — warm cream, aged, faintly fibrous — holding the note body and
 nothing else. Dark ink on warm paper, the strongest text contrast in the product.
@@ -35,14 +35,14 @@ borders, destructive actions. Printed, absorbed, matte. **Red never glows.**
 **Violet is light.** It belongs to the Chrome: active navigation, focus, halos, emitting edges,
 the glow around interactive marks. Emitted, blooming, never flat. **Violet never prints.**
 
-The field beneath both is neutral and warm-leaning — near-black grey rather than violet-black,
+The field beneath both is neutral and warm-leaning — near-black gray rather than violet-black,
 so violet reads as light falling on a neutral surface rather than a tinted background. Text on
 the Chrome is a warm off-white, closer to bone than paper.
 
 ## Depth
 
 Flatness is the failure mode this design exists to avoid. Depth comes from layering, light
-behaviour and texture — never 3D, perspective, or isometric projection.
+behavior and texture — never 3D, perspective, or isometric projection.
 
 **Atmospheric imagery bleeds behind content and dissolves.** A dark scene sits behind a
 masthead and fades into the field with no hard edge; panels sit _on_ it, semi-transparent, so
@@ -51,13 +51,13 @@ the scene reads through them. This is the primary depth mechanism, and it belong
 
 **Five receding planes**: the deepest field; the atmosphere of haze, bloom and imagery; the
 structure of frames and rules; the surfaces holding content; the light itself. **No two
-adjacent planes share a brightness** — each steps in blur, opacity and colour temperature.
+adjacent planes share a brightness** — each steps in blur, opacity and color temperature.
 
 **Light has a single origin per screen**, and everything obeys it. Two elements of the same
 kind at different distances from it must not look identical.
 
 **Edges are lit, not stroked.** A border brightens on the side facing the light and fades to
-nothing on the side facing away. A uniform thin grey rectangle around a panel is the single
+nothing on the side facing away. A uniform thin gray rectangle around a panel is the single
 largest cause of a flat interface.
 
 **Surfaces are lit from within** — recessed, inner shadow, faint outer glow — rather than
@@ -69,7 +69,7 @@ that does not spill light reads as a notebook page, not an illuminated one.
 
 **Fine grain lies over everything**, with a coarser paper tooth on vellum only. Nothing is pure
 black or white; every extreme is tinted. The viewport carries a vignette, so the screen has a
-centre.
+center.
 
 ## Runes
 
@@ -129,7 +129,7 @@ depth without shadows.
 **The note list is uneven by construction**: entries are not identical rectangles, they vary by
 state, and light falls across the list unevenly, brightest nearest its source.
 
-**The reading view** puts the Page at the centre, a breadcrumb and metadata above the body. The
+**The reading view** puts the Page at the center, a breadcrumb and metadata above the body. The
 body carries a dropped capital opening the first paragraph, section headings, lists,
 quotations, inline and fenced code, links, and callouts, with ornamented rules dividing
 sections. Owner actions are present but subordinate to the text.
@@ -139,7 +139,7 @@ filament creeping along the edge, thick in two or three places, dormant elsewher
 for whole runs, with short tendrils branching off and trailing into the dark so the rectangle
 is broken. Bright buds sit at the branch points. The glow is a wide dim halo, a medium glow and
 a thin bright core — a single stroke never reads as emission. The dimmed page behind takes a
-soft radial wash in the filament's colour: a dark room lit by this object, not a flat scrim.
+soft radial wash in the filament's color: a dark room lit by this object, not a flat scrim.
 The interior stays calm and holds the strongest text contrast, with all the drama at the edge.
 
 **Empty states** carry a line of themed copy and one rune mark. No illustration.
@@ -158,7 +158,7 @@ The interior stays calm and holds the strongest text contrast, with all the dram
 ## Copy in mockups
 
 The renaming matters to the design: a display serif set over _Notes_ reads nothing like the
-same face over _Grimoire_. Compose against flavoured copy, never lorem or plain product
+same face over _Grimoire_. Compose against flavored copy, never lorem or plain product
 vocabulary.
 
 **Only four terms are settled** and may be treated as fixed: **Grimoria**, a **spell**, a

@@ -20,6 +20,10 @@ because Next.js and Payload do not expect Plug'n'Play. Yarn quarantines npm rele
 last few days: on `all versions ... are quarantined`, take the newest version that resolves
 rather than disabling the gate.
 
+**American English everywhere it is written down** — code, comments, docs, commit messages, UI, gh comments.
+Local discussion is the exception; `yarn
+spellcheck` guards the rest.
+
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting — a decision, a term, a
@@ -41,7 +45,7 @@ denial is the signal to run `/docs-sync`, not to bypass it.
   states: `docs/agents/coding-standards/components.md`. `views/` never carries `"use client"`, a
   server module carries `server-only`, and JSX conditionals close on `null`.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants:
-  `docs/agents/coding-standards/styling.md`. Colour, radius and shadow outside the tokens do not
+  `docs/agents/coding-standards/styling.md`. Color, radius and shadow outside the tokens do not
   compile, spacing is Tailwind's own scale, and duration and focus are names the build cannot
   enforce. A component never branches on the active Theme.
 - **Writing a user-visible string, or editing `messages/`**:
@@ -51,7 +55,7 @@ denial is the signal to run `/docs-sync`, not to bypass it.
 - **Designing or styling a UI surface**: `design/standard-design.md` and
   `design/dark-fantasy-design.md` — the written look of each Theme, fixing no values. Structure
   (shells, sidebar, masthead) is shared by both and lives in `docs/features/site-layout.md`.
-- **Needing a concrete colour, radius, shadow or duration**: `src/styles/standard.css` and
+- **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
   `dark-fantasy.css` — the only place values exist.
 - **Changing a token value, or wondering why one is what it is**: `design/standard-tokens.md`
   and `design/dark-fantasy-tokens.md` — contrast fixes, accent-role rules, font weights, type
