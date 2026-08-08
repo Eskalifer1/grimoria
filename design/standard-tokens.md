@@ -82,8 +82,8 @@ families; these are the **weights to load**, which it does not carry:
 **Plus Jakarta Sans carries display and interface from one family**, separated by weight and
 size rather than a second face. **JetBrains Mono carries all metadata** and code inside Notes —
 chosen over a display monospace because code is primary content here, not an accent; caps
-labels take wide tracking, a mono stating a fact does not. **Literata sets the Note body under
-both Themes** at a measure of roughly 68–75 characters, and neither Theme may override it.
+labels take wide tracking, a mono stating a fact does not. **Literata is shared with
+`dark-fantasy`**; what that constrains is `token-contract.md`.
 
 ### Type scale
 

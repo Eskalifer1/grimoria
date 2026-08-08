@@ -98,16 +98,15 @@ fact.
 
 A **reading serif** for the note body and nowhere else — the one face `standard` does not own,
 since `dark-fantasy` sets the note body in the same serif so switching theme never changes what
-long-form reading feels like. Measure roughly 68–75 characters, generous leading, and neither
-theme may override it for decoration.
+long-form reading feels like. Generous leading; the constraint on it is
+`token-contract.md`.
 
 **Display weights never appear on small functional controls.**
 
 ## Structure and surfaces
 
-Shells, sidebar contents and behaviour at each width are **not** settled here —
-`docs/features/site-layout.md` is canonical for structure, which both themes share. This is
-only how those zones are made of this theme's material.
+Structure is `docs/features/site-layout.md`; this is only how those zones are made of this
+theme's material.
 
 **The sidebar** holds the brand mark at the head, navigation as icon-and-label rows under
 monospace section labels, and user and log out at the foot. Rows owning sub-items expand into
@@ -122,20 +121,17 @@ the burger and the brand mark and nothing else — chrome rather than a masthead
 grow controls.
 
 **The masthead** carries a large display title with a monospace count or status line beneath,
-closed by a hairline. It holds no controls, and the space opposite the title is left empty on
-purpose: reserving it now means the page will not re-balance the first time something is put
-there.
+closed by a hairline.
 
 **The note list is a masonry grid**, not a uniform one — cards take the height their content
 needs and columns fill independently, because an even grid of equal cards is what makes a notes
-app look like a template. What a card is made of is settled with the Notes list page design.
+app look like a template.
 
 **Empty states** carry one plain line explaining what to do, and one action.
 
-The reference images beside this document are working files and **none is canonical for
-structure** — they show a global top bar, a global search field, filter and view-toggle
-buttons, a promotional panel at the sidebar foot, and navigation belonging to another product.
-Read them for material and atmosphere only.
+The reference images beside this document are working files — read them for material and
+atmosphere only. What in them is not canonical for structure is
+`docs/features/site-layout.md`.
 
 ## What this design is not
 

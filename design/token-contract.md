@@ -73,7 +73,10 @@ Most names mean what they say. These carry a decision:
 - **Disabled is always a colour pair, never an `opacity` rule** — `standard-tokens.md` says why.
 - **`--font-reading` and `--font-code` hold the same values in both Themes**, the only tokens
   for which that is true by rule. Both live inside the Note body, which is content the User
-  wrote; changing Theme must not change what their own writing looks like to read.
+  wrote; changing Theme must not change what their own writing looks like to read. **Neither
+  Theme may override the reading face for decoration**, and the Note body is set at a measure of
+  roughly 68–75 characters under both. Which families fill them, and at which weights, is each
+  Theme's token document.
 - **`--font-display` and `--font-ui` may resolve to one family** — `standard` does exactly that,
   separating them by weight and size. Two names exist because `dark-fantasy` needs two faces.
   **`--font-meta` is a monospace in `standard` and a letterspaced grotesque in `dark-fantasy`**,

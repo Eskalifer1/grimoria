@@ -94,9 +94,8 @@ navigation. An **interface sans** carries everything functional: buttons, form l
 text, meta rows, tooltips, tables; the display serif never appears on these.
 
 A **reading serif** sets the note body on the Page and nowhere else — the one face both themes
-share, so switching theme never changes what long-form reading feels like. Measure roughly
-68–75 characters, generous leading, and neither theme may override it for decoration. A
-**monospace** carries code, shared for the same reason.
+share, so switching theme never changes what long-form reading feels like; the constraint on it
+is `token-contract.md`. A **monospace** carries code, shared for the same reason.
 
 **Metadata is not monospace here** — breadcrumbs, tags, dates, counts and section labels are the
 interface sans, small, in capitals, widely tracked. This is the one place the two themes voice
@@ -106,9 +105,8 @@ keeps it serious.
 
 ## Surfaces and structure
 
-Shells, sidebar contents and behaviour at each width are **not** settled here —
-`docs/features/site-layout.md` is canonical for structure, which both themes share. This is
-only how those zones are made of this theme's material. There is no global header.
+Structure is `docs/features/site-layout.md`; this is only how those zones are made of this
+theme's material.
 
 **The sidebar** carries the primary areas as icon-and-label rows in small-caps display type,
 the brand mark above, user and log out below. The active row is marked by a lit vertical edge
@@ -122,16 +120,14 @@ forward, its edge lit harder against the dimmed field. The thin bar that opens i
 burger and the brand mark and is the shallowest plane in the theme.
 
 **The masthead** carries the note count or status in monospace beneath a display title, closing
-with an ornamented rule rather than a plain hairline. It holds no controls, and the space
-opposite the title stays empty as a reserved slot.
+with an ornamented rule rather than a plain hairline.
 
 **Panels** are semi-transparent over the atmosphere behind them, bounded by lit edges and,
 where density warrants, thin frames with corner brackets. Frames are how a dense screen keeps
 depth without shadows.
 
 **The note list is uneven by construction**: entries are not identical rectangles, they vary by
-state, and light falls across the list unevenly, brightest nearest its source. What an entry is
-made of is settled with the Notes list page design.
+state, and light falls across the list unevenly, brightest nearest its source.
 
 **The reading view** puts the Page at the centre, a breadcrumb and metadata above the body. The
 body carries a dropped capital opening the first paragraph, section headings, lists,

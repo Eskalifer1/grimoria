@@ -3,10 +3,10 @@ trigger applies to the current task.
 
 ## Stack
 
-Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable
-(ADR-0005) — Postgres on Neon, one project with no monorepo (ADR-0006), `next-intl` for the
-locale × theme copy system from day one (ADR-0004), Tailwind v4 + shadcn/ui, and a custom gated
-`/admin/*` rather than Payload's built-in admin UI (ADR-0001). Reasoning: `docs/adr/`.
+Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable —
+Postgres on Neon, one project with no monorepo, `next-intl` for the locale × theme copy system
+from day one, Tailwind v4 + shadcn/ui, and a custom gated `/admin/*` rather than Payload's
+built-in admin UI.
 
 ## Tooling
 

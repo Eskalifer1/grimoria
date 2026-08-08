@@ -11,15 +11,15 @@ lives in `src/styles/` and holds **tokens only**.
 **A value outside the tokens does not compile.** `tokens.css` removes Tailwind's own colour,
 radius, shadow, blur, font and easing scales, so `bg-red-500` and `shadow-lg` fail the build
 rather than shipping a value nothing links to the design system. Do not add them back: needing
-a value the tokens lack means `design/token-contract.md` is missing a name, and a name is added
-to **both** Themes in the same change or not at all.
+a value the tokens lack means `design/token-contract.md` is missing a name, and adding one is a
+change to that contract.
 
 Font size is the one scale still open — the two Themes name their type scales differently, so
 `text-*` stays until #79 settles one set of names.
 
 **Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
-what the utilities already produce (`p-6` is 24px). There is no spacing token and none is to be
-added. Anything not a multiple of four is a hairline, a font metric, or a bug.
+what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
+value off the scale means, is `design/token-contract.md`.
 
 **A component never asks which Theme is active.** No `data-theme` condition, no `dark:`
 variant, no Tailwind variant registered for a Theme. Switching Theme is values changing under
@@ -36,7 +36,6 @@ hand-edited to change a token, fix a variant, or match our formatting.
 
 - shadcn's vocabulary is translated **once**, in `src/styles/shadcn-adapter.css`. A primitive
   needing a name that file lacks is a decision about what that name means in both Themes.
-- Anything we write, wrappers included, lives outside `ui/` under the ordinary rules.
 - Biome's formatter and import sorting are **off** there, and style rules disagreeing with the
   CLI are disabled for it — that is what keeps `shadcn add <x>` a no-op diff. A newly added
   primitive tripping another rule gets the rule disabled for the zone, not the file fixed.

@@ -115,7 +115,7 @@ dark field where a finer old-style serif would go thin and shimmer.
 labels `standard` sets in monospace. Always small (11–14px) and letterspaced (0.08–0.14em); the
 display serif never appears on these.
 
-**Literata and JetBrains Mono are not this Theme's to change.**
+**Literata and JetBrains Mono are shared**; what that constrains is `token-contract.md`.
 
 ### Type scale
 

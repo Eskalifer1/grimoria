@@ -17,18 +17,13 @@ implementing any dark-fantasy surface. Values are `src/styles/dark-fantasy.css`,
 `design/dark-fantasy-tokens.md`. Structure is shared with `standard` and lives in
 `docs/features/site-layout.md`.
 
-## Two rules that reach outside the design docs
+## The one thing this Theme does not re-skin
 
-**The Note body font is not this Theme's to choose.** One reading serif — **Literata** — sets
-the Note body under _both_ Themes, so switching Theme never changes what long-form reading
-feels like. It is the single exception to "this Theme re-skins everything", and it exists for
-the same reason the vellum Page does. Everything else in the chrome remains this Theme's own.
-
-**Token parity.** Both Themes fill one shared list of semantic names
-(`design/token-contract.md`), so switching swaps values, never which names exist. Where this
-Theme has something `standard` lacks — glow, blur, translucent surfaces — `standard` fills those
-names with `none`, and vice versa for `--shadow-card`. **A component must never branch on which
-Theme is active**; if it has to, the contract is missing a name.
+**The Note body font is not this Theme's to choose.** It is the single exception to "this Theme
+re-skins everything", and it exists for the same reason the vellum Page does — everything else
+in the chrome remains this Theme's own. What the constraint actually is, and the token parity
+that makes switching Themes a swap of values rather than of names, is
+`design/token-contract.md`.
 
 ## How it's built
 

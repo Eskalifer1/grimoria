@@ -41,7 +41,7 @@ Bucket by what kind of fact changed:
 - **Process/tooling/convention** → `CLAUDE.md`.
 - **Issue-tracker/label/agent-workflow convention** → the relevant `docs/agents/*.md`.
 
-A single change can land in more than one bucket. Read this list from CLAUDE.md's `## Agent skills` / `## Conventions` sections at the start of each run rather than treating the list above as fixed — if CLAUDE.md's doc layout changes, this skill should follow it, not drift from it.
+A single change can land in more than one bucket. Read this list from CLAUDE.md's `## Where to look, by task` section at the start of each run rather than treating the list above as fixed — if CLAUDE.md's doc layout changes, this skill should follow it, not drift from it.
 
 ### 4. Check each candidate doc before proposing anything
 
@@ -49,7 +49,13 @@ Open every doc a bucket points to and compare it against the change. Only flag w
 
 ### 5. Grep pass for indirect staleness
 
-The primary doc for a change isn't always the only place it's mentioned. Grep `CONTEXT.md`, `CLAUDE.md`, and all of `docs/` for the term(s)/slug(s)/identifier(s) involved — including the **old** name when something was renamed, since the diff itself won't contain it anymore. A hit outside the primary doc that now disagrees is exactly the drift this skill exists to catch — this is what would have caught the `docs/agents/labels.md` mismatch that prompted this skill's creation, had the label change gone through a code diff instead of `gh label` calls (which it didn't — see the "known gaps" note below).
+The primary doc for a change isn't always the only place it's mentioned. Grep `CONTEXT.md`, `CLAUDE.md`, and all of `docs/` for the term(s)/slug(s)/identifier(s) involved — including the **old** name when something was renamed, since the diff itself won't contain it anymore. A hit outside the primary doc that **repeats** the rule is a finding too, not just one that disagrees: a rule living in two places has two places to drift, and the fix is to leave a pointer in the secondary doc rather than edit the same rule twice. Four repeats are deliberate and are **not** findings:
+
+- **The two `design/*-design.md` docs** are mirrors — each is one Theme's written look, read on its own. They may describe the same material twice; only a pointer to another doc belongs in one place.
+- **`docs/features/*.md`** carry what a rule means for that feature, beside a pointer at the rule itself.
+- **CLAUDE.md's `## Where to look, by task` bullets** restate the rules they point at on purpose — they are the only copy always in context.
+- **`docs/adr/`** records a decision as it stood. A standards doc saying it differently is a signal the decision was revisited, not drift.
+ A hit outside the primary doc that now disagrees is exactly the drift this skill exists to catch — this is what would have caught the `docs/agents/labels.md` mismatch that prompted this skill's creation, had the label change gone through a code diff instead of `gh label` calls (which it didn't — see the "known gaps" note below).
 
 ### 6. Propose — don't write yet
 
