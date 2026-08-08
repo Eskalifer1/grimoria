@@ -41,8 +41,9 @@ denial is the signal to run `/docs-sync`, not to bypass it.
   states: `docs/agents/coding-standards/components.md`. `views/` never carries `"use client"`, a
   server module carries `server-only`, and JSX conditionals close on `null`.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants:
-  `docs/agents/coding-standards/styling.md`. Values outside the tokens do not compile, spacing is
-  Tailwind's own scale, and a component never branches on the active Theme.
+  `docs/agents/coding-standards/styling.md`. Colour, radius and shadow outside the tokens do not
+  compile, spacing is Tailwind's own scale, and duration and focus are names the build cannot
+  enforce. A component never branches on the active Theme.
 - **Writing a user-visible string, or editing `messages/`**:
   `docs/agents/coding-standards/i18n.md`. Copy is never hardcoded in JSX
   (`style/noJsxLiterals`), and a string is written in both theme catalogs in one change or `tsc`

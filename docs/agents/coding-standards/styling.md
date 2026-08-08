@@ -17,6 +17,10 @@ change to that contract.
 Font size is the one scale still open — the two Themes name their type scales differently, so
 `text-*` stays until #79 settles one set of names.
 
+**Duration is written as a name**: `duration-fast`, `duration-slow`, or no class at all, which
+is the contract's own default. `duration-200` is the exception the build cannot catch — a bare
+number is not a scale lookup, so there is no scale to drop.
+
 **Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
 what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
 value off the scale means, is `design/token-contract.md`.
@@ -30,6 +34,10 @@ branch.
 Tailwind's `dark` variant is deliberately pointed at a class this app never sets
 (`shadcn-adapter.css`), so `dark:` does nothing rather than half-working. The OS never selects
 a Theme either: `prefers-color-scheme` chooses nothing here.
+
+**Focus comes from one rule and needs no class.** `globals.css` declares `:focus-visible`
+unlayered, which outranks every utility — including a vendored primitive's. A
+`focus-visible:ring-*` written in our own code compiles and then loses to it.
 
 **The vendored zone is consumed, never edited.** `src/shared/components/ui/` is CLI output — not
 hand-edited to change a token, fix a variant, or match our formatting.

@@ -100,4 +100,14 @@
 
   --ease-standard: var(--ease-standard);
   --ease-emphasized: var(--ease-emphasized);
+
+  /*
+   * `duration-<number>` is a bare value, so no namespace can be dropped to make
+   * it fail — naming the three is what gives it something to lose to. The
+   * default is overridden because a bare `transition` would otherwise animate
+   * at Tailwind's 150ms, which is not a contract value.
+   */
+  --transition-duration-fast: var(--dur-fast);
+  --transition-duration-slow: var(--dur-slow);
+  --default-transition-duration: var(--dur);
 }

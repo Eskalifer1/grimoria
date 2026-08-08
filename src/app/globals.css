@@ -16,10 +16,14 @@
     color: var(--text-body);
     font-family: var(--font-ui);
   }
+}
 
-  /* A shadow rather than a colour because the Themes focus differently. */
-  :focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-  }
+/*
+ * A shadow rather than a colour because the Themes focus differently, and
+ * unlayered so it outranks `@layer utilities` — a vendored primitive's
+ * `focus-visible:ring-*` would otherwise win and flatten dark-fantasy's bloom.
+ */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
