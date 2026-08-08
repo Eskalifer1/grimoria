@@ -1,0 +1,122 @@
+/*
+ * `standard` values — `design/standard-tokens.md`. On bare `:root` so that
+ * anything the Theme mechanism does not reach, like `/admin` (ADR-0001),
+ * renders in this Theme without asking for it.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Primitives */
+
+  --teal-900: #0a423e;
+  --teal-700: #0d5a54;
+  --teal-600: #0f6b63;
+  --teal-400: #0fb5a5;
+  --teal-200: #bfe3de;
+  --teal-100: #e3f2f0;
+  --teal-50: #eff7f6;
+
+  --violet-600: #7c3aed;
+  --violet-500: #8b5cf6;
+  --violet-200: #ddcdfb;
+  --violet-100: #f1e9fe;
+  --violet-50: #f7f2fe;
+
+  --ink-900: #150b2b;
+  --ink-700: #2d2545;
+  --ink-500: #5b5570;
+  --ink-400: #6e6885;
+  --ink-300: #a8a4b8;
+
+  --paper-0: #ffffff;
+  --paper-50: #fcfcfe;
+  --paper-100: #f7f7fb;
+  --line-100: #eceaf2;
+  --line-200: #dfdce9;
+
+  /* Semantic */
+
+  --surface-page: var(--paper-50);
+  --surface-card: var(--paper-0);
+  --surface-sidebar: var(--paper-0);
+  --surface-raised: var(--paper-0);
+  --surface-inset: var(--paper-100);
+  --surface-selected: var(--teal-50);
+  --surface-inverse: var(--ink-900);
+  --text-on-inverse: var(--paper-50);
+
+  --page-surface: var(--paper-0);
+  --page-text: var(--ink-700);
+  --page-text-muted: var(--ink-500);
+  --page-rule: var(--line-100);
+  --page-code-surface: var(--violet-50);
+  --page-accent: var(--violet-600);
+
+  --text-title: var(--ink-900);
+  --text-body: var(--ink-700);
+  --text-muted: var(--ink-500);
+  --text-meta: var(--ink-400);
+  --text-brand: var(--teal-700);
+  --text-accent: var(--violet-600);
+  --text-on-brand: var(--paper-0);
+
+  --border-subtle: var(--line-100);
+  --border-strong: var(--line-200);
+  --border-brand: var(--teal-400);
+  --border-disabled: var(--line-100);
+
+  --action-primary-bg: var(--teal-700);
+  --action-primary-bg-hover: var(--teal-900);
+  --action-primary-bg-pressed: var(--teal-900);
+  --action-primary-fg: var(--text-on-brand);
+  --action-primary-bg-disabled: var(--paper-100);
+  --action-primary-fg-disabled: var(--ink-300);
+
+  --action-quiet-bg: transparent;
+  --action-quiet-bg-hover: var(--paper-100);
+  --action-quiet-fg: var(--ink-700);
+  --action-quiet-fg-disabled: var(--ink-300);
+
+  --focus-ring: 0 0 0 2px var(--teal-400);
+
+  --status-live: var(--teal-400);
+  --status-idle: var(--ink-300);
+  --status-done: var(--teal-700);
+
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--ink-900) 4%, transparent),
+    0 10px 28px color-mix(in srgb, var(--ink-900) 6%, transparent);
+  --shadow-raised:
+    0 2px 4px color-mix(in srgb, var(--ink-900) 5%, transparent),
+    0 18px 40px color-mix(in srgb, var(--ink-900) 9%, transparent);
+  --shadow-modal: 0 24px 60px color-mix(in srgb, var(--ink-900) 14%, transparent);
+
+  --glow-accent-sm: none;
+  --glow-accent-md: none;
+  --glow-text: none;
+
+  --scrim-modal: color-mix(in srgb, var(--ink-900) 32%, transparent);
+  --blur-card: 0;
+  --blur-raised: 0;
+  --blur-modal: 0;
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  --dur-fast: 140ms;
+  --dur: 200ms;
+  --dur-slow: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
+  --press-scale: 0.985;
+
+  --font-display: var(--font-plus-jakarta-sans), sans-serif;
+  --font-ui: var(--font-plus-jakarta-sans), sans-serif;
+  --font-meta: var(--font-jetbrains-mono), monospace;
+  --font-reading: var(--font-literata), serif;
+  --font-code: var(--font-jetbrains-mono), monospace;
+}

@@ -1,0 +1,130 @@
+/*
+ * `dark-fantasy` values — `design/dark-fantasy-tokens.md`. The selector carries
+ * `:root` because a bare attribute selector ties the winner to import order.
+ */
+
+:root[data-theme="dark-fantasy"] {
+  color-scheme: dark;
+
+  /* Primitives */
+
+  --void-abyss: #0a0908;
+  --void-crypt: #121110;
+  --void-shroud: #171614;
+  --void-veil: #1f1d1a;
+  --void-slate: #262320;
+  --void-ash: #2c2926;
+  --void-bone: #3a3631;
+  --void-black: #000000;
+
+  --violet-mist: #e9ddff;
+  --violet-light: #c4a9fd;
+  --violet-dim: #a385f2;
+  --violet-core: #7c3aed;
+  --violet-deep: #4c1d95;
+  --violet-veil: #221a2c;
+  --violet-shroud: #2c2340;
+
+  --blood-mist: #ffdad6;
+  --blood-light: #ffb4ab;
+  --blood-sigil: #93000a;
+  --blood-clot: #690005;
+
+  --vellum-0: #efe4ce;
+  --vellum-100: #e4d8be;
+  --vellum-line: #dccdb0;
+  --vellum-ink: #2b2118;
+  --vellum-muted: #6b5b47;
+
+  --line-hair: #211f1c;
+  --line-etch: #37332e;
+
+  --bone-100: #ede6da;
+  --bone-300: #d2c9bc;
+  --bone-500: #9a9184;
+  --bone-700: #5a554d;
+
+  /* Semantic */
+
+  --surface-page: var(--void-shroud);
+  --surface-sidebar: var(--void-crypt);
+  --surface-inset: var(--void-ash);
+  --surface-selected: var(--violet-veil);
+  --surface-inverse: var(--vellum-0);
+  --text-on-inverse: var(--vellum-ink);
+
+  /* The only two translucent surfaces; the field, sidebar and sheet stay opaque. */
+  --surface-card: color-mix(in srgb, var(--void-veil) 86%, transparent);
+  --surface-raised: color-mix(in srgb, var(--void-slate) 82%, transparent);
+
+  --page-surface: var(--vellum-0);
+  --page-text: var(--vellum-ink);
+  --page-text-muted: var(--vellum-muted);
+  --page-rule: var(--vellum-line);
+  --page-code-surface: var(--vellum-100);
+  --page-accent: var(--blood-sigil);
+
+  --text-title: var(--bone-100);
+  --text-body: var(--bone-300);
+  --text-muted: var(--bone-500);
+  --text-meta: var(--bone-500);
+  --text-brand: var(--violet-light);
+  --text-accent: var(--blood-light);
+  --text-on-brand: var(--void-abyss);
+
+  --border-subtle: var(--line-hair);
+  --border-strong: var(--line-etch);
+  --border-brand: var(--violet-light);
+  --border-disabled: var(--line-hair);
+
+  --action-primary-bg: var(--violet-light);
+  --action-primary-bg-hover: var(--violet-mist);
+  --action-primary-bg-pressed: var(--violet-dim);
+  --action-primary-fg: var(--void-abyss);
+  --action-primary-bg-disabled: var(--void-slate);
+  --action-primary-fg-disabled: var(--bone-700);
+
+  --action-quiet-bg: transparent;
+  --action-quiet-bg-hover: color-mix(in srgb, var(--violet-light) 8%, transparent);
+  --action-quiet-fg: var(--text-body);
+  --action-quiet-fg-disabled: var(--bone-700);
+
+  --focus-ring:
+    0 0 0 1px var(--violet-light), 0 0 16px color-mix(in srgb, var(--violet-light) 25%, transparent);
+
+  --status-live: var(--violet-light);
+  --status-idle: var(--bone-500);
+  --status-done: var(--violet-core);
+
+  --shadow-card: none;
+  --shadow-raised: 0 24px 48px color-mix(in srgb, var(--void-black) 55%, transparent);
+  --shadow-modal: 0 32px 80px color-mix(in srgb, var(--void-black) 70%, transparent);
+
+  --glow-accent-sm: 0 0 12px color-mix(in srgb, var(--violet-light) 18%, transparent);
+  --glow-accent-md: 0 0 28px color-mix(in srgb, var(--violet-light) 24%, transparent);
+  --glow-text: 0 0 18px color-mix(in srgb, var(--violet-light) 35%, transparent);
+
+  --scrim-modal: color-mix(in srgb, var(--void-abyss) 78%, transparent);
+  --blur-card: 8px;
+  --blur-raised: 8px;
+  --blur-modal: 14px;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  --dur-fast: 120ms;
+  --dur: 220ms;
+  --dur-slow: 420ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --press-scale: 1;
+
+  --font-display: var(--font-playfair-display), serif;
+  --font-ui: var(--font-barlow), sans-serif;
+  --font-meta: var(--font-barlow), sans-serif;
+  --font-reading: var(--font-literata), serif;
+  --font-code: var(--font-jetbrains-mono), monospace;
+}

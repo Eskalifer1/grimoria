@@ -62,7 +62,11 @@ Copy is sourced through a `locale × theme` resource (see the copy-system ADR) r
 
 **Storage**: logged-in users' choice persists on their User profile (syncs across devices); guests get a cookie, so the public notes page still respects their preference. It has to be a cookie rather than `localStorage` because the server resolves copy before rendering — see the copy-system ADR.
 
-**Switching**: the toggle has to reach the server and re-render, not just flip client state. Styling is CSS custom properties and would repaint on its own, but the copy would stay in the old tonality — so a half-switched page is the failure mode to watch for.
+**Styling**: both Themes fill the whole token contract in `src/styles/`, and the active Theme is a `data-theme` attribute on `<html>`, resolved on the server alongside the copy. `standard`'s values sit on bare `:root`, so a surface the mechanism does not reach — `/admin`, which is localized but not themed (ADR-0001) — still renders in a complete Theme. How code consumes these tokens is `docs/agents/coding-standards/styling.md`.
+
+**The operating system never selects this Theme.** A visitor whose system is in dark mode still gets `standard`: `prefers-color-scheme` chooses nothing here, and `standard` has no dark variant. This Theme is a different identity with different words, not a darker palette, and handing someone the dark-fantasy tonality because of a system setting is the failure that rules this out.
+
+**Switching**: the toggle has to reach the server and re-render, not just flip client state. Styling is CSS custom properties and would repaint on its own, but the copy would stay in the old tonality — so a half-switched page is the failure mode to watch for. The control itself is #78; the mechanism it drives landed with the token scaffold.
 
 ## Copy mapping (draft — expand as UI surfaces get built)
 

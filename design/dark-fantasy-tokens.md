@@ -255,9 +255,10 @@ halo and the glow; the core is the element's own colour.
 
 ## 4. Spacing, radii, motion
 
-Spacing is `--space-N = N × 4px`, **identical to `standard`** — see the contract. Rhythm is
-structural; this Theme draws from the same scale, generous vertically and tight horizontally
-inside controls. The values below are this Theme's own.
+Spacing is a 4px step, **identical to `standard`** and carried by Tailwind's own utilities
+rather than a token — see the contract. Rhythm is structural; this Theme draws from the same
+scale, generous vertically and tight horizontally inside controls. The values below are this
+Theme's own.
 
 ```
 --radius-xs:   2px    --dur-fast: 120ms   --ease-standard:   cubic-bezier(.2,0,0,1)

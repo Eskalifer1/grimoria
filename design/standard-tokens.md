@@ -179,8 +179,8 @@ it exists so the Theme can do that at all — see `token-contract.md`.
 
 ## 4. Spacing, radii, motion
 
-Spacing is `--space-N = N × 4px`, **identical to `dark-fantasy`** — see the contract. The
-values below are this Theme's own.
+Spacing is a 4px step, **identical to `dark-fantasy`** and carried by Tailwind's own
+utilities rather than a token — see the contract. The values below are this Theme's own.
 
 ```
 --radius-xs:   6px    --dur-fast: 140ms   --ease-standard:   cubic-bezier(.2,.8,.3,1)

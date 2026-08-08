@@ -44,6 +44,34 @@ turbopack
 vercel
 vitest
 
+# --- Design system: typography, colour and CSS terms ---
+centreline
+centrelines
+desaturated
+letterspaced
+linecap
+linejoin
+literata
+Playfair
+recoloured
+retuned
+rgba
+srgb
+unlayered
+WCAG
+wordmark
+
+# --- British spellings and prose the base dictionary lacks ---
+behaviour
+categorisation
+colour
+colours
+normalised
+parameterised
+regenerable
+roled
+unflavoured
+
 # --- Agent/process vocabulary (skills, workflow docs) ---
 ack
 acks

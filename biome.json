@@ -22,6 +22,9 @@
     }
   },
   "css": {
+    "parser": {
+      "tailwindDirectives": true
+    },
     "formatter": {
       "enabled": true
     },
@@ -121,8 +124,23 @@
       "linter": {
         "rules": {
           "style": {
+            "useExportType": "off",
             "useExportsLast": "off",
+            "useImportType": "off",
             "useReactFunctionComponents": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/shared/components/ui/**"],
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "actions": {
+          "source": {
+            "organizeImports": "off"
           }
         }
       }

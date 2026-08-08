@@ -1,0 +1,67 @@
+/*
+ * shadcn/ui speaks its own token names. Translating them here, once, is what
+ * keeps `src/shared/components/ui/` unedited and the CLI a working update path
+ * (`general.md` §7.1). A primitive needing a name not listed below is a
+ * decision about what that name means in both Themes — make it here.
+ */
+
+/*
+ * Tailwind's `dark` variant is `prefers-color-scheme`, which would let an OS
+ * setting change this UI. Pointed at a class this app never sets instead: the
+ * aliases below already resolve per Theme, so the base classes are correct on
+ * both grounds and the `dark:` ones would only double-apply.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: var(--surface-page);
+  --foreground: var(--text-body);
+
+  --card: var(--surface-card);
+  --card-foreground: var(--text-body);
+
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--text-body);
+
+  --primary: var(--action-primary-bg);
+  --primary-foreground: var(--action-primary-fg);
+
+  /* shadcn's `--secondary` is a second action surface, not the content accent. */
+  --secondary: var(--surface-inset);
+  --secondary-foreground: var(--text-body);
+
+  --muted: var(--surface-inset);
+  --muted-foreground: var(--text-muted);
+
+  /* shadcn uses `--accent` for the hover fill of quiet controls. */
+  --accent: var(--action-quiet-bg-hover);
+  --accent-foreground: var(--action-quiet-fg);
+
+  --border: var(--border-subtle);
+  --input: var(--border-strong);
+  --ring: var(--border-brand);
+
+  --radius: var(--radius-md);
+}
+
+/* No `--destructive` alias: the contract has no destructive pair yet (#79). */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}

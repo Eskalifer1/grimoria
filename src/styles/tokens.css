@@ -1,0 +1,103 @@
+/*
+ * The bridge from `design/token-contract.md`'s names to Tailwind utilities.
+ * Values live in `standard.css` and `dark-fantasy.css`; the spacing scale is
+ * Tailwind's own `--spacing`, which is already the contract's 4px step.
+ */
+
+@theme {
+  /*
+   * Dropped so that a utility whose value is not a token cannot compile —
+   * `bg-red-500`, `rounded-xl`, `shadow-lg`, `ease-out`. Font sizes are left
+   * alone: no contract name exists to replace them with yet (#79).
+   */
+  --color-*: initial;
+  --font-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --blur-*: initial;
+  --ease-*: initial;
+}
+
+/*
+ * `inline` substitutes the `var()` into each utility instead of resolving it at
+ * build time, which is what lets `bg-surface-card` follow the active Theme.
+ *
+ * The five namespaces the contract already names Tailwind's way look
+ * self-referential below. Tailwind's copies land in `@layer theme`; the Theme
+ * files declare the same names unlayered, and unlayered always wins.
+ */
+@theme inline {
+  --color-surface-page: var(--surface-page);
+  --color-surface-card: var(--surface-card);
+  --color-surface-sidebar: var(--surface-sidebar);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-surface-selected: var(--surface-selected);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-text-on-inverse: var(--text-on-inverse);
+
+  --color-page-surface: var(--page-surface);
+  --color-page-text: var(--page-text);
+  --color-page-text-muted: var(--page-text-muted);
+  --color-page-rule: var(--page-rule);
+  --color-page-code-surface: var(--page-code-surface);
+  --color-page-accent: var(--page-accent);
+
+  --color-text-title: var(--text-title);
+  --color-text-body: var(--text-body);
+  --color-text-muted: var(--text-muted);
+  --color-text-meta: var(--text-meta);
+  --color-text-brand: var(--text-brand);
+  --color-text-accent: var(--text-accent);
+  --color-text-on-brand: var(--text-on-brand);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-border-brand: var(--border-brand);
+  --color-border-disabled: var(--border-disabled);
+
+  --color-action-primary-bg: var(--action-primary-bg);
+  --color-action-primary-bg-hover: var(--action-primary-bg-hover);
+  --color-action-primary-bg-pressed: var(--action-primary-bg-pressed);
+  --color-action-primary-fg: var(--action-primary-fg);
+  --color-action-primary-bg-disabled: var(--action-primary-bg-disabled);
+  --color-action-primary-fg-disabled: var(--action-primary-fg-disabled);
+
+  --color-action-quiet-bg: var(--action-quiet-bg);
+  --color-action-quiet-bg-hover: var(--action-quiet-bg-hover);
+  --color-action-quiet-fg: var(--action-quiet-fg);
+  --color-action-quiet-fg-disabled: var(--action-quiet-fg-disabled);
+
+  --color-status-live: var(--status-live);
+  --color-status-idle: var(--status-idle);
+  --color-status-done: var(--status-done);
+
+  --color-scrim-modal: var(--scrim-modal);
+
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+  --font-reading: var(--font-reading);
+  --font-meta: var(--font-meta);
+  --font-code: var(--font-code);
+
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  /* Glows take the shadow namespace because that is the property they set. */
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-modal: var(--shadow-modal);
+  --shadow-glow-accent-sm: var(--glow-accent-sm);
+  --shadow-glow-accent-md: var(--glow-accent-md);
+  --shadow-glow-text: var(--glow-text);
+
+  --blur-card: var(--blur-card);
+  --blur-raised: var(--blur-raised);
+  --blur-modal: var(--blur-modal);
+
+  --ease-standard: var(--ease-standard);
+  --ease-emphasized: var(--ease-emphasized);
+}

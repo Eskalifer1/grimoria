@@ -204,26 +204,19 @@ That is why metadata and code are two roles rather than one shared monospace tok
 
 ### Spacing — one scale, identical in both Themes
 
-**`--space-N` is always `N × 4px`.** Every gap, pad, and margin in the product is a multiple
-of four, and the token's index is that multiple, so `--space-6` is unambiguously `24px`
-without anyone having to look it up.
+**Every gap, pad, and margin in the product is a multiple of 4px.** Spacing is the one group
+whose values are identical in both Themes, not merely the names, which is why it is named
+here rather than in either value document.
 
-```
---space-0:  0px    --space-5: 20px    --space-10: 40px
---space-1:  4px    --space-6: 24px    --space-12: 48px
---space-2:  8px    --space-7: 28px    --space-16: 64px
---space-3: 12px    --space-8: 32px    --space-20: 80px
---space-4: 16px
-```
-
-Spacing is the one group whose **values are identical in both Themes**, not merely the names,
-and it is therefore **declared once** — in `:root`, outside the per-Theme blocks, which never
-redeclare it. That is why the scale appears here and not in either value document: a second
-copy is a second thing to drift.
 Rhythm is structural, not thematic: a Theme changes what a surface is made of, never how far
 apart two things sit. The Themes still *feel* different in density, because they draw from
 different parts of the same scale — `standard` reaches for the wide end, `dark-fantasy` is
 generous vertically and tight horizontally — but neither invents a value the other lacks.
+
+**There is no spacing token, and none is to be added.** Tailwind's spacing utilities already
+*are* this scale — `p-6` is 24px — so a `--space-6` would be a second copy of a value the
+framework holds, and a second copy is a second thing to drift. The rule above is what this
+document contributes; `docs/agents/coding-standards/styling.md` is where it is applied.
 
 Anything that is not a multiple of four is either a hairline, a font metric, or a bug.
 

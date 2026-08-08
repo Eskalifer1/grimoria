@@ -6,7 +6,7 @@
 >
 > *Where* a component file goes — folders, `index.tsx`, sub-component nesting, layers — is
 > `general.md` §4. *How its types are written* is `typescript.md`. *How its copy is written*
-> is `i18n.md`. Styling is `styling.md` (#60).
+> is `i18n.md`. Styling is `styling.md`.
 >
 > These are settled rules, not options. Where a rule is machine-enforced, the enforcing
 > config is named — that config is the source of truth, not this document.
