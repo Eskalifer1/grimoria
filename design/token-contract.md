@@ -17,6 +17,10 @@ is a bug against this contract.
 **A new token is added to both Themes in the same change, or not at all.** A name existing in
 one Theme is the drift this file prevents.
 
+**Motion is muted for both Themes at once.** `prefers-reduced-motion: reduce` collapses the
+`--dur-*` values in `globals.css`, so every transition timed by them shortens with them. Motion
+timed any other way escapes that switch and leaves the preference unhonoured.
+
 ## Tiers — where a raw value is allowed
 
 **A literal colour appears exactly once, in tier 1, and everything above refers back.**

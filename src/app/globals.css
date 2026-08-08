@@ -27,3 +27,16 @@
   outline: none;
   box-shadow: var(--focus-ring);
 }
+
+/*
+ * Every transition is timed by these three, so collapsing them here mutes both
+ * Themes at once — the vendored zone included, which no component-level
+ * `motion-reduce:` could reach.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

@@ -19,7 +19,8 @@ Font size is the one scale still open — the two Themes name their type scales 
 
 **Duration is written as a name**: `duration-fast`, `duration-slow`, or no class at all, which
 is the contract's own default. `duration-200` is the exception the build cannot catch — a bare
-number is not a scale lookup, so there is no scale to drop.
+number is not a scale lookup, so there is no scale to drop. Reduced motion is handled once, by
+collapsing those durations in `globals.css`, so a component carries no `motion-reduce:` variant.
 
 **Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
 what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
