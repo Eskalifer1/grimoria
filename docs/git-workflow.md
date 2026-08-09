@@ -4,9 +4,8 @@ Feature branches merge into `dev`; `dev` merges into `main` roughly weekly. `mai
 continuously to Vercel production. Neon has two branches (`main`, `dev`), not one per PR. No
 pre-commit hooks. Branch off `dev`.
 
-**Not set up yet**: neither `dev` nor `main` exists — the default branch is `master`, and branch
-protection is still to be configured (#43). Until that lands, work goes directly into `master`.
-The paragraph above is the target, not today.
+**Nothing enforces the flow yet** — branch protection is #43, which is canonical for what lands
+where. Until it does, the rules above hold by hand.
 
 ## Commit messages
 
