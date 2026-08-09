@@ -7,6 +7,16 @@ the config is named.
 Written against React 19 before the first real components exist — revisit once the site shell
 (#75) has landed.
 
+## Contents
+
+- The server/client boundary
+- State
+- When a component grows
+- Loading and failure
+- The component file
+- Naming
+- Documenting props
+
 ## The server/client boundary
 
 Every component is a Server Component. `"use client"` goes on the file that **first** needs the

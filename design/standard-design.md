@@ -14,6 +14,16 @@ Vercel-Dashboard family; what is settled here is warmer, rounder and closer to a
 productivity product, keeping one strong accent color, monospace metadata and generous negative
 space. **The epic gets corrected rather than this document bent back to it.**
 
+## Contents
+
+- One material, many depths
+- Color
+- Depth in a light interface
+- Typography
+- Structure and surfaces
+- What this design is not
+- Copy in mockups
+
 ## One material, many depths
 
 Where `dark-fantasy` is built from two opposed materials, `standard` is built from one: white

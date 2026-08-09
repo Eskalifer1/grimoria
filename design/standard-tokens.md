@@ -4,6 +4,15 @@
 CSS cannot say: why a value is what it is, and which are not free to change. Its input is
 `standard-design.md`.
 
+## Contents
+
+- Palette roles
+- Interactive states
+- Elevation
+- Radii and motion
+- Typography
+- Deliberately not settled
+
 ## Palette roles
 
 **Teal is the action accent** — brand mark, page title, filled button, active nav label. One

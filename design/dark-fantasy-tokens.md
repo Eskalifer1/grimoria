@@ -4,6 +4,16 @@
 CSS cannot say: why a value is what it is, and which are not free to change. Its input is
 `dark-fantasy-design.md`.
 
+## Contents
+
+- Provenance
+- Palette roles
+- Interactive states
+- Elevation and light
+- Radii and motion
+- Typography
+- Deliberately not settled
+
 ## Provenance
 
 Only the red is transcribed from a Claude Design run; everything else was **derived** here,

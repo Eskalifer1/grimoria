@@ -9,6 +9,17 @@ grimoire — a Note is a **spell**, the collection a **grimoire**, the User a **
 intended feeling: **magic and runes, dark and mysterious, and at the same time inviting.**
 Atmosphere may never cost legibility or the speed of scanning a list.
 
+## Contents
+
+- Two material worlds
+- Light and ink — the accent rule
+- Depth
+- Runes
+- Typography
+- Surfaces and structure
+- What this design is not
+- Copy in mockups
+
 ## Two material worlds
 
 The design's central structural idea. **Every component is described for both; a control on
