@@ -20,6 +20,20 @@ yarn dev
 `PAYLOAD_SECRET` is any long random string (`openssl rand -hex 32`); `DATABASE_URL` points at
 Postgres (Neon, ADR-0007). Without it the app runs, but anything touching the database fails.
 
+### Database
+
+One Neon project with two branches, matching the git ones: local development and everything
+outside production use `dev`, production uses `main`. Both connection strings come from the Neon
+dashboard's connection widget for the branch — `DATABASE_URL` is the pooled string (the host
+carrying `-pooler`), `DATABASE_URL_UNPOOLED` the direct one. Neon's pooler runs PgBouncer in
+transaction mode, which cannot run schema work, so `src/payload.config.ts` sends dev pushes and
+`payload migrate` down the direct string and request traffic down the pooled one.
+
+The schema is not migrated yet: in development Payload pushes the config's shape straight into the
+`dev` branch on boot, which is its default. Production migrations land with the first real
+collection (#32) — until then production has nothing to point a deploy at, and the `main` branch
+exists only so its `DATABASE_URL` can be set on Vercel when a deploy is first configured.
+
 The app runs at http://localhost:3000, with Payload's admin at `/cms` — the only admin there
 is, for the maintainer's own use (ADR-0005).
 

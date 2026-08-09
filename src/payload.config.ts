@@ -6,6 +6,18 @@ import { buildConfig } from 'payload';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Neon's pooled endpoint runs PgBouncer in transaction mode, where the `SET`
+// statements schema work relies on do not survive between transactions. Schema
+// work is exactly the two cases the adapter itself checks for: dev push
+// (`NODE_ENV !== 'production'`) and `payload migrate` (`PAYLOAD_MIGRATING`).
+// Everything else is serverless request traffic, which is what pooling is for.
+const isSchemaOperation =
+  process.env.NODE_ENV !== 'production' || process.env.PAYLOAD_MIGRATING === 'true';
+
+const connectionString = isSchemaOperation
+  ? process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || ''
+  : process.env.DATABASE_URL || '';
+
 export default buildConfig({
   // None of our own yet: Payload appends a default `users` collection when a
   // config declares no auth collection, and that backs the admin until #32.
@@ -24,9 +36,7 @@ export default buildConfig({
   },
 
   db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
+    pool: { connectionString },
   }),
 
   secret: process.env.PAYLOAD_SECRET || '',
