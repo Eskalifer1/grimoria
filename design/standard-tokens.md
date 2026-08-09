@@ -31,8 +31,8 @@ component sit on `dark-fantasy`'s vellum sheet without knowing it moved.
 `--ink-400` is darkened from the generated bundle's `#8A85A0`, which reached only **3.53:1** on
 white. Metadata here is 11–12px monospace — no contrast headroom, and the one place a failure
 would be systematic rather than incidental. The current value reads 5.27:1 on white and 4.94:1
-on the sunken surface. **Do not lighten it back.** Verification for the rest of the palette is
-#36's a11y pass.
+on the sunken surface. **Do not lighten it back.** The rest of the palette is not
+contrast-verified.
 
 ## Interactive states
 
@@ -108,4 +108,5 @@ has values, but they are a template's geometry: a `280px` sidebar and `76px` rai
 someone else's screenshot. Not contract tokens — the contract covers material, not the shell's
 dimensions, which belong to `docs/features/site-layout.md` and wait on #74.
 
-**Component-level specs.** Applying these tokens to components is #36 and the coding standards.
+**Component-level specs.** Applying these tokens to components is #74 and #75, and the coding
+standards.

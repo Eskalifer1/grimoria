@@ -1,43 +1,44 @@
 This file loads into every session's context — keep it short. Open a linked doc only when its
 trigger applies to the current task.
 
+When reporting information to me, be extremely concise and sacrifice grammar for sake of concision.
+
 ## Stack
 
 Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable —
-Postgres on Neon, one project with no monorepo, `next-intl` for the locale × theme copy system
-from day one, Tailwind v4 + shadcn/ui, and **no admin of our own** — Payload's built-in admin
-at `/cms` is the admin, kept for the maintainer alone (ADR-0005).
+Postgres on Neon, one project with no monorepo, `next-intl` for the locale × theme copy system,
+Tailwind v4 + shadcn/ui, and **no admin of our own**: Payload's built-in admin at `/cms` is the
+admin, kept for the maintainer alone (ADR-0005).
 
 ## Tooling
 
 **Biome** is the single formatter and linter — no ESLint, no Prettier. Import order is an assist
-action rather than formatting, so `yarn check` is the honest check and `yarn check:fix` the
-honest fix. CI runs `yarn ci`.
+action rather than formatting, so `yarn check` is the honest check and `yarn check:fix` the honest
+fix. CI runs `yarn ci`.
 
-**Yarn 4**, pinned by `packageManager` plus a committed release in `.yarn/releases` — no
-Corepack; `yarnPath` in `.yarnrc.yml` is what resolves `yarn` to 4.x. `nodeLinker: node-modules`,
-because Next.js and Payload do not expect Plug'n'Play. Yarn quarantines npm releases from the
-last few days: on `all versions ... are quarantined`, take the newest version that resolves
-rather than disabling the gate.
+**Yarn 4**, pinned by `packageManager` plus a committed release in `.yarn/releases` — no Corepack;
+`yarnPath` in `.yarnrc.yml` resolves `yarn` to 4.x. `nodeLinker: node-modules`, because Next.js
+and Payload do not expect Plug'n'Play. Yarn quarantines npm releases from the last few days: on
+`all versions ... are quarantined`, take the newest version that resolves rather than disabling
+the gate.
 
-**American English everywhere it is written down** — code, comments, docs, commit messages, UI, gh comments.
-Local discussion is the exception; `yarn
-spellcheck` guards the rest.
+**American English everywhere it is written down** — code, comments, docs, commit messages, UI, gh
+comments. Local discussion is the exception; `yarn spellcheck` guards the rest.
 
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting — a decision, a term, a
 feature behavior — and again before calling done any session that changed behavior, architecture
-or scope. Drift is a bug; "I'll remember to update the doc" is not a plan.
-
-A `PreToolUse` hook denies a commit staging non-doc changes with no corresponding doc touch. The
-denial is the signal to run `/docs-sync`, not to bypass it.
+or scope. Drift is a bug. A `PreToolUse` hook denies a commit staging non-doc changes with no
+doc touch; the denial is the signal to run `/docs-sync`, not to bypass it.
 
 ## Where to look, by task
 
-- **Creating a file under `src/`, or deciding where code belongs** — layers, naming, imports:
-  `docs/agents/coding-standards/general.md`. Layer rules are lint-enforced, so guessing fails
-  `yarn check`.
+- **Creating a file under `src/`, or deciding where code belongs** — one doc per question, under
+  `docs/agents/coding-standards/`: layers and what each may hold, `layers.md` (lint-enforced, so
+  guessing fails `yarn check`); routes and `app/`, `routing.md`; folder, file and test names,
+  `naming.md`; alias vs relative, barrels, exports, `imports.md`; comments and JSDoc,
+  `documentation.md`.
 - **Writing a type**: `docs/agents/coding-standards/typescript.md`. `any`, `as`, `!` and
   `@ts-ignore` have one legal use each; object shapes are `interface`, state is a discriminated
   union closed by `assertNever`, domain shapes derive from `payload-types.ts`.
@@ -48,21 +49,20 @@ denial is the signal to run `/docs-sync`, not to bypass it.
   `docs/agents/coding-standards/styling.md`. Color, radius and shadow outside the tokens do not
   compile, spacing is Tailwind's own scale, and duration and focus are names the build cannot
   enforce. A component never branches on the active Theme.
-- **Writing a user-visible string, or editing `messages/`**:
-  `docs/agents/coding-standards/i18n.md`. Copy is never hardcoded in JSX
-  (`style/noJsxLiterals`), and a string is written in both theme catalogs in one change or `tsc`
-  fails.
+- **Writing a user-visible string, or editing `messages/`**: `docs/agents/coding-standards/i18n.md`.
+  Copy is never hardcoded in JSX (`style/noJsxLiterals`), and a string is written in both theme
+  catalogs in one change or `tsc` fails.
 - **Designing or styling a UI surface**: `design/standard-design.md` and
   `design/dark-fantasy-design.md` — the written look of each Theme, fixing no values. Structure
   (shells, sidebar, masthead) is shared by both and lives in `docs/features/site-layout.md`.
 - **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
   `dark-fantasy.css` — the only place values exist.
-- **Changing a token value, or wondering why one is what it is**: `design/standard-tokens.md`
-  and `design/dark-fantasy-tokens.md` — contrast fixes, accent-role rules, font weights, type
-  scales, what is unsettled. Read before retuning a value.
+- **Changing a token value, or wondering why one is what it is**: `design/standard-tokens.md` and
+  `design/dark-fantasy-tokens.md` — contrast fixes, accent-role rules, font weights, type scales,
+  what is unsettled. Read before retuning a value.
 - **Adding or renaming a design token**: `design/token-contract.md`. A token is added to both
-  Themes in one change or not at all; a component that branches on the Theme means the contract
-  is missing a name.
+  Themes in one change or not at all; a component that branches on the Theme means the contract is
+  missing a name.
 - **Needing the brand mark**: `design/logo.md` — one shared skeleton, two executions.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**,
   never speculatively ahead of time.

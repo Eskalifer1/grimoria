@@ -17,6 +17,7 @@
     "public/**",
     "src/app/favicon.ico",
     "src/app/(payload)/**",
+    "src/payload-types.ts",
     ".cspell/**",
     ".claude/skills/**",
     ".claude/hooks/**"

@@ -130,7 +130,7 @@ Not in the CSS — Tailwind's `text-*` still owns font size until #79.
 ```
 
 Measured off the source screenshot, a different product at a different density. **Weaker than
-`standard`'s** — a starting point for #54's render, not a decision.
+`standard`'s** — a starting point for the first render, not a decision.
 
 ## Deliberately not settled
 
@@ -139,7 +139,7 @@ app's geometry, for a bar this product does not have. They belong to
 `docs/features/site-layout.md` and wait on #74.
 
 **Runes and the filament modal** — described in the design doc; the bundle renders a plain
-blurred dialog and a spinning sigil instead. #54 and #56.
+blurred dialog and a spinning sigil instead. The icon half is #56.
 
 **Backdrop imagery** — local and dissolving behind mastheads, not the bundle's tiled photograph
 under the whole screen. No asset exists yet.

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Safety net for CLAUDE.md's "Keep docs current" rule: fires before `git commit`
-# and flags commits that touch code/process files with zero doc touch.
-# Advisory, not permanent — a repeat attempt with the exact same staged content
-# passes through, so it never blocks forever once /docs-sync has actually run.
+# Safety net for CLAUDE.md's "Keep docs current" rule: flags a `git commit` that
+# touches code/process files with zero doc touch. Advisory — a repeat attempt with
+# the same staged content passes, so it never blocks once /docs-sync has run.
 set -euo pipefail
 
 cd "${CLAUDE_PROJECT_DIR:-.}"
@@ -11,9 +10,8 @@ input_json=$(cat 2>/dev/null || true)
 command_text=$(printf '%s' "$input_json" | jq -r '.tool_input.command // empty' 2>/dev/null || true)
 
 # A PreToolUse `matcher` only matches the tool name, so this fires on every Bash
-# call — the "is this a commit?" filter has to live here. Bail before touching
-# the ack dir: acking on an unrelated command would spend this check's one
-# warning and let the real commit through silently.
+# call and the "is this a commit?" filter lives here. Bail before touching the ack
+# dir: acking an unrelated command would spend the one warning silently.
 if ! printf '%s' "$command_text" | grep -qE '(^|[;&|(]|&&)[[:space:]]*git[[:space:]]+([^[:space:]|;&]+[[:space:]]+)*commit([[:space:]]|$)'; then
   exit 0
 fi
@@ -40,7 +38,7 @@ other_files=()
 while IFS= read -r f; do
   [ -z "$f" ] && continue
   case "$f" in
-    docs/*|CONTEXT.md|CLAUDE.md|.claude/*) has_docs=true ;;
+    docs/*|design/*|CONTEXT.md|CLAUDE.md|.claude/*) has_docs=true ;;
     *) has_other=true; other_files+=("$f") ;;
   esac
 done <<< "$staged"
@@ -70,7 +68,7 @@ fi
 touch "$ack_file"
 
 file_list=$(printf -- '- %s\n' "${other_files[@]}")
-reason="This commit stages changes with no docs/, CONTEXT.md, or CLAUDE.md update in the same commit:
+reason="This commit stages changes with no docs/, design/, CONTEXT.md, or CLAUDE.md update in the same commit:
 ${file_list}
 Run /docs-sync to check whether docs/features/*.md, CONTEXT.md, docs/adr/, or docs/agents/*.md need updating for these before committing. If you already ran it and confirmed nothing needs updating, retry the exact same commit — this staged content will pass through next time."
 escaped_reason=$(printf '%s' "$reason" | jq -R -s .)

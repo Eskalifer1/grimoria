@@ -4,7 +4,7 @@ Vitest + React Testing Library for unit/component tests. Playwright for e2e, inc
 
 Payload access-control logic (`Role`, `Visibility`) is tested against a real Postgres instance, never mocked — that's the highest-value code to get right.
 
-Where test files live — the `tests/` tree mirroring `src/`, `e2e/` for Playwright, and how they're named — is settled in `docs/agents/coding-standards/general.md` → Tests, not here.
+Where test files live and how they're named is `docs/agents/coding-standards/naming.md` → Tests, not here.
 
 ## CI required checks
 
