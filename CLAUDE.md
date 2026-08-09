@@ -63,7 +63,6 @@ doc touch; the denial is the signal to run `/docs-sync`, not to bypass it.
 - **Adding or renaming a design token**: `design/token-contract.md`. A token is added to both
   Themes in one change or not at all; a component that branches on the Theme means the contract is
   missing a name.
-- **Needing the brand mark**: `design/logo.md` — one shared skeleton, two executions.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**,
   never speculatively ahead of time.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md` (how to consume
