@@ -10,11 +10,9 @@ there is no dark sub-variant of `standard` and no light sub-variant of `dark-fan
 `Theme` is one axis with two values and each value is one complete look.
 
 **On the stated direction.** The design epic places `standard` in the Linear / Raycast /
-Vercel-Dashboard family. What is settled here is a different register: warmer, rounder,
-friendlier, closer to a modern productivity product. It keeps the three properties that
-mattered — one strong accent color, monospace for metadata and tags, generous negative space —
-and changes the reference family. **The epic gets corrected rather than this document bent back
-to it.**
+Vercel-Dashboard family; what is settled here is warmer, rounder and closer to a modern
+productivity product, keeping one strong accent color, monospace metadata and generous negative
+space. **The epic gets corrected rather than this document bent back to it.**
 
 ## One material, many depths
 
@@ -55,8 +53,7 @@ permitted to feel electric, appearing in small amounts.
 keeps a title from reading cold beside the teal. Secondary text is mid gray; metadata is
 lighter still and set in the monospace face.
 
-Nothing here is gray-on-gray: every panel is white, every division is a hairline or a shadow,
-and color appears only where it carries meaning.
+Color appears only where it carries meaning.
 
 ## Depth in a light interface
 

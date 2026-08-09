@@ -19,32 +19,22 @@ implementing any dark-fantasy surface. Values are `src/styles/dark-fantasy.css`,
 
 ## The one thing this Theme does not re-skin
 
-**The Note body font is not this Theme's to choose.** It is the single exception to "this Theme
-re-skins everything", and it exists for the same reason the vellum Page does — everything else
-in the chrome remains this Theme's own. What the constraint actually is, and the token parity
-that makes switching Themes a swap of values rather than of names, is
+**The Note body font is not this Theme's to choose** — the single exception to "re-skins
+everything", for the same reason the vellum Page exists. The constraint itself is
 `design/token-contract.md`.
 
 ## How it's built
 
-Copy comes from a `locale × theme` catalog (ADR-0004): each Theme is a full message catalog,
-and the Theme decides which one loads, so no component names a Theme. Both Themes fill the
-whole token contract in `src/styles/`, and the active Theme is a `data-theme` attribute on
-`<html>`, resolved on the server alongside the copy.
-
-**Storage.** Logged-in Users' choice persists on their profile; Guests get a cookie, so the
-public notes page respects their preference. It must be a cookie rather than `localStorage`
-because the server resolves copy before rendering.
+Copy comes from a `locale × theme` catalog and the choice is stored per User, in a cookie for
+Guests (ADR-0004). Both Themes fill the whole token contract in `src/styles/`, and the active
+Theme is a `data-theme` attribute on `<html>`, resolved on the server alongside the copy.
 
 **The operating system never selects this Theme.** A visitor whose system is in dark mode still
-gets `standard`: `prefers-color-scheme` chooses nothing here, and `standard` has no dark
-variant. This Theme is a different identity with different words, not a darker palette, and
-handing someone the dark-fantasy tonality because of a system setting is the failure that rules
-this out.
+gets `standard`: `prefers-color-scheme` chooses nothing here. This Theme is a different identity
+with different words, not a darker palette.
 
-**Switching must reach the server and re-render**, not just flip client state. CSS custom
-properties would repaint on their own, but the copy would stay in the old tonality — a
-half-switched page is the failure mode to watch for. The control is #78.
+**Switching must reach the server and re-render.** Flipping client state repaints the colors
+through CSS custom properties and leaves the copy in the old tonality. The control is #78.
 
 ## Copy mapping
 

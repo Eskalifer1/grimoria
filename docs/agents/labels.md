@@ -27,8 +27,7 @@ CI/CD, project setup, skills, config)
 ## Blocking
 
 GitHub's **native issue dependencies**, not a label — commands in `docs/agents/issue-tracker.md`.
-They are live-computed, never go stale, and show in the sidebar as "Blocked by #N". A manual
-`blocked` label was rejected: keeping it in sync needs a dedicated Action.
+A manual `blocked` label was rejected: keeping it in sync needs a dedicated Action.
 
 ## Ticket depth
 
@@ -49,6 +48,5 @@ Do not tag a parent with two `area` labels as a shortcut; wait for the real brea
 
 ## Outside the taxonomy
 
-GitHub's defaults (`bug`, `documentation`, `enhancement`, …) still exist on the repo but are
-wired into nothing. Decide deliberately whether to prune them or give them a role — `bug` for
-defect reports is the obvious gap in `type` — rather than applying them ad hoc.
+GitHub's defaults (`bug`, `documentation`, `enhancement`, …) still exist on the repo but are wired
+into nothing. Do not apply them ad hoc; `bug` for defect reports is the obvious gap in `type`.

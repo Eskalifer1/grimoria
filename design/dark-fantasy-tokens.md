@@ -6,19 +6,17 @@ CSS cannot say: why a value is what it is, and which are not free to change. Its
 
 ## Provenance
 
-One family is transcribed from a Claude Design run: the red. Everything else was **derived**
-here, because that run was made against a screenshot of a different product — a ritual-casting
-app — and built a single-accent crimson system in which red is also the light. That inverts this
-Theme's accent rule.
+Only the red is transcribed from a Claude Design run; everything else was **derived** here,
+because that run built a single-accent crimson system in which red is also the light — the
+inverse of this Theme's accent rule.
 
-The neutral ramp keeps the run's **lightness steps** but not its **temperature**: its voids and
-grays lean cool and violet, which the design document forbids, because the field must be
-neutral and warm-leaning so violet reads as light falling on a neutral surface rather than a
-tinted background. A violet-black field would make the accent disappear into its own backdrop.
+The neutral ramp keeps the run's **lightness steps** but not its **temperature**: its voids lean
+cool and violet, where the field must be neutral and warm-leaning so violet reads as light on a
+neutral surface rather than a tinted background.
 
-The violet family and the vellum sheet have **no counterpart in that bundle**. Everything
-derived was reasoned and contrast-checked rather than sampled, and it is settled — but has never
-been seen at full size. The first `dark-fantasy` render is the moment to look again.
+The violet family and the vellum sheet have **no counterpart in that bundle**. What was derived is
+reasoned and contrast-checked rather than sampled, and settled — but has never been seen at full
+size. The first `dark-fantasy` render is the moment to look again.
 
 ## Palette roles
 

@@ -28,9 +28,9 @@ Actions group all update types together, majors included: an action major is usu
 
 npm updates wait 7 days after release, 14 for majors.
 
-**Why**: Yarn quarantines npm releases from the last few days (CLAUDE.md, "Package manager").
-Without the wait, Dependabot could open a PR for a version `yarn install` then refuses to
-resolve — a red PR caused entirely by timing. Cooldown does not apply to security updates.
+**Why**: Yarn quarantines npm releases from the last few days (CLAUDE.md, "Tooling"). Without the
+wait, Dependabot could open a PR for a version `yarn install` then refuses to resolve — a red PR
+caused entirely by timing. Cooldown does not apply to security updates.
 
 ## Biome bumps
 

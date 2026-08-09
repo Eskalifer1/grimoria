@@ -8,10 +8,7 @@ Use a heredoc for multi-line bodies.
 
 ## PRs as a request surface: no
 
-_(Set to `yes` if this repo starts treating external PRs as feature requests; `/triage` reads
-this flag.)_ When `yes`, PRs run through the same labels and states as issues via the `gh pr`
-equivalents, and triage lists keep only `authorAssociation` of `CONTRIBUTOR`,
-`FIRST_TIME_CONTRIBUTOR` or `NONE`.
+`/triage` reads this flag; flip it to `yes` if external PRs ever become feature requests.
 
 GitHub shares one number space across issues and PRs, so a bare `#42` may be either — resolve
 with `gh pr view 42`, falling back to `gh issue view 42`.

@@ -6,7 +6,7 @@ truth.
 
 ## Layers
 
-Feature-Sliced Design, deliberately simplified — no `widgets`/`processes`, no `@x` notation. Add no
+Feature-Sliced Design, deliberately simplified — no `widgets`/`processes`, no `@x` notation, and no
 FSD concept beyond what is here.
 
 ```

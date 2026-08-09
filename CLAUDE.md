@@ -6,18 +6,18 @@ When reporting information to me, be extremely concise and sacrifice grammar for
 ## Stack
 
 Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable —
-Postgres on Neon, one project with no monorepo, `next-intl` for the locale × theme copy system,
-Tailwind v4 + shadcn/ui, and **no admin of our own**: Payload's built-in admin at `/cms` is the
-admin, kept for the maintainer alone (ADR-0005).
+Postgres on Neon, one project, `next-intl` for the locale × theme copy system, Tailwind v4 +
+shadcn/ui. Payload's built-in admin at `/cms` is **the only admin**, kept for the maintainer alone
+(ADR-0005).
 
 ## Tooling
 
-**Biome** is the single formatter and linter — no ESLint, no Prettier. Import order is an assist
-action rather than formatting, so `yarn check` is the honest check and `yarn check:fix` the honest
-fix. CI runs `yarn ci`.
+**Biome** is the single formatter and linter. Import order is an assist action rather than
+formatting, so `yarn check` is the honest check and `yarn check:fix` the honest fix. CI runs
+`yarn ci`.
 
-**Yarn 4**, pinned by `packageManager` plus a committed release in `.yarn/releases` — no Corepack;
-`yarnPath` in `.yarnrc.yml` resolves `yarn` to 4.x. `nodeLinker: node-modules`, because Next.js
+**Yarn 4**, pinned by `packageManager` plus a committed release in `.yarn/releases`; `yarnPath` in
+`.yarnrc.yml` resolves `yarn` to 4.x. `nodeLinker: node-modules`, because Next.js
 and Payload do not expect Plug'n'Play. Yarn quarantines npm releases from the last few days: on
 `all versions ... are quarantined`, take the newest version that resolves rather than disabling
 the gate.
@@ -63,8 +63,7 @@ doc touch; the denial is the signal to run `/docs-sync`, not to bypass it.
 - **Adding or renaming a design token**: `design/token-contract.md`. A token is added to both
   Themes in one change or not at all; a component that branches on the Theme means the contract is
   missing a name.
-- **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**,
-  never speculatively ahead of time.
+- **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md` (how to consume
   `CONTEXT.md` and `docs/adr/`).
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; which labels an issue

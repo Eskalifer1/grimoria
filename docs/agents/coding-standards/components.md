@@ -16,7 +16,7 @@ its own.
 
 **`views/` stays on the server.** Marking a screen module `"use client"` pulls every feature it
 composes into the browser bundle in one edit — and nothing fails: the page still renders, just
-larger and later. That silence is why this is a rule rather than a preference.
+larger and later.
 
 **Server data reaches a client leaf through a slot.** An interactive wrapper takes `children` or a
 `ReactNode` prop, so React renders the content on the server and the data-fetching module never

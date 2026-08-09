@@ -4,10 +4,9 @@ The shell every page renders inside. **Theme-agnostic** — the structure is ide
 Themes, and only the material differs (`design/standard-design.md`,
 `design/dark-fantasy-design.md`, and `design/logo.md` for the mark those zones carry).
 
-Only the parts that constrain implementation and would be expensive to discover late are here.
-**The full structure is settled in the Site layout epic (#73), whose first comment is
-canonical** — including the navigation items, which are still moving as their features land and
-are deliberately not copied here.
+**The full structure is settled in the Site layout epic (#73), whose first comment is canonical**
+— including the navigation items, which are still moving as their features land. Only what
+constrains implementation is repeated here.
 
 ## Shells
 
@@ -28,11 +27,9 @@ A single `Sidebar` component, not two that look alike.
 The persistent sidebar collapses to an **icon rail**. **Width never overrides the User's
 collapse choice** — the rail is a decision, not a breakpoint.
 
-**Collapse state is a server-resolved preference**: on the User profile when authenticated, in a
-cookie for Guests, read on the server so the first rendered frame is already correct. Same rule
-as `Theme`, for the same reason (ADR-0004) — the server builds the markup and must know the
-state before the first frame, or the sidebar jumps on every load. **Anything else that becomes a
-persisted UI preference inherits this rule.**
+**Collapse state is a server-resolved preference** — on the User profile when authenticated, in a
+cookie for Guests, same rule as `Theme` and for the same reason (ADR-0004); otherwise the sidebar
+jumps on every load. **Anything else that becomes a persisted UI preference inherits this rule.**
 
 ## Content area
 

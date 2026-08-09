@@ -13,11 +13,11 @@ A visitor without a session. Not a stored entity or Role — purely the absence 
 _Avoid_: Anonymous user, Visitor (as a stored concept).
 
 **Role**:
-An enum on User determining permission level: `user` (default), `moderator`, `admin`. Authorization checks are written against this field from day one, even before `moderator` has any distinct permissions of its own.
+An enum on User determining permission level: `user` (default), `moderator`, `admin`. Authorization checks are written against this field (ADR-0003).
 _Avoid_: isAdmin flag, permission level (as a separate concept from Role).
 
 **Theme**:
-A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Persisted on the User profile when logged in; stored in a cookie for guests — the server resolves copy, so it has to be able to read the theme (not `localStorage`) before rendering. Orthogonal to locale — see the copy system ADR. The dark-fantasy flavor mapping itself (what each term becomes) is documented separately, not here — this glossary stays implementation/flavor-free.
+A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Persisted on the User profile, in a cookie for Guests; orthogonal to locale (ADR-0004). The flavor mapping — what each term becomes — is `docs/features/dark-fantasy-theme.md`.
 _Avoid_: Skin (as the stored value's name — "Theme" is the field, dark-fantasy re-skinning is the feature built on top of it).
 
 **Note**:

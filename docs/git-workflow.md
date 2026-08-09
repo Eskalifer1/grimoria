@@ -10,7 +10,7 @@ The paragraph above is the target, not today.
 
 ## Commit messages
 
-Conventional Commits, these ten types and no others:
+Conventional Commits, these ten types:
 
 `feat:` new user-visible behavior · `fix:` shipped behavior was wrong · `perf:` same behavior,
 faster · `refactor:` restructured, behavior identical · `style:` formatter ran, no logic

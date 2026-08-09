@@ -8,8 +8,8 @@ codebase. This is a single-context repo: one `CONTEXT.md` at the root, ADRs in `
 - **`CONTEXT.md`** — the glossary.
 - **`docs/adr/`** — the ADRs touching the area you are about to work in.
 
-If a file does not exist, **proceed silently**. Do not flag its absence or suggest creating it
-upfront; `/domain-modeling` creates them lazily, when terms or decisions actually get resolved.
+If a file does not exist, **proceed silently** — `/domain-modeling` creates them lazily, when terms
+or decisions actually get resolved.
 
 ## Use the glossary's vocabulary
 
@@ -21,6 +21,5 @@ does not use (reconsider), or there is a real gap (note it for `/domain-modeling
 
 ## Flag ADR conflicts
 
-Where your output contradicts an existing ADR, surface it rather than silently overriding:
-
-> _Contradicts ADR-0007 (Postgres on Neon) — but worth reopening because…_
+Where your output contradicts an existing ADR, name the ADR and say why it is worth reopening
+rather than silently overriding it.

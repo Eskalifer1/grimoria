@@ -9,6 +9,6 @@ On top of those, this project needs custom review skills not yet written/sourced
 - `payload-performance-review` (Neon pooled connections, Payload `depth`, ISR caching, indexes, GraphQL N+1/pagination)
 - `bug-hunt-review` (proactive correctness/edge-case review, including GraphQL schema/type design)
 
-Each gets its own ticket. They are **not** flat under Project Setup: they live under the `Agent task-flow: process + skills` epic (#66), alongside the vendored skills above and the `task-flow` spine that orchestrates them — see `docs/agents/labels.md`'s ticket depth policy for why a Project Setup sub-issue that outgrows one ticket becomes its own epic. The live breakdown and blocking order are in #66; don't restate them here.
+Each gets its own ticket under the `Agent task-flow: process + skills` epic (#66), not flat under Project Setup. The live breakdown and blocking order are in #66; don't restate them here.
 
 All four run as parallel sub-agents in the review stage of `task-flow`, alongside the vendored `code-review`'s Spec and Standards axes. Each declares its own model in frontmatter rather than inheriting from the orchestrator.
