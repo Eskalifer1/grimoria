@@ -54,6 +54,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   grilling one into a spec, picking the next ready child: `/task-flow <issue>`.
 - **Implementing a `ready-for-agent` issue** — branch, test-first, gates, review, handoff:
   `/implement-issue <issue>`.
+- **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` for the fast
+  three, `/checks full` to add `yarn test` and `yarn build`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.

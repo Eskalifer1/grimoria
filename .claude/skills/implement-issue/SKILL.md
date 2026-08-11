@@ -60,11 +60,11 @@ reads this file.
 
 | Gate | Commands | When |
 | --- | --- | --- |
-| **Fast** | `yarn check` → `yarn typecheck` → `yarn spellcheck` | Step 5, and after every fix in steps 6, 9, 10 |
-| **Full** | the fast gate, then `yarn test` → `yarn build` | Step 7, and again at step 13 |
+| **Fast** — `/checks fast` | `yarn check` → `yarn typecheck` → `yarn spellcheck` | Step 5, and after every fix in steps 6, 9, 10 |
+| **Full** — `/checks` | the fast gate, then `yarn test` → `yarn build` | Step 7, and again at step 13 |
 
-Both run through `/checks` in a subagent, on the cheapest model. **Failures come back verbatim; a
-green run returns an empty failure list and nothing else.**
+`/checks` forks its own subagent on the cheapest model, so none of it lands here. **Failures come
+back verbatim; a green run is one line and nothing else.**
 
 **Red stops the flow**, including a failure that looks unrelated to this ticket. Fix and re-run
 until green.

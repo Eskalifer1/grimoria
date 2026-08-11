@@ -55,5 +55,7 @@ design/*.jpg
 design/*.jpeg
 design/*.webp
 
-# Agent scratch space — per-branch notes, never committed
-.scratch/
+# Agent scratch space — per-branch notes and gate logs, never committed.
+# The directory itself is tracked: /checks redirects into it and cannot create it.
+.scratch/*
+!.scratch/.gitkeep
