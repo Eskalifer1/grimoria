@@ -1,7 +1,7 @@
 ---
 name: task-flow
 description: Run a tracker issue end to end — dispatch by label, then either break an epic into sub-issues, grill an unspecified issue into a spec, or implement a ready one through verification to a commit handoff. Invoked as /task-flow <issue-number>.
-argument-hint: [issue-number]
+argument-hint: "[issue-number]"
 disable-model-invocation: true
 allowed-tools: Bash(gh issue view:*), Bash(gh api:*)
 ---

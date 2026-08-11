@@ -1,7 +1,7 @@
 ---
 name: implement-issue
 description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards read, test-first, two gates, self-verify, review axes, triage, acceptance check, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
-argument-hint: [issue-number]
+argument-hint: "[issue-number]"
 allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkout:*), Bash(git diff:*), Bash(git status:*), Bash(yarn check:*), Bash(yarn typecheck:*), Bash(yarn spellcheck:*), Bash(yarn build:*)
 ---
 
