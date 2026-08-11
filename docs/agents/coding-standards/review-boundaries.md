@@ -6,6 +6,9 @@ Which findings a code review may report. What the code should look like is the r
 **A finding names the rule it breaks** — the doc and the line, or the failing input and the wrong
 output. A finding that argues from taste is dropped without a reply.
 
+**An accessibility finding names a WCAG 2.2 AA success criterion** — number and name. The level and
+who enforces which part is `accessibility.md`.
+
 **Missing extensibility is never a finding.** Reportable: an abstraction standing without a second
 consumer in the repo. Not reportable: the absence of one.
 

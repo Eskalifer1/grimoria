@@ -64,4 +64,6 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Writing or running tests, choosing a test layer, or touching CI**: `docs/testing.md`.
 - **Reviewing a diff, or judging whether a review finding is legitimate**:
   `<standards>/review-boundaries.md`.
+- **Keyboard reach, screen-reader names, focus order, ARIA state, or what a11y level we hold**:
+  `<standards>/accessibility.md`; to review a branch against it, `/a11y-review [range]`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.

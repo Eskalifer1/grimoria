@@ -91,7 +91,7 @@ Invoke `/review-axes` with the issue number and the git range — the workflow a
 | Axis | Carrier |
 | --- | --- |
 | Standards + Fowler smells | `/mattpocock-skills:code-review` |
-| a11y | not yet — #44 |
+| a11y | `/a11y-review` |
 | Payload access control | not yet — #45 |
 | Payload performance | not yet — #46 |
 | bug hunt | not yet — #47 |

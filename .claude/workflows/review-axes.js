@@ -50,7 +50,10 @@ const AXES = [
     key: 'standards',
     prompt: `Run the /mattpocock-skills:code-review skill over ${range}. Judge against this repo's own standards in docs/agents/coding-standards/ (reached through CLAUDE.md) plus Fowler's smell list. Before reporting anything, read docs/agents/coding-standards/review-boundaries.md — it decides which findings are reportable here at all, and it requires every finding to name the rule it breaks.`,
   },
-  // { key: 'a11y', ... }                     not yet — #44
+  {
+    key: 'a11y',
+    prompt: `Run the /a11y-review skill over ${range}. Its gate comes first: a range that touches no .tsx under src/ outside src/app/(payload)/ returns zero findings and stops. Report against WCAG 2.2 AA, never against a rule Biome's a11y preset already holds, and read docs/agents/coding-standards/review-boundaries.md before reporting anything — it requires every finding to name the rule it breaks.`,
+  },
   // { key: 'payload-access-control', ... }   not yet — #45
   // { key: 'payload-performance', ... }      not yet — #46
   // { key: 'bug-hunt', ... }                 not yet — #47
