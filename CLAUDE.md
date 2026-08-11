@@ -1,8 +1,6 @@
 This file loads into every session's context — keep it short. Open a linked doc only when its
 trigger applies to the current task.
 
-When reporting information to me, be extremely concise and sacrifice grammar for sake of concision.
-
 ## Stack
 
 Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable — Postgres
@@ -16,7 +14,7 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
 version that resolves rather than disabling the gate.
 
-**American English everywhere it is written down**, `yarn spellcheck` guards it. Local discussion is
+**American English everywhere it is written down or posting on GH**, `yarn spellcheck` guards it. Local discussion is
 the exception.
 
 ## Keep docs current
