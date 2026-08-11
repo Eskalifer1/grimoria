@@ -52,8 +52,6 @@ Test-first, through `/mattpocock-skills:tdd`: **one seam, one failing test, one 
 slice**, against the seams the spec settled. Confirm the seams with the user before the first test
 where the spec left them open.
 
-**Test-first waits on #28** (Vitest + RTL harness). Until it lands, this step is implementation only.
-
 **Record decisions as they are made**, to `.scratch/$0.md` under `## Decisions` — one line each:
 what was chosen, and what was rejected where a reviewer would plausibly propose it back. Step 9
 reads this file.
@@ -63,7 +61,7 @@ reads this file.
 | Gate | Commands | When |
 | --- | --- | --- |
 | **Fast** | `yarn check` → `yarn typecheck` → `yarn spellcheck` | Step 5, and after every fix in steps 6, 9, 10 |
-| **Full** | the fast gate, then Vitest (#28) → `yarn build` | Step 7, and again at step 13 |
+| **Full** | the fast gate, then `yarn test` → `yarn build` | Step 7, and again at step 13 |
 
 Both run through `/checks` in a subagent, on the cheapest model. **Failures come back verbatim; a
 green run returns an empty failure list and nothing else.**

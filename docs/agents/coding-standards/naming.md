@@ -39,22 +39,22 @@ fail that. The vendored zone is exempt.
 
 ## Tests
 
-A **separate tree**, so components stay uncluttered and a test may import from any layer — layer
-restrictions are scoped to `src/`.
+A **separate tree**, so a test may import from any layer — layer restrictions are scoped to `src/`.
 
 ```
-tests/                                        Vitest + React Testing Library
-  features/note/components/NoteCard.test.tsx
+tests/                                        Vitest
+  i18n/theme.test.ts                          unit
+  features/note/components/NoteCard.test.tsx  component
+  collections/users.integration.test.ts       integration
   setup/  fixtures/
-e2e/                                          Playwright
+e2e/                                          Playwright (#39)
 ```
 
-- **`tests/` mirrors `src/`**, so nothing has to be searched for and a test whose subject was
-  deleted stands out.
-- **Named after its subject**, not after `index` — this keeps `git grep NoteCard` finding both.
-- **`e2e/` is separate**: different runner, config, and CI job (advisory).
+- **`tests/` mirrors `src/`.**
+- **Named after its subject**, not after `index`.
+- **The suffix selects the layer**, so a misnamed test runs in the wrong project. The mapping is
+  `docs/testing.md`.
 - **Accepted cost:** renaming a component means moving its test, uncaught by tooling.
 
 Colocation was rejected: with folder-plus-`index.tsx` it yields either `index.test.tsx`, naming
 nothing, or a folder mixing private sub-components with tests, weakening nesting-means-privacy.
-Which layer of test to write is `docs/testing.md`.

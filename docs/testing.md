@@ -1,19 +1,53 @@
 # Testing
 
-Vitest + React Testing Library for unit/component tests. Playwright for e2e, including both themes.
+Which layer of test a piece of code gets, and what is not tested at all. Where test files live and
+how they are named is `docs/agents/coding-standards/naming.md` → Tests. How a good test is written —
+seams, anti-patterns, the red-green loop — is `/mattpocock-skills:tdd`.
 
-Payload access-control logic (`Role`, `Visibility`) is tested against a real Postgres instance, never mocked.
+## The four layers
 
-Where test files live and how they're named is `docs/agents/coding-standards/naming.md` → Tests, not here.
+Each layer is a Vitest project in `vitest.config.ts`, except e2e, which is a separate runner.
+
+| Layer | Subject | Environment | File |
+| --- | --- | --- | --- |
+| `unit` | A pure function — no DOM, no database, no `next/headers` | node | `tests/**/*.test.ts` |
+| `component` | A React component's rendered output and its response to interaction | jsdom + React Testing Library | `tests/**/*.test.tsx` |
+| `integration` | Several real pieces together: Payload's Local API against real Postgres | node | `tests/**/*.integration.test.ts` |
+| e2e | A journey through the running app in a real browser, in both Themes | Playwright | `e2e/` |
+
+**Push a test down to the cheapest layer that still exercises the logic.** Where impure code wraps a
+decision worth testing, extract the decision — `resolveTheme()` reads cookies and Payload, while the
+`toTheme()` it delegates to is pure and unit-tested.
+
+**Payload access control (`Role`, `Visibility`) runs against real Postgres and is never mocked** —
+the pattern is #38, and the `integration` project is declared and empty until it lands.
+
+**An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
+by e2e (#39); the pure functions it calls are covered by unit.
+
+## What is not tested
+
+- **The vendored zone** — `src/shared/components/ui/**` is shadcn's code (`layers.md`).
+- **Config and constants** — `next.config.ts`, `src/constants/**`, and anything with no branch.
+- **Plain re-exports and one-line wrappers** around a library, such as `cn()`.
+
+## Running
+
+`yarn test` runs every project once and exits — this is what CI (#42) and the full gate of
+`/implement-issue` call.
+
+**A shared render helper for component tests arrives with the second component test**, wrapping
+whatever providers (`NextIntlClientProvider`, Theme) turn out to be needed by then (#28).
 
 ## Test-first
 
-Work runs red → green in **vertical slices**: one seam, one failing test, one implementation, next
-slice. The seams are agreed with the user before the first test is written, and the spec produced in
+The seams are agreed with the user before the first test is written, and the spec produced in
 session 1 of `/task-flow` is where they are recorded.
-
-The loop itself is `/mattpocock-skills:tdd`. **It waits on #28** — there is no runner installed yet.
 
 ## CI required checks
 
-On every PR: install → `yarn ci` → `yarn typecheck` → `yarn spellcheck` (cspell) → Vitest → `yarn build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage stabilizes.
+On every PR: install → `yarn ci` → `yarn typecheck` → `yarn spellcheck` (cspell) → `yarn test` →
+`yarn build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage
+stabilizes. The workflow itself is #42.
+
+Coverage thresholds are deliberately absent (#28).

@@ -11,6 +11,8 @@
     "payload": "node scripts/patchPayloadAuth.mjs && payload",
     "generate:types": "yarn payload generate:types",
     "generate:importmap": "yarn payload generate:importmap",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
     "format": "biome format --write",
@@ -44,12 +46,18 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.6",
     "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jsdom": "^30",
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "cspell": "^10.0.1",
+    "jsdom": "^30.0.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7"
+    "typescript": "^7",
+    "vitest": "^4.1.10"
   },
   "packageManager": "yarn@4.18.0"
 }

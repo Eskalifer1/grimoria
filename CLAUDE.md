@@ -59,7 +59,7 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
 - **Committing, commit messages, closing an issue**: `docs/git-workflow.md`. The user commits,
   never you.
-- **Writing or running tests, or touching CI**: `docs/testing.md`.
+- **Writing or running tests, choosing a test layer, or touching CI**: `docs/testing.md`.
 - **Reviewing a diff, or judging whether a review finding is legitimate**:
   `<standards>/review-boundaries.md`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.
