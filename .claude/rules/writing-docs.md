@@ -64,6 +64,30 @@ concept back to it costs load and returns nothing.
 - **Past 100 lines, open with a Contents list**, so a partial read still shows the full scope. Past
   roughly 150 the doc is answering two questions — split it rather than compress it.
 
+## CLAUDE.md is a switchboard
+
+It loads into every session whether or not it is needed, so it holds **the trigger and the doc that
+answers it, and stops** — a new subject earns one bullet in `## Where to look, by task`, never a
+section of its own, and never a second sentence explaining what the doc will say. The substance
+lives in the doc.
+
+**Shorten the answer, never the trigger or the path.** The bullet is the only thing standing
+between a task and the doc, so it names every situation that should send a reader there ("server
+component, state, loading and error states") and gives a path that opens as typed. A trigger cut to
+one word stops matching the task at hand, and a bare filename has to be searched for — both read
+as "no doc exists" and are how a trim quietly turns docs off.
+
+**Point at a doc a task will act on**, not at `docs/adr/`. An ADR records why a decision was made
+and is read when someone questions it; the standards or feature doc it produced is what gets read
+while working, and the ADR is reachable from there.
+
+## Say it once, in as few words as carry it
+
+Every doc here is read under a token budget, so **the shortest phrasing that keeps the meaning wins
+over the fuller one**. Cut the throat-clearing, the restatement, the second example that shows the
+same shape, the sentence that only sets up the next. Precision is what is being kept — dropping a
+condition or a name to save words makes the doc wrong, which costs far more than length.
+
 ## What keeps it true
 
 - **A doc grows by replacement.** Delete the sentence a change supersedes in the same edit.

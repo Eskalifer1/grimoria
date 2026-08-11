@@ -19,6 +19,19 @@ The vendored zone (`layers.md`) is the one exception to all of the above.
 
 ## Naming
 
+**Constants** SCREAMING_SNAKE, **keys inside a constant included** (`ROUTES.ADMIN`), in
+`src/constants/`, one plain file per subject — themes, routes, durations, limits. A value earns a
+name there once it means something beyond the line it sits on; a number that is only an
+implementation detail of one function stays in that function. Named exports, not one nested object:
+a bundler drops unimported names but keeps every branch of a touched object. One object holds a set
+that is read as a set — `ROUTES` is the standing example, and `routing.md` says how a route joins
+it.
+
+**The split is by import graph, not by tidiness.** Every layer imports these files, so anything one
+of them imports is inherited by everyone — a subject that ever needs a runtime import, or sits on
+one side of the client/server boundary, must not share a file with subjects that do not. Splitting
+buys nothing in bundle size: tree-shaking drops unused **exports**, never unused object keys.
+
 **Component folders** PascalCase, matching the export. **Every other file** camelCase, named for its
 subject (`useNoteList.ts`, `createNote.ts`) and written as a plain file — only components get the
 folder treatment. A name says what the thing is or does; `data`, `helper`, `utils`, `handleClick2`

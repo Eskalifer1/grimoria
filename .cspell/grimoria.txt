@@ -24,6 +24,7 @@ spellbook
 warlock
 
 # --- Technology and tool names ---
+authjs
 biome
 codegen
 cspell
@@ -36,6 +37,7 @@ payloads
 playwright
 pooler
 postgrest
+sslmode
 sentry
 shadcn
 SIGSEGV
@@ -88,6 +90,7 @@ mattpocock
 
 # --- General English the bundled dictionaries happen to miss ---
 branchable
+libpq
 extensionless
 lockdown
 logomark

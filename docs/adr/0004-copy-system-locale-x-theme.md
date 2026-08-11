@@ -16,7 +16,7 @@ Both catalogs are complete rather than dark-fantasy being a sparse overlay on st
 
 Copy is resolved during server rendering, so the active theme has to be known **before** the HTML is built. Two things follow, and neither is optional:
 
-- **Guests store the theme in a cookie, not `localStorage`.** The server never sees `localStorage`, so it would render standard copy and only swap to dark-fantasy after hydration. A flash of the wrong colors is tolerable; a flash of the wrong words is not. `src/i18n/theme.ts` is the single place this is decided — logged-in users read from their profile instead, a branch added when the `Users` collection exists (#32).
+- **Guests store the theme in a cookie, not `localStorage`.** The server never sees `localStorage`, so it would render standard copy and only swap to dark-fantasy after hydration. A flash of the wrong colors is tolerable; a flash of the wrong words is not. `src/i18n/resolveTheme.ts` is the single place this is decided: a logged-in User's Theme comes from their profile, and the cookie answers only for Guests.
 - **A theme toggle must round-trip to the server.** Flipping client state alone repaints the colors and leaves the text stale, because no new HTML was ever requested.
 
 Reading a cookie also opts every localized route out of static rendering, and makes the response vary by cookie — a shared CDN cache would otherwise be able to serve one visitor's tonality to another. Caching for the public notes page is deferred to its own performance pass (#46); there is nothing cacheable to protect yet.

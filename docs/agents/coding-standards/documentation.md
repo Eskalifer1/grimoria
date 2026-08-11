@@ -20,7 +20,8 @@ range); side effects (a cookie written, a path revalidated); what it throws and 
 function exists, when nobody would guess.
 
 Tags stay minimal: `@param` and `@returns` only, no types inside them, and a parameter whose name
-says everything is left out entirely. `src/shared/lib/assertNever.ts` and `src/i18n/theme.ts` are
+says everything is left out entirely. `src/shared/lib/assertNever.ts` and
+`src/i18n/resolveTheme.ts` are
 the shape to copy. This also covers `tests/setup/` and `tests/fixtures/`, which many specs import;
 a spec documents itself through its titles.
 

@@ -67,16 +67,29 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    'payload-kv': PayloadKv;
     users: User;
+    sessions: Session;
+    accounts: Account;
+    verifications: Verification;
+    'admin-invitations': AdminInvitation;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    users: {
+      account: 'accounts';
+      session: 'sessions';
+    };
+  };
   collectionsSelect: {
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    sessions: SessionsSelect<false> | SessionsSelect<true>;
+    accounts: AccountsSelect<false> | AccountsSelect<true>;
+    verifications: VerificationsSelect<false> | VerificationsSelect<true>;
+    'admin-invitations': AdminInvitationsSelect<false> | AdminInvitationsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -117,6 +130,191 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  /**
+   * Users chosen display name
+   */
+  name: string;
+  /**
+   * The email of the user
+   */
+  email: string;
+  /**
+   * Whether the email of the user has been verified
+   */
+  emailVerified: boolean;
+  /**
+   * The image of the user
+   */
+  image?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  /**
+   * The role/ roles of the user
+   */
+  role?: ('admin' | 'user' | 'moderator')[] | null;
+  /**
+   * Whether the user is banned from the platform
+   */
+  banned?: boolean | null;
+  /**
+   * The reason for the ban
+   */
+  banReason?: string | null;
+  /**
+   * The date and time when the ban will expire
+   */
+  banExpires?: string | null;
+  account?: {
+    docs?: (number | Account)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  session?: {
+    docs?: (number | Session)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
+   * Decides the User's Theme; the cookie answers for Guests only
+   */
+  theme?: ('standard' | 'dark-fantasy') | null;
+  /**
+   * Addresses the public profile. Generated on create, editable later (#5)
+   */
+  slug?: string | null;
+  collection: 'users';
+}
+/**
+ * Accounts are used to store user accounts for authentication providers
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts".
+ */
+export interface Account {
+  id: number;
+  /**
+   * The id of the account as provided by the SSO or equal to userId for credential accounts
+   */
+  accountId: string;
+  /**
+   * The id of the provider as provided by the SSO
+   */
+  providerId: string;
+  /**
+   * The user that the account belongs to
+   */
+  user: number | User;
+  /**
+   * The access token of the account. Returned by the provider
+   */
+  accessToken?: string | null;
+  /**
+   * The refresh token of the account. Returned by the provider
+   */
+  refreshToken?: string | null;
+  /**
+   * The id token for the account. Returned by the provider
+   */
+  idToken?: string | null;
+  /**
+   * The date and time when the access token will expire
+   */
+  accessTokenExpiresAt?: string | null;
+  /**
+   * The date and time when the refresh token will expire
+   */
+  refreshTokenExpiresAt?: string | null;
+  /**
+   * The scope of the account. Returned by the provider
+   */
+  scope?: string | null;
+  /**
+   * The hashed password of the account. Mainly used for email and password authentication
+   */
+  password?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+/**
+ * Sessions are active sessions for users. They are used to authenticate users with a session token
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions".
+ */
+export interface Session {
+  id: number;
+  /**
+   * The date and time when the session will expire
+   */
+  expiresAt: string;
+  /**
+   * The unique session token
+   */
+  token: string;
+  createdAt: string;
+  updatedAt: string;
+  /**
+   * The IP address of the device
+   */
+  ipAddress?: string | null;
+  /**
+   * The user agent information of the device
+   */
+  userAgent?: string | null;
+  /**
+   * The user that the session belongs to
+   */
+  user: number | User;
+  /**
+   * The admin who is impersonating this session
+   */
+  impersonatedBy?: (number | null) | User;
+}
+/**
+ * Verifications are used to verify authentication requests
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verifications".
+ */
+export interface Verification {
+  id: number;
+  /**
+   * The identifier of the verification request
+   */
+  identifier: string;
+  /**
+   * The value to be verified
+   */
+  value: string;
+  /**
+   * The date and time when the verification request will expire
+   */
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-invitations".
+ */
+export interface AdminInvitation {
+  id: number;
+  role: 'admin' | 'user' | 'moderator';
+  token: string;
+  /**
+   * The invitation is invalid after this time.
+   */
+  expiresAt: string;
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -134,39 +332,31 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
   id: number;
-  document?: {
-    relationTo: 'users';
-    value: number | User;
-  } | null;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'sessions';
+        value: number | Session;
+      } | null)
+    | ({
+        relationTo: 'accounts';
+        value: number | Account;
+      } | null)
+    | ({
+        relationTo: 'verifications';
+        value: number | Verification;
+      } | null)
+    | ({
+        relationTo: 'admin-invitations';
+        value: number | AdminInvitation;
+      } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
@@ -211,33 +401,86 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  emailVerified?: T;
+  image?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  role?: T;
+  banned?: T;
+  banReason?: T;
+  banExpires?: T;
+  account?: T;
+  session?: T;
+  theme?: T;
+  slug?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions_select".
+ */
+export interface SessionsSelect<T extends boolean = true> {
+  expiresAt?: T;
+  token?: T;
+  createdAt?: T;
+  updatedAt?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  user?: T;
+  impersonatedBy?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "accounts_select".
+ */
+export interface AccountsSelect<T extends boolean = true> {
+  accountId?: T;
+  providerId?: T;
+  user?: T;
+  accessToken?: T;
+  refreshToken?: T;
+  idToken?: T;
+  accessTokenExpiresAt?: T;
+  refreshTokenExpiresAt?: T;
+  scope?: T;
+  password?: T;
+  createdAt?: T;
+  updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verifications_select".
+ */
+export interface VerificationsSelect<T extends boolean = true> {
+  identifier?: T;
+  value?: T;
+  expiresAt?: T;
+  createdAt?: T;
+  updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-invitations_select".
+ */
+export interface AdminInvitationsSelect<T extends boolean = true> {
+  role?: T;
+  token?: T;
+  expiresAt?: T;
+  url?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

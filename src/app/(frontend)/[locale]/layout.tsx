@@ -10,8 +10,8 @@ import { notFound } from 'next/navigation';
 
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 
+import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
-import { resolveTheme } from '@/i18n/theme';
 import { cn } from '@/shared/lib/cn';
 
 import '../globals.css';

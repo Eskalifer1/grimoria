@@ -8,7 +8,7 @@ Why, given the project's actual constraints:
 - A hand-rolled Node backend (Fastify, NestJS) needs its own always-on host, which usually costs money — not acceptable for a pet project.
 - A pure BaaS (Supabase accessed directly from the frontend) was rejected: the maintainer wants a real API layer between the UI and the database, not direct DB access from client code, and wants to practice GraphQL, which Supabase doesn't provide natively (PostgREST is REST + realtime only).
 - Payload CMS generates both REST and GraphQL APIs automatically from collection definitions, satisfies the "real API layer" requirement, and — critically — deploys as part of the same Next.js/Vercel project, so there is no second host to pay for.
-- Payload's access-control functions (collection- and field-level) map directly onto `Role` (ADR-0003) and `Visibility` (see `CONTEXT.md`), and its built-in Users collection covers auth, so both authorization and authentication come from the framework rather than hand-written code.
+- Payload's access-control functions (collection- and field-level) map directly onto `Role` (ADR-0003) and `Visibility` (see `CONTEXT.md`), so authorization comes from the framework rather than hand-written code. Authentication comes from Better Auth, mounted inside the same app because Payload's own auth has no OAuth (ADR-0009).
 
 Database hosting: see ADR-0007 (Postgres on Neon).
 

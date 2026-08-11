@@ -5,71 +5,56 @@ When reporting information to me, be extremely concise and sacrifice grammar for
 
 ## Stack
 
-Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable —
-Postgres on Neon, one project, `next-intl` for the locale × theme copy system, Tailwind v4 +
-shadcn/ui. Payload's built-in admin at `/cms` is **the only admin**, kept for the maintainer alone
-(ADR-0005).
+Next.js (App Router) with **Payload CMS 3 embedded** — no separate backend or deployable — Postgres
+on Neon, `next-intl` for the locale × theme copy system, Tailwind v4 + shadcn/ui, Better Auth for
+authentication. Payload's admin at `/cms` is the only admin, for the maintainer alone.
 
 ## Tooling
 
-**Biome** is the single formatter and linter. Import order is an assist action rather than
-formatting, so `yarn check` is the honest check and `yarn check:fix` the honest fix. CI runs
-`yarn ci`.
+**Biome** is the single formatter and linter — `yarn check`, `yarn check:fix`. CI runs `yarn ci`.
 
-**Yarn 4**, pinned by `packageManager` plus a committed release in `.yarn/releases`; `yarnPath` in
-`.yarnrc.yml` resolves `yarn` to 4.x. `nodeLinker: node-modules`, because Next.js
-and Payload do not expect Plug'n'Play. Yarn quarantines npm releases from the last few days: on
-`all versions ... are quarantined`, take the newest version that resolves rather than disabling
-the gate.
+**Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
+version that resolves rather than disabling the gate.
 
-**American English everywhere it is written down** — code, comments, docs, commit messages, UI, gh
-comments. Local discussion is the exception; `yarn spellcheck` guards the rest.
+**American English everywhere it is written down**, `yarn spellcheck` guards it. Local discussion is
+the exception.
 
 ## Keep docs current
 
-Run `/docs-sync` once a conversation settles something worth documenting — a decision, a term, a
-feature behavior — and again before calling done any session that changed behavior, architecture
-or scope. Drift is a bug. A `PreToolUse` hook denies a commit staging non-doc changes with no
-doc touch; the denial is the signal to run `/docs-sync`, not to bypass it.
+Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
+done any session that changed behavior, architecture or scope. Drift is a bug. A `PreToolUse` hook
+denies a commit that stages code with no doc touch; that denial is the signal to run `/docs-sync`.
 
 ## Where to look, by task
 
-- **Creating a file under `src/`, or deciding where code belongs** — one doc per question, under
-  `docs/agents/coding-standards/`: layers and what each may hold, `layers.md` (lint-enforced, so
-  guessing fails `yarn check`); routes and `app/`, `routing.md`; folder, file and test names,
-  `naming.md`; alias vs relative, barrels, exports, `imports.md`; comments and JSDoc,
-  `documentation.md`.
-- **Writing a type**: `docs/agents/coding-standards/typescript.md`. `any`, `as`, `!` and
-  `@ts-ignore` have one legal use each; object shapes are `interface`, state is a discriminated
-  union closed by `assertNever`, domain shapes derive from `payload-types.ts`.
+All paths below are from the repo root. `<standards>` is `docs/agents/coding-standards/`.
+
+- **Creating a file under `src/`, or deciding where code belongs** — layers, folders, file names,
+  imports, comments: `<standards>/layers.md` (lint-enforced), `routing.md`, `naming.md`,
+  `imports.md`, `documentation.md`.
+- **Writing a type, or reaching for `any`, `as`, `!`, `@ts-ignore`**: `<standards>/typescript.md`.
+  Domain shapes derive from `payload-types.ts`.
 - **Building a React component** — server/client boundary, state, splitting, loading and error
-  states: `docs/agents/coding-standards/components.md`. `views/` never carries `"use client"`, a
-  server module carries `server-only`, and JSX conditionals close on `null`.
-- **Writing styles** — utilities, tokens, shadcn primitives, variants:
-  `docs/agents/coding-standards/styling.md`. Color, radius and shadow outside the tokens do not
-  compile, spacing is Tailwind's own scale, and duration and focus are names the build cannot
-  enforce. A component never branches on the active Theme.
-- **Writing a user-visible string, or editing `messages/`**: `docs/agents/coding-standards/i18n.md`.
-  Copy is never hardcoded in JSX (`style/noJsxLiterals`), and a string is written in both theme
-  catalogs in one change or `tsc` fails.
-- **Designing or styling a UI surface**: `design/standard-design.md` and
-  `design/dark-fantasy-design.md` — the written look of each Theme, fixing no values. Structure
-  (shells, sidebar, masthead) is shared by both and lives in `docs/features/site-layout.md`.
+  states: `<standards>/components.md`.
+- **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
+  Values outside the tokens do not compile.
+- **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`. Copy is never
+  hardcoded in JSX, and a string is written in both theme catalogs or `tsc` fails.
+- **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
+  per subject; a route is `ROUTES` in `constants/routes.ts`. Naming is `<standards>/naming.md`.
+- **Designing or styling a UI surface**: `design/standard-design.md`,
+  `design/dark-fantasy-design.md`; shared structure in `docs/features/site-layout.md`.
 - **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
-  `dark-fantasy.css` — the only place values exist.
-- **Changing a token value, or wondering why one is what it is**: `design/standard-tokens.md` and
-  `design/dark-fantasy-tokens.md` — contrast fixes, accent-role rules, font weights, type scales,
-  what is unsettled. Read before retuning a value.
-- **Adding or renaming a design token**: `design/token-contract.md`. A token is added to both
-  Themes in one change or not at all; a component that branches on the Theme means the contract is
-  missing a name.
+  `dark-fantasy.css`.
+- **Changing a token value, or asking why one is what it is**: `design/standard-tokens.md`,
+  `design/dark-fantasy-tokens.md`.
+- **Adding or renaming a design token**: `design/token-contract.md`. Both Themes in one change.
+- **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
-- **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md` (how to consume
-  `CONTEXT.md` and `docs/adr/`).
-- **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; which labels an issue
-  gets: `docs/agents/labels.md`.
-- **Branching, committing (the user commits, the agent proposes a title), closing an issue**:
-  `docs/git-workflow.md`.
+- **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
+- **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
+  `docs/agents/labels.md`.
+- **Branching, committing, closing an issue**: `docs/git-workflow.md`. The user commits, never you.
 - **Writing or running tests, or touching CI**: `docs/testing.md`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.
 - **Scoping a new review skill**: `docs/agents/review-skills-roadmap.md`.

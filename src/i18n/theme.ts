@@ -1,41 +1,16 @@
-import { cookies } from 'next/headers';
-
-const themes = ['standard', 'dark-fantasy'] as const;
-
-type Theme = (typeof themes)[number];
-
-const defaultTheme: Theme = 'standard';
-
-const themeCookieName = 'theme';
-
-function isTheme(value: string | undefined): value is Theme {
-  return themes.includes(value as Theme);
-}
+import { DEFAULT_THEME, THEMES, type Theme } from '@/constants/theme';
 
 /**
- * The single place the active `Theme` is decided.
- *
- * Copy is resolved on the server (ADR-0004), so the theme has to be known
- * before the HTML is built — which is why guests get a cookie rather than
- * `localStorage`: the server never sees `localStorage`, and the page would
- * render standard copy and only swap to dark-fantasy after hydration.
- *
- * Logged-in users store their theme on their profile instead. That branch
- * belongs here too, but the `Users` collection doesn't exist yet (#32) and
- * neither does the toggle that writes it (#36) — so today this reads the
- * cookie for everyone. Adding the profile branch is an edit to this function
- * and nowhere else.
- *
- * Reading a cookie opts every localized route out of static rendering. That is
- * accepted deliberately: caching for the public notes page is a separate
- * concern (#46), and there is nothing cacheable to protect yet.
+ * Narrows a value that came from outside TypeScript's reach — a cookie, a
+ * database column, a URL — to a `Theme`.
  */
-async function resolveTheme(): Promise<Theme> {
-  const cookieStore = await cookies();
-  const value = cookieStore.get(themeCookieName)?.value;
-
-  return isTheme(value) ? value : defaultTheme;
+function isTheme(value: string | undefined | null): value is Theme {
+  return THEMES.includes(value as Theme);
 }
 
-export type { Theme };
-export { defaultTheme, resolveTheme, themeCookieName, themes };
+/** Same source of values as `isTheme`, resolved to a usable `Theme`. */
+function toTheme(value: string | undefined | null): Theme {
+  return isTheme(value) ? value : DEFAULT_THEME;
+}
+
+export { isTheme, toTheme };

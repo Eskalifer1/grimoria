@@ -23,6 +23,14 @@ segment config live alongside it. Three categories of file:
   put arbitrary implementation in `app/`.
 - **Vendored** — the `(payload)` route group. None of these conventions apply.
 
+**A route exists twice: as a folder under `app/`, and as a `ROUTES` entry in
+`src/constants/routes.ts`.**
+Adding the folder without the entry is half a route — every `href`, `redirect()` and config value
+reads it from `ROUTES` (`ROUTES.HOME`, not `'/'`), and a dynamic route is a function there
+(`PROFILE: (slug) => …`) so no caller ever joins a path itself. Payload's own routes are the one
+exception the file already holds: `ROUTES.ADMIN` is passed to `routes.admin`, and `/api/*` stays
+Payload's.
+
 `(payload)` mounts `/cms` (Payload's admin, the only admin there is — ADR-0005), `/api/*` (REST, on
 a catch-all) and `/api/graphql`. **`/api/*` belongs to Payload** — a vendor default, not an
 architectural rule, so it says nothing about how our mutations are written (open in #49/#61). Our

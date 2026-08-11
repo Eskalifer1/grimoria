@@ -13,7 +13,7 @@ A visitor without a session. Not a stored entity or Role — purely the absence 
 _Avoid_: Anonymous user, Visitor (as a stored concept).
 
 **Role**:
-An enum on User determining permission level: `user` (default), `moderator`, `admin`. Authorization checks are written against this field (ADR-0003).
+A set of values on User determining permission level: `user` (default), `moderator`, `admin`. Authorization checks are written against this field, through a permission helper rather than an equality test — `role` holds an array (ADR-0003).
 _Avoid_: isAdmin flag, permission level (as a separate concept from Role).
 
 **Theme**:

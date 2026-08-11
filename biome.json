@@ -226,7 +226,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**"],
-                    "message": "views/ may import features/, entities/ and shared/ only, and never another screen module — see docs/agents/coding-standards/layers.md."
+                    "message": "views/ may import features/, entities/ and shared/ only, and never another screen module \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -246,7 +246,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**"],
-                    "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ — see docs/agents/coding-standards/layers.md."
+                    "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -266,7 +266,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
-                    "message": "entities/ may import shared/ only, and never another entity — see docs/agents/coding-standards/layers.md."
+                    "message": "entities/ may import shared/ only, and never another entity \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -286,7 +286,7 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
-                    "message": "shared/ never reaches up. Domain-bound code belongs in entities/ — see docs/agents/coding-standards/layers.md."
+                    "message": "shared/ never reaches up. Domain-bound code belongs in entities/ \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
