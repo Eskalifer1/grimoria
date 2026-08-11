@@ -1,9 +1,9 @@
 # Breaking an epic into sub-issues
 
-**No code is written in this mode.**
+Reached from `SKILL.md` when the issue has `epic` and no sub-issues. **No code.**
 
-The chain is `/mattpocock-skills:grill-me` → `/mattpocock-skills:to-spec` →
-`/mattpocock-skills:to-tickets`. Below is where this repo departs from them.
+The chain is `/mattpocock-skills:grilling` → `to-spec` → `to-tickets`. The last two cannot be
+invoked — read their bodies as `spec.md` describes. Below is where this repo departs from them.
 
 ## Depth — before to-tickets runs
 

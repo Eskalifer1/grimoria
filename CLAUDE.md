@@ -20,8 +20,8 @@ the exception.
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
-done any session that changed behavior, architecture or scope. Drift is a bug. `/task-flow` runs it
-at step 10, before the commit is handed over; outside that flow nothing prompts for it.
+done any session that changed behavior, architecture or scope. Drift is a bug. `/implement-issue`
+runs it at step 12, before the commit is handed over; outside that flow nothing prompts for it.
 
 ## Where to look, by task
 
@@ -50,8 +50,10 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
-- **Starting work on a tracker issue — breaking down an epic, grilling one into a spec, or
-  implementing a `ready-for-agent` one**: `/task-flow <issue>`.
+- **Starting work on a tracker issue, unsure which mode it needs** — breaking down an epic,
+  grilling one into a spec, picking the next ready child: `/task-flow <issue>`.
+- **Implementing a `ready-for-agent` issue** — branch, test-first, gates, review, handoff:
+  `/implement-issue <issue>`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.

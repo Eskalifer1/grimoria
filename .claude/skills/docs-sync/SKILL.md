@@ -1,19 +1,19 @@
 ---
 name: docs-sync
-description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/features/*.md, docs/agents/*.md, CLAUDE.md) with a change that was just made or just discussed, so docs never drift from what the code/process actually does. Invoked manually after a conversation that decided something worth documenting, and by /task-flow at step 10. Always proposes before writing — never edits docs unconfirmed.
+description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/features/*.md, docs/agents/*.md, CLAUDE.md) with a change that was just made or just discussed, so docs never drift from what the code/process actually does. Invoked manually after a conversation that decided something worth documenting, and by /implement-issue at step 12. Always proposes before writing — never edits docs unconfirmed.
 ---
 
 ## Two ways in
 
 - **Called directly** — usually right after a conversation that settled something worth documenting (a new/changed term, a decision, a feature behavior), even before any code exists for it.
-- **Called by `/task-flow`** at step 10, over everything that session changed.
+- **Called by `/implement-issue`** at step 12, over everything that session changed.
 
 ## Process
 
 ### 1. Gather inputs — conversation first, diff as the safety net
 
 - **Conversation**: has this session explicitly discussed or decided something that belongs in a doc — a term, a behavior, a decision — regardless of whether code exists for it yet? This is the primary signal when called directly.
-- **Diff**: everything not yet on the default branch — `git diff $(git merge-base origin/dev HEAD)...HEAD` plus the working tree — as a check for anything the conversation didn't call out explicitly. This is the primary signal when called from `/task-flow`.
+- **Diff**: everything not yet on the default branch — `git diff $(git merge-base origin/dev HEAD)...HEAD` plus the working tree — as a check for anything the conversation didn't call out explicitly. This is the primary signal when called from `/implement-issue`.
 
 Use both when both are available.
 
@@ -76,4 +76,4 @@ Close with a short report: which docs changed (one line each), what the deletion
 ## Known gaps (not solved by this skill)
 
 - **State that changes outside git** — GitHub labels, milestones, and similar are never in a diff. This skill can't catch that class of drift by design; it relies on being invoked directly, from conversation, whenever such state changes.
-- **Decisions made in conversation but never invoked** — if this skill isn't called, nothing checks anything. There is no background watcher; outside `/task-flow` it runs only when asked.
+- **Decisions made in conversation but never invoked** — if this skill isn't called, nothing checks anything. There is no background watcher; outside `/implement-issue` it runs only when asked.

@@ -1,11 +1,12 @@
 export const meta = {
-  name: 'verify',
+  // Not `verify` — that collides with Claude Code's bundled /verify command.
+  name: 'review-axes',
   description: 'Run the review axes over a task branch, one subagent each',
   phases: [{ title: 'Review', detail: 'review axes, one subagent each' }],
 }
 
-// Step 8 of /task-flow, and only that step: the stretch where nobody is asked anything.
-// The full gate is green before this runs — step 7.
+// Step 8 of /implement-issue, and only that step. A workflow cannot ask the user anything mid-run,
+// which is why triage is step 9 and not part of this. The full gate is green before this runs.
 // args: { issue: number, range: string } — the ticket number and the git range under review.
 //
 // This file is outside Biome's file set (`biome.json` → `files.includes`). The workflow VM demands
