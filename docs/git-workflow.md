@@ -1,11 +1,14 @@
 # Git workflow
 
+Commit messages, who commits, and what lands where. **How a branch is created and named is
+`docs/git-branching.md`.**
+
 Feature branches merge into `dev`; `dev` merges into `main` roughly weekly. `main` deploys
 continuously to Vercel production. Neon has two branches (`main`, `dev`), not one per PR. No
-pre-commit hooks. Branch off `dev`.
+pre-commit hooks.
 
 **Nothing enforces the flow yet** — branch protection is #43, which is canonical for what lands
-where. Until it does, the rules above hold by hand.
+where.
 
 ## Commit messages
 
@@ -19,7 +22,7 @@ changed · `test:` tests only · `docs:` documentation only · `ci:` CI configur
 **`style:` is not about styling** — palette, spacing and theming are `feat:`/`fix:`.
 
 The type describes the primary change, not every file touched: a `chore:` commit that also
-updates the README stays `chore:`. Scopes (`feat(notes):`) are optional.
+updates the README stays `chore:`.
 
 ## Who commits
 
@@ -27,7 +30,4 @@ updates the README stays `chore:`. Scopes (`feat(notes):`) are optional.
 the commit. Once the user confirms it is done, close the tracking issue — never before that
 confirmation.
 
-**Why**: an agent-run commit triggered a signing prompt that broke the user's terminal session.
-
-**Open gap**: nothing here yet defines when an agent should create a branch before starting a
-task, or how to name it — tracked by #65.
+Held by `permissions.deny` in `.claude/settings.json`.

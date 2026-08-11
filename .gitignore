@@ -54,3 +54,6 @@ design/*.png
 design/*.jpg
 design/*.jpeg
 design/*.webp
+
+# Agent scratch space — per-branch notes, never committed
+.scratch/

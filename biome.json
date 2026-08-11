@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!.yarn", "!public", "!yarn.lock"]
+    "includes": ["**", "!.yarn", "!public", "!yarn.lock", "!.claude/workflows"]
   },
   "formatter": {
     "enabled": true,

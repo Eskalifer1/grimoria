@@ -15,8 +15,7 @@ These docs load on demand, so length is paid by every task that opens one. Write
 the environment cannot say, once, and stop.
 
 **The reader is a frontier model mid-task**, not a newcomer. It holds the stack, the language and
-the framework already; it is missing only the local fact it has no way to derive. Explaining a
-concept back to it costs load and returns nothing.
+the framework already; it is missing only the local fact it has no way to derive.
 
 ## What earns a line
 
@@ -29,8 +28,7 @@ concept back to it costs load and returns nothing.
   the lookup is expensive. Cache the unwritten convention, the reason behind a choice, the gotcha
   no config confesses — and leave the one-command lookups where they cannot go stale.
 - **A line closes a failure that was observed.** Written after watching a run go wrong, not in
-  anticipation of one. Context files written speculatively measure out worse than no file at all:
-  they add tokens, steps and cost while the agent was already right.
+  anticipation of one.
 
 ## How to phrase it
 
@@ -46,11 +44,14 @@ concept back to it costs load and returns nothing.
 - **Reach for a leading word.** A word the model already holds — _cache_, _sediment_, _no-op_,
   _guardrail_, _ladder_ — anchors a whole region of behavior for one token, repeated as a token and
   never redefined. A triad spelled out at three sites, or a sentence gesturing at one idea, is
-  asking to collapse into one word. A coined word recruits nothing and is paid for in definitions.
-- **One term per thing, capitalized the way `CONTEXT.md` writes it** — Theme, User, Guest, Note. A
-  synonym is a failed grep and two docs that look like they disagree.
-- **Bold carries the claim, plain text the reason.** Reading only the bold yields the whole rule
-  set; the prose behind it is depth for whoever needs it.
+  asking to collapse into one word.
+- **One term per thing, capitalized the way `CONTEXT.md` writes it** — Theme, User, Guest, Note.
+- **Bold carries the claim, plain text the condition.** Reading only the bold yields the whole rule
+  set; the prose behind it says when the rule applies and where its edge is.
+- **An instruction states what to do and stops.** No justification, no account of how the decision
+  was reached, no alternative that lost. Prose after the claim earns its place only by changing what the
+  reader does at an edge the claim leaves open. Where a reader would otherwise reverse the rule on
+  their own, the rule links by number to the issue or ADR that settled it.
 
 ## How it is shaped
 
@@ -74,12 +75,10 @@ lives in the doc.
 **Shorten the answer, never the trigger or the path.** The bullet is the only thing standing
 between a task and the doc, so it names every situation that should send a reader there ("server
 component, state, loading and error states") and gives a path that opens as typed. A trigger cut to
-one word stops matching the task at hand, and a bare filename has to be searched for — both read
-as "no doc exists" and are how a trim quietly turns docs off.
+one word stops matching the task at hand, and a bare filename has to be searched for.
 
-**Point at a doc a task will act on**, not at `docs/adr/`. An ADR records why a decision was made
-and is read when someone questions it; the standards or feature doc it produced is what gets read
-while working, and the ADR is reachable from there.
+**Point at a doc a task will act on**, not at `docs/adr/` — the standards or feature doc a decision
+produced is what gets read while working, and the ADR is reachable from there.
 
 ## Say it once, in as few words as carry it
 
@@ -93,19 +92,20 @@ condition or a name to save words makes the doc wrong, which costs far more than
 - **A doc grows by replacement.** Delete the sentence a change supersedes in the same edit.
   Appending is how sediment forms: stale layers that settle because adding feels safe, until
   someone has to core through them to reach what is still live.
-- **Name what holds each rule** — Biome, `tsc`, or review alone. Unmarked, the reader re-verifies
-  what the build already catches and trusts what nothing checks.
+- **Name what holds each rule** — Biome, `tsc`, or review alone.
 - **Anything still moving points at its issue** and says the issue is canonical, instead of
   describing a state that will change without the doc noticing. A superseded pattern worth keeping
   goes in a collapsed "Old patterns" note; dates inside prose go nowhere.
-- **A rejected alternative keeps one line** wherever a reader would otherwise propose it back —
-  `naming.md` on colocation is the shape. History is `git log` and `docs/adr/`; a live guardrail
-  against a plausible mistake is not history.
+- **A rejected alternative lives in the issue or ADR that settled it**, and the rule it produced
+  links there by number.
 
 ## The deletion pass
 
 Run last, as its own pass, cutting only. Every sentence that fails the no-op test. An example that
 restates the sentence above it — keep one concrete example per convention where the shape is the
 point, and cut the abstract ones. A value already readable in the file the doc points at. A rule
-another doc already states, replaced by a pointer to it. The story of how the current state came
-about.
+another doc already states, replaced by a pointer to it. Every clause justifying an instruction
+rather than qualifying it, and the story of how the current state came about.
+
+**The pass leaves a trace.** Name what was cut when handing the doc over. A pass with nothing
+reported did not run.

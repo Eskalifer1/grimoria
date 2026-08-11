@@ -29,6 +29,10 @@ signal rather than a lint error to route around. Two ways out:
   answer this one: threading a primitive down through props purely to satisfy the layer rule is
   prop-drilling that exists for no reason but structure.
 
+**A check or step reaching a second call site moves down to the layer that owns it** — `entities/`
+when it reads a domain shape, `shared/` when it does not. The second site is the trigger, not the
+third.
+
 Domain **types** need neither: `src/payload-types.ts` sits outside the layers, importable anywhere.
 `@/` resolves to `src/`.
 

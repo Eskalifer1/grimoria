@@ -51,6 +51,10 @@ hand-edited to change a token, fix a variant, or match our formatting.
 - Biome's formatter and import sorting are **off** there, and style rules disagreeing with the
   CLI are disabled for it — that is what keeps `shadcn add <x>` a no-op diff. A newly added
   primitive tripping another rule gets the rule disabled for the zone, not the file fixed.
+- **A wrapper over a primitive is earned where the CLI output stops short** — the primitive does not
+  exist in shadcn, or it does not carry by default what has to hold by default here (a token, a
+  translated label, an accessibility attribute). Not "to make it reusable": the CLI already ships
+  `cva` variants, `asChild`, and a caller `className` merged through `cn`.
 
 **`cn` from `@/shared/lib/cn` is the only way class names are combined** — it resolves Tailwind
 conflicts, which makes a caller's `className` an override rather than a coin flip. Use `cva`

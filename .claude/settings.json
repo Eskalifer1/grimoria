@@ -1,5 +1,8 @@
 {
   "outputStyle": "ELI5",
+  "enabledPlugins": {
+    "mattpocock-skills@claude-plugins-official": true
+  },
   "permissions": {
     "deny": [
       "Bash(git push *--force*)",
@@ -10,6 +13,11 @@
       "Bash(git clean *--force*)",
       "Bash(git branch *-D*)",
 
+      "Bash(git commit)",
+      "Bash(git commit *)",
+      "Bash(git * commit)",
+      "Bash(git * commit *)",
+
       "Bash(sudo *)",
       "Bash(npm publish*)",
       "Bash(yarn npm publish*)",
@@ -19,20 +27,6 @@
       "Read(./.env.*)",
       "Read(./secrets/**)",
       "Read(**/*.pem)"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/docs-sync-check.sh\"",
-            "statusMessage": "Checking docs are in sync before commit..."
-          }
-        ]
-      }
     ]
   }
 }
