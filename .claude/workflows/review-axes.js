@@ -58,8 +58,11 @@ const AXES = [
     key: 'payload-security',
     prompt: `Run the /payload-security-review skill over ${range}. Its gate comes first: a range that touches no server surface returns zero findings and stops. Never report something Better Auth, Payload, Vercel or Neon already holds — the skill lists them. Read docs/agents/coding-standards/review-boundaries.md before reporting anything, and name the concrete exploiting request behind every finding.`,
   },
+  {
+    key: 'bug-hunt',
+    prompt: `Run the /bug-hunt-review skill over ${range}. Its gate comes first: a range touching no src/ file outside the generated and vendored zones returns zero findings and stops. Races, transactions and anything touching payload.* or req belong to the payload-security axis, not this one, and the ticket is never read here. Read docs/agents/coding-standards/review-boundaries.md before reporting anything, and name the concrete failing input and the wrong output it produces behind every finding.`,
+  },
   // { key: 'payload-performance', ... }      not yet — #46
-  // { key: 'bug-hunt', ... }                 not yet — #47
 ]
 
 phase('Review')

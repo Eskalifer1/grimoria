@@ -70,4 +70,7 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   User input** — who may do what: `docs/features/auth.md`; to review a branch for access holes,
   IDOR, unvalidated input, racing writes, leaked secrets or injection:
   `/payload-security-review [range]`.
+- **Hunting a latent correctness bug on a branch** — an edge input, a floating `Promise`, a
+  swallowed failure, state that disagrees with itself, `as` or `!` standing in for a check, the
+  server/client boundary, cache and revalidation, Payload hook ordering: `/bug-hunt-review [range]`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.

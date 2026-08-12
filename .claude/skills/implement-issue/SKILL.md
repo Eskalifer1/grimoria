@@ -92,9 +92,9 @@ Invoke `/review-axes` with the issue number and the git range — the workflow a
 | --- | --- |
 | Standards + Fowler smells | `/mattpocock-skills:code-review` |
 | a11y | `/a11y-review` |
-| Payload access control | not yet — #45 |
+| Payload access control | `/payload-security-review` |
+| bug hunt | `/bug-hunt-review` |
 | Payload performance | not yet — #46 |
-| bug hunt | not yet — #47 |
 
 **What a review may report at all is `docs/agents/coding-standards/review-boundaries.md`.** The axes
 only report; nothing changes until step 9.

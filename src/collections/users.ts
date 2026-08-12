@@ -13,12 +13,16 @@ import {
  * which is what tells the caller it addresses nobody.
  */
 function normalizeProfileSlug(value: unknown): string {
-  return (typeof value === 'string' ? value : '')
-    .normalize('NFKD')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, PROFILE_SLUG_MAX_BASE_LENGTH);
+  return (
+    (typeof value === 'string' ? value : '')
+      .normalize('NFKD')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      // Truncation before trimming, not after: cutting at 40 can land on a
+      // separator and put one back at the end.
+      .slice(0, PROFILE_SLUG_MAX_BASE_LENGTH)
+      .replace(/^-+|-+$/g, '')
+  );
 }
 
 /**
@@ -96,4 +100,4 @@ function withProfileFields({ collection }: { collection: CollectionConfig }): Co
   };
 }
 
-export { withProfileFields };
+export { buildProfileSlug, normalizeProfileSlug, withProfileFields };

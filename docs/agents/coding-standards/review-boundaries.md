@@ -13,6 +13,11 @@ who enforces which part is `accessibility.md`.
 in. What the platform already holds, and is therefore never a finding, is
 `.claude/skills/payload-security-review/SKILL.md`.
 
+**A correctness finding names the failing input and the wrong output it produces.** Races,
+transactions and anything touching `payload.*` or `req` are
+`.claude/skills/payload-security-review/SKILL.md`; every other correctness bug is
+`.claude/skills/bug-hunt-review/SKILL.md`.
+
 **Missing extensibility is never a finding.** Reportable: an abstraction standing without a second
 consumer in the repo. Not reportable: the absence of one.
 

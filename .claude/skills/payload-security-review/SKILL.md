@@ -12,6 +12,10 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, 
 Who may do what is `docs/features/auth.md`. What a review may report at all is
 `docs/agents/coding-standards/review-boundaries.md` — read it before reporting anything.
 
+**Races, transactions and anything touching `payload.*` or `req` are this axis**, including a race
+that only corrupts a User's own data. `/bug-hunt-review` runs beside this one and takes every other
+correctness bug.
+
 ## 1. Gate — is there a server surface in this range?
 
 ```sh
@@ -97,6 +101,10 @@ Uniqueness is a database constraint (`unique: true`), never a preceding existenc
 invite or reset that may be used once is **consumed by a conditional update that matches its unused
 state**, and the row it wrote is what proves the caller won. Work that must not interleave shares
 one transaction through `req`. Rate limiting narrows a race and does not close it.
+
+**A hook that writes runs inside the request's transaction only when it passes `req` on.** A
+`beforeChange` or `afterChange` calling `payload.update` without it commits separately, so a later
+failure rolls the document back and leaves that write standing.
 
 ### 7. Secrets stay on the server
 
