@@ -71,6 +71,7 @@ export interface Config {
     sessions: Session;
     accounts: Account;
     verifications: Verification;
+    rateLimit: RateLimit;
     'admin-invitations': AdminInvitation;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -88,6 +89,7 @@ export interface Config {
     sessions: SessionsSelect<false> | SessionsSelect<true>;
     accounts: AccountsSelect<false> | AccountsSelect<true>;
     verifications: VerificationsSelect<false> | VerificationsSelect<true>;
+    rateLimit: RateLimitSelect<false> | RateLimitSelect<true>;
     'admin-invitations': AdminInvitationsSelect<false> | AdminInvitationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -298,6 +300,23 @@ export interface Verification {
   updatedAt: string;
 }
 /**
+ * Rate limits for users
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rateLimit".
+ */
+export interface RateLimit {
+  id: number;
+  /**
+   * The key for the rate limit.
+   */
+  key: string;
+  count: number;
+  lastRequest: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "admin-invitations".
  */
@@ -352,6 +371,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'verifications';
         value: number | Verification;
+      } | null)
+    | ({
+        relationTo: 'rateLimit';
+        value: number | RateLimit;
       } | null)
     | ({
         relationTo: 'admin-invitations';
@@ -461,6 +484,17 @@ export interface VerificationsSelect<T extends boolean = true> {
   expiresAt?: T;
   createdAt?: T;
   updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rateLimit_select".
+ */
+export interface RateLimitSelect<T extends boolean = true> {
+  key?: T;
+  count?: T;
+  lastRequest?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

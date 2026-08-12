@@ -66,4 +66,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   `<standards>/review-boundaries.md`.
 - **Keyboard reach, screen-reader names, focus order, ARIA state, or what a11y level we hold**:
   `<standards>/accessibility.md`; to review a branch against it, `/a11y-review [range]`.
+- **Writing a collection's access control, a route handler, a Server Action, or anything reading
+  User input** — who may do what: `docs/features/auth.md`; to review a branch for access holes,
+  IDOR, unvalidated input, racing writes, leaked secrets or injection:
+  `/payload-security-review [range]`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.

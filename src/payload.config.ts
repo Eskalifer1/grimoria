@@ -59,6 +59,12 @@ export default buildConfig({
 
         emailAndPassword: { enabled: true },
 
+        // Better Auth counts requests in memory by default, which on serverless
+        // means one counter per instance — ten instances, ten times the limit.
+        // Postgres is the only store every instance shares; `payload-auth` turns
+        // this into the generated `rateLimit` collection.
+        rateLimit: { storage: 'database' },
+
         // A session slides: any Better Auth request older than `updateAge`
         // pushes `expiresIn` out again, so a User who shows up inside two weeks
         // is never signed out. This is what a refresh token buys elsewhere.

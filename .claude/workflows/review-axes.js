@@ -54,7 +54,10 @@ const AXES = [
     key: 'a11y',
     prompt: `Run the /a11y-review skill over ${range}. Its gate comes first: a range that touches no .tsx under src/ outside src/app/(payload)/ returns zero findings and stops. Report against WCAG 2.2 AA, never against a rule Biome's a11y preset already holds, and read docs/agents/coding-standards/review-boundaries.md before reporting anything — it requires every finding to name the rule it breaks.`,
   },
-  // { key: 'payload-access-control', ... }   not yet — #45
+  {
+    key: 'payload-security',
+    prompt: `Run the /payload-security-review skill over ${range}. Its gate comes first: a range that touches no server surface returns zero findings and stops. Never report something Better Auth, Payload, Vercel or Neon already holds — the skill lists them. Read docs/agents/coding-standards/review-boundaries.md before reporting anything, and name the concrete exploiting request behind every finding.`,
+  },
   // { key: 'payload-performance', ... }      not yet — #46
   // { key: 'bug-hunt', ... }                 not yet — #47
 ]

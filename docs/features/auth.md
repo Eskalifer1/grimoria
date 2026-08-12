@@ -5,9 +5,9 @@ Why Better Auth rather than Payload's own auth is ADR-0009; what `role` means is
 
 ## Shape
 
-`payload-auth`'s `betterAuthPlugin` in `src/payload.config.ts` generates five collections —
-`users`, `sessions`, `accounts`, `verifications`, `admin-invitations` — and installs a Payload auth
-strategy that resolves Better Auth sessions. Nothing declares them; **editing the plugin options is
+`payload-auth`'s `betterAuthPlugin` in `src/payload.config.ts` generates six collections —
+`users`, `sessions`, `accounts`, `verifications`, `admin-invitations`, `rateLimit` — and installs a
+Payload auth strategy that resolves Better Auth sessions. Nothing declares them; **editing the plugin options is
 how the collections change**, and `src/collections/users.ts` adds the two fields Better Auth knows
 nothing about (`theme`, `slug`) through `collectionOverrides`.
 
@@ -38,13 +38,13 @@ signed out and there is no refresh code to write.
 
 ## What a User may do
 
-| | |
-| --- | --- |
-| Read | self, or an admin |
-| Create | admin only — everyone else registers through `/api/auth/*` |
-| Update | self, restricted to `allowedFields`; admins unrestricted |
-| Delete | self, or an admin |
-| Reach `/cms` | `adminRoles` only |
+|              |                                                            |
+| ------------ | ---------------------------------------------------------- |
+| Read         | self, or an admin                                          |
+| Create       | admin only — everyone else registers through `/api/auth/*` |
+| Update       | self, restricted to `allowedFields`; admins unrestricted   |
+| Delete       | self, or an admin                                          |
+| Reach `/cms` | `adminRoles` only                                          |
 
 **`allowedFields` is what stops self-promotion.** It lists `name` and `theme`; `role` is absent, so
 a User PATCHing `{"role":["admin"]}` at their own record gets "You are not allowed to perform this
@@ -52,6 +52,12 @@ action". Adding a self-editable field means adding it there, not only to the col
 
 `read` being self-or-admin is the known gap: showing an author's name on a public Note needs it
 widened, which lands with the first surface that displays one (#5 / Notes).
+
+## Rate limiting
+
+Better Auth limits `/api/auth/*` itself, in production only, and nothing outside it. Its counters
+default to memory — one per serverless instance, so no limit at all — which is why
+`rateLimit.storage` is `database` and the `rateLimit` collection above is the table it writes.
 
 ## Registration
 
@@ -78,6 +84,12 @@ path allowed to write `role`.
 falls back to the cookie only for Guests — the cookie is client-writable and per-device, so letting
 it win would put a User's Theme outside the server's control. The session read is wrapped in
 React's `cache()`, so the page that asks for the same User pays nothing.
+
+## Where it is checked
+
+`/payload-security-review [range]` on demand, and automatically as the `payload-security` axis of
+`/review-axes` — step 8 of `/implement-issue`. The axis returns nothing when a range touches no
+server surface.
 
 ## Gotchas
 

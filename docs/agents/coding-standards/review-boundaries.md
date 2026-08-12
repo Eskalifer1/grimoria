@@ -9,6 +9,10 @@ output. A finding that argues from taste is dropped without a reply.
 **An accessibility finding names a WCAG 2.2 AA success criterion** — number and name. The level and
 who enforces which part is `accessibility.md`.
 
+**A security finding names the request that exploits it** — method, path, body, and who is signed
+in. What the platform already holds, and is therefore never a finding, is
+`.claude/skills/payload-security-review/SKILL.md`.
+
 **Missing extensibility is never a finding.** Reportable: an abstraction standing without a second
 consumer in the repo. Not reportable: the absence of one.
 

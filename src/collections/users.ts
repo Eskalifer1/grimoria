@@ -1,7 +1,25 @@
-import type { CollectionConfig, Field } from 'payload';
+import type { CollectionConfig, Field, PayloadRequest } from 'payload';
 
 import { DEFAULT_THEME, THEMES } from '@/constants/theme';
-import { PROFILE_SLUG_MAX_BASE_LENGTH, PROFILE_SLUG_SUFFIX_LENGTH } from '@/constants/user';
+import {
+  PROFILE_SLUG_MAX_ATTEMPTS,
+  PROFILE_SLUG_MAX_BASE_LENGTH,
+  PROFILE_SLUG_SUFFIX_LENGTH,
+} from '@/constants/user';
+
+/**
+ * The one shape a slug may have, applied to generated and supplied values
+ * alike. A string of nothing but punctuation or spaces normalizes to `''`,
+ * which is what tells the caller it addresses nobody.
+ */
+function normalizeProfileSlug(value: unknown): string {
+  return (typeof value === 'string' ? value : '')
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, PROFILE_SLUG_MAX_BASE_LENGTH);
+}
 
 /**
  * A profile slug that reads as the User's name and still collides with nobody:
@@ -10,18 +28,33 @@ import { PROFILE_SLUG_MAX_BASE_LENGTH, PROFILE_SLUG_SUFFIX_LENGTH } from '@/cons
  * to `user`, so the suffix carries the whole identity.
  */
 function buildProfileSlug(name: unknown): string {
-  const base = (typeof name === 'string' ? name : '')
-    .normalize('NFKD')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, PROFILE_SLUG_MAX_BASE_LENGTH);
-
   const suffix = Math.random()
     .toString(36)
     .slice(2, 2 + PROFILE_SLUG_SUFFIX_LENGTH);
 
-  return `${base || 'user'}-${suffix}`;
+  return `${normalizeProfileSlug(name) || 'user'}-${suffix}`;
+}
+
+/**
+ * The `unique` index is what actually decides — two sign-ups can pass this
+ * check in the same millisecond. Re-rolling the suffix first is what keeps a
+ * User from meeting a raw constraint error over a 1-in-60-million collision.
+ */
+async function pickProfileSlug(name: unknown, req: PayloadRequest): Promise<string> {
+  let candidate = buildProfileSlug(name);
+
+  for (let attempt = 1; attempt < PROFILE_SLUG_MAX_ATTEMPTS; attempt++) {
+    const { totalDocs } = await req.payload.count({
+      collection: 'users',
+      req,
+      where: { slug: { equals: candidate } },
+    });
+
+    if (totalDocs === 0) break;
+    candidate = buildProfileSlug(name);
+  }
+
+  return candidate;
 }
 
 const themeField: Field = {
@@ -43,8 +76,10 @@ const slugField: Field = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, value }) =>
-        typeof value === 'string' && value.length > 0 ? value : buildProfileSlug(data?.name),
+      // A supplied slug is untrusted: `"  "` normalizes to nothing, and a slug
+      // that addresses nobody is replaced rather than stored.
+      async ({ data, req, value }) =>
+        normalizeProfileSlug(value) || (await pickProfileSlug(data?.name, req)),
     ],
   },
 };

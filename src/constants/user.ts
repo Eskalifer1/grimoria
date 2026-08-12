@@ -11,7 +11,11 @@ const PROFILE_SLUG_SUFFIX_LENGTH = 5;
 
 const PROFILE_SLUG_MAX_BASE_LENGTH = 40;
 
+/** How many suffixes a sign-up tries before letting the unique index decide. */
+const PROFILE_SLUG_MAX_ATTEMPTS = 3;
+
 export {
+  PROFILE_SLUG_MAX_ATTEMPTS,
   PROFILE_SLUG_MAX_BASE_LENGTH,
   PROFILE_SLUG_SUFFIX_LENGTH,
   SESSION_EXPIRES_IN,

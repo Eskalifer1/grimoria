@@ -66,6 +66,7 @@ wordmark
 ack
 acks
 frontmatter
+IDOR
 subtasking
 wayfinder
 wayfinding
@@ -99,3 +100,4 @@ roled
 triaging
 typechecks
 unrepresentable
+unvalidated
