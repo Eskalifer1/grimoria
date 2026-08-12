@@ -23,7 +23,7 @@ issues reach here; `failures.md` in this folder covers a step that cannot comple
 | 3 | Read the standards this task touches | main agent | here |
 | 4 | Implement test-first, record the decisions | **main agent** | `/mattpocock-skills:tdd` |
 | 5 | Fast gate | subagent | `/checks` |
-| 6 | Self-verify against the requirements, 2–3 rounds | fresh subagent finds, main agent judges | here |
+| 6 | Self-verify against the requirements, 2–3 rounds | fresh subagent finds, main agent judges | `/self-verify` |
 | 7 | Full gate | subagent | `/checks` |
 | 8 | Review axes in parallel | workflow | `/review-axes` |
 | 9 | Triage and fix | main agent | here |
@@ -71,17 +71,11 @@ until green.
 
 ### 6 — self-verify
 
-Each round: a **fresh** subagent gets only the issue with comments and the diff — never the author's
-reasoning — and returns, under a schema, where the code diverges from the requirements.
+`/self-verify $0` over the branch range. It runs the rounds, and the fast gate after any round that
+fixed something.
 
-**Judge each divergence before acting on it.** Check the claim against the code, fix what holds,
-report which claims were rejected and on what grounds. Then the fast gate again.
-
-**Two rounds minimum; a third only if the second still found something**, ceiling of three.
-Whatever is left goes into an issue comment as known debt.
-
-**The screenshot-against-the-design round turns on once a visual reference exists** to compare
-against.
+**This is the only step that judges the code against the ticket.** Step 8 judges it against the
+standards.
 
 ### 8 — review axes
 
@@ -94,7 +88,6 @@ Invoke `/review-axes` with the issue number and the git range — the workflow a
 | a11y | `/a11y-review` |
 | Payload access control | `/payload-security-review` |
 | bug hunt | `/bug-hunt-review` |
-| Payload performance | not yet — #46 |
 
 **What a review may report at all is `docs/agents/coding-standards/review-boundaries.md`.** The axes
 only report; nothing changes until step 9.

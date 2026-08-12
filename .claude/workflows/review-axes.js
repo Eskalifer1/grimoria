@@ -43,8 +43,8 @@ const FINDINGS_SCHEMA = {
   },
 }
 
-// Axes with no skill behind them yet are listed, not silently missing — uncomment the row when
-// its ticket closes.
+// No spec axis here: step 6 (/self-verify) checks the code against the ticket, step 11 checks it
+// again against the acceptance criteria, and a third pass in between pays for the same reading.
 const AXES = [
   {
     key: 'standards',
@@ -62,7 +62,6 @@ const AXES = [
     key: 'bug-hunt',
     prompt: `Run the /bug-hunt-review skill over ${range}. Its gate comes first: a range touching no src/ file outside the generated and vendored zones returns zero findings and stops. Races, transactions and anything touching payload.* or req belong to the payload-security axis, not this one, and the ticket is never read here. Read docs/agents/coding-standards/review-boundaries.md before reporting anything, and name the concrete failing input and the wrong output it produces behind every finding.`,
   },
-  // { key: 'payload-performance', ... }      not yet — #46
 ]
 
 phase('Review')

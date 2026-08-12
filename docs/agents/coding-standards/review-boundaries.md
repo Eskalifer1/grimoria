@@ -18,6 +18,10 @@ transactions and anything touching `payload.*` or `req` are
 `.claude/skills/payload-security-review/SKILL.md`; every other correctness bug is
 `.claude/skills/bug-hunt-review/SKILL.md`.
 
+**A review never reads the ticket.** Whether the code meets what was asked is
+`.claude/skills/self-verify/SKILL.md`, which reads nothing else; every axis here judges the code
+against the standards and the platform, and a requirement is not a rule it may cite.
+
 **Missing extensibility is never a finding.** Reportable: an abstraction standing without a second
 consumer in the repo. Not reportable: the absence of one.
 

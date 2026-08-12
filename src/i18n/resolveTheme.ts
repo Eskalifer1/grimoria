@@ -33,7 +33,7 @@ const readUser = cache(async () => {
  *
  * Reading a cookie opts every localized route out of static rendering. That is
  * accepted deliberately: caching for the public notes page is a separate
- * concern (#46), and there is nothing cacheable to protect yet.
+ * concern, and there is nothing cacheable to protect yet.
  */
 async function resolveTheme(): Promise<Theme> {
   const user = await readUser();

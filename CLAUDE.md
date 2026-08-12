@@ -56,6 +56,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   `/implement-issue <issue>`.
 - **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` for the fast
   three, `/checks full` to add `yarn test` and `yarn build`.
+- **Checking whether a branch does what its ticket asked** — a requirement unmet, met differently,
+  or met more widely than asked: `/self-verify <issue> [range]`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
