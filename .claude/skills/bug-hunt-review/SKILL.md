@@ -1,13 +1,21 @@
 ---
 name: bug-hunt-review
-description: Hunt latent correctness bugs in a branch's changed code — edge inputs, floating promises, swallowed failures, state that disagrees with itself, assertions standing in for checks, the server/client boundary, cache and revalidation, and Payload hook ordering. Every finding names the input that breaks and the wrong output it produces. Reads code only; runs nothing and repairs nothing. Invoked as /bug-hunt-review [range], and by /review-axes as the bug-hunt axis.
+description: Hunt latent correctness bugs in a branch's changed code — edge inputs, floating promises, swallowed failures, state that disagrees with itself, assertions standing in for checks, the server/client boundary, cache and revalidation, and Payload hook ordering. Every finding names the input that breaks and the wrong output it produces. Reads code only; runs nothing and repairs nothing. Invoked as /bug-hunt-review [range], and by /implement-issue as the bug-hunt axis at step 8.
 argument-hint: "[range]"
+context: fork
+agent: general-purpose
+background: false
 allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, Grep, Glob
 ---
 
 # Bug hunt over `$0`
 
-**The range is `$0`, or `dev...HEAD` when `$0` is empty.**
+**Run the review below now and report what it finds.** Change no code, and ask nothing.
+
+**The range is `$0`, or `dev` when `$0` is empty.**
+
+**`dev`, not `dev...HEAD`.** `/implement-issue` hands the branch over uncommitted, so a three-dot
+range compares two commits and reports an empty diff over a branch full of work.
 
 What a review may report at all is `docs/agents/coding-standards/review-boundaries.md` — read it
 before reporting anything.
@@ -124,7 +132,7 @@ occur is `high` — a User never sees it.
 Each finding carries: the file and line, one sentence on what breaks, the failing input and the
 wrong output it produces, and the concrete fix.
 
-**Called by `/review-axes`** — return the axis JSON schema the workflow passed in, `axis:
+**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis:
 "bug-hunt"`, the failing input and wrong output in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the eight

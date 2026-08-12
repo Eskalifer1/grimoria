@@ -54,8 +54,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   grilling one into a spec, picking the next ready child: `/task-flow <issue>`.
 - **Implementing a `ready-for-agent` issue** — branch, test-first, gates, review, handoff:
   `/implement-issue <issue>`.
-- **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` for the fast
-  three, `/checks full` to add `yarn test` and `yarn build`.
+- **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` runs the full
+  gate, `/checks fast` drops `yarn build` and keeps the rest.
 - **Checking whether a branch does what its ticket asked** — a requirement unmet, met differently,
   or met more widely than asked: `/self-verify <issue> [range]`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:

@@ -12,7 +12,7 @@ issues reach here; `failures.md` in this folder covers a step that cannot comple
 
 ## The ticket
 
-!`gh issue view $0 --comments`
+!`gh issue view $0 --json number,title,state,labels,body,comments --jq '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'`
 
 ## Steps
 
@@ -22,10 +22,10 @@ issues reach here; `failures.md` in this folder covers a step that cannot comple
 | 2 | Create the branch | main agent | `docs/git-branching.md` |
 | 3 | Read the standards this task touches | main agent | here |
 | 4 | Implement test-first, record the decisions | **main agent** | `/mattpocock-skills:tdd` |
-| 5 | Fast gate | subagent | `/checks` |
+| 5 | Fast gate | subagent | `/checks fast` |
 | 6 | Self-verify against the requirements, 2–3 rounds | fresh subagent finds, main agent judges | `/self-verify` |
 | 7 | Full gate | subagent | `/checks` |
-| 8 | Review axes in parallel | workflow | `/review-axes` |
+| 8 | Review axes in parallel | four subagents | here |
 | 9 | Triage and fix | main agent | here |
 | 10 | Re-run | main agent | here |
 | 11 | Acceptance check against the issue | fresh subagent | here |
@@ -52,6 +52,15 @@ Test-first, through `/mattpocock-skills:tdd`: **one seam, one failing test, one 
 slice**, against the seams the spec settled. Confirm the seams with the user before the first test
 where the spec left them open.
 
+**A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
+test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
+and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
+acceptance criteria at step 11 are what verifies this class of ticket.
+
+**`git add -N` every file the ticket creates, as it is created.** Nothing here is committed until
+the user commits, and an untracked file is invisible to `git diff` — step 6 and every axis at step 8
+would judge an empty range. **The range they all take is `dev`**, which carries the working tree.
+
 **Record decisions as they are made**, to `.scratch/$0.md` under `## Decisions` — one line each:
 what was chosen, and what was rejected where a reviewer would plausibly propose it back. Step 9
 reads this file.
@@ -60,8 +69,11 @@ reads this file.
 
 | Gate | Commands | When |
 | --- | --- | --- |
-| **Fast** — `/checks fast` | `yarn check` → `yarn typecheck` → `yarn spellcheck` | Step 5, and after every fix in steps 6, 9, 10 |
-| **Full** — `/checks` | the fast gate, then `yarn test` → `yarn build` | Step 7, and again at step 13 |
+| **Fast** — `/checks fast $0` | `yarn check` → `yarn typecheck` → `yarn spellcheck` → `yarn test` | Step 5, and after every fix in steps 6, 9, 10 |
+| **Full** — `/checks full $0` | the fast gate, then `yarn build` | Step 7, and again at step 13 |
+
+**Pass the issue number as the second argument** — it names the gate's log files, so a second branch
+gating at the same time cannot overwrite them.
 
 `/checks` forks its own subagent on the cheapest model, so none of it lands here. **Failures come
 back verbatim; a green run is one line and nothing else.**
@@ -79,18 +91,34 @@ standards.
 
 ### 8 — review axes
 
-Invoke `/review-axes` with the issue number and the git range — the workflow at
-`.claude/workflows/review-axes.js`.
+Four subagents, **launched in one message so they run in parallel**, each given the git range and
+nothing about the ticket.
+
+**Each subagent is told to read its axis file under `.claude/skills/` and follow it**, rather than
+to invoke the skill. The three axis skills fork when invoked, and a fork inside a subagent is a
+second hop that relays its findings through a middleman. Forks also queue rather than run at once —
+measured — so the parallelism here comes from the four subagents and nowhere else.
 
 | Axis | Carrier |
 | --- | --- |
-| Standards + Fowler smells | `/mattpocock-skills:code-review` |
+| Standards + Fowler smells | `/mattpocock-skills:code-review`, **its Standards axis alone** |
 | a11y | `/a11y-review` |
 | Payload access control | `/payload-security-review` |
 | bug hunt | `/bug-hunt-review` |
 
+Each axis returns a list, one entry per finding: severity, file, line, summary, and **the rule it
+breaks** — the field step 9 triages on.
+
+**`code-review` ships two axes and only its Standards axis runs here.** Say so in its prompt: its
+Spec axis reads the ticket, which step 6 already did with the issue in hand, and inside a subagent
+its "ask the user where the spec is" fallback has nobody to ask.
+
 **What a review may report at all is `docs/agents/coding-standards/review-boundaries.md`.** The axes
 only report; nothing changes until step 9.
+
+`.claude/workflows/review-axes.js` carries the same four axes under a validated JSON schema and is
+the better carrier the day a session can launch a workflow. **It is not a slash command** — nothing
+runs it today (#66), so the four subagents above are the live path.
 
 ### 9 — triage
 
@@ -109,8 +137,11 @@ Decide here; reach for the user only at the end:
 
 ### 10 — re-run
 
-The fast gate after every fix, the full gate once the fixes stop, then `/review-axes` again over the
-fix diff. **Invoke the workflow fresh** — an agent cannot resume a run.
+The fast gate after every fix, the full gate once the fixes stop, then the review axes again over
+the **fix diff** — and **only the axes that returned a finding the first time**. An axis that came
+back empty over the wider range comes back empty over a subset of it.
+
+**A fresh subagent per axis** — an agent cannot resume a run.
 
 Two full cycles maximum; what is still open goes into an issue comment as known debt.
 

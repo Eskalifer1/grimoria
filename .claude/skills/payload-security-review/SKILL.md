@@ -1,13 +1,21 @@
 ---
 name: payload-security-review
-description: Review a branch's changed server surfaces for security defects the framework does not hold — collection access control, IDOR, Local API access bypass, unauthenticated route handlers and Server Actions, unvalidated input, race conditions on writes, leaked secrets and stack traces, and the injection trio (XSS, SQL, SSRF). Reads code only; runs nothing and repairs nothing. Invoked as /payload-security-review [range], and by /review-axes as the security axis.
+description: Review a branch's changed server surfaces for security defects the framework does not hold — collection access control, IDOR, Local API access bypass, unauthenticated route handlers and Server Actions, unvalidated input, race conditions on writes, leaked secrets and stack traces, and the injection trio (XSS, SQL, SSRF). Reads code only; runs nothing and repairs nothing. Invoked as /payload-security-review [range], and by /implement-issue as the security axis at step 8.
 argument-hint: "[range]"
+context: fork
+agent: general-purpose
+background: false
 allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, Grep, Glob
 ---
 
 # Payload security review over `$0`
 
-**The range is `$0`, or `dev...HEAD` when `$0` is empty.**
+**Run the review below now and report what it finds.** Change no code, and ask nothing.
+
+**The range is `$0`, or `dev` when `$0` is empty.**
+
+**`dev`, not `dev...HEAD`.** `/implement-issue` hands the branch over uncommitted, so a three-dot
+range compares two commits and reports an empty diff over a branch full of work.
 
 Who may do what is `docs/features/auth.md`. What a review may report at all is
 `docs/agents/coding-standards/review-boundaries.md` — read it before reporting anything.
@@ -178,7 +186,7 @@ dropped.
 Each finding carries: the file and line, one sentence on what breaks, the request or rule behind
 it, and the concrete fix.
 
-**Called by `/review-axes`** — return the axis JSON schema the workflow passed in, `axis:
+**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis:
 "payload-security"`, the exploiting request or the doc line in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the ten

@@ -33,8 +33,9 @@ by e2e (#39); the pure functions it calls are covered by unit.
 
 ## Running
 
-`yarn test` runs every project once and exits — this is what CI (#42) and `/checks full` call, the
-full gate of `/implement-issue`.
+`yarn test` runs every project once and exits — this is what CI (#42) and `/checks` call. It sits in
+the **fast** gate of `/implement-issue`: the suite costs under a second, so a fix that breaks a test
+goes red on the next fast gate rather than at the end.
 
 **A shared render helper for component tests arrives with the second component test**, wrapping
 whatever providers (`NextIntlClientProvider`, Theme) turn out to be needed by then (#28).

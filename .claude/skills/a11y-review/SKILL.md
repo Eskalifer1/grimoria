@@ -1,13 +1,21 @@
 ---
 name: a11y-review
-description: Review a branch's changed React components for accessibility defects that Biome's static a11y rules cannot see — semantics, accessible names, keyboard reach, ARIA state, form wiring, dynamic states, and locale markup. Reads code only; runs no browser and repairs nothing. Invoked as /a11y-review [range], and by /review-axes as the a11y axis.
+description: Review a branch's changed React components for accessibility defects that Biome's static a11y rules cannot see — semantics, accessible names, keyboard reach, ARIA state, form wiring, dynamic states, and locale markup. Reads code only; runs no browser and repairs nothing. Invoked as /a11y-review [range], and by /implement-issue as the a11y axis at step 8.
 argument-hint: "[range]"
+context: fork
+agent: general-purpose
+background: false
 allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, Grep, Glob
 ---
 
 # Accessibility review over `$0`
 
-**The range is `$0`, or `dev...HEAD` when `$0` is empty.**
+**Run the review below now and report what it finds.** Change no code, and ask nothing.
+
+**The range is `$0`, or `dev` when `$0` is empty.**
+
+**`dev`, not `dev...HEAD`.** `/implement-issue` hands the branch over uncommitted, so a three-dot
+range compares two commits and reports an empty diff over a branch full of work.
 
 What this repo promises accessibility-wise is
 `docs/agents/coding-standards/accessibility.md`. What a review may report at all is
@@ -104,7 +112,7 @@ criterion behind it is taste, and `review-boundaries.md` drops it.
 Each finding carries: the file and line, one sentence on what breaks, the criterion, and the concrete
 fix.
 
-**Called by `/review-axes`** — return the axis JSON schema the workflow passed in, `axis: "a11y"`,
+**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis: "a11y"`,
 the criterion in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the seven

@@ -6,7 +6,10 @@ argument-hint: "[issue-number] [range]"
 
 # Self-verify issue #$0 over `$1`
 
-**The ticket is #$0. The range is `$1`, or `dev...HEAD` when `$1` is empty.**
+**The ticket is #$0. The range is `$1`, or `dev` when `$1` is empty.**
+
+**`dev`, not `dev...HEAD`.** The flow commits nothing until the user does, so a three-dot range
+compares two commits and reports an empty diff over a branch full of work.
 
 What a review may report at all is `docs/agents/coding-standards/review-boundaries.md`.
 
@@ -21,6 +24,9 @@ git diff --stat <range>
 
 **An empty diff is a broken call, not zero divergences.** Say which range came back empty and stop.
 
+**A file never added to the index is invisible to `git diff`.** `git add -N` on the branch's new
+files is what step 4 owes this step; without it a whole new module reads as no change at all.
+
 ## 2. What a divergence is
 
 **A requirement of the ticket that the code does not meet, meets differently, or meets more widely
@@ -31,12 +37,14 @@ divergences here, however obvious they are on the way past. Step 8 pays for thos
 
 ## 3. The round
 
-1. Gather the ticket — `gh issue view $0 --comments` — and the diff over the range.
+1. Gather the ticket with the `--json`/`--jq` form `/implement-issue` uses — **never
+   `gh issue view --comments`, which prints nothing at all when the issue has no comments** — and
+   the diff over the range.
 2. Spawn a **fresh** subagent with what section 4 allows it, and nothing else.
 3. It returns divergences in the shape below. It changes no code.
 4. Judge each claim against the code, apply the fixes that hold, and write one line per claim —
    held or rejected, and on what grounds — to `.scratch/$0.md`.
-5. Run the fast gate (`/checks fast`) when anything was fixed.
+5. Run the fast gate (`/checks fast $0`) when anything was fixed.
 
 **The main agent applies every fix.**
 

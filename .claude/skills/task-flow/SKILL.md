@@ -12,7 +12,7 @@ Which mode a tracker issue needs, and where that mode is written down.
 
 ## The ticket
 
-!`gh issue view $0 --comments`
+!`gh issue view $0 --json number,title,state,labels,body,comments --jq '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'`
 
 ## Sub-issues
 
