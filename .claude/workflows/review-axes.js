@@ -6,9 +6,10 @@ export const meta = {
 }
 
 // NOT REACHABLE TODAY. A workflow is not a slash command — it launches only through the workflow
-// tool, which no session here has had. Step 8 of /implement-issue runs these four axes as four
-// parallel subagents instead; this file is the schema-validated carrier for the day that tool
-// shows up, and the two must be changed together (#66).
+// tool, which no session here has had. Step 8 of /implement-issue runs the axes the diff earns —
+// one subagent each on a large diff, one subagent for all of them on a small one — instead; this
+// file is the schema-validated carrier for the day that tool shows up, and the two must be changed
+// together (#66).
 //
 // Step 8 of /implement-issue, and only that step. A workflow cannot ask the user anything mid-run,
 // which is why triage is step 9 and not part of this. The full gate is green before this runs.

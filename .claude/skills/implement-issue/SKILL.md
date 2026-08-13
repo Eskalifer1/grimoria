@@ -23,9 +23,9 @@ issues reach here; `failures.md` in this folder covers a step that cannot comple
 | 3 | Read the standards this task touches | main agent | here |
 | 4 | Implement test-first, record the decisions | **main agent** | `/mattpocock-skills:tdd` |
 | 5 | Fast gate | subagent | `/checks fast` |
-| 6 | Self-verify against the requirements, 2–3 rounds | fresh subagent finds, main agent judges | `/self-verify` |
+| 6 | Self-verify against the requirements, 1–2 rounds | fresh subagent finds, main agent judges | `/self-verify` |
 | 7 | Full gate | subagent | `/checks` |
-| 8 | Review axes in parallel | four subagents | here |
+| 8 | Review, over the axes the diff earns | one subagent, or one per axis | here |
 | 9 | Triage and fix | main agent | here |
 | 10 | Re-run | main agent | here |
 | 11 | Acceptance check against the issue | fresh subagent | here |
@@ -48,8 +48,9 @@ and testing decisions, acceptance criteria. **A label with no spec goes back to 
 
 ### 4 — implement
 
-Test-first, through `/mattpocock-skills:tdd`: **one seam, one failing test, one implementation, next
-slice**, against the seams the spec settled. Confirm the seams with the user before the first test
+**Invoke `/mattpocock-skills:tdd` before the first test** — it is a Skill call, not a description of
+the loop to imitate; a run that skips it is unrecorded at step 13. It gives: **one seam, one failing
+test, one implementation, next slice**, against the seams the spec settled. Confirm the seams with the user before the first test
 where the spec left them open.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
@@ -75,8 +76,10 @@ reads this file.
 **Pass the issue number as the second argument** — it names the gate's log files, so a second branch
 gating at the same time cannot overwrite them.
 
-`/checks` forks its own subagent on the cheapest model, so none of it lands here. **Failures come
-back verbatim; a green run is one line and nothing else.**
+**Every gate in this skill is one `/checks` call and nothing else** — steps 5, 6, 7, 9, 10 and 13
+alike. `/checks` forks its own subagent on the cheapest model, so **a `yarn` command typed here
+instead pays for its whole output in the main context** — measured at twelve inline runs against one
+skill call. **Failures come back verbatim; a green run is one line and nothing else.**
 
 **Red stops the flow**, including a failure that looks unrelated to this ticket. Fix and re-run
 until green.
@@ -89,25 +92,63 @@ fixed something.
 **This is the only step that judges the code against the ticket.** Step 8 judges it against the
 standards.
 
-### 8 — review axes
+### 8 — review
 
-Four subagents, **launched in one message so they run in parallel**, each given the git range and
-nothing about the ticket.
+**An axis costs the same whether or not the diff can break its rules.** A subagent pays its whole
+context to open a range it will find nothing in — measured at four axes over a 40-line pure
+function, two of which were no-ops before they started. So the diff picks the axes, and the diff's
+size picks how they are carried.
 
-**Each subagent is told to read its axis file under `.claude/skills/` and follow it**, rather than
-to invoke the skill. The three axis skills fork when invoked, and a fork inside a subagent is a
-second hop that relays its findings through a middleman. Forks also queue rather than run at once —
-measured — so the parallelism here comes from the four subagents and nowhere else.
+**One command decides both**, and it is the only input needed:
 
-| Axis | Carrier |
+```sh
+git diff --stat dev && git diff --name-only dev
+```
+
+#### Which axes run
+
+| Axis | File the subagent reads | Runs when the changed files include |
+| --- | --- | --- |
+| Standards + Fowler smells | `~/.claude/plugins/cache/claude-plugins-official/mattpocock-skills/*/skills/engineering/code-review/SKILL.md`, **its Standards axis alone** | always |
+| bug hunt | `.claude/skills/bug-hunt-review/SKILL.md` | always |
+| a11y | `.claude/skills/a11y-review/SKILL.md` | a `.tsx` file that renders markup a User reaches — `src/views/`, `src/features/`, `src/entities/`, `src/shared/components/`, `src/app/(frontend)/` — or a `messages/` catalog whose copy carries markup |
+| Payload access control | `.claude/skills/payload-security-review/SKILL.md` | `src/collections/`, `src/payload.config.ts`, `src/proxy.ts`, any `route.ts`, any Server Action (`'use server'`), or any new read of User input |
+
+**`src/admin/` and `src/app/(payload)/` do not earn the a11y axis.** The admin is the maintainer's
+alone (`docs/features/auth.md`) and the `(payload)` tree is vendored — neither is a surface this
+repo holds an accessibility level on.
+
+**A skipped axis is named in the step-13 report as skipped and why**, so a gap is visible rather
+than silent.
+
+#### How they are carried
+
+| Diff | Carrier |
 | --- | --- |
-| Standards + Fowler smells | `/mattpocock-skills:code-review`, **its Standards axis alone** |
-| a11y | `/a11y-review` |
-| Payload access control | `/payload-security-review` |
-| bug hunt | `/bug-hunt-review` |
+| **≤ 5 files and ≤ 150 changed lines** | **one subagent** running the surviving axes in sequence, each from its own file |
+| anything larger | **one subagent per surviving axis, launched in one message** so they run in parallel |
 
-Each axis returns a list, one entry per finding: severity, file, line, summary, and **the rule it
-breaks** — the field step 9 triages on.
+Under the small-diff threshold every extra subagent re-reads the same short diff and pays a fresh
+context to do it, and the four contexts cost more than the four passes save. Above it the diff is
+long enough that a single agent holding four rule sets at once starts missing findings, and the
+parallelism buys back the wall clock.
+
+**Every review subagent runs `model: sonnet`.** Applying a rule set to a diff is the work; deciding
+which findings survive is step 9, in the main agent, on the stronger model.
+
+**Each subagent is given the exact path of its axis file and told to read it and follow it**, rather
+than to invoke the skill. The axis skills fork when invoked, and a fork inside a subagent is a
+second hop that relays its findings through a middleman. Forks also queue rather than run at once —
+measured — so the parallelism here comes from the subagents and nowhere else.
+
+**A plugin skill lives outside the repo** and its path carries a version segment that moves on every
+plugin update, so the standards axis gets a glob and the subagent expands it with `ls` on the first
+tool call. Passing `.claude/skills/mattpocock-skills/...` sends it hunting the filesystem — measured,
+twice.
+
+Each subagent is given the git range and **nothing about the ticket**. Each axis returns a list, one
+entry per finding: severity, file, line, summary, and **the rule it breaks** — the field step 9
+triages on.
 
 **`code-review` ships two axes and only its Standards axis runs here.** Say so in its prompt: its
 Spec axis reads the ticket, which step 6 already did with the issue in hand, and inside a subagent
@@ -118,7 +159,7 @@ only report; nothing changes until step 9.
 
 `.claude/workflows/review-axes.js` carries the same four axes under a validated JSON schema and is
 the better carrier the day a session can launch a workflow. **It is not a slash command** — nothing
-runs it today (#66), so the four subagents above are the live path.
+runs it today (#66), so the subagents above are the live path.
 
 ### 9 — triage
 
@@ -137,17 +178,19 @@ Decide here; reach for the user only at the end:
 
 ### 10 — re-run
 
-The fast gate after every fix, the full gate once the fixes stop, then the review axes again over
+`/checks fast $0` after every fix, `/checks full $0` once the fixes stop, then the review axes again over
 the **fix diff** — and **only the axes that returned a finding the first time**. An axis that came
 back empty over the wider range comes back empty over a subset of it.
 
-**A fresh subagent per axis** — an agent cannot resume a run.
+**A fresh subagent, on `model: sonnet`** — an agent cannot resume a run. The fix diff is smaller
+than the diff that produced the findings, so this re-run is the small-diff case of step 8: **one
+subagent carries every axis being re-run.**
 
 Two full cycles maximum; what is still open goes into an issue comment as known debt.
 
 ### 11 — acceptance check
 
-A **fresh** subagent gets the issue with comments and the final diff and returns, under a schema,
+A **fresh** subagent on `model: sonnet` gets the issue with comments and the final diff and returns, under a schema,
 one verdict per acceptance criterion: met, not met, or out of scope. Anything not met goes back to
 step 9, and the loop re-enters at step 11, not at step 12.
 
@@ -157,7 +200,8 @@ step 9, and the loop re-enters at step 11, not at step 12.
 
 ### 13 — handoff
 
-The full gate one last time, over code and docs together. Then the report, **assembled from
+`/checks full $0` one last time, over code and docs together — **this run is what makes the handoff
+green, and a run skipped here hands the user an ungated branch.** Then the report, **assembled from
 `.scratch/$0.md` rather than from memory**: the docs read, what the gates and the axes found, what
 was fixed, what was rejected and why, what `/docs-sync` cut, and the step-11 verdict per criterion.
 

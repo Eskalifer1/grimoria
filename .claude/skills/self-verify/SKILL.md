@@ -1,6 +1,6 @@
 ---
 name: self-verify
-description: Check a branch against the requirements of the ticket it was written for — a fresh subagent finds the divergences each round, the main agent judges them and applies every fix. Two rounds minimum, three at most, fast gate after any round that fixed something. Invoked as /self-verify <issue-number> [range], and by /implement-issue at step 6.
+description: Check a branch against the requirements of the ticket it was written for — a fresh subagent finds the divergences each round, the main agent judges them and applies every fix. One round, a second only if the first found something, fast gate after any round that fixed something. Invoked as /self-verify <issue-number> [range], and by /implement-issue at step 6.
 argument-hint: "[issue-number] [range]"
 ---
 
@@ -40,7 +40,9 @@ divergences here, however obvious they are on the way past. Step 8 pays for thos
 1. Gather the ticket with the `--json`/`--jq` form `/implement-issue` uses — **never
    `gh issue view --comments`, which prints nothing at all when the issue has no comments** — and
    the diff over the range.
-2. Spawn a **fresh** subagent with what section 4 allows it, and nothing else.
+2. Spawn a **fresh** subagent with what section 4 allows it, and nothing else — `model: sonnet`.
+   Finding a divergence is reading two documents against each other, and the judging that needs the
+   stronger model happens at step 4 in the main agent.
 3. It returns divergences in the shape below. It changes no code.
 4. Judge each claim against the code, apply the fixes that hold, and write one line per claim —
    held or rejected, and on what grounds — to `.scratch/$0.md`.
@@ -72,7 +74,11 @@ critic handed those assumptions reproduces them and calls the result correct.
 
 ## 5. How many rounds
 
-**Two minimum. A third only if the second still found something. Never a fourth.**
+**One round. A second only if the first returned a divergence that held. Never a third.**
+
+A round that comes back empty has already answered the question — a second round over the same
+unchanged diff, with the same ticket, re-reads everything to reproduce that answer. Measured: round
+2 over a clean round 1 cost more than round 1 and found nothing.
 
 What is still open when the ceiling is reached goes into an issue comment as known debt, and the
 flow continues.

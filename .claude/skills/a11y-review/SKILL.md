@@ -24,10 +24,13 @@ What this repo promises accessibility-wise is
 ## 1. Gate — is there a rendered surface in this range?
 
 ```sh
-git diff --name-only <range> -- 'src/**/*.tsx' ':!src/app/(payload)/**'
+git diff --name-only <range> -- 'src/views/**/*.tsx' 'src/features/**/*.tsx' 'src/entities/**/*.tsx' 'src/shared/components/**/*.tsx' 'src/app/(frontend)/**/*.tsx'
 ```
 
-`src/app/(payload)/` is Payload's own admin UI, vendored, not authored here.
+**Those five trees are the surfaces a User reaches, and they are the whole scope of this review.**
+`src/app/(payload)/` is Payload's own admin UI, vendored, not authored here; `src/admin/` renders
+inside that admin, which the maintainer alone reaches (`docs/features/auth.md`). Neither carries an
+accessibility level this repo holds.
 
 **Empty list means zero findings.** Report the empty result and stop — no reading, no reasoning
 about what a future component might do.
