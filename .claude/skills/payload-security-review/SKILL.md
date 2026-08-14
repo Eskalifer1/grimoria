@@ -1,6 +1,6 @@
 ---
 name: payload-security-review
-description: Review a branch's changed server surfaces for security defects the framework does not hold — collection access control, IDOR, Local API access bypass, unauthenticated route handlers and Server Actions, unvalidated input, race conditions on writes, leaked secrets and stack traces, and the injection trio (XSS, SQL, SSRF). Reads code only; runs nothing and repairs nothing. Invoked as /payload-security-review [range], and by /implement-issue as the security axis at step 8.
+description: Review a branch's changed server surfaces for security defects the framework does not hold — collection access control, IDOR, Local API access bypass, unauthenticated route handlers and Server Actions, unvalidated input, race conditions on writes, leaked secrets and stack traces, and the injection trio (XSS, SQL, SSRF). Reads code only; runs nothing and repairs nothing. Invoked as /payload-security-review [range], and by /verify-branch as the security axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose
@@ -186,7 +186,7 @@ dropped.
 Each finding carries: the file and line, one sentence on what breaks, the request or rule behind
 it, and the concrete fix.
 
-**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis:
+**Called as a review axis by `/verify-branch`** — return the fields /verify-branch asks for, `axis:
 "payload-security"`, the exploiting request or the doc line in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the ten

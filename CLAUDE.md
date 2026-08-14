@@ -1,5 +1,4 @@
-This file loads into every session's context — keep it short. Open a linked doc only when its
-trigger applies to the current task.
+Open a linked doc only when its trigger applies to the current task.
 
 ## Stack
 
@@ -14,14 +13,14 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
 version that resolves rather than disabling the gate.
 
-**American English everywhere it is written down or posting on GH**, `yarn spellcheck` guards it. Local discussion is
-the exception.
+**American English in everything written down or posted to GitHub**, guarded by `yarn spellcheck`.
+Local discussion is the exception.
 
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
 done any session that changed behavior, architecture or scope. Drift is a bug. `/implement-issue`
-runs it at step 12, before the commit is handed over; outside that flow nothing prompts for it.
+runs it before the handoff; outside that flow nothing prompts for it.
 
 ## Where to look, by task
 
@@ -31,15 +30,13 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   imports, comments: `<standards>/layers.md` (lint-enforced), `routing.md`, `naming.md`,
   `imports.md`, `documentation.md`.
 - **Writing a type, or reaching for `any`, `as`, `!`, `@ts-ignore`**: `<standards>/typescript.md`.
-  Domain shapes derive from `payload-types.ts`.
 - **Building a React component** — server/client boundary, state, splitting, loading and error
   states: `<standards>/components.md`.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
   Values outside the tokens do not compile.
-- **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`. Copy is never
-  hardcoded in JSX, and a string is written in both theme catalogs or `tsc` fails.
+- **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
-  per subject; a route is `ROUTES` in `constants/routes.ts`. Naming is `<standards>/naming.md`.
+  per subject; a route is `ROUTES` in `constants/routes.ts`.
 - **Designing or styling a UI surface**: `design/standard-design.md`,
   `design/dark-fantasy-design.md`; shared structure in `docs/features/site-layout.md`.
 - **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
@@ -56,8 +53,9 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   `/implement-issue <issue>`.
 - **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` runs the full
   gate, `/checks fast` drops `yarn build` and keeps the rest.
-- **Checking whether a branch does what its ticket asked** — a requirement unmet, met differently,
-  or met more widely than asked: `/self-verify <issue> [range]`.
+- **Judging a branch someone else wrote** — gates, a requirement unmet, met differently or met more
+  widely than asked, the review axes the diff earns, the acceptance criteria:
+  `/verify-branch <issue> <first|final>`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.

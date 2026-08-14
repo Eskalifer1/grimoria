@@ -1,6 +1,6 @@
 ---
 name: a11y-review
-description: Review a branch's changed React components for accessibility defects that Biome's static a11y rules cannot see — semantics, accessible names, keyboard reach, ARIA state, form wiring, dynamic states, and locale markup. Reads code only; runs no browser and repairs nothing. Invoked as /a11y-review [range], and by /implement-issue as the a11y axis at step 8.
+description: Review a branch's changed React components for accessibility defects that Biome's static a11y rules cannot see — semantics, accessible names, keyboard reach, ARIA state, form wiring, dynamic states, and locale markup. Reads code only; runs no browser and repairs nothing. Invoked as /a11y-review [range], and by /verify-branch as the a11y axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose
@@ -115,7 +115,7 @@ criterion behind it is taste, and `review-boundaries.md` drops it.
 Each finding carries: the file and line, one sentence on what breaks, the criterion, and the concrete
 fix.
 
-**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis: "a11y"`,
+**Called as a review axis by `/verify-branch`** — return the fields /verify-branch asks for, `axis: "a11y"`,
 the criterion in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the seven

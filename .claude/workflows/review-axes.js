@@ -6,13 +6,13 @@ export const meta = {
 }
 
 // NOT REACHABLE TODAY. A workflow is not a slash command — it launches only through the workflow
-// tool, which no session here has had. Step 8 of /implement-issue runs the axes the diff earns —
-// one subagent each on a large diff, one subagent for all of them on a small one — instead; this
-// file is the schema-validated carrier for the day that tool shows up, and the two must be changed
+// tool, which no session here has had. Section 5 of /verify-branch runs the axes the diff earns —
+// one subagent each on a large diff, one pass for all of them on a small one — instead; this file
+// is the schema-validated carrier for the day that tool shows up, and the two must be changed
 // together (#66).
 //
-// Step 8 of /implement-issue, and only that step. A workflow cannot ask the user anything mid-run,
-// which is why triage is step 9 and not part of this. The full gate is green before this runs.
+// Section 5 of /verify-branch, and only that section. A workflow cannot ask the user anything
+// mid-run, which is why triage stays in /implement-issue. The gate is green before this runs.
 // args: { issue: number, range: string } — the ticket number and the git range under review.
 //
 // This file is outside Biome's file set (`biome.json` → `files.includes`). The workflow VM demands
@@ -49,7 +49,7 @@ const FINDINGS_SCHEMA = {
   },
 }
 
-// No spec axis here: step 6 (/self-verify) checks the code against the ticket, step 11 checks it
+// No spec axis here: /verify-branch section 4 checks the code against the ticket and section 6 checks it
 // again against the acceptance criteria, and a third pass in between pays for the same reading.
 const AXES = [
   {

@@ -29,6 +29,6 @@ lint nor review checks them per use.
 
 ## Where it is checked
 
-`/a11y-review [range]` on demand, and automatically as the `a11y` axis of `/review-axes` — step 8 of
-`/implement-issue`. The axis returns nothing when a range touches no `.tsx` under `src/` outside
-`src/app/(payload)/`.
+`/a11y-review [range]` on demand, and automatically as the `a11y` axis of `/verify-branch`. The axis
+runs only where a User reaches the markup — a changed `.tsx` under `src/views/`, `src/features/`,
+`src/entities/`, `src/shared/components/` or `src/app/(frontend)/` — and returns nothing otherwise.

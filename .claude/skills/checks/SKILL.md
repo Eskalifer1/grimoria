@@ -7,7 +7,7 @@ agent: general-purpose
 background: false
 model: haiku
 effort: low
-allowed-tools: Bash(yarn check:*), Bash(yarn typecheck:*), Bash(yarn spellcheck:*), Bash(yarn test:*), Bash(yarn build:*), Read
+allowed-tools: Bash, Read
 ---
 
 # Run the `$0` gate now
@@ -20,24 +20,41 @@ Whoever called this fixes what it reports. Do not ask what to do — run the gat
 **The log paths below carry the second argument verbatim.** Write them exactly as written; two
 branches gate at once, and a fixed name has one of them reading the other's failure.
 
-## 1. Run the fast four, in this order, all of them
+## 1. Skip a gate whose inputs did not move
 
-Run all four even after one goes red — each costs seconds, and one report carrying four failures
-beats four round trips.
+**One command, exactly this:**
 
 ```sh
-yarn check > .scratch/checks-$1-check.log 2>&1
-yarn typecheck > .scratch/checks-$1-typecheck.log 2>&1
-yarn spellcheck > .scratch/checks-$1-spellcheck.log 2>&1
-yarn test > .scratch/checks-$1-test.log 2>&1
+mkdir -p .scratch && git diff dev | shasum | cut -d' ' -f1 > .scratch/gate-$1.now && cat .scratch/gate-$1.green 2>/dev/null
 ```
 
-## 2. In `full` mode only, add the build
+`.scratch/gate-$1.green` holds two words from the last green run — the level, then the fingerprint.
 
-**Run it only when the fast four were all green:**
+**Answer `$0 gate: green, inputs unchanged since the last green <level> gate` and stop** when the
+fingerprint matches **and** the recorded level covers the one asked for — `full` covers both, `fast`
+covers only `fast`. Otherwise run section 2.
+
+**The fingerprint is `git diff dev`, so any edit anywhere in the branch moves it** — a one-character
+fix after a review round, a doc `/docs-sync` touched, a test rewritten. A gate is skipped only when
+the tree is byte-identical to the tree that already went green. **A file never `git add -N`'d is
+invisible to `git diff` and to this fingerprint**; that is step 4 of `/implement-issue`, and without
+it this section will skip a gate over code it cannot see.
+
+## 2. Run the gate, in one command
+
+**One command, and every gate in it even after one goes red** — each costs seconds, and one report
+carrying four failures beats four round trips. The log holds the output; the printed line holds the
+verdict. **Running a command twice to learn its exit status is the defect this shape exists to
+avoid.**
 
 ```sh
-yarn build > .scratch/checks-$1-build.log 2>&1
+for c in check typecheck spellcheck test; do yarn $c > .scratch/checks-$1-$c.log 2>&1 && echo "$c: PASS" || echo "$c: FAIL"; done
+```
+
+**In `full` mode, and only when those four all printed PASS**, add the build:
+
+```sh
+yarn build > .scratch/checks-$1-build.log 2>&1 && echo "build: PASS" || echo "build: FAIL"
 ```
 
 Run the `package.json` scripts, never the binaries under them — `yarn typecheck` runs `next typegen`
@@ -45,12 +62,16 @@ first, and Payload's generated types are stale without it.
 
 ## 3. Report
 
-The redirected log is the verbatim record. **Read the log of each failed command back with the Read
-tool and copy from it**; the caller acts on the tool's own words, so any rewording is a defect.
+**Green — record the fingerprint, then answer in one line, nothing after it:**
 
-**Green — one line, nothing after it:** `full gate: green` or `fast gate: green`. No per-command
-entries, no summary of what passed.
+```sh
+echo "<level> $(cat .scratch/gate-$1.now)" > .scratch/gate-$1.green
+```
 
-**Red — for each failed command, three things:** the command, its log path, and **the log's first
+`full gate: green` or `fast gate: green`. No per-command entries, no summary of what passed.
+
+**Red — leave `.scratch/gate-$1.green` alone**, so the next call re-runs. **Read the log of each
+failed command back with the Read tool and copy from it** — the caller acts on the tool's own words,
+so any rewording is a defect. Per failed command: the command, its log path, and **the log's first
 60 lines, copied**. Head, not tail: Biome and `tsc` print the diagnostics first and a bare count
 last, so the tail is the part worth losing.

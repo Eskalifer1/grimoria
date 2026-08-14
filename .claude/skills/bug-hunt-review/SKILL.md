@@ -1,6 +1,6 @@
 ---
 name: bug-hunt-review
-description: Hunt latent correctness bugs in a branch's changed code — edge inputs, floating promises, swallowed failures, state that disagrees with itself, assertions standing in for checks, the server/client boundary, cache and revalidation, and Payload hook ordering. Every finding names the input that breaks and the wrong output it produces. Reads code only; runs nothing and repairs nothing. Invoked as /bug-hunt-review [range], and by /implement-issue as the bug-hunt axis at step 8.
+description: Hunt latent correctness bugs in a branch's changed code — edge inputs, floating promises, swallowed failures, state that disagrees with itself, assertions standing in for checks, the server/client boundary, cache and revalidation, and Payload hook ordering. Every finding names the input that breaks and the wrong output it produces. Reads code only; runs nothing and repairs nothing. Invoked as /bug-hunt-review [range], and by /verify-branch as the bug-hunt axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose
@@ -132,7 +132,7 @@ occur is `high` — a User never sees it.
 Each finding carries: the file and line, one sentence on what breaks, the failing input and the
 wrong output it produces, and the concrete fix.
 
-**Called as a review axis by `/implement-issue`** — return the fields step 8 asks for, `axis:
+**Called as a review axis by `/verify-branch`** — return the fields /verify-branch asks for, `axis:
 "bug-hunt"`, the failing input and wrong output in the `rule` field.
 
 **Called directly** — a markdown table, most severe first, then one line naming which of the eight

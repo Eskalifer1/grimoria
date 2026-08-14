@@ -88,7 +88,7 @@ React's `cache()`, so the page that asks for the same User pays nothing.
 ## Where it is checked
 
 `/payload-security-review [range]` on demand, and automatically as the `payload-security` axis of
-`/review-axes` — step 8 of `/implement-issue`. The axis returns nothing when a range touches no
+`/review-axes` — section 5 of `/verify-branch`. The axis returns nothing when a range touches no
 server surface.
 
 ## Gotchas
