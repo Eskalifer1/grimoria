@@ -1,12 +1,12 @@
 ---
 name: docs-sync
-description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/features/*.md, docs/agents/*.md, CLAUDE.md) with a change that was just made or just discussed, so docs never drift from what the code/process actually does. Invoked manually after a conversation that decided something worth documenting, and by /implement-issue at step 9. Always proposes before writing — never edits docs unconfirmed.
+description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/features/*.md, docs/agents/*.md, CLAUDE.md) with a change that was just made or just discussed, so docs never drift from what the code/process actually does. Invoked manually after a conversation that decided something worth documenting, and by /implement-issue at step 7. Always proposes before writing — never edits docs unconfirmed.
 ---
 
 ## Two ways in
 
 - **Called directly** — usually right after a conversation that settled something worth documenting (a new/changed term, a decision, a feature behavior), even before any code exists for it.
-- **Called by `/implement-issue`** at step 9, over everything that session changed.
+- **Called by `/implement-issue`** at step 7, over everything that session changed.
 
 ## Process
 
@@ -65,7 +65,9 @@ Never apply edits before this checkpoint, even when the change seems obvious.
 
 ### 8. Deletion pass — fresh eyes, cutting only
 
-Hand each doc written or edited in step 7 to a subagent whose only inputs are the file and `.claude/rules/writing-docs.md` — no transcript, no reason for the change. Its brief: return the lines to cut and why, never a rewrite or an addition.
+Hand **every** doc written or edited in step 7 to **one** subagent, in a single call. Its only inputs are the file paths and `.claude/rules/writing-docs.md` — no transcript, no reason for the change. Its brief: return the lines to cut and why, grouped by file, never a rewrite or an addition.
+
+**One subagent for all of them, not one per file.** What the pass needs isolating from is the reason the edit was made, and that reason is the same for every file in the set; a context per file buys nothing and pays a fresh entry price each time.
 
 Apply the cuts that hold.
 

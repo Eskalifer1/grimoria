@@ -1,6 +1,7 @@
 #!/bin/sh
-# The mechanical half of /implement-issue's first two steps: does the ticket carry a spec, and what
-# is the branch called. Both are settled by the ticket's own text, so both are `grep`, not judgement.
+# The ticket, plus the mechanical half of /implement-issue's first two steps: does the body carry a
+# spec, and what the branch is called. Both are settled by the ticket's own text, so both are
+# `grep`, not judgement — and all three come from one `gh` call.
 #
 # Usage: ticket-context.sh <issue>
 
@@ -8,13 +9,17 @@ issue="${1:-0}"
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 cd "$root" || exit 0
 
-json=$(gh issue view "$issue" --json title,body,labels 2>/dev/null) || {
+json=$(gh issue view "$issue" --json number,title,state,body,labels,comments 2>/dev/null) || {
   echo "TICKET: unreadable — gh could not fetch #$issue"
   exit 0
 }
 title=$(printf '%s' "$json" | jq -r '.title')
 body=$(printf '%s' "$json" | jq -r '.body')
 labels=$(printf '%s' "$json" | jq -r '[.labels[].name]|join(" ")')
+
+printf '%s' "$json" | jq -r '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'
+echo
+echo "=== the two mechanical steps, already settled ==="
 
 # --- does the body carry the sections /task-flow's grilling produces ------------------------------
 missing=""

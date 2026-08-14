@@ -19,10 +19,6 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 
 ## The ticket
 
-!`gh issue view $0 --json number,title,state,labels,body,comments --jq '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'`
-
-## The spec check and the branch name
-
 !`.claude/bin/ticket-context.sh $0`
 
 ## Where the tree stands
@@ -62,8 +58,29 @@ stopped; `failures.md` covers the abandoned case.
 imitate. It gives: one seam, one failing test, one implementation, next slice, against the seams the
 spec settled. Confirm the seams with the user before the first test where the spec left them open.
 
-**Past the third slice, each remaining slice runs in a fresh subagent on `model: opus`**, handed the
-seam, the standards list from step 3, and `.scratch/$0.md`.
+**Past the third slice, each remaining slice runs in a fresh subagent on `model: opus`.** A slice
+kept here is paid for again on every turn that follows it, so a long ticket implemented in one
+context costs more than the ticket is.
+
+**The subagent gets four things and no more**: the seam, the acceptance criteria that seam serves,
+the standards paths from step 3, and the line `Write the failing test first; the PostToolUse hook
+runs Biome, cspell and the covering test on every file you write.`
+
+**It returns five lines and no more**, and say so in its prompt:
+
+```
+FILES    <path — created|changed, one per line>
+DECIDED  <what was chosen, and what was rejected where a reviewer would propose it back>
+TESTS    <n passing | the one failure, verbatim>
+LEFT     <what this slice deliberately did not do>
+ASK      <none | the call it could not settle>
+```
+
+**A subagent that narrates its work undoes the reason it exists** — the transcript it saves is paid
+for again if it comes back as prose. No plan, no recap of the code, no advice for the next slice.
+
+**Append `FILES` and `DECIDED` to `.scratch/$0.md` as each slice returns**, and carry nothing else
+forward.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
