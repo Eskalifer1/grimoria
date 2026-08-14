@@ -2,16 +2,17 @@
 # Everything a /verify-branch round needs before its first turn, loaded through the skill's `!`
 # blocks so none of it costs a turn.
 #
-#   review-context.sh <issue> <first|final> head   the diff, the delta since the previous round,
-#                                                  whether the gate can be skipped, which axes the
-#                                                  changed files earn
-#   review-context.sh <issue> <first|final> axes   the full text of exactly those axes
+#   review-context.sh <issue> <full|recheck> head   the diff, the delta since the previous round,
+#                                                   whether the gate can be skipped, which axes the
+#                                                   changed files earn
+#   review-context.sh <issue> <full|recheck> axes   the full text of exactly those axes
 #
 # `head` runs at the top of the skill and `axes` at the bottom, so the rules stay next to the short
-# facts and the long reference text sits under them. Only `head` writes the round snapshot.
+# facts and the long reference text sits under them. Only `head` writes the round snapshot, and it
+# leaves the delta on disk for `axes` to read after the snapshot has moved on.
 
 issue="${1:-0}"
-round="${2:-first}"
+round="${2:-full}"
 mode="${3:-head}"
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 cd "$root" || exit 0
@@ -39,6 +40,13 @@ fi
 
 # --- the axes themselves --------------------------------------------------------------------------
 if [ "$mode" = "axes" ]; then
+  # A recheck under the delta floor runs no axis, so printing their text would load a reference
+  # nobody opens.
+  delta=$(cat ".scratch/verify-$issue.delta" 2>/dev/null)
+  if [ "$round" = "recheck" ] && [ -n "$delta" ] && [ "$delta" -lt 20 ] 2>/dev/null; then
+    echo "(no axis runs on a recheck of $delta lines — nothing to load)"
+    exit 0
+  fi
   emit() {
     [ -f "$2" ] || return 0
     echo
@@ -72,15 +80,18 @@ fi
 
 snap=".scratch/verify-$issue.diff"
 echo "--- round delta ---"
-if [ "$round" = "first" ] || [ ! -s "$snap" ]; then
+if [ "$round" != "recheck" ] || [ ! -s "$snap" ]; then
   echo "DELTA: n/a — no previous round to compare against"
+  echo "" > ".scratch/verify-$issue.delta"
 else
-  echo "DELTA: $(git diff dev 2>/dev/null | diff "$snap" - | grep -c '^[<>]') lines differ from the previous round's diff"
+  delta=$(git diff dev 2>/dev/null | diff "$snap" - | grep -c '^[<>]')
+  echo "DELTA: $delta lines differ from the previous round's diff"
+  echo "$delta" > ".scratch/verify-$issue.delta"
 fi
 git diff dev > "$snap" 2>/dev/null
 
 # --- can the gate be skipped ----------------------------------------------------------------------
-[ "$round" = "final" ] && want=full || want=fast
+want=full
 now=$(git diff dev 2>/dev/null | shasum | cut -d' ' -f1)
 echo "$now" > ".scratch/gate-$issue.now"
 green=$(cat ".scratch/gate-$issue.green" 2>/dev/null)

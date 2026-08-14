@@ -1,7 +1,7 @@
 ---
 name: verify-branch
-description: Judge a branch someone else wrote — gates, the ticket's requirements, the review axes the diff earns, and on the final round the acceptance criteria. Runs in its own context on a cheaper model, reads code only, and repairs nothing. Invoked as /verify-branch <issue-number> <first|final>, and by /implement-issue at steps 5 and 7.
-argument-hint: "[issue-number] [first|final]"
+description: Judge a branch someone else wrote — the full gate, the ticket's requirements, the review axes the diff earns, and one verdict per acceptance criterion. Runs in its own context on a cheaper model, reads code only, and repairs nothing. Invoked as /verify-branch <issue-number> <full|recheck>, and by /implement-issue at step 5.
+argument-hint: "[issue-number] [full|recheck]"
 context: fork
 agent: general-purpose
 background: false
@@ -34,24 +34,24 @@ invisible here, and a whole new module then reads as no change at all.
 
 ## 2. What the round covers
 
-| | `first` | `final` |
-| --- | --- | --- |
-| Gate | `fast` | `full` |
-| Requirements against the ticket | yes | yes, over the fixed diff |
-| Review axes | every axis `RUN:` names | see the two rules below |
-| Acceptance criteria, one verdict each | no | yes |
+**`full` is the whole judgement and runs once**: the gate, the requirements, every axis `RUN:`
+names, and one verdict per acceptance criterion.
 
-**The `final` round runs only the axes that returned a finding in the `first` round** — an axis
-empty over the wider diff is empty over a subset of it.
+**`recheck` runs only after a `full` round whose findings changed code.** It covers the gate, the
+acceptance criteria, and **only the axes that returned a finding the first time** — an axis empty
+over the wider diff is empty over a subset of it.
 
-**A `final` round whose `DELTA` is under 20 lines runs no axis at all**: gate, requirements and
-acceptance only. Say so under `AXES SKIPPED` with the delta. Fixes that small cannot introduce what
-four rule sets just came back clean on.
+**A `recheck` whose `DELTA` is under 20 lines runs no axis at all**: gate and acceptance only. Say
+so under `AXES SKIPPED` with the delta. Fixes that small cannot introduce what four rule sets just
+came back clean on.
 
 ## 3. Gate
 
-**`GATE: skip` in section 1 means the branch has not moved since its last green run.** Report
-`<LEVEL> gate: green, inputs unchanged` and go to section 4 without running anything.
+**Section 1 already ran the checks this section would open with. Do not list `.scratch/`, re-read
+`gate-$0.now`, or confirm any line it printed** — it is the tool's own output, not a claim to test.
+
+**`GATE: skip` means the branch has not moved since its last green run.** Report
+`full gate: green, inputs unchanged` and go to section 4 without running anything.
 
 **On `GATE: run`, this one command, exactly as written** — every gate in it even after one goes red,
 because one report carrying four failures beats four round trips:
@@ -64,18 +64,20 @@ for c in check typecheck spellcheck test; do yarn $c > .scratch/checks-$0-$c.log
 `next typegen` first, and Payload's generated types are stale without it. **Running a command twice
 to learn its exit status is the defect this shape exists to avoid.**
 
-**On the `final` round, and only when those four all printed PASS**, add the build:
+**Only when those four all printed PASS**, add the build:
 
 ```sh
 yarn build > .scratch/checks-$0-build.log 2>&1 && echo "build: PASS" || echo "build: FAIL"
 ```
 
-**All green — record the fingerprint**, so the next round and the handoff can skip a gate over a
+**All five green — record the fingerprint**, so the next round and the handoff can skip a gate over a
 tree that did not move:
 
 ```sh
-echo "<LEVEL from section 1> $(cat .scratch/gate-$0.now)" > .scratch/gate-$0.green
+echo "full $(cat .scratch/gate-$0.now)" > .scratch/gate-$0.green
 ```
+
+**Leave every `.scratch/checks-$0-*.log` where it is** — the caller reads them after this returns.
 
 **Red stops this skill. Leave `.scratch/gate-$0.green` alone**, read the log of each failed command
 back with the Read tool, and report **the log's first 60 lines, copied** — head, not tail, because
@@ -113,7 +115,7 @@ each one the axis file path and the range; it re-reads its own axis.
 **`review-boundaries.md`, first in the appendix, decides what may be reported at all.** A finding
 names the rule it breaks, by doc and line, or it is taste and does not travel.
 
-## 6. Acceptance — `final` round only
+## 6. Acceptance
 
 One verdict per acceptance criterion in the ticket: **met, not met, or out of scope.** Quote the
 criterion, name the file and line that meets it, and say plainly which of the three it is.

@@ -53,9 +53,28 @@ $spell_out"
     ;;
 esac
 
+# Run the one test that covers the file just written, and only then. Writing an implementation file
+# is the exact moment its test is expected to pass, so a red result here is news the author has to
+# act on. Writing a test file is not that moment — red is what TDD asks for first — and nothing
+# outside src/ has a test to run, so both fall through untouched.
+case "$file" in
+  "$root"/src/*.ts|"$root"/src/*.tsx)
+    rel=${file#"$root"/src/}
+    for t in "$root/tests/${rel%.*}.test.ts" "$root/tests/${rel%.*}.test.tsx"; do
+      [ -f "$t" ] || continue
+      if ! test_out=$(cd "$root" && yarn vitest run "${t#"$root"/}" --reporter dot 2>&1); then
+        out="$out
+$(printf '%s\n' "$test_out" | tail -40)"
+        status=1
+      fi
+      break
+    done
+    ;;
+esac
+
 [ "$status" -eq 0 ] && exit 0
 
 printf '%s\n' "$file was written, then auto-formatted. What is left needs you:" >&2
 printf '%s\n' "$out" >&2
-printf '%s\n' "Fix it now — the gate will report the same thing later, at the cost of a full round trip. An unknown word that is correct goes into .cspell/grimoria.txt." >&2
+printf '%s\n' "Fix it now — the gate will report the same thing later, at the cost of a full round trip. An unknown word that is correct goes into .cspell/grimoria.txt; a red test needs the code, not another run." >&2
 exit 2

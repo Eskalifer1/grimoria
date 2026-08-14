@@ -56,7 +56,7 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   gate, `/checks fast` drops `yarn build` and keeps the rest.
 - **Judging a branch someone else wrote** — gates, a requirement unmet, met differently or met more
   widely than asked, the review axes the diff earns, the acceptance criteria:
-  `/verify-branch <issue> <first|final>`.
+  `/verify-branch <issue> <full|recheck>`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.

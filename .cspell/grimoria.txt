@@ -82,6 +82,7 @@ nodeLinker
 noopener
 noreferrer
 opengraph
+shortstat
 toplevel
 tsbuildinfo
 tsconfig

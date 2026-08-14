@@ -1,7 +1,9 @@
 ---
 name: implement-issue
-description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards read, test-first, two judging rounds in their own context, triage, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
+description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards read, test-first, a judging round in its own context when the diff earns one, triage, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
 argument-hint: "[issue-number]"
+model: opus
+effort: medium
 allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkout:*), Bash(git diff:*), Bash(git status:*), Bash(git add:*)
 ---
 
@@ -19,6 +21,10 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 
 !`gh issue view $0 --json number,title,state,labels,body,comments --jq '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'`
 
+## The spec check and the branch name
+
+!`.claude/bin/ticket-context.sh $0`
+
 ## Where the tree stands
 
 !`echo "branch: $(git branch --show-current)  |  HEAD: $(git log --oneline -1)"; echo "--- uncommitted ---"; git status --short | head -20; echo "--- prior state for this ticket ---"; if [ -s .scratch/$0.md ]; then head -40 .scratch/$0.md; else echo "(none — fresh start)"; fi; echo "--- test layout ---"; ls tests 2>/dev/null`
@@ -33,21 +39,13 @@ stopped; `failures.md` covers the abandoned case.
 
 | # | Step | Where |
 | --- | --- | --- |
-| 1 | Confirm the ticket carries a spec | here |
-| 2 | Create the branch | `docs/git-branching.md` |
+| 1–2 | Act on `SPEC:` and run the `BRANCH:` command above | here |
 | 3 | Read the standards this task touches | here |
 | 4 | Implement test-first, record the decisions | `/mattpocock-skills:tdd` |
-| 5 | First judging round | `/verify-branch $0 first` |
+| 5 | Judge the branch, when it earns it | `/verify-branch $0 full` |
 | 6 | Triage and fix | here |
-| 7 | Final judging round | `/verify-branch $0 final` |
-| 8 | Triage what is left | here |
-| 9 | `/docs-sync` | here |
-| 10 | Full gate, propose a commit title, stop | `docs/git-workflow.md` |
-
-### 1 — confirm the spec, not just the label
-
-The body must carry the sections session 1 produces: problem, solution, user stories, implementation
-and testing decisions, acceptance criteria. **A label with no spec goes back to `/task-flow`.**
+| 7 | `/docs-sync`, when the branch earns it | here |
+| 8 | Full gate, propose a commit title, stop | `docs/git-workflow.md` |
 
 ### 3 — read the standards first
 
@@ -57,8 +55,6 @@ and testing decisions, acceptance criteria. **A label with no spec goes back to 
   that adds a login form touches auth too.
 - **Every coding standard covering a changed file, always.**
 - **The design docs when a surface has to be invented** — a new page with no mock.
-
-**Write the docs read to `.scratch/$0.md` under `## Read`** before writing any code.
 
 ### 4 — implement
 
@@ -72,29 +68,50 @@ seam, the standards list from step 3, and `.scratch/$0.md`.
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
 and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
-acceptance criteria at step 7 verify this class of ticket.
+acceptance criteria at step 5 verify this class of ticket.
 
 **A file created with `Write` is already `git add -N`'d** by the `PostToolUse` hook. **A file
 created any other way — a heredoc, `printf`, a generator — is not**; `git add -N` those by hand as
 they appear, or the whole new module reads as no change at all to every gate and judging round.
 
-**Record decisions as they are made**, to `.scratch/$0.md` under `## Decisions` — one line each:
-what was chosen, and what was rejected where a reviewer would plausibly propose it back.
+**Write `.scratch/$0.md` twice and no more** — once when the code is done, carrying the docs read
+under `## Read` and, under `## Decisions`, one line per decision: what was chosen, and what was
+rejected where a reviewer would plausibly propose it back. Once more when step 5 returns, carrying
+its report. **Each write is a full turn**, and the file exists so the handoff reports from record
+rather than from memory, not to narrate progress.
 
-**A file written is a file already formatted and spell-checked** — the same hook runs Biome and
-cspell on it and hands back what it could not fix. Fix that when it comes.
+**A file written is a file already formatted, spell-checked and tested** — a `PostToolUse` hook
+runs Biome and cspell on it, and on a file under `src/` with a matching test it runs that test too.
+Fix what it hands back. **Do not run `yarn test` after writing an implementation file**; the hook
+already did, and silence from it means green.
 
-### 5 and 7 — the judging rounds
+**Writing the failing test first still costs a run** — the hook stays quiet on test files, because
+red is what that step is for.
 
-`/verify-branch $0 first`, then `/verify-branch $0 final` once the fixes stop. It owns the gates,
-the ticket's requirements, the review axes the diff earns, and the acceptance criteria.
+### 5 — judge the branch, when it earns it
 
-**Two rounds. A third only where the second's fixes were substantial enough to plausibly break
-something**, and never a fourth. What is still open goes into an issue comment as known debt.
+**Ask first, in one command:**
+
+```sh
+.claude/bin/judge-needed.sh
+```
+
+**`JUDGE: skip` ends this step.** The branch touched only helpers, constants, tests, docs or config
+— what can be wrong there, the gate and the tests already catch. Run section 8's gate now instead,
+give the acceptance verdicts straight from the diff, and record the step as skipped with the reason
+the script printed. **A judging round costs a fork's whole entry price before it reads a line**, so
+one that cannot find anything is the most expensive nothing in this flow.
+
+**`JUDGE: run` — `/verify-branch $0 full`.** One round: the gate, the ticket's requirements, the
+review axes the diff earns, and a verdict per acceptance criterion.
+
+**`/verify-branch $0 recheck` only when step 6 changed code**, and never a third round. It re-runs
+the gate and the axes that found something. What is still open goes into an issue comment as known
+debt.
 
 **A round returns a terse report.** **Append it to `.scratch/$0.md` as it arrives.**
 
-### 6 and 8 — triage
+### 6 — triage
 
 Decide here; reach for the user only at the end:
 
@@ -110,13 +127,13 @@ Decide here; reach for the user only at the end:
 - **Ask when the call is genuinely open**, both readings defensible. Everything under `ASK` in the
   round's report is already one of these.
 
-### 9 — docs
+### 7 — docs
 
 **`/docs-sync` only when the branch changed behavior, architecture or scope** — a new module, a
 route, a config, a feature, a standard. A ticket that adds one internal helper and its tests skips
 this step and says so in the report. Its deletion pass runs over anything written here.
 
-### 10 — handoff
+### 8 — handoff
 
 `/checks full $0` one last time, over code and docs together. **It skips itself when nothing moved
 since its last green run.**
@@ -125,9 +142,8 @@ Then the report, **assembled from `.scratch/$0.md` rather than from memory**: th
 the gates and the axes found, which axes were skipped and why, what was fixed, what was rejected and
 why, what `/docs-sync` cut, and the acceptance verdict per criterion.
 
-Every step from 5 on appends its outcome to that file as it finishes — one or two lines, written at
-the time. **A step with no line in the file is reported as unrecorded, not reconstructed.** Say
-which steps are missing and hand over anyway; the user decides whether to re-run them.
+**A step with no line in `.scratch/$0.md` is reported as unrecorded, not reconstructed.** Say which
+steps are missing and hand over anyway; the user decides whether to re-run them.
 
 Propose a commit title and **stop** — the user runs the commit, and the issue is closed only after
 they confirm it landed.
