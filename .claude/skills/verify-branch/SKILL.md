@@ -7,27 +7,25 @@ agent: general-purpose
 background: false
 model: sonnet
 effort: medium
-allowed-tools: Bash, Read, Grep, Glob, Skill, Agent
+allowed-tools: Bash, Read, Grep, Glob, Agent
 ---
 
 # Judge issue #$0 — `$1` round
 
-**Report what you find and stop. Change no file.** The agent that called this owns every fix.
+**Report what you find and stop. Change no file** except the one gate-fingerprint line in section 3.
+The agent that called this owns every fix.
 
 **Read no `.scratch/` file.** The author's reasoning lives there, and a critic handed the
 assumptions the code came from reproduces them and calls the result correct. The ticket, the diff
 and the repo are the whole input.
 
-**The range is `dev`, not `dev...HEAD`** — nothing on this branch is committed, so a three-dot range
-reports an empty diff over a branch full of work.
+## 1. Where the branch stands
 
-## 1. The diff, the delta and the axes
+!`.claude/bin/review-context.sh $0 $1 head`
 
-!`.claude/bin/review-context.sh $0 $1`
-
-**That block is the whole input and it cost no turn.** It carries the diff, how far the branch moved
-since the previous round, which axes the changed files earn, and the full text of exactly those
-axes. **Do not re-run `git diff`, expand the plugin path, or open an axis file** — it is above.
+**That block is the diff, and it cost no turn. Do not run `git diff`, `git status` or `git log`** —
+it is above, and the range is already `dev` rather than `dev...HEAD`, which would report an empty
+diff over a branch nothing has committed yet.
 
 **An empty file list is a broken call, not a clean branch.** Say the range came back empty and stop.
 
@@ -38,7 +36,7 @@ invisible here, and a whole new module then reads as no change at all.
 
 | | `first` | `final` |
 | --- | --- | --- |
-| Gate | `/checks fast $0` | `/checks full $0` |
+| Gate | `fast` | `full` |
 | Requirements against the ticket | yes | yes, over the fixed diff |
 | Review axes | every axis `RUN:` names | see the two rules below |
 | Acceptance criteria, one verdict each | no | yes |
@@ -52,10 +50,37 @@ four rule sets just came back clean on.
 
 ## 3. Gate
 
-`/checks fast $0` on the `first` round, `/checks full $0` on the `final` one. It skips itself when
-the branch has not moved since its last green run.
+**`GATE: skip` in section 1 means the branch has not moved since its last green run.** Report
+`<LEVEL> gate: green, inputs unchanged` and go to section 4 without running anything.
 
-**Red stops this skill.** Report the failure verbatim and return.
+**On `GATE: run`, this one command, exactly as written** — every gate in it even after one goes red,
+because one report carrying four failures beats four round trips:
+
+```sh
+for c in check typecheck spellcheck test; do yarn $c > .scratch/checks-$0-$c.log 2>&1 && echo "$c: PASS" || echo "$c: FAIL"; done
+```
+
+**Run the `package.json` scripts, never the binaries under them** — `yarn typecheck` runs
+`next typegen` first, and Payload's generated types are stale without it. **Running a command twice
+to learn its exit status is the defect this shape exists to avoid.**
+
+**On the `final` round, and only when those four all printed PASS**, add the build:
+
+```sh
+yarn build > .scratch/checks-$0-build.log 2>&1 && echo "build: PASS" || echo "build: FAIL"
+```
+
+**All green — record the fingerprint**, so the next round and the handoff can skip a gate over a
+tree that did not move:
+
+```sh
+echo "<LEVEL from section 1> $(cat .scratch/gate-$0.now)" > .scratch/gate-$0.green
+```
+
+**Red stops this skill. Leave `.scratch/gate-$0.green` alone**, read the log of each failed command
+back with the Read tool, and report **the log's first 60 lines, copied** — head, not tail, because
+Biome and `tsc` print the diagnostics first and a bare count last. Judging code that does not
+compile wastes both of us.
 
 ## 4. Requirements
 
@@ -75,21 +100,18 @@ what stands in the code instead, and which of the three kinds it is.
 
 ## 5. Review axes
 
-**`RUN:` in section 1 is the list. Follow each named axis from the text already printed there**, and
-report every `SKIPPED:` axis as skipped, with the reason given.
+**`RUN:` in section 1 is the list, and the appendix at the bottom of this file is their full text.**
+Follow each named axis from there. **Open no other standards doc to invent an axis of your own** —
+an axis absent from `RUN:` is one the diff cannot break, and it is reported as skipped with the
+reason section 1 gave.
 
 **Carry the axes yourself, in sequence, when the diff is ≤ 5 files and ≤ 150 changed lines.** Above
 that, **one `subagent_type: review-axis` per axis, launched in one message** so they run in
 parallel — a single pass holding four rule sets at once starts dropping findings at that size. Hand
 each one the axis file path and the range; it re-reads its own axis.
 
-**Of the standards axis, only its Standards half runs here.** Its Spec axis reads the ticket, which
-section 4 already did, and inside a fork its "ask the user where the spec is" fallback has nobody to
-ask.
-
-**`docs/agents/coding-standards/review-boundaries.md`, printed in section 1, decides what may be
-reported at all.** A finding names the rule it breaks, by doc and line, or it is taste and does not
-travel.
+**`review-boundaries.md`, first in the appendix, decides what may be reported at all.** A finding
+names the rule it breaks, by doc and line, or it is taste and does not travel.
 
 ## 6. Acceptance — `final` round only
 
@@ -114,3 +136,7 @@ outside the ticket, or a genuinely open call, goes there instead of into a findi
 
 **A section with nothing to say is one word: `none`.** No preamble, no restatement of the ticket, no
 account of what you read on the way.
+
+## Appendix — the axes `RUN:` named
+
+!`.claude/bin/review-context.sh $0 $1 axes`
