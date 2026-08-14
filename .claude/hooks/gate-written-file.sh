@@ -20,6 +20,11 @@ case "$file" in
   *"/node_modules/"*|*"/.scratch/"*|*"/.next/"*|*"/src/payload-types.ts") exit 0 ;;
 esac
 
+# Make a new file visible to `git diff dev` — the range every gate and judging round reads.
+if ! git -C "$root" ls-files --error-unmatch -- "$file" >/dev/null 2>&1; then
+  git -C "$root" check-ignore -q -- "$file" || git -C "$root" add -N -- "$file" >/dev/null 2>&1
+fi
+
 out=""
 status=0
 

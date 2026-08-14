@@ -1,11 +1,12 @@
 ---
 name: verify-branch
-description: Judge a branch someone else wrote — gates, the ticket's requirements, the review axes the diff earns, and on the final round the acceptance criteria. Runs in its own context on a cheaper model, reads code only, and repairs nothing. Invoked as /verify-branch <issue-number> <first|final>, and by /implement-issue at steps 5–8 and 10–11.
+description: Judge a branch someone else wrote — gates, the ticket's requirements, the review axes the diff earns, and on the final round the acceptance criteria. Runs in its own context on a cheaper model, reads code only, and repairs nothing. Invoked as /verify-branch <issue-number> <first|final>, and by /implement-issue at steps 5 and 7.
 argument-hint: "[issue-number] [first|final]"
 context: fork
 agent: general-purpose
 background: false
 model: sonnet
+effort: medium
 allowed-tools: Bash, Read, Grep, Glob, Skill, Agent
 ---
 
@@ -13,44 +14,48 @@ allowed-tools: Bash, Read, Grep, Glob, Skill, Agent
 
 **Report what you find and stop. Change no file.** The agent that called this owns every fix.
 
-**This runs in its own context so the author's reasoning cannot reach it.** An agent is blind to
-exactly the assumptions it generated the code from, so a critic handed those assumptions reproduces
-them and calls the result correct. **Read no `.scratch/` file** — that is where the author's
-reasoning lives. The ticket, the diff, and the repo are the whole input.
+**Read no `.scratch/` file.** The author's reasoning lives there, and a critic handed the
+assumptions the code came from reproduces them and calls the result correct. The ticket, the diff
+and the repo are the whole input.
 
-**The range is `dev`, not `dev...HEAD`.** `/implement-issue` commits nothing, so a three-dot range
-compares two commits and reports an empty diff over a branch full of work.
+**The range is `dev`, not `dev...HEAD`** — nothing on this branch is committed, so a three-dot range
+reports an empty diff over a branch full of work.
 
-## 1. What the round covers
+## 1. The diff, the delta and the axes
+
+!`.claude/bin/review-context.sh $0 $1`
+
+**That block is the whole input and it cost no turn.** It carries the diff, how far the branch moved
+since the previous round, which axes the changed files earn, and the full text of exactly those
+axes. **Do not re-run `git diff`, expand the plugin path, or open an axis file** — it is above.
+
+**An empty file list is a broken call, not a clean branch.** Say the range came back empty and stop.
+
+**Report a suspiciously thin diff rather than judging it** — a file never `git add -N`'d is
+invisible here, and a whole new module then reads as no change at all.
+
+## 2. What the round covers
 
 | | `first` | `final` |
 | --- | --- | --- |
 | Gate | `/checks fast $0` | `/checks full $0` |
 | Requirements against the ticket | yes | yes, over the fixed diff |
-| Review axes | every axis the diff earns | only the axes that returned a finding in the `first` round |
+| Review axes | every axis `RUN:` names | see the two rules below |
 | Acceptance criteria, one verdict each | no | yes |
 
-**An axis that came back empty over the wider diff comes back empty over a subset of it**, so the
-`final` round never re-runs a clean axis.
+**The `final` round runs only the axes that returned a finding in the `first` round** — an axis
+empty over the wider diff is empty over a subset of it.
 
-## 2. The diff decides everything below
-
-```sh
-git diff --stat dev && git diff --name-only dev
-```
-
-**An empty diff is a broken call, not a clean branch.** Say the range came back empty and stop.
-
-**A file never `git add -N`'d is invisible here**, and a whole new module then reads as no change at
-all. Report a suspiciously thin diff rather than judging it.
+**A `final` round whose `DELTA` is under 20 lines runs no axis at all**: gate, requirements and
+acceptance only. Say so under `AXES SKIPPED` with the delta. Fixes that small cannot introduce what
+four rule sets just came back clean on.
 
 ## 3. Gate
 
 `/checks fast $0` on the `first` round, `/checks full $0` on the `final` one. It skips itself when
-the branch has not moved since its last green run, so calling it costs nothing when nothing changed.
+the branch has not moved since its last green run.
 
-**Red stops this skill.** Report the failure verbatim and return — judging code that does not
-compile wastes both of us.
+**Red stops this skill.** Report the failure verbatim and return.
 
 ## 4. Requirements
 
@@ -70,35 +75,21 @@ what stands in the code instead, and which of the three kinds it is.
 
 ## 5. Review axes
 
-**An axis costs the same whether or not the diff can break its rules**, so the changed files pick
-which ones run.
-
-| Axis | File to read and follow | Runs when the changed files include |
-| --- | --- | --- |
-| Standards + Fowler smells | `~/.claude/plugins/cache/claude-plugins-official/mattpocock-skills/*/skills/engineering/code-review/SKILL.md`, **its Standards axis alone** | always |
-| bug hunt | `.claude/skills/bug-hunt-review/SKILL.md` | always |
-| a11y | `.claude/skills/a11y-review/SKILL.md` | a `.tsx` under `src/views/`, `src/features/`, `src/entities/`, `src/shared/components/` or `src/app/(frontend)/`, or a `messages/` catalog whose copy carries markup |
-| Payload access control | `.claude/skills/payload-security-review/SKILL.md` | `src/collections/`, `src/payload.config.ts`, `src/proxy.ts`, any `route.ts`, any `'use server'`, or any new read of User input |
-
-**The standards axis path carries a `*`** — it is a plugin outside the repo whose version segment
-moves on every update. Expand it with one `ls`; a guessed path sends you hunting the filesystem.
-
-**Read the axis file and follow it. Do not invoke the skill** — the axis skills fork when invoked,
-and a fork here is a second hop relaying findings through a middleman.
+**`RUN:` in section 1 is the list. Follow each named axis from the text already printed there**, and
+report every `SKIPPED:` axis as skipped, with the reason given.
 
 **Carry the axes yourself, in sequence, when the diff is ≤ 5 files and ≤ 150 changed lines.** Above
-that, **one subagent per axis on `model: sonnet`, launched in one message** so they run in parallel:
-past that size a single pass holding four rule sets at once starts dropping findings, and the
-parallelism buys back the wall clock. Below it, four contexts re-reading one short diff cost more
-than the four passes save.
+that, **one `subagent_type: review-axis` per axis, launched in one message** so they run in
+parallel — a single pass holding four rule sets at once starts dropping findings at that size. Hand
+each one the axis file path and the range; it re-reads its own axis.
 
-**`code-review` ships two axes and only its Standards axis runs here.** Say so in its prompt: its
-Spec axis reads the ticket, which section 4 already did, and inside a fork its "ask the user where
-the spec is" fallback has nobody to ask.
+**Of the standards axis, only its Standards half runs here.** Its Spec axis reads the ticket, which
+section 4 already did, and inside a fork its "ask the user where the spec is" fallback has nobody to
+ask.
 
-**What a review may report at all is `docs/agents/coding-standards/review-boundaries.md`.** Read it
-before reporting anything. A finding names the rule it breaks, by doc and line, or it is taste and
-does not travel.
+**`docs/agents/coding-standards/review-boundaries.md`, printed in section 1, decides what may be
+reported at all.** A finding names the rule it breaks, by doc and line, or it is taste and does not
+travel.
 
 ## 6. Acceptance — `final` round only
 

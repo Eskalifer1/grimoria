@@ -10,17 +10,24 @@ allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkou
 A `ready-for-agent` ticket, from branch to the commit the user runs. `/task-flow` decides which
 issues reach here; `failures.md` in this folder covers a step that cannot complete.
 
-**Start this in an empty session.** Whatever the conversation already holds is re-read on every one
-of this flow's turns, so a chat carrying an hour of unrelated work costs more than the ticket does.
-**Invoked with history behind it — say so, and ask for `/clear` before going on.**
+**Start this in an empty session** — every turn of this flow re-reads whatever the conversation
+already holds. **Invoked with history behind it — say so, and ask for `/clear` before going on.**
 
-**This context writes the code and nothing else.** Judging happens in `/verify-branch`, which runs
-in its own context on a cheaper model — every gate log, review pass and acceptance verdict that
-lands here is paid for again on every turn that follows it.
+**This context writes the code and nothing else.** Judging happens in `/verify-branch`.
 
 ## The ticket
 
 !`gh issue view $0 --json number,title,state,labels,body,comments --jq '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'`
+
+## Where the tree stands
+
+!`echo "branch: $(git branch --show-current)  |  HEAD: $(git log --oneline -1)"; echo "--- uncommitted ---"; git status --short | head -20; echo "--- prior state for this ticket ---"; if [ -s .scratch/$0.md ]; then head -40 .scratch/$0.md; else echo "(none — fresh start)"; fi; echo "--- test layout ---"; ls tests 2>/dev/null`
+
+**This block is the orientation.** Do not re-run `git status`, `git branch`, `git log` or
+`ls tests` to learn what it already says.
+
+**A `.scratch/$0.md` with content means a previous session got partway.** Resume from where it
+stopped; `failures.md` covers the abandoned case.
 
 ## Steps
 
@@ -44,8 +51,7 @@ and testing decisions, acceptance criteria. **A label with no spec goes back to 
 
 ### 3 — read the standards first
 
-**One `cat` for every doc, not one per doc** — each tool call re-reads the whole context, so six
-calls cost six times what one costs and return the same bytes.
+**One `cat` for every doc, not one per doc.**
 
 - **Route by the files the code will touch**, not by the issue's `area` label — a frontend ticket
   that adds a login form touches auth too.
@@ -56,32 +62,27 @@ calls cost six times what one costs and return the same bytes.
 
 ### 4 — implement
 
-**Invoke `/mattpocock-skills:tdd` before the first test** — it is a Skill call, not a description of
-a loop to imitate. It gives: **one seam, one failing test, one implementation, next slice**, against
-the seams the spec settled. Confirm the seams with the user before the first test where the spec
-left them open.
+**Invoke `/mattpocock-skills:tdd` before the first test** — it is a Skill call, not a loop to
+imitate. It gives: one seam, one failing test, one implementation, next slice, against the seams the
+spec settled. Confirm the seams with the user before the first test where the spec left them open.
 
 **Past the third slice, each remaining slice runs in a fresh subagent on `model: opus`**, handed the
-seam, the standards list from step 3, and `.scratch/$0.md`. A long ticket implemented in one context
-pays for every earlier slice on every later turn; a slice per context makes that cost flat instead
-of growing with the ticket.
+seam, the standards list from step 3, and `.scratch/$0.md`.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
 and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
-acceptance criteria at step 7 are what verifies this class of ticket.
+acceptance criteria at step 7 verify this class of ticket.
 
-**`git add -N` every file the ticket creates, as it is created.** Nothing here is committed until
-the user commits, and an untracked file is invisible to `git diff` — every judging round, every
-axis, and the gate's own fingerprint would read an empty range.
+**A file created with `Write` is already `git add -N`'d** by the `PostToolUse` hook. **A file
+created any other way — a heredoc, `printf`, a generator — is not**; `git add -N` those by hand as
+they appear, or the whole new module reads as no change at all to every gate and judging round.
 
 **Record decisions as they are made**, to `.scratch/$0.md` under `## Decisions` — one line each:
-what was chosen, and what was rejected where a reviewer would plausibly propose it back. Step 6
-reads this file.
+what was chosen, and what was rejected where a reviewer would plausibly propose it back.
 
-**A file written is a file already formatted and spell-checked** — a `PostToolUse` hook runs Biome
-and cspell on it and hands back what it could not fix. Fix that when it comes; it is the same thing
-the gate would report later, at a fraction of the cost.
+**A file written is a file already formatted and spell-checked** — the same hook runs Biome and
+cspell on it and hands back what it could not fix. Fix that when it comes.
 
 ### 5 and 7 — the judging rounds
 
@@ -91,8 +92,7 @@ the ticket's requirements, the review axes the diff earns, and the acceptance cr
 **Two rounds. A third only where the second's fixes were substantial enough to plausibly break
 something**, and never a fourth. What is still open goes into an issue comment as known debt.
 
-**A round returns a terse report** — gate verdict, divergences, findings, acceptance verdicts, and
-`ASK` for anything it could not settle. **Append it to `.scratch/$0.md` as it arrives.**
+**A round returns a terse report.** **Append it to `.scratch/$0.md` as it arrives.**
 
 ### 6 and 8 — triage
 
@@ -112,12 +112,14 @@ Decide here; reach for the user only at the end:
 
 ### 9 — docs
 
-`/docs-sync`. Its deletion pass runs over anything written here, and its report folds into step 10.
+**`/docs-sync` only when the branch changed behavior, architecture or scope** — a new module, a
+route, a config, a feature, a standard. A ticket that adds one internal helper and its tests skips
+this step and says so in the report. Its deletion pass runs over anything written here.
 
 ### 10 — handoff
 
 `/checks full $0` one last time, over code and docs together. **It skips itself when nothing moved
-since its last green run**, so this costs one line when `/docs-sync` changed nothing.
+since its last green run.**
 
 Then the report, **assembled from `.scratch/$0.md` rather than from memory**: the docs read, what
 the gates and the axes found, which axes were skipped and why, what was fixed, what was rejected and

@@ -18,6 +18,23 @@
   },
   "permissions": {
     "deny": [
+      "CronCreate",
+      "CronDelete",
+      "CronList",
+      "ScheduleWakeup",
+      "Monitor",
+      "PushNotification",
+      "RemoteTrigger",
+      "SendMessage",
+      "ListAgents",
+      "DesignSync",
+      "EnterWorktree",
+      "ExitWorktree",
+      "NotebookEdit",
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "ReadMcpResourceDirTool",
+
       "Bash(git push *--force*)",
       "Bash(git push *-f *)",
       "Bash(git push *-f)",

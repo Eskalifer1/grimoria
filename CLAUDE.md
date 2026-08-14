@@ -20,7 +20,8 @@ Local discussion is the exception.
 
 Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
 done any session that changed behavior, architecture or scope. Drift is a bug. `/implement-issue`
-runs it before the handoff; outside that flow nothing prompts for it.
+runs it before the handoff when the branch changed one of those; outside that flow nothing prompts
+for it.
 
 ## Where to look, by task
 

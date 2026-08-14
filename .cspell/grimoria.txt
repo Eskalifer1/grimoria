@@ -72,6 +72,8 @@ wayfinder
 wayfinding
 
 # --- Config keys, CLI flags and file names ---
+Wakeup
+Worktree
 autofix
 cooldown
 importmap
@@ -80,6 +82,7 @@ nodeLinker
 noopener
 noreferrer
 opengraph
+toplevel
 tsbuildinfo
 tsconfig
 unpooled
