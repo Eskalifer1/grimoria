@@ -33,9 +33,11 @@ by e2e (#39); the pure functions it calls are covered by unit.
 
 ## Running
 
-`yarn test` runs every project once and exits — this is what CI (#42) and `/checks` call. It sits in
-the **fast** gate of `/implement-issue`: the suite costs under a second, so a fix that breaks a test
-goes red on the next fast gate rather than at the end.
+`yarn test` runs every project once and exits — this is what CI (#42) and `/checks` call.
+
+**A file written under `src/` runs its covering test as it is written**, from the `PostToolUse` hook
+(`CLAUDE.md`, `## Tooling`). A break surfaces at the file that caused it rather than at the handoff
+gate, so writing an implementation file is followed by no `yarn test` of its own.
 
 **A shared render helper for component tests arrives with the second component test**, wrapping
 whatever providers (`NextIntlClientProvider`, Theme) turn out to be needed by then (#28).

@@ -10,6 +10,12 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 
 **Biome** is the single formatter and linter — `yarn check`, `yarn check:fix`. CI runs `yarn ci`.
 
+**A file written with `Write` or `Edit` comes back formatted, spell-checked and tested** — a
+`PostToolUse` hook (`.claude/hooks/gate-written-file.sh`) runs Biome and cspell on it, the covering
+test when it sits under `src/`, and `git add -N` when it is new. Fix what it hands back; silence
+means green. **A file created any other way — a heredoc, a generator — gets none of that** and needs
+`yarn check --write` and `git add -N` by hand.
+
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
 version that resolves rather than disabling the gate.
 

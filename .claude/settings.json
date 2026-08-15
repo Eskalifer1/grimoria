@@ -36,6 +36,16 @@
       "ReadMcpResourceDirTool",
       "mcp__chrome-devtools",
       "mcp__ide",
+      "mcp__claude_ai_Google_Drive",
+
+      "TaskCreate",
+      "TaskGet",
+      "TaskList",
+      "TaskOutput",
+      "TaskStop",
+      "TaskUpdate",
+      "EnterPlanMode",
+      "ExitPlanMode",
 
       "Bash(git push *--force*)",
       "Bash(git push *-f *)",

@@ -87,9 +87,10 @@ React's `cache()`, so the page that asks for the same User pays nothing.
 
 ## Where it is checked
 
-`/payload-security-review [range]` on demand, and automatically as the `payload-security` axis of
-`/review-axes` — section 5 of `/verify-branch`. The axis returns nothing when a range touches no
-server surface.
+`/payload-security-review [range]` on demand, and automatically as the `payload` axis in section 5
+of `/verify-branch`. That axis is earned by a diff touching a collection, `payload.config.ts`,
+`proxy.ts`, a route handler, `"use server"`, or a new read of User input — a range touching none of
+them skips it.
 
 ## Gotchas
 

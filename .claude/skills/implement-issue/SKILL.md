@@ -1,6 +1,6 @@
 ---
 name: implement-issue
-description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards read, test-first, a judging round in its own context when the diff earns one, triage, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
+description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards routed, test-first slices in their own subagents, a judging round in its own context when the diff earns one, triage, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
 argument-hint: "[issue-number]"
 model: opus
 effort: medium
@@ -36,21 +36,30 @@ stopped; `failures.md` covers the abandoned case.
 | # | Step | Where |
 | --- | --- | --- |
 | 1–2 | Act on `SPEC:` and run the `BRANCH:` command above | here |
-| 3 | Read the standards this task touches | here |
+| 3 | Route the standards this task touches | here |
 | 4 | Implement test-first, record the decisions | `/mattpocock-skills:tdd` |
 | 5 | Judge the branch, when it earns it | `/verify-branch $0 full` |
 | 6 | Triage and fix | here |
 | 7 | `/docs-sync`, when the branch earns it | here |
 | 8 | Full gate, propose a commit title, stop | `docs/git-workflow.md` |
 
-### 3 — read the standards first
+### 3 — route the standards
 
-**One `cat` for every doc, not one per doc.**
+**Produce the list of paths, from `CLAUDE.md`'s `## Where to look, by task`. Reading them is step
+4's business.**
 
 - **Route by the files the code will touch**, not by the issue's `area` label — a frontend ticket
   that adds a login form touches auth too.
 - **Every coding standard covering a changed file, always.**
 - **The design docs when a surface has to be invented** — a new page with no mock.
+
+**A doc opened here is carried by every turn that follows it.** The set runs to 40,000 characters,
+and the ticket it serves is finished long before this context is. Where step 4 dispatches slices,
+each subagent opens only the two or three its own slice touches, and pays for them for the length
+of that slice alone.
+
+**Open them here only when step 4 keeps the slices in this context** — three seams or fewer, where
+there is no subagent to read them instead. One `cat` for every doc, not one per doc.
 
 ### 4 — implement
 
@@ -58,13 +67,30 @@ stopped; `failures.md` covers the abandoned case.
 imitate. It gives: one seam, one failing test, one implementation, next slice, against the seams the
 spec settled. Confirm the seams with the user before the first test where the spec left them open.
 
-**Past the third slice, each remaining slice runs in a fresh subagent on `model: opus`.** A slice
-kept here is paid for again on every turn that follows it, so a long ticket implemented in one
-context costs more than the ticket is.
+**Count the seams before the first test, and let the count decide where the slices run:**
 
-**The subagent gets four things and no more**: the seam, the acceptance criteria that seam serves,
-the standards paths from step 3, and the line `Write the failing test first; the PostToolUse hook
-runs Biome, cspell and the covering test on every file you write.`
+- **Three or fewer — they run here.** A fork costs its whole entry price before it reads a line, and
+  three short slices do not earn three of those. Read the standards now, per step 3.
+- **More than three — every slice runs in a fresh subagent, starting with the first.** A slice kept
+  here is paid for again on every turn that follows it: on a ticket the size of a site shell that is
+  the largest single cost in the flow, larger than the code, the gates and the judging together.
+  **This context then opens no standards doc at all** — it dispatches, collects five lines, and
+  keeps the ledger.
+
+**Invoking this skill is the request for those subagents.** A standing instruction to spawn none
+unless asked is answered here: the user asked, by name, when they typed `/implement-issue`.
+
+**Pick the model per slice**, on what the slice actually decides:
+
+- **`opus`** where the slice settles something — access control, the server/client boundary, a
+  token-contract call, a public seam other slices will build on.
+- **`sonnet`** where the shape is already settled and the slice fills it in — routes and layouts,
+  placeholder pages, re-exports, a catalog entry per string.
+
+**The subagent gets five things and no more**: the seam, the acceptance criteria that seam serves,
+the standards paths from step 3, the `FILES`/`DECIDED` lines already in `.scratch/$0.md`, and the
+line `Write the failing test first; the PostToolUse hook runs Biome, cspell and the covering test on
+every file you write.` **It opens only the standards its own seam touches**, not the whole set.
 
 **It returns five lines and no more**, and say so in its prompt:
 
@@ -87,9 +113,23 @@ test.** Vitest has no seam to grab, and a test asserting on the file's own wordi
 and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
 acceptance criteria at step 5 verify this class of ticket.
 
-**A file created with `Write` is already `git add -N`'d** by the `PostToolUse` hook. **A file
-created any other way — a heredoc, `printf`, a generator — is not**; `git add -N` those by hand as
-they appear, or the whole new module reads as no change at all to every gate and judging round.
+**Files that differ only by substitution are created by one loop over a template**, in a single
+`Bash` call — placeholder pages, route files that re-export a screen module, a catalog entry per
+string. **A file with a decision inside it gets its own `Write`.** Twenty-five near-identical
+one-file writes cost more than the module they build: each turn pays for the whole context again,
+and the template is emitted twenty-five times instead of once.
+
+```sh
+for p in Favorites Drafts PublicNotes; do
+  mkdir -p "src/views/${p}Page" && cat > "src/views/${p}Page/index.tsx" <<EOF
+…the template, with $p substituted…
+EOF
+done
+```
+
+**The loop's files never touch the hook** (`CLAUDE.md`, `## Tooling`). Close it with one
+`yarn check --write` over the paths and one `git add -N`, or they reach every gate unformatted and
+every diff invisible.
 
 **Write `.scratch/$0.md` twice and no more** — once when the code is done, carrying the docs read
 under `## Read` and, under `## Decisions`, one line per decision: what was chosen, and what was
@@ -97,13 +137,9 @@ rejected where a reviewer would plausibly propose it back. Once more when step 5
 its report. **Each write is a full turn**, and the file exists so the handoff reports from record
 rather than from memory, not to narrate progress.
 
-**A file written is a file already formatted, spell-checked and tested** — a `PostToolUse` hook
-runs Biome and cspell on it, and on a file under `src/` with a matching test it runs that test too.
-Fix what it hands back. **Do not run `yarn test` after writing an implementation file**; the hook
-already did, and silence from it means green.
-
-**Writing the failing test first still costs a run** — the hook stays quiet on test files, because
-red is what that step is for.
+**Do not run `yarn test` after writing an implementation file** — the hook already ran its covering
+test, and silence means green. **Writing the failing test first still costs a run of its own**: the
+hook stays quiet on test files, because red is what that step is for.
 
 ### 5 — judge the branch, when it earns it
 

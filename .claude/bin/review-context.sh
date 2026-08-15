@@ -47,11 +47,11 @@ if [ "$mode" = "axes" ]; then
     echo "(no axis runs on a recheck of $delta lines — nothing to load)"
     exit 0
   fi
+  out=".scratch/axes-$issue.md"
+  : > "$out"
   emit() {
     [ -f "$2" ] || return 0
-    echo
-    echo "=== $1 — $2 ==="
-    cat "$2"
+    { echo; echo "=== $1 — $2 ==="; cat "$2"; } >> "$out"
   }
   emit "what a review may report at all" docs/agents/coding-standards/review-boundaries.md
   for a in $axes; do
@@ -65,6 +65,15 @@ if [ "$mode" = "axes" ]; then
       payload)  emit "AXIS Payload access control" .claude/skills/payload-security-review/SKILL.md ;;
     esac
   done
+  # A block over 30,000 characters is not injected — it is written to a side file the reader then has
+  # to hunt down, which costs the turns this whole script exists to avoid. Under the ceiling the text
+  # goes inline for free; over it, one named file and one Read beats a truncated block.
+  if [ "$(wc -c < "$out")" -gt 28000 ]; then
+    echo "The axes are too long to sit inline. **Read \`$out\` once, in full, before section 5** —"
+    echo "it holds review-boundaries.md and the text of exactly these axes:$axes"
+  else
+    cat "$out"
+  fi
   exit 0
 fi
 

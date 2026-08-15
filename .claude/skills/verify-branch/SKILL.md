@@ -15,17 +15,23 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 **Report what you find and stop. Change no file** except the one gate-fingerprint line in section 3.
 The agent that called this owns every fix.
 
-**Read no `.scratch/` file.** The author's reasoning lives there, and a critic handed the
-assumptions the code came from reproduces them and calls the result correct. The ticket, the diff
-and the repo are the whole input.
+**Read no `.scratch/` file the author wrote** — `$0.md` above all. The author's reasoning lives
+there, and a critic handed the assumptions the code came from reproduces them and calls the result
+correct. The ticket, the diff and the repo are the whole input. The three files this skill's own
+tooling writes — `verify-$0.diff`, `axes-$0.md`, `checks-$0-*.log` — are that input, not the
+author's word for it.
 
 ## 1. Where the branch stands
 
 !`.claude/bin/review-context.sh $0 $1 head`
 
-**That block is the diff, and it cost no turn. Do not run `git diff`, `git status` or `git log`** —
-it is above, and the range is already `dev` rather than `dev...HEAD`, which would report an empty
-diff over a branch nothing has committed yet.
+**That block is the shape of the diff, and it cost no turn. Do not run `git diff`, `git status` or
+`git log`** — the range is already `dev` rather than `dev...HEAD`, which would report an empty diff
+over a branch nothing has committed yet.
+
+**The diff itself is at `.scratch/verify-$0.diff`, already written. Read it once, whole,** with the
+Read tool. Walking it in `sed` windows pays for the file as many times as there are windows, and a
+finding needs the file it lives in anyway.
 
 **An empty file list is a broken call, not a clean branch.** Say the range came back empty and stop.
 
@@ -140,5 +146,8 @@ outside the ticket, or a genuinely open call, goes there instead of into a findi
 account of what you read on the way.
 
 ## Appendix — the axes `RUN:` named
+
+**Below is either the axes themselves or the one file holding them.** A pointer means the set was
+too long to sit inline: read that file once, in full, and judge from it.
 
 !`.claude/bin/review-context.sh $0 $1 axes`
