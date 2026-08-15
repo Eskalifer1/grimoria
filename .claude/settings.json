@@ -17,16 +17,14 @@
     ]
   },
   "permissions": {
+    "allow": ["Bash(.claude/bin/e2e-run.sh:*)"],
     "deny": [
       "CronCreate",
       "CronDelete",
       "CronList",
       "ScheduleWakeup",
-      "Monitor",
       "PushNotification",
       "RemoteTrigger",
-      "SendMessage",
-      "ListAgents",
       "DesignSync",
       "EnterWorktree",
       "ExitWorktree",

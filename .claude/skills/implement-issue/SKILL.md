@@ -92,21 +92,30 @@ the standards paths from step 3, the `FILES`/`DECIDED` lines already in `.scratc
 line `Write the failing test first; the PostToolUse hook runs Biome, cspell and the covering test on
 every file you write.` **It opens only the standards its own seam touches**, not the whole set.
 
-**It returns five lines and no more**, and say so in its prompt:
+**It returns these six lines and no more**, and say so in its prompt:
 
 ```
 FILES    <path — created|changed, one per line>
+SEAM     <each prop, export, route or message key this slice hands another — name and shape>
 DECIDED  <what was chosen, and what was rejected where a reviewer would propose it back>
 TESTS    <n passing | the one failure, verbatim>
 LEFT     <what this slice deliberately did not do>
 ASK      <none | the call it could not settle>
 ```
 
-**A subagent that narrates its work undoes the reason it exists** — the transcript it saves is paid
-for again if it comes back as prose. No plan, no recap of the code, no advice for the next slice.
+**Every turn inside a slice carries a tool call.** A turn spent announcing the next step or
+restating the file just written pays for the whole context again to say nothing — measured on a
+site-shell ticket, over half of every slice's turns produced no tool call at all. The six lines at
+the end are where a slice speaks: no plan, no running commentary, no advice for the next slice.
 
-**Append `FILES` and `DECIDED` to `.scratch/$0.md` as each slice returns**, and carry nothing else
-forward.
+**Append `FILES`, `SEAM` and `DECIDED` to `.scratch/$0.md` as each slice returns**, and carry
+nothing else forward.
+
+**After the last slice, dispatch one `sonnet` wiring pass** — hand it every `SEAM` line collected
+and the acceptance criteria, and ask which seam no file consumes and which criterion no `FILES` line
+covers. A prop published and never passed, or a criterion no slice owned, is what splitting a ticket
+produces and what no gate catches: the code compiles, the tests pass, and the button does nothing.
+It reports; this context decides what to fix.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording

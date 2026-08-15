@@ -118,6 +118,10 @@ that, **one `subagent_type: review-axis` per axis, launched in one message** so 
 parallel — a single pass holding four rule sets at once starts dropping findings at that size. Hand
 each one the axis file path and the range; it re-reads its own axis.
 
+**Invoking this skill is the request for those subagents.** A standing instruction to spawn none
+unless asked is answered here: the round was asked for by name, and a diff this size judged in one
+pass returns fewer findings than it should.
+
 **`review-boundaries.md`, first in the appendix, decides what may be reported at all.** A finding
 names the rule it breaks, by doc and line, or it is taste and does not travel.
 

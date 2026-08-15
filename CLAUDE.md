@@ -63,6 +63,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Judging a branch someone else wrote** — gates, a requirement unmet, met differently or met more
   widely than asked, the review axes the diff earns, the acceptance criteria:
   `/verify-branch <issue> <full|recheck>`.
+- **Asking what an agent flow costs, or measuring a change to one** — the per-run ledger, the
+  sandbox, `.claude/bin/e2e-run.sh`: `docs/agents/agent-run-log.md` (#66).
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
