@@ -55,6 +55,3 @@ e2e/                                          Playwright (#39)
 - **The suffix selects the layer**, so a misnamed test runs in the wrong project. The mapping is
   `docs/testing.md`.
 - **Accepted cost:** renaming a component means moving its test, uncaught by tooling.
-
-Colocation was rejected: with folder-plus-`index.tsx` it yields either `index.test.tsx`, naming
-nothing, or a folder mixing private sub-components with tests, weakening nesting-means-privacy.

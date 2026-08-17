@@ -17,7 +17,18 @@ title=$(printf '%s' "$json" | jq -r '.title')
 body=$(printf '%s' "$json" | jq -r '.body')
 labels=$(printf '%s' "$json" | jq -r '[.labels[].name]|join(" ")')
 
-printf '%s' "$json" | jq -r '"#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n\(([.comments[]|"--- comment by \(.author.login)\n\(.body)"])|join("\n"))"'
+# A ticket grilled by /task-flow can carry a dozen comments, and the ones that settled the spec are
+# either the last few or say so in their own text. The rest is discussion the branch does not need,
+# and it is injected whole into every turn of this flow.
+printf '%s' "$json" | jq -r '
+  ([.comments[] | select(.body | test("spec|acceptance|criterion|criteria|scope"; "i"))]
+    + .comments[-3:]) as $keep
+  | ($keep | unique_by(.createdAt)) as $keep
+  | "#\(.number) \(.title)  [\(.state)]\nlabels: \([.labels[].name]|join(", "))\n\n\(.body)\n\n"
+    + ([$keep[] | "--- comment by \(.author.login)\n\(.body[:2000])"] | join("\n"))
+    + (if (.comments|length) > ($keep|length)
+       then "\n\n(\((.comments|length) - ($keep|length)) earlier comments not shown — they settled nothing the spec repeats. `gh issue view \(.number) --comments` has them.)"
+       else "" end)'
 echo
 echo "=== the two mechanical steps, already settled ==="
 

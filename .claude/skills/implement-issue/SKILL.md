@@ -4,7 +4,7 @@ description: Implement a `ready-for-agent` tracker issue from branch to commit h
 argument-hint: "[issue-number]"
 model: opus
 effort: medium
-allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkout:*), Bash(git diff:*), Bash(git status:*), Bash(git add:*)
+allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkout:*), Bash(git diff:*), Bash(git status:*), Bash(git add:*), Bash(.claude/bin/standards.sh:*), Bash(.claude/bin/judge-needed.sh), Bash(.claude/bin/gate.sh:*)
 ---
 
 # Implement issue #$0
@@ -25,8 +25,12 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 
 !`echo "branch: $(git branch --show-current)  |  HEAD: $(git log --oneline -1)"; echo "--- uncommitted ---"; git status --short | head -20; echo "--- prior state for this ticket ---"; if [ -s .scratch/$0.md ]; then head -40 .scratch/$0.md; else echo "(none — fresh start)"; fi; echo "--- test layout ---"; ls tests 2>/dev/null`
 
-**This block is the orientation.** Do not re-run `git status`, `git branch`, `git log` or
-`ls tests` to learn what it already says.
+## The standards profiles
+
+!`.claude/bin/standards.sh --list`
+
+**These three blocks are the orientation.** Do not re-run `git status`, `git branch`, `git log`,
+`ls tests` or `gh issue view` to learn what they already say.
 
 **A `.scratch/$0.md` with content means a previous session got partway.** Resume from where it
 stopped; `failures.md` covers the abandoned case.
@@ -45,21 +49,17 @@ stopped; `failures.md` covers the abandoned case.
 
 ### 3 — route the standards
 
-**Produce the list of paths, from `CLAUDE.md`'s `## Where to look, by task`. Reading them is step
-4's business.**
+**Name the profiles from the block above, per slice. Reading them is the slice's business** — it
+runs `.claude/bin/standards.sh <profile...>` itself and pays one turn for its whole set.
 
 - **Route by the files the code will touch**, not by the issue's `area` label — a frontend ticket
-  that adds a login form touches auth too.
-- **Every coding standard covering a changed file, always.**
-- **The design docs when a surface has to be invented** — a new page with no mock.
+  that adds a login form touches `server` too.
+- **`design` only when a surface has to be invented** — a new page with no mock.
+- **A doc outside the profiles goes in by path**, named in the slice's prompt.
 
-**A doc opened here is carried by every turn that follows it.** The set runs to 40,000 characters,
-and the ticket it serves is finished long before this context is. Where step 4 dispatches slices,
-each subagent opens only the two or three its own slice touches, and pays for them for the length
-of that slice alone.
-
-**Open them here only when step 4 keeps the slices in this context** — three seams or fewer, where
-there is no subagent to read them instead. One `cat` for every doc, not one per doc.
+**Run `standards.sh` here only when step 4 keeps the slices in this context.** A doc opened here is
+carried by every turn that follows it, and the ticket it serves is finished long before this context
+is.
 
 ### 4 — implement
 
@@ -67,88 +67,58 @@ there is no subagent to read them instead. One `cat` for every doc, not one per 
 imitate. It gives: one seam, one failing test, one implementation, next slice, against the seams the
 spec settled. Confirm the seams with the user before the first test where the spec left them open.
 
-**Count the seams before the first test, and let the count decide where the slices run:**
+**Cut the ticket into slices by output size and shared standards, not one slice per seam.** A slice
+is roughly 300–500 lines of delivered code, or one profile's worth of files. Each subagent pays a
+cold context's whole entry price before it reads a line, so five thin slices cost more than three
+full ones — and every extra seam between slices is a wire nobody owns (#66).
 
-- **Three or fewer — they run here.** A fork costs its whole entry price before it reads a line, and
-  three short slices do not earn three of those. Read the standards now, per step 3.
-- **More than three — every slice runs in a fresh subagent, starting with the first.** A slice kept
-  here is paid for again on every turn that follows it: on a ticket the size of a site shell that is
-  the largest single cost in the flow, larger than the code, the gates and the judging together.
-  **This context then opens no standards doc at all** — it dispatches, collects five lines, and
-  keeps the ledger.
+**One or two slices — they run here.** There is no third subagent to carry the standards instead, so
+run `standards.sh` per step 3 and write the code in this context.
+
+**A ticket that touches one file skips the ledger** — no `.scratch/$0.md`, no wiring pass. Both carry
+facts between contexts, and a single file crosses no seam and hands nothing on. Step 8 reports from
+what this context did. **Judge it by the files the code actually touched, not by the ticket's
+estimate**; the moment a second file is written, the ledger rules below apply from that point on.
+
+**Three or more — every slice runs in a fresh subagent, starting with the first.** A slice kept here
+is paid for again on every turn that follows it. **This context then runs `standards.sh` not at all**
+— it dispatches, collects six lines, and keeps the ledger.
 
 **Invoking this skill is the request for those subagents.** A standing instruction to spawn none
 unless asked is answered here: the user asked, by name, when they typed `/implement-issue`.
 
-**Pick the model per slice**, on what the slice actually decides:
+**Pick the agent on what the slice decides:**
 
-- **`opus`** where the slice settles something — access control, the server/client boundary, a
-  token-contract call, a public seam other slices will build on.
-- **`sonnet`** where the shape is already settled and the slice fills it in — routes and layouts,
-  placeholder pages, re-exports, a catalog entry per string.
+- **`subagent_type: slice`** where the slice settles something — access control, the server/client
+  boundary, a token-contract call, a public seam other slices build on.
+- **`subagent_type: slice-fill`** where the shape is already settled and the slice fills it in —
+  routes and layouts, placeholder pages, re-exports, a catalog entry per string. It runs cheaper and
+  thinks less, which is right for work with nothing left to decide.
 
-**The subagent gets five things and no more**: the seam, the acceptance criteria that seam serves,
-the standards paths from step 3, the `FILES`/`DECIDED` lines already in `.scratch/$0.md`, and the
-line `Write the failing test first; the PostToolUse hook runs Biome, cspell and the covering test on
-every file you write.` **It opens only the standards its own seam touches**, not the whole set.
-
-**It returns these six lines and no more**, and say so in its prompt:
-
-```
-FILES    <path — created|changed, one per line>
-SEAM     <each prop, export, route or message key this slice hands another — name and shape>
-DECIDED  <what was chosen, and what was rejected where a reviewer would propose it back>
-TESTS    <n passing | the one failure, verbatim>
-LEFT     <what this slice deliberately did not do>
-ASK      <none | the call it could not settle>
-```
-
-**Every turn inside a slice carries a tool call.** A turn spent announcing the next step or
-restating the file just written pays for the whole context again to say nothing — measured on a
-site-shell ticket, over half of every slice's turns produced no tool call at all. The six lines at
-the end are where a slice speaks: no plan, no running commentary, no advice for the next slice.
+**The subagent's prompt carries five things and no more**: the seam, the acceptance criteria that
+seam serves, the `standards.sh` profile names from step 3, the `FILES`/`DECIDED` lines already in
+`.scratch/$0.md`, and any doc outside the profiles, by path. **The six lines it returns, the hook,
+and the template loop are in its own definition** — do not restate them.
 
 **Append `FILES`, `SEAM` and `DECIDED` to `.scratch/$0.md` as each slice returns**, and carry
 nothing else forward.
 
-**After the last slice, dispatch one `sonnet` wiring pass** — hand it every `SEAM` line collected
-and the acceptance criteria, and ask which seam no file consumes and which criterion no `FILES` line
-covers. A prop published and never passed, or a criterion no slice owned, is what splitting a ticket
-produces and what no gate catches: the code compiles, the tests pass, and the button does nothing.
-It reports; this context decides what to fix.
+**After the last slice, dispatch one `subagent_type: wiring`** — give it the path
+`.scratch/$0.md` and the acceptance criteria, nothing else. It reports which seam no file consumes
+and which criterion no `FILES` line covers: a prop published and never passed, or a criterion no
+slice owned. That is what splitting a ticket produces and what no gate catches — the code compiles,
+the tests pass, and the button does nothing. This context decides what to fix.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
 and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
 acceptance criteria at step 5 verify this class of ticket.
 
-**Files that differ only by substitution are created by one loop over a template**, in a single
-`Bash` call — placeholder pages, route files that re-export a screen module, a catalog entry per
-string. **A file with a decision inside it gets its own `Write`.** Twenty-five near-identical
-one-file writes cost more than the module they build: each turn pays for the whole context again,
-and the template is emitted twenty-five times instead of once.
-
-```sh
-for p in Favorites Drafts PublicNotes; do
-  mkdir -p "src/views/${p}Page" && cat > "src/views/${p}Page/index.tsx" <<EOF
-…the template, with $p substituted…
-EOF
-done
-```
-
-**The loop's files never touch the hook** (`CLAUDE.md`, `## Tooling`). Close it with one
-`yarn check --write` over the paths and one `git add -N`, or they reach every gate unformatted and
-every diff invisible.
-
-**Write `.scratch/$0.md` twice and no more** — once when the code is done, carrying the docs read
-under `## Read` and, under `## Decisions`, one line per decision: what was chosen, and what was
-rejected where a reviewer would plausibly propose it back. Once more when step 5 returns, carrying
-its report. **Each write is a full turn**, and the file exists so the handoff reports from record
-rather than from memory, not to narrate progress.
-
-**Do not run `yarn test` after writing an implementation file** — the hook already ran its covering
-test, and silence means green. **Writing the failing test first still costs a run of its own**: the
-hook stays quiet on test files, because red is what that step is for.
+**Write `.scratch/$0.md` twice and no more** — once when the code is done, carrying the profiles
+routed under `## Read` and, under `## Decisions`, one line per decision: what was chosen, and what
+was rejected where a reviewer would plausibly propose it back. Once more when step 5 returns,
+carrying its report. **Each write is a full turn**, and the file exists so the handoff reports from
+record rather than from memory, not to narrate progress.
 
 ### 5 — judge the branch, when it earns it
 
@@ -181,8 +151,8 @@ Decide here; reach for the user only at the end:
 - **A finding must name the rule it breaks**, per `docs/agents/coding-standards/review-boundaries.md`.
   One that argues from taste is dropped with a line in the report, and is owed no counter-argument.
 - **Open the named doc and read the named line before accepting a finding.** A citation that does
-  not say what the finding claims makes it taste. Judge what survives against the standards read at
-  step 3 and the decisions recorded at step 4, then fix what holds.
+  not say what the finding claims makes it taste. Judge what survives against the standards routed
+  at step 3 and the decisions recorded at step 4, then fix what holds.
 - **A fix that reaches outside the ticket goes to the user, not into the branch** — one touching
   files the ticket did not, or changing behavior the spec settled. Ask with the finding, both
   options, and a recommendation.
@@ -197,15 +167,20 @@ this step and says so in the report. Its deletion pass runs over anything writte
 
 ### 8 — handoff
 
-`/checks full $0` one last time, over code and docs together. **It skips itself when nothing moved
-since its last green run.**
+```sh
+.claude/bin/gate.sh $0 full
+```
 
-Then the report, **assembled from `.scratch/$0.md` rather than from memory**: the docs read, what
-the gates and the axes found, which axes were skipped and why, what was fixed, what was rejected and
-why, what `/docs-sync` cut, and the acceptance verdict per criterion.
+One last time, over code and docs together. **It skips itself when nothing moved since its last
+green run**, and on red it prints the head of every failed log — read none of them back.
+
+Then the report, **assembled from `.scratch/$0.md` rather than from memory**: the standards routed,
+what the gates and the axes found, which axes were skipped and why, what was fixed, what was
+rejected and why, what `/docs-sync` cut, and the acceptance verdict per criterion.
 
 **A step with no line in `.scratch/$0.md` is reported as unrecorded, not reconstructed.** Say which
-steps are missing and hand over anyway; the user decides whether to re-run them.
+steps are missing and hand over anyway; the user decides whether to re-run them. **A one-file ticket
+reports from this context instead** — step 4 gave it no ledger to read, and nothing is unrecorded.
 
 Propose a commit title and **stop** — the user runs the commit, and the issue is closed only after
 they confirm it landed.

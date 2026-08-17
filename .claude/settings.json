@@ -29,6 +29,7 @@
       "EnterWorktree",
       "ExitWorktree",
       "NotebookEdit",
+      "Artifact",
       "ListMcpResourcesTool",
       "ReadMcpResourceTool",
       "ReadMcpResourceDirTool",

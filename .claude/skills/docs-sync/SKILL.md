@@ -13,7 +13,7 @@ description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/feature
 ### 1. Gather inputs — conversation first, diff as the safety net
 
 - **Conversation**: has this session explicitly discussed or decided something that belongs in a doc — a term, a behavior, a decision — regardless of whether code exists for it yet? This is the primary signal when called directly.
-- **Diff**: everything not yet on the default branch — `git diff dev`, which covers the working tree because `/implement-issue` commits nothing — as a check for anything the conversation didn't call out explicitly. This is the primary signal when called from `/implement-issue`.
+- **Diff**: everything this branch added since it left the default branch — `git diff $(git merge-base dev HEAD)`, which covers the working tree because `/implement-issue` commits nothing, and whose `merge-base` base keeps commits `dev` gained meanwhile out of the branch's own changes. A check for anything the conversation didn't call out explicitly, and the primary signal when called from `/implement-issue`.
 
 Use both when both are available.
 

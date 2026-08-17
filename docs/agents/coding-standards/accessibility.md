@@ -27,8 +27,4 @@ lint nor review checks them per use.
 - **Every state change a user triggers is announced** — loading, empty, and error regions included.
 - **Both Themes meet it.** A surface passes in `standard` and `dark-fantasy` or it does not pass.
 
-## Where it is checked
-
-`/a11y-review [range]` on demand, and automatically as the `a11y` axis of `/verify-branch`. The axis
-runs only where a User reaches the markup — a changed `.tsx` under `src/views/`, `src/features/`,
-`src/entities/`, `src/shared/components/` or `src/app/(frontend)/` — and returns nothing otherwise.
+Which diffs earn the axis is decided by `.claude/bin/review-context.sh`, not restated here.

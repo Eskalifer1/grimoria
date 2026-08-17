@@ -86,6 +86,7 @@ shortstat
 toplevel
 tsbuildinfo
 tsconfig
+typegen
 unpooled
 yarnrc
 

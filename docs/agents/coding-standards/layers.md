@@ -58,8 +58,7 @@ layer may import them. **The list grows only by an explicit decision.**
 
 The composition root for one rendered surface: **pages** (`NotesListPage`) and **shells**
 (`AppShell`, `PublicShell` — `docs/features/site-layout.md`), both re-exported by an `app/` file.
-Shells live here rather than in `features/` (a shell composes several features, which a feature may
-not do) or `shared/` (a shell reads `Role` — domain-bound, not generic).
+**A shell lives here, never in `features/` or `shared/`.**
 
 ## Feature, entity, shared structure
 

@@ -25,9 +25,8 @@ Local discussion is the exception.
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
-done any session that changed behavior, architecture or scope. Drift is a bug. `/implement-issue`
-runs it before the handoff when the branch changed one of those; outside that flow nothing prompts
-for it.
+done any session that changed behavior, architecture or scope — drift is a bug. `/implement-issue`
+runs it at its handoff; nothing else prompts for it.
 
 ## Where to look, by task
 
@@ -49,8 +48,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
   `dark-fantasy.css`.
 - **Changing a token value, or asking why one is what it is**: `design/standard-tokens.md`,
-  `design/dark-fantasy-tokens.md`.
-- **Adding or renaming a design token**: `design/token-contract.md`. Both Themes in one change.
+  `design/dark-fantasy-tokens.md`. **Adding or renaming one**: `design/token-contract.md`, both
+  Themes in one change.
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
@@ -58,13 +57,14 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   grilling one into a spec, picking the next ready child: `/task-flow <issue>`.
 - **Implementing a `ready-for-agent` issue** — branch, test-first, gates, review, handoff:
   `/implement-issue <issue>`.
+- **Making a change whose blast radius is already known** — a mechanical sweep across many files, a
+  rename, a copy fix, a config bump: `/implement-issue-simple [issue]`, which branches, codes, gates
+  and proposes a title with no slices and no judging round.
 - **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` runs the full
   gate, `/checks fast` drops `yarn build` and keeps the rest.
 - **Judging a branch someone else wrote** — gates, a requirement unmet, met differently or met more
   widely than asked, the review axes the diff earns, the acceptance criteria:
   `/verify-branch <issue> <full|recheck>`.
-- **Asking what an agent flow costs, or measuring a change to one** — the per-run ledger, the
-  sandbox, `.claude/bin/e2e-run.sh`: `docs/agents/agent-run-log.md` (#66).
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.

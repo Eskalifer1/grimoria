@@ -74,7 +74,7 @@ never see `number | User`, and never reach for `as` to get past it.
 
 ## Keep types readable
 
-This is a portfolio piece read by people. **Use freely:** `Partial`, `Pick`, `Omit`, `Record`,
+**Use freely:** `Partial`, `Pick`, `Omit`, `Record`,
 `NonNullable`, `Awaited`, `ReturnType`, single-parameter generics. **Justify in a comment or write
 two concrete declarations instead:** conditional types, `infer`, template-literal types, recursive
 types, mapped types with key remapping.

@@ -59,35 +59,17 @@ came back clean on.
 **`GATE: skip` means the branch has not moved since its last green run.** Report
 `full gate: green, inputs unchanged` and go to section 4 without running anything.
 
-**On `GATE: run`, this one command, exactly as written** — every gate in it even after one goes red,
-because one report carrying four failures beats four round trips:
+**On `GATE: run`, this one command:**
 
 ```sh
-for c in check typecheck spellcheck test; do yarn $c > .scratch/checks-$0-$c.log 2>&1 && echo "$c: PASS" || echo "$c: FAIL"; done
+.claude/bin/gate.sh $0 full
 ```
 
-**Run the `package.json` scripts, never the binaries under them** — `yarn typecheck` runs
-`next typegen` first, and Payload's generated types are stale without it. **Running a command twice
-to learn its exit status is the defect this shape exists to avoid.**
+It runs all five gates even after one goes red, records the green fingerprint, and on red prints the
+first 60 lines of every failed log itself. **Read no `.scratch/checks-$0-*.log` back** — the script
+already printed what a `Read` would find, and the logs stay on disk for the caller.
 
-**Only when those four all printed PASS**, add the build:
-
-```sh
-yarn build > .scratch/checks-$0-build.log 2>&1 && echo "build: PASS" || echo "build: FAIL"
-```
-
-**All five green — record the fingerprint**, so the next round and the handoff can skip a gate over a
-tree that did not move:
-
-```sh
-echo "full $(cat .scratch/gate-$0.now)" > .scratch/gate-$0.green
-```
-
-**Leave every `.scratch/checks-$0-*.log` where it is** — the caller reads them after this returns.
-
-**Red stops this skill. Leave `.scratch/gate-$0.green` alone**, read the log of each failed command
-back with the Read tool, and report **the log's first 60 lines, copied** — head, not tail, because
-Biome and `tsc` print the diagnostics first and a bare count last. Judging code that does not
+**Red stops this skill.** Report what the script printed, verbatim. Judging code that does not
 compile wastes both of us.
 
 ## 4. Requirements
@@ -108,15 +90,18 @@ what stands in the code instead, and which of the three kinds it is.
 
 ## 5. Review axes
 
-**`RUN:` in section 1 is the list, and the appendix at the bottom of this file is their full text.**
-Follow each named axis from there. **Open no other standards doc to invent an axis of your own** —
-an axis absent from `RUN:` is one the diff cannot break, and it is reported as skipped with the
-reason section 1 gave.
+**`RUN:` in section 1 is the list, and the appendix at the bottom of this file is either their full
+text or their paths.** Follow each named axis. **Open no other standards doc to invent an axis of
+your own** — an axis absent from `RUN:` is one the diff cannot break, and it is reported as skipped
+with the reason section 1 gave.
 
-**Carry the axes yourself, in sequence, when the diff is ≤ 5 files and ≤ 150 changed lines.** Above
-that, **one `subagent_type: review-axis` per axis, launched in one message** so they run in
-parallel — a single pass holding four rule sets at once starts dropping findings at that size. Hand
-each one the axis file path and the range; it re-reads its own axis.
+**`SPLIT:` in section 1 decides where they run, and it has already counted the diff:**
+
+- **`SPLIT: no` — carry the axes yourself, in sequence,** from the appendix text below.
+- **`SPLIT: yes` — one `subagent_type: review-axis` per axis, all launched in one message** so they
+  run in parallel. A single pass holding four rule sets at once starts dropping findings at that
+  size. Hand each one the axis path the appendix prints and the range; it re-reads its own axis.
+  **The appendix then prints paths and no text, so read nothing from it yourself.**
 
 **Invoking this skill is the request for those subagents.** A standing instruction to spawn none
 unless asked is answered here: the round was asked for by name, and a diff this size judged in one
@@ -151,7 +136,8 @@ account of what you read on the way.
 
 ## Appendix — the axes `RUN:` named
 
-**Below is either the axes themselves or the one file holding them.** A pointer means the set was
-too long to sit inline: read that file once, in full, and judge from it.
+**Below is one of three things**, and it says which: the axes themselves; one file holding them all,
+because the set was too long to sit inline — read it once, in full; or, on `SPLIT: yes`, the axis
+paths alone, which you hand to the subagents and do not open.
 
 !`.claude/bin/review-context.sh $0 $1 axes`

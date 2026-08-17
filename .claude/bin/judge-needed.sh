@@ -10,11 +10,16 @@
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 cd "$root" || exit 0
 
-names=$(git diff --name-only dev 2>/dev/null)
+# The base is where this branch left `dev`, not `dev`'s tip: a plain `git diff dev` counts every
+# commit `dev` gained since as a reversed change belonging to this branch, and the inflated file and
+# line counts below then flip a skip into a round nobody needed.
+base=$(git merge-base dev HEAD 2>/dev/null || echo dev)
+
+names=$(git diff --name-only "$base" 2>/dev/null)
 [ -z "$names" ] && { echo "JUDGE: run — the diff came back empty, which is a broken range, not a clean branch"; exit 0; }
 
 files=$(printf '%s\n' "$names" | grep -c .)
-lines=$(git diff --shortstat dev 2>/dev/null | grep -oE '[0-9]+ (insertion|deletion)' | grep -oE '^[0-9]+' | paste -sd+ - | bc 2>/dev/null)
+lines=$(git diff --shortstat "$base" 2>/dev/null | grep -oE '[0-9]+ (insertion|deletion)' | grep -oE '^[0-9]+' | paste -sd+ - | bc 2>/dev/null)
 : "${lines:=0}"
 
 # Anything outside this set is code an axis can have something to say about.

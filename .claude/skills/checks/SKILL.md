@@ -25,7 +25,7 @@ branches gate at once, and a fixed name has one of them reading the other's fail
 **One command, exactly this:**
 
 ```sh
-mkdir -p .scratch && git diff dev | shasum | cut -d' ' -f1 > .scratch/gate-$1.now && cat .scratch/gate-$1.green 2>/dev/null
+mkdir -p .scratch && git diff $(git merge-base dev HEAD) | shasum | cut -d' ' -f1 > .scratch/gate-$1.now && cat .scratch/gate-$1.green 2>/dev/null
 ```
 
 `.scratch/gate-$1.green` holds two words from the last green run — the level, then the fingerprint.
@@ -34,9 +34,16 @@ mkdir -p .scratch && git diff dev | shasum | cut -d' ' -f1 > .scratch/gate-$1.no
 fingerprint matches **and** the recorded level covers the one asked for — `full` covers both, `fast`
 covers only `fast`. Otherwise run section 2.
 
-**The fingerprint is `git diff dev`, so any edit anywhere in the branch moves it.** A gate is
-skipped only when the tree is byte-identical to the tree that already went green. **A file never
-`git add -N`'d is invisible to it**, and this section will then skip a gate over code it cannot see.
+**The fingerprint is the diff from where this branch left `dev`, so any edit anywhere in the branch
+moves it.** A gate is skipped only when the tree is byte-identical to the tree that already went
+green. **A file never `git add -N`'d is invisible to it**, and this section will then skip a gate
+over code it cannot see.
+
+**The base is `merge-base`, and the command above is exact.** A plain `git diff dev` reads every
+commit `dev` gained since the branch started as a change belonging to the branch, so a teammate's
+merge moves the fingerprint and re-runs a gate that was already green. `dev...HEAD` is not the fix
+either — it resolves to `HEAD` and drops the working tree, which is where a branch mid-flow keeps all
+of its code.
 
 ## 2. Run the gate, in one command
 
