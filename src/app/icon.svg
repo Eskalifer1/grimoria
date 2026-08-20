@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <title>Grimoria</title>
+  <!-- Centerlines copied from design/logo/grimoria-standard.svg; keep them in
+       step. The one icon not stuck with a single ink, so each browser Chrome
+       gets the Theme that belongs to it: `standard`'s teal-700 on light,
+       `dark-fantasy`'s blood-light on dark. See design/logo.md.
+       No double hyphen anywhere in here: it is illegal in an XML comment and
+       browsers drop the whole file. -->
+  <style>
+    svg { color: #0d5a54; }
+    @media (prefers-color-scheme: dark) {
+      svg { color: #ffb4ab; }
+    }
+  </style>
+  <g fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M169.5 69.5 128 28 28 128 128 228 228 128 140 128"/>
+    <path d="M123.5 92.5 88 128 123.5 163.5"/>
+  </g>
+</svg>
