@@ -6,6 +6,7 @@ import { admin } from 'better-auth/plugins';
 import { buildConfig } from 'payload';
 import { betterAuthPlugin } from 'payload-auth/better-auth/plugin';
 
+import { withInviteExpiry } from './collections/admin-invitations';
 import { withProfileFields } from './collections/users';
 import { ROUTES } from './constants/routes';
 import { SESSION_EXPIRES_IN, SESSION_UPDATE_AGE } from './constants/user';
@@ -38,6 +39,12 @@ export default buildConfig({
 
   plugins: [
     betterAuthPlugin({
+      // The login screen mints the first admin's invite itself, and omits the
+      // one field it declares required — see `withInviteExpiry`.
+      adminInvitations: {
+        collectionOverrides: withInviteExpiry,
+      },
+
       users: {
         roles: ['user', 'moderator'],
         adminRoles: ['admin'],

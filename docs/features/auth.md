@@ -33,8 +33,7 @@ client's own `/api/auth/*` traffic.
 
 A session is a row plus one `better-auth.session_token` cookie holding a **signed** token — the
 value from a sign-in response body is the bare token and will not authenticate a request on its
-own. `expiresIn` is 14 days, `updateAge` 1 day, so a User who returns inside two weeks is never
-signed out and there is no refresh code to write.
+own.
 
 ## What a User may do
 
@@ -46,18 +45,17 @@ signed out and there is no refresh code to write.
 | Delete       | self, or an admin                                          |
 | Reach `/cms` | `adminRoles` only                                          |
 
-**`allowedFields` is what stops self-promotion.** It lists `name` and `theme`; `role` is absent, so
-a User PATCHing `{"role":["admin"]}` at their own record gets "You are not allowed to perform this
-action". Adding a self-editable field means adding it there, not only to the collection.
+**`allowedFields` is what stops self-promotion** — a User PATCHing `{"role":["admin"]}` at their own
+record gets "You are not allowed to perform this action". Adding a self-editable field means adding
+it there, not only to the collection.
 
 `read` being self-or-admin is the known gap: showing an author's name on a public Note needs it
 widened, which lands with the first surface that displays one (#5 / Notes).
 
 ## Rate limiting
 
-Better Auth limits `/api/auth/*` itself, in production only, and nothing outside it. Its counters
-default to memory — one per serverless instance, so no limit at all — which is why
-`rateLimit.storage` is `database` and the `rateLimit` collection above is the table it writes.
+Better Auth limits `/api/auth/*` itself, in production only, and nothing outside it. The `rateLimit`
+collection above is the table its counters live in.
 
 ## Registration
 
@@ -101,6 +99,9 @@ them skips it.
   reset screens are the plugin's components and reach the browser through that map.
 - **`BETTER_AUTH_SECRET` is a hard error in production**, not a warning, and rotating it signs
   every live session out.
+- **`withInviteExpiry` keeps a database with no admin able to make one** — without it `/cms` answers
+  400 on a fresh database. Only ever reached before the first admin exists, which is why local work
+  never sees it.
 - `yarn install` prints unmet-peer warnings from `@better-auth/*`; they declare runtime
   dependencies as peers, everything resolves, and adding them to `package.json` would be a lie.
 - **`/cms/signup` answers only to an invite token** from the `admin-invitations` collection, which

@@ -6,6 +6,9 @@ const SESSION_EXPIRES_IN = SECONDS_PER_DAY * 14;
 /** How often using a session pushes its expiry out again. */
 const SESSION_UPDATE_AGE = SECONDS_PER_DAY;
 
+/** How long an admin invite stays usable — `payload-auth`'s own value for one. */
+const ADMIN_INVITE_EXPIRES_IN = SECONDS_PER_DAY * 7;
+
 /** Random tail on a generated profile slug, which is what keeps names unique. */
 const PROFILE_SLUG_SUFFIX_LENGTH = 5;
 
@@ -15,6 +18,7 @@ const PROFILE_SLUG_MAX_BASE_LENGTH = 40;
 const PROFILE_SLUG_MAX_ATTEMPTS = 3;
 
 export {
+  ADMIN_INVITE_EXPIRES_IN,
   PROFILE_SLUG_MAX_ATTEMPTS,
   PROFILE_SLUG_MAX_BASE_LENGTH,
   PROFILE_SLUG_SUFFIX_LENGTH,
