@@ -1,5 +1,13 @@
 {
   "outputStyle": "ELI5",
+  "disableBundledSkills": true,
+  "disableWorkflows": true,
+  "disableRemoteControl": true,
+  "disableClaudeAiConnectors": true,
+  "disableArtifact": true,
+  "env": {
+    "CLAUDE_CODE_DISABLE_BUNDLED_SKILLS": "1"
+  },
   "enabledPlugins": {
     "mattpocock-skills@claude-plugins-official": true
   },
@@ -45,6 +53,7 @@
       "TaskUpdate",
       "EnterPlanMode",
       "ExitPlanMode",
+      "AskUserQuestion",
 
       "Bash(git push *--force*)",
       "Bash(git push *-f *)",

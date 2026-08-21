@@ -30,4 +30,7 @@ updates the README stays `chore:`.
 the commit. Once the user confirms it is done, close the tracking issue — never before that
 confirmation.
 
+**The comment that closes an issue takes the landing shape in `docs/agents/issue-tracker.md`** —
+fifteen lines, American English, no file table and no gate output.
+
 Held by `permissions.deny` in `.claude/settings.json`.

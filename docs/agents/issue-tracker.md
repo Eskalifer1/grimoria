@@ -6,6 +6,28 @@ Use a heredoc for multi-line bodies.
 **When a skill says "publish to the issue tracker"** → create a GitHub issue.
 **When a skill says "fetch the relevant ticket"** → `gh issue view <number> --comments`.
 
+## Comments
+
+**A comment carries what the ticket's body and the repository cannot say on their own** — American
+English, whatever language the conversation ran in.
+
+**Fifteen lines is the ceiling.** Past it, the comment is holding something that belongs in a doc,
+in the spec, or nowhere.
+
+A landing comment has three parts and stops:
+
+```
+Landed in `<sha>`.
+
+<what was decided during the work that the spec did not settle — one line each, or omit>
+
+Known gaps: <what a reader would otherwise expect to work and does not — or omit>
+```
+
+**Leave out what the reader can already see**: a file-by-file table (the diff has it), gate output
+(the run has it), the acceptance criteria restated (the body has them), and any account of how the
+work proceeded. A decision is worth a line when someone would otherwise reverse it; the rest is not.
+
 ## PRs as a request surface: no
 
 `/triage` reads this flag; flip it to `yes` if external PRs ever become feature requests.

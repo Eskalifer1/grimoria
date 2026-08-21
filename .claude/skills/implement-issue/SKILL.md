@@ -139,7 +139,7 @@ review axes the diff earns, and a verdict per acceptance criterion.
 
 **`/verify-branch $0 recheck` only when step 6 changed code**, and never a third round. It re-runs
 the gate and the axes that found something. What is still open goes into an issue comment as known
-debt.
+debt, in the shape `docs/agents/issue-tracker.md` fixes.
 
 **A round returns a terse report.** **Append it to `.scratch/$0.md` as it arrives.**
 
