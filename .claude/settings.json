@@ -74,7 +74,6 @@
       "Bash(vercel *--prod*)",
 
       "Read(./.env)",
-      "Read(./.env.*)",
       "Read(./secrets/**)",
       "Read(**/*.pem)"
     ]

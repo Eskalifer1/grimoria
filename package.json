@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:migrate": "payload migrate && next build",
+    "migrate:verify-rollback": "./scripts/verify-migration-rollback.sh",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "payload": "node scripts/patchPayloadAuth.mjs && payload",
@@ -59,5 +61,8 @@
     "typescript": "^7",
     "vitest": "^4.1.10"
   },
-  "packageManager": "yarn@4.18.0"
+  "packageManager": "yarn@4.18.0",
+  "engines": {
+    "node": "24.x"
+  }
 }

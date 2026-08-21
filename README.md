@@ -7,7 +7,7 @@ wizard's grimoire of spells.
 
 ## Getting started
 
-Requires Node.js 20+. Yarn 4 is pinned via `packageManager` and a committed
+Requires Node.js 24 (`engines`). Yarn 4 is pinned via `packageManager` and a committed
 release in `.yarn/releases`, so no global Yarn install is needed beyond a
 launcher (`yarn` 1.x or Corepack).
 
@@ -29,10 +29,9 @@ carrying `-pooler`), `DATABASE_URL_UNPOOLED` the direct one. Neon's pooler runs 
 transaction mode, which cannot run schema work, so `src/payload.config.ts` sends dev pushes and
 `payload migrate` down the direct string and request traffic down the pooled one.
 
-The schema is not migrated yet: in development Payload pushes the config's shape straight into the
-`dev` branch on boot, which is its default. Production migrations land with the first real
-collection (#32) — until then production has nothing to point a deploy at, and the `main` branch
-exists only so its `DATABASE_URL` can be set on Vercel when a deploy is first configured.
+Development pushes the config's shape into `dev` on boot. Production is migrated instead: every
+schema change is committed to `src/migrations`, and Vercel's build runs them against `main` first.
+`docs/database-migrations.md` is the workflow.
 
 The app runs at http://localhost:3000, with Payload's admin at `/cms` — the only admin there
 is, for the maintainer's own use (ADR-0005).
@@ -42,7 +41,9 @@ is, for the maintainer's own use (ADR-0005).
 | Script              | What it does                                            |
 | ------------------- | ------------------------------------------------------- |
 | `yarn dev`          | Development server                                      |
-| `yarn build`        | Production build                                        |
+| `yarn build`        | Production build — no database work                     |
+| `yarn build:migrate` | What Vercel runs: migrate, then build                  |
+| `yarn migrate:verify-rollback` | Apply/roll back/apply against a throwaway branch |
 | `yarn start`        | Serve the production build                              |
 | `yarn typecheck`    | Next route typegen, then `tsc --noEmit`                 |
 | `yarn lint`         | Biome linter only                                       |

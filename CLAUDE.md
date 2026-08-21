@@ -70,6 +70,9 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
 - **Committing, commit messages, closing an issue**: `docs/git-workflow.md`. The user commits,
   never you.
+- **Changing a collection** — a field, collection, index or relationship added, removed or renamed:
+  generate the migration in the same change. `docs/database-migrations.md` also covers proving a
+  rollback and what the production deploy does on its own.
 - **Writing or running tests, choosing a test layer, or touching CI**: `docs/testing.md`.
 - **Reviewing a diff, or judging whether a review finding is legitimate**:
   `<standards>/review-boundaries.md`.
