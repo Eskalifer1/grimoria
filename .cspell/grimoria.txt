@@ -82,16 +82,19 @@ nodeLinker
 noopener
 noreferrer
 opengraph
+setaf
 shortstat
 toplevel
 tsbuildinfo
 tsconfig
 typegen
 unpooled
+wslview
 yarnrc
 
 # --- Names ---
 Eskalifer
+Leonxlnx
 mattpocock
 
 # --- General English the bundled dictionaries happen to miss ---
