@@ -2,7 +2,9 @@
 
 Reached from `SKILL.md` when the issue has neither `epic` nor `ready-for-agent`. **No code.**
 
-1. `/mattpocock-skills:grilling` on the ticket.
+1. `/mattpocock-skills:grilling` on the ticket. **Ask the grilling questions in Ukrainian** — it is
+   local discussion. Everything written down stays American English: the spec, the issue bodies,
+   the labels, the titles.
 2. Read the upstream `to-spec` body and follow it, with one departure: **it publishes into this
    issue, not a new one.** The spec replaces the body; what the grilling dropped is deleted.
 3. `gh issue edit <issue> --add-label ready-for-agent`, then stop.
