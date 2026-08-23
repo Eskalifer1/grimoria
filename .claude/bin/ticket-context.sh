@@ -5,7 +5,9 @@
 #
 # Usage: ticket-context.sh <issue>
 
-issue="${1:-0}"
+# A pasted issue URL reaches here whole. `gh issue view` accepts one, but the branch slug below and
+# `gh api .../issues/<n>/...` do not — so the number is taken once, here.
+issue=$(printf '%s' "${1:-0}" | sed 's#.*/##')
 root="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 cd "$root" || exit 0
 
@@ -39,7 +41,7 @@ for s in problem solution "user stor" implementation testing acceptance; do
 done
 if [ -n "$missing" ]; then
   echo "SPEC: missing —$missing"
-  echo "A label with no spec goes back to /task-flow. Stop here and say so."
+  echo "A label with no spec goes back to /task-flow $issue. Stop here and say so."
 else
   echo "SPEC: ok — problem, solution, user stories, implementation, testing and acceptance all present"
 fi
