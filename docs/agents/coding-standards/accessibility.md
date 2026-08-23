@@ -25,6 +25,9 @@ lint nor review checks them per use.
 - **Every action is reachable and operable from the keyboard alone**, in the order it reads.
 - **Every interactive element and every image resolves to a name** a screen reader can speak.
 - **Every state change a user triggers is announced** — loading, empty, and error regions included.
+- **A control carries its own state in ARIA**: a rejected input is `aria-invalid` and points at its
+  message with `aria-describedby`; a control waiting on a request is `aria-busy`. Visual styling and
+  a disabled attribute say nothing to a screen reader (WCAG 2.2 AA, 4.1.2).
 - **Both Themes meet it.** A surface passes in `standard` and `dark-fantasy` or it does not pass.
 
 Which diffs earn the axis is decided by `.claude/bin/review-context.sh`, not restated here.

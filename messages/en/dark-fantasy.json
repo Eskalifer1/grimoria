@@ -1,4 +1,12 @@
 {
+  "actionError": {
+    "conflict": "Another hand rewrote this page first. Read it anew.",
+    "forbidden": "This rite is sealed against you.",
+    "invalidInput": "The words will not hold. Mend them and try again.",
+    "notFound": "Nothing of the kind remains here.",
+    "unauthenticated": "Only the named may work this. Sign in.",
+    "unexpected": "The working faltered. Attempt it again."
+  },
   "common": {
     "appName": "Grimoria",
     "tagline": "A grimoire binding to memory every spell you have ever learned."
@@ -7,5 +15,11 @@
     "createNote": "Inscribe a spell",
     "empty": "No spells are bound to your grimoire yet.",
     "title": "My grimoire"
+  },
+  "profilePage": {
+    "dismiss": "Banish the omen",
+    "nameLabel": "Bound name",
+    "save": "Bind",
+    "title": "My sigil"
   }
 }

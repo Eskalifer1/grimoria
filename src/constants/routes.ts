@@ -10,8 +10,22 @@
 const ROUTES = {
   HOME: '/',
 
+  /** The signed-in User's own profile screen. */
+  PROFILE: '/profile',
+
   /** Payload's admin. Passed to `routes.admin`, which is what mounts it. */
   ADMIN: '/cms',
 } as const;
 
-export { ROUTES };
+/**
+ * The same routes as Next matches them internally, with their dynamic segments
+ * intact. `revalidatePath` takes these, never a `ROUTES` value: every page sits
+ * under `[locale]`, so revalidating `/profile` matches nothing and leaves the
+ * screen reading stale data. One entry per route that a write invalidates.
+ */
+const ROUTE_PATTERNS = {
+  /** `ROUTES.PROFILE` under its locale segment — every locale at once. */
+  PROFILE: '/[locale]/profile',
+} as const;
+
+export { ROUTE_PATTERNS, ROUTES };

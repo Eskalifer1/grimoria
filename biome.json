@@ -226,7 +226,11 @@
                 "patterns": [
                   {
                     "group": ["@/app/**", "@/views/**"],
-                    "message": "views/ may import features/, entities/ and shared/ only, and never another screen module \u2014 see docs/agents/coding-standards/layers.md."
+                    "message": "views/ may import features/, entities/, api/ and shared/ only, and never another screen module \u2014 see docs/agents/coding-standards/layers.md."
+                  },
+                  {
+                    "group": ["payload", "payload/**", "@payload-config"],
+                    "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -247,6 +251,10 @@
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**"],
                     "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ \u2014 see docs/agents/coding-standards/layers.md."
+                  },
+                  {
+                    "group": ["payload", "payload/**", "@payload-config"],
+                    "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -267,6 +275,10 @@
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
                     "message": "entities/ may import shared/ only, and never another entity \u2014 see docs/agents/coding-standards/layers.md."
+                  },
+                  {
+                    "group": ["payload", "payload/**", "@payload-config"],
+                    "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
@@ -285,8 +297,71 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
+                    "group": [
+                      "@/app/**",
+                      "@/views/**",
+                      "@/features/**",
+                      "@/entities/**",
+                      "@/api/**"
+                    ],
                     "message": "shared/ never reaches up. Domain-bound code belongs in entities/ \u2014 see docs/agents/coding-standards/layers.md."
+                  },
+                  {
+                    "group": ["payload", "payload/**", "@payload-config"],
+                    "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/api/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "@/app/**",
+                      "@/views/**",
+                      "@/features/**",
+                      "@/entities/**",
+                      "@/api/**",
+                      "!@/api/core/**"
+                    ],
+                    "message": "api/ may import shared/ and src/constants/ only, and never another api/ domain \u2014 see docs/agents/coding-standards/layers.md."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/app/**",
+        "!src/app/(payload)/**",
+        "!src/app/api/auth/**",
+        "src/proxy.ts",
+        "src/instrumentation.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["payload", "payload/**", "@payload-config"],
+                    "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }

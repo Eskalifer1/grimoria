@@ -28,6 +28,13 @@ Run `/docs-sync` once a conversation settles something worth documenting, and ag
 done any session that changed behavior, architecture or scope — drift is a bug. `/implement-issue`
 runs it at its handoff; nothing else prompts for it.
 
+## A correction becomes a standard
+
+When the user rejects **how** something was written rather than a fact, run `/learn` in the same
+turn as the fix — it judges whether the point generalizes, finds the doc that owns it, and proposes
+the lines. **A correction acted on and not written down is one the next session repeats**, so the
+judgment is reported either way: recorded in `<standards>/*.md`, or left local and why.
+
 ## Where to look, by task
 
 All paths below are from the repo root. `<standards>` is `docs/agents/coding-standards/`.
@@ -36,6 +43,9 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   imports, comments: `<standards>/layers.md` (lint-enforced), `routing.md`, `naming.md`,
   `imports.md`, `documentation.md`.
 - **Writing a type, or reaching for `any`, `as`, `!`, `@ts-ignore`**: `<standards>/typescript.md`.
+- **Writing something a second caller will reuse, repeating a check, or typing a bare string a
+  constant should hold** — wrappers, result unions, shared error codes, documented options:
+  `<standards>/abstraction.md`.
 - **Building a React component** — server/client boundary, state, splitting, loading and error
   states: `<standards>/components.md`.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
@@ -52,6 +62,8 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
   Themes in one change.
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
+- **Reading data or writing it back** — where a Payload query lives, what a Server Action returns,
+  optimistic or blocking, rollback on failure, revalidation: `docs/features/data-access.md`.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
 - **Starting work on a tracker issue, unsure which mode it needs** — breaking down an epic,
   grilling one into a spec, picking the next ready child: `/task-flow <issue>`.

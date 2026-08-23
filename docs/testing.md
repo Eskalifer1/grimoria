@@ -22,6 +22,10 @@ decision worth testing, extract the decision — `resolveTheme()` reads cookies 
 **Payload access control (`Role`, `Visibility`) runs against real Postgres and is never mocked** —
 the pattern is #38, and the `integration` project is declared and empty until it lands.
 
+**A Server Action is tested at the `unit` layer with its seams mocked** — `@/api/core/session`,
+`@/api/core/payloadClient` and `next/cache`. `vitest.config.ts` aliases `server-only` to its empty
+build, or importing the action throws before a test runs.
+
 **An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
 by e2e (#39); the pure functions it calls are covered by unit.
 

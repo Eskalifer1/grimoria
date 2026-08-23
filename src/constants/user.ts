@@ -14,6 +14,9 @@ const PROFILE_SLUG_SUFFIX_LENGTH = 5;
 
 const PROFILE_SLUG_MAX_BASE_LENGTH = 40;
 
+/** Longest display name a User may save, measured after trimming. */
+const USER_NAME_MAX_LENGTH = 60;
+
 /** How many suffixes a sign-up tries before letting the unique index decide. */
 const PROFILE_SLUG_MAX_ATTEMPTS = 3;
 
@@ -24,4 +27,5 @@ export {
   PROFILE_SLUG_SUFFIX_LENGTH,
   SESSION_EXPIRES_IN,
   SESSION_UPDATE_AGE,
+  USER_NAME_MAX_LENGTH,
 };

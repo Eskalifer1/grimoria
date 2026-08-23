@@ -1,4 +1,12 @@
 {
+  "actionError": {
+    "conflict": "That change clashed with another. Reload and try again.",
+    "forbidden": "You don't have access to do that.",
+    "invalidInput": "Check the highlighted field and try again.",
+    "notFound": "That no longer exists.",
+    "unauthenticated": "Sign in to continue.",
+    "unexpected": "Something went wrong. Try again."
+  },
   "common": {
     "appName": "Grimoria",
     "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
@@ -7,5 +15,11 @@
     "createNote": "Create a note",
     "empty": "You haven't written anything down yet.",
     "title": "My notes"
+  },
+  "profilePage": {
+    "dismiss": "Dismiss error",
+    "nameLabel": "Display name",
+    "save": "Save",
+    "title": "My profile"
   }
 }

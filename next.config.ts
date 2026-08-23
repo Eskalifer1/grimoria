@@ -4,6 +4,11 @@ import { withPayload } from '@payloadcms/next/withPayload';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
+  // Memoizes components and hooks at build time, so a value or callback is not
+  // rebuilt unless what it is made of changed. Stable by default in Next 16; off
+  // by default only because it runs through Babel and costs build time.
+  reactCompiler: true,
+
   experimental: {
     // TypeScript 7 ships no Compiler API, which is what Next normally calls to
     // type-check a build. This makes it shell out to the `tsc` binary instead.

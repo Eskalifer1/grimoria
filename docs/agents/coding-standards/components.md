@@ -37,8 +37,7 @@ layer boundary and the client boundary at once.
 a DAL, anything reading `process.env` — starts with `import 'server-only'`, so a client import
 fails the build by name instead of shipping the module to the browser. Payload is embedded in this
 same app (ADR-0005), so a database read sits behind the same `@/` alias as a button; the package is
-what makes that mistake loud. `actions/` files need neither. The packages land with the first
-server module that needs them, in #75.
+what makes that mistake loud. A `"use server"` file needs neither.
 
 ## State
 
@@ -58,9 +57,14 @@ pieces of state in step means one is derived, and the fix is to delete it — `u
 synchronizing with something outside React, with a cleanup. Machine-enforced:
 `correctness/useHookAtTopLevel`, `correctness/useExhaustiveDependencies`.
 
-**Memoization is added against a measurement**, not by default, and the comment saying why is the
-point. **Refs point down, never up** — a ref handing data back to a parent is state belonging at
-rung 2.
+**The React Compiler memoizes for us** — `reactCompiler: true` in `next.config.ts`, and the
+`component` project in `vitest.config.ts` runs tests through it so a test asserts what ships. A
+component or hook written plainly comes out memoized, so `useMemo`, `useCallback` and `memo` are not
+written by hand; one added anyway is added **against a measurement**, and the comment saying why is
+the point. **The compiler skips what it cannot lower, silently** — a default in a destructured
+parameter (`{ compare = Object.is }`) costs the whole function its memoization, so default in the
+body instead.
+**Refs point down, never up** — a ref handing data back to a parent is state belonging at rung 2.
 
 ## When a component grows
 
