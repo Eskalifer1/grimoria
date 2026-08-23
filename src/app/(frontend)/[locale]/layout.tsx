@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import {
   Barlow,
   JetBrains_Mono,
@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation';
 
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 
+import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
 import { cn } from '@/shared/lib/cn';
@@ -54,8 +55,32 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Grimoria',
-  description: "A personal knowledge base for saving and rediscovering things you've learned.",
+  // `opengraph-image.jpg` sits beside this file, and Open Graph needs absolute
+  // URLs; without a base Next resolves it against localhost and the card 404s
+  // wherever the link is actually shared.
+  metadataBase: new URL(process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'),
+  title: APP_NAME,
+  description: APP_DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    siteName: APP_NAME,
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+  },
+  // Next mirrors the `opengraph-image` file into `twitter:image`, so a second
+  // copy of the same card would only add bytes. This picks the large layout.
+  twitter: { card: 'summary_large_image' },
+  // Without this an iOS shortcut opens in Safari Chrome rather than standalone.
+  appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
+};
+
+// The browser Chrome around the page, which `manifest.ts` cannot reach — that
+// one is read at install time only. Both Themes' `--surface-page`.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fcfcfe' },
+    { media: '(prefers-color-scheme: dark)', color: '#171614' },
+  ],
 };
 
 export default async function LocaleLayout({ children, params }: LayoutProps<'/[locale]'>) {
