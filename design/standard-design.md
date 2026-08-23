@@ -9,11 +9,6 @@ is a note, and everything the interface says is said plainly. It is a single lig
 there is no dark sub-variant of `standard` and no light sub-variant of `dark-fantasy`, because
 `Theme` is one axis with two values and each value is one complete look.
 
-**On the stated direction.** The design epic places `standard` in the Linear / Raycast /
-Vercel-Dashboard family; what is settled here is warmer, rounder and closer to a modern
-productivity product, keeping one strong accent color, monospace metadata and generous negative
-space. **The epic gets corrected rather than this document bent back to it.**
-
 ## Contents
 
 - One material, many depths
@@ -34,9 +29,7 @@ and its craft is making that band read as depth rather than fog.
 
 Because there is one material, **the note body needs no separate surface**: the reading surface
 is the same white as everything else, and long-form reading is protected by the reading face,
-measure, leading and contrast rather than by a change of material. This is the structural
-difference between the themes, and why a component specified once here is specified twice in
-`dark-fantasy`.
+measure, leading and contrast rather than by a change of material.
 
 ## Color
 
@@ -95,8 +88,7 @@ A **geometric sans** carries both display and interface, separated by weight and
 than a second family. Heavy and large it is display — page titles, card titles, the active
 navigation label — and its roundness there is a large part of the theme's character; at reading
 weight the same family sets body copy, form labels and buttons, where it is meant to be
-unremarkable. One family doing both keeps the interface from sounding like two products
-stapled together.
+unremarkable.
 
 A **monospace** for all metadata: dates, counts, tags, sidebar section labels. This is the
 theme's one deliberately technical note, and what keeps a soft, rounded design from reading as
@@ -135,10 +127,6 @@ needs and columns fill independently, because an even grid of equal cards is wha
 app look like a template.
 
 **Empty states** carry one plain line explaining what to do, and one action.
-
-The reference images beside this document are working files — read them for material and
-atmosphere only. What in them is not canonical for structure is
-`docs/features/site-layout.md`.
 
 ## What this design is not
 

@@ -31,8 +31,7 @@ Near-black neutral-warm grays, cool light, volumetric depth, things emerging fro
 **The Page** is light vellum — warm cream, aged, faintly fibrous — holding the note body and
 nothing else. Dark ink on warm paper, the strongest text contrast in the product.
 
-The Page exists because **long-form reading must never be compromised by theme decoration** — a
-product requirement, not a preference. It is a physical object lying above the dark field: it
+The Page exists because **long-form reading must never be compromised by theme decoration**. It is a physical object lying above the dark field: it
 has weight, casts a soft shadow, and its corner is cut rather than rounded.
 
 ## Light and ink — the accent rule
@@ -75,8 +74,7 @@ largest cause of a flat interface.
 floating on identical drop shadows. The Page is the deliberate exception: a real object casting
 a genuine shadow.
 
-**The Page emits.** Its warm light blooms onto the dark Chrome around it. A cream rectangle
-that does not spill light reads as a notebook page, not an illuminated one.
+**The Page emits.** Its warm light blooms onto the dark Chrome around it.
 
 **Fine grain lies over everything**, with a coarser paper tooth on vellum only. Nothing is pure
 black or white; every extreme is tinted. The viewport carries a vignette, so the screen has a
@@ -109,10 +107,8 @@ share, so switching theme never changes what long-form reading feels like; the c
 is `token-contract.md`. A **monospace** carries code, shared for the same reason.
 
 **Metadata is not monospace here** — breadcrumbs, tags, dates, counts and section labels are the
-interface sans, small, in capitals, widely tracked. This is the one place the two themes voice
-the same role differently, deliberately: a monospace label would read as machinery in a theme
-built out of ink and light, where `standard` uses it precisely because that technical note
-keeps it serious.
+interface sans, small, in capitals, widely tracked — the one place the two Themes voice the same
+role differently.
 
 ## Surfaces and structure
 
@@ -125,8 +121,7 @@ and a faint warm wash, not a solid fill — light is how this theme says _here_.
 nearest the viewer: slightly lighter than the field, lit-edged, and content passes beside it
 through haze rather than stopping at a rule.
 
-Collapsed to an icon rail the rows lose labels and keep their lit marking, because a rail that
-cannot show the active area is a dead strip of icons. As a drawer it is the same Chrome brought
+Collapsed to an icon rail the rows lose labels and keep their lit marking. As a drawer it is the same Chrome brought
 forward, its edge lit harder against the dimmed field. The thin bar that opens it carries the
 burger and the brand mark and is the shallowest plane in the theme.
 

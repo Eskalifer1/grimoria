@@ -34,8 +34,7 @@ timed any other way escapes that switch and leaves the preference unhonored.
    one Theme and will be wrong in the other.
 
 **Alpha is `color-mix(in srgb, var(--primitive) N%, transparent)`**, never a hand-written
-`rgba()` restating the primitive's channels — a copied `rgba(196,169,253,.35)` is a second
-violet that nothing links to the first, and it will not follow when the first changes.
+`rgba()` restating the primitive's channels.
 
 **The check:** no tier-2 declaration contains `#`, `rgb(` or `rgba(`.
 
@@ -47,10 +46,6 @@ Both Themes have exactly two accents with the same two roles. Only the hues diff
 |---|---|---|---|
 | **Action** | brand, primary action, active state, focus | deep teal | violet — _the light_ |
 | **Content** | emphasis inside what the User wrote | violet | red — _the ink_ |
-
-"Red never glows, violet never prints" is this table read in `dark-fantasy`'s material: the
-action accent emits, the content accent is printed. `standard` obeys the same split without the
-atmosphere, which is why one contract serves both.
 
 **An accent never crosses roles.** A content accent carrying a button, or an action accent
 tinting a code block, breaks both Themes at once.
@@ -95,11 +90,6 @@ Most names mean what they say. These carry a decision:
 **Every gap, pad and margin is a multiple of 4px**, and this is the one group whose _values_ are
 identical in both Themes rather than just its names, which is why it is named here and in
 neither value document.
-
-Rhythm is structural, not thematic: a Theme changes what a surface is made of, never how far
-apart two things sit. The Themes still feel different in density because they draw from
-different parts of the same scale — `standard` reaches for the wide end, `dark-fantasy` is
-generous vertically and tight horizontally — but neither invents a value the other lacks.
 
 **There is no spacing token and none is to be added.** Tailwind's utilities already _are_ this
 scale, so a `--space-6` would be a second copy of a value the framework holds. Anything not a

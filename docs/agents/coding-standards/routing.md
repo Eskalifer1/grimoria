@@ -33,7 +33,8 @@ Payload's.
 
 `(payload)` mounts `/cms` (Payload's admin, the only admin there is — ADR-0005), `/api/*` (REST, on
 a catch-all) and `/api/graphql`. **`/api/*` belongs to Payload** — a vendor default, not an
-architectural rule, so it says nothing about how our mutations are written (open in #49/#61). Our
+architectural rule, so it says nothing about how our mutations are written
+(`docs/features/data-access.md`). Our
 own handler under `/api` would collide with that catch-all; the escape hatch is
 `routes.api: '/api/payload'`.
 

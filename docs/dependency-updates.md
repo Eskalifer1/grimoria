@@ -17,10 +17,6 @@ three and open individual PRs as soon as an advisory lands.
 `major` updates are deliberately outside the npm group, so each arrives as its own PR and
 actually gets read.
 
-**Why**: the default (`weekly`, ungrouped) produces several PRs a week on a solo project. The
-failure mode is not the noise — it is that the noise gets Dependabot switched off entirely,
-taking the security half down with it.
-
 Actions group all update types together, majors included: an action major is usually a tag bump
 (`actions/checkout@v5`), not a migration.
 
@@ -28,9 +24,7 @@ Actions group all update types together, majors included: an action major is usu
 
 npm updates wait 7 days after release, 14 for majors.
 
-**Why**: Yarn quarantines npm releases from the last few days (CLAUDE.md, "Tooling"). Without the
-wait, Dependabot could open a PR for a version `yarn install` then refuses to resolve — a red PR
-caused entirely by timing. Cooldown does not apply to security updates.
+Cooldown does not apply to security updates.
 
 ## Biome bumps
 

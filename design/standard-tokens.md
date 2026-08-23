@@ -20,20 +20,11 @@ step is reserved: `--teal-400` is the **live signal only** (selected edge, unrea
 ring), the one color permitted to feel electric.
 
 **Violet is the content accent and never carries an action.** It belongs to what the User wrote:
-code surfaces, emphasis inside a Note, tags. That restriction is the whole point of having it,
-so violet has **no interactive states** — hover, active and disabled do not apply. An answer,
-not an omission.
-
-**Ink is a purple-black, not a blue one** — that warmth keeps a title from reading cold beside
-the teal. **The field is never pure white**, so white panels read as brighter than their
-surroundings; that single relationship does most of the depth work in a light UI.
+code surfaces, emphasis inside a Note, tags. Violet has **no interactive states** — hover, active
+and disabled do not apply.
 
 `--teal-100` and `--violet-100` are used directly rather than through a semantic name, filling
 brand and content chips.
-
-**The Page tokens resolve to ordinary paper**, because this Theme has one material. They still
-exist, and components rendering Note content read only them — that is what lets the same
-component sit on `dark-fantasy`'s vellum sheet without knowing it moved.
 
 ### The one contrast fix
 
@@ -60,20 +51,17 @@ not perceivable at these durations. The token exists because `dark-fantasy` genu
 ## Elevation
 
 **Shadow lifts here, and there is no glow** — `--glow-*` are `none`, the mirror of
-`dark-fantasy`'s `--shadow-card: none`. Neither Theme has a missing declaration.
+`dark-fantasy`'s `--shadow-card: none`.
 
 Every shadow is the ink at a low percentage rather than a hand-mixed gray, so the whole set
-follows if the ink is retuned. **Different elevations get genuinely different shadows** — a
-card, a popover and a modal must not share one. Every surface is opaque, so the blur tokens are
-`0`.
+follows if the ink is retuned. Every surface is opaque, so the blur tokens are `0`.
 
 `--surface-inverse` is this Theme's near-black, carrying tooltips and toasts — the only place
 `standard` sets light text on a dark surface, and it exists so the Theme can do that at all.
 
 ## Radii and motion
 
-Radii are generous and consistent, and the softness is the point: **round where `dark-fantasy`
-is cut**. Hover is `--dur-fast` on color and `--dur` on shadow.
+Radii are generous and consistent. Hover is `--dur-fast` on color and `--dur` on shadow.
 
 ## Typography
 

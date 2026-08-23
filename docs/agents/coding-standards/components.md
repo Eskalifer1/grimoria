@@ -30,14 +30,12 @@ larger and later.
 
 **Server data reaches a client leaf through a slot.** An interactive wrapper takes `children` or a
 `ReactNode` prop, so React renders the content on the server and the data-fetching module never
-joins the client graph — the same move that keeps features from importing each other, holding the
-layer boundary and the client boundary at once.
+joins the client graph.
 
 **`server-only` and `client-only`.** A module that must never reach the browser — Local API reads,
 a DAL, anything reading `process.env` — starts with `import 'server-only'`, so a client import
-fails the build by name instead of shipping the module to the browser. Payload is embedded in this
-same app (ADR-0005), so a database read sits behind the same `@/` alias as a button; the package is
-what makes that mistake loud. A `"use server"` file needs neither.
+fails the build by name instead of shipping the module to the browser. A `"use server"` file needs
+neither.
 
 ## State
 
@@ -49,8 +47,9 @@ Climb only when the rung below stops working.
    sort, pagination, an open detail panel. Write with `router.replace(..., { scroll: false })` so
    entries do not stack. Which library manages URL state is decided against a screen with real
    filters (#4); today the native hooks are the whole answer.
-4. **Server cache** — anything mirroring Postgres. Not component state; a cached read with its own
-   invalidation (#62).
+4. **Server cache** — anything mirroring Postgres. Not component state; a read on the server and a
+   write through a Server Action, `docs/features/data-access.md`. Revalidation becomes tag-based
+   with Cache Components (#95).
 
 **Derived values are computed during render, never stored.** Reaching for `useEffect` to keep two
 pieces of state in step means one is derived, and the fix is to delete it — `useEffect` is for
@@ -60,10 +59,10 @@ synchronizing with something outside React, with a cleanup. Machine-enforced:
 **The React Compiler memoizes for us** — `reactCompiler: true` in `next.config.ts`, and the
 `component` project in `vitest.config.ts` runs tests through it so a test asserts what ships. A
 component or hook written plainly comes out memoized, so `useMemo`, `useCallback` and `memo` are not
-written by hand; one added anyway is added **against a measurement**, and the comment saying why is
-the point. **The compiler skips what it cannot lower, silently** — a default in a destructured
-parameter (`{ compare = Object.is }`) costs the whole function its memoization, so default in the
-body instead.
+written by hand; one added anyway is added **against a measurement**. **The compiler skips what it
+cannot lower, silently** — a default in a destructured parameter (`{ compare = Object.is }`) costs
+the whole function its memoization, so default in the body instead.
+
 **Refs point down, never up** — a ref handing data back to a parent is state belonging at rung 2.
 
 ## When a component grows

@@ -30,14 +30,13 @@ runs it at its handoff; nothing else prompts for it.
 
 ## A correction becomes a standard
 
-When the user rejects **how** something was written rather than a fact, run `/learn` in the same
-turn as the fix — it judges whether the point generalizes, finds the doc that owns it, and proposes
-the lines. **A correction acted on and not written down is one the next session repeats**, so the
-judgment is reported either way: recorded in `<standards>/*.md`, or left local and why.
+Run `/learn` in the same turn as the fix, and **report its judgment either way** — recorded in
+`<standards>/*.md`, or left local and why. A correction acted on and not written down is one the
+next session repeats.
 
 ## Where to look, by task
 
-All paths below are from the repo root. `<standards>` is `docs/agents/coding-standards/`.
+`<standards>` is `docs/agents/coding-standards/`.
 
 - **Creating a file under `src/`, or deciding where code belongs** — layers, folders, file names,
   imports, comments: `<standards>/layers.md` (lint-enforced), `routing.md`, `naming.md`,
@@ -65,18 +64,6 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Reading data or writing it back** — where a Payload query lives, what a Server Action returns,
   optimistic or blocking, rollback on failure, revalidation: `docs/features/data-access.md`.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
-- **Starting work on a tracker issue, unsure which mode it needs** — breaking down an epic,
-  grilling one into a spec, picking the next ready child: `/task-flow <issue>`.
-- **Implementing a `ready-for-agent` issue** — branch, test-first, gates, review, handoff:
-  `/implement-issue <issue>`.
-- **Making a change whose blast radius is already known** — a mechanical sweep across many files, a
-  rename, a copy fix, a config bump: `/implement-issue-simple [issue]`, which branches, codes, gates
-  and proposes a title with no slices and no judging round.
-- **Checking where a branch stands — lint, types, spelling, tests, build**: `/checks` runs the full
-  gate, `/checks fast` drops `yarn build` and keeps the rest.
-- **Judging a branch someone else wrote** — gates, a requirement unmet, met differently or met more
-  widely than asked, the review axes the diff earns, the acceptance criteria:
-  `/verify-branch <issue> <full|recheck>`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
 - **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
@@ -89,12 +76,7 @@ All paths below are from the repo root. `<standards>` is `docs/agents/coding-sta
 - **Reviewing a diff, or judging whether a review finding is legitimate**:
   `<standards>/review-boundaries.md`.
 - **Keyboard reach, screen-reader names, focus order, ARIA state, or what a11y level we hold**:
-  `<standards>/accessibility.md`; to review a branch against it, `/a11y-review [range]`.
+  `<standards>/accessibility.md`.
 - **Writing a collection's access control, a route handler, a Server Action, or anything reading
-  User input** — who may do what: `docs/features/auth.md`; to review a branch for access holes,
-  IDOR, unvalidated input, racing writes, leaked secrets or injection:
-  `/payload-security-review [range]`.
-- **Hunting a latent correctness bug on a branch** — an edge input, a floating `Promise`, a
-  swallowed failure, state that disagrees with itself, `as` or `!` standing in for a check, the
-  server/client boundary, cache and revalidation, Payload hook ordering: `/bug-hunt-review [range]`.
+  User input** — who may do what: `docs/features/auth.md`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.

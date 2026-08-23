@@ -6,7 +6,6 @@ CSS cannot say: why a value is what it is, and which are not free to change. Its
 
 ## Contents
 
-- Provenance
 - Palette roles
 - Interactive states
 - Elevation and light
@@ -14,26 +13,12 @@ CSS cannot say: why a value is what it is, and which are not free to change. Its
 - Typography
 - Deliberately not settled
 
-## Provenance
-
-Only the red is transcribed from a Claude Design run; everything else was **derived** here,
-because that run built a single-accent crimson system in which red is also the light — the
-inverse of this Theme's accent rule.
-
-The neutral ramp keeps the run's **lightness steps** but not its **temperature**: its voids lean
-cool and violet, where the field must be neutral and warm-leaning so violet reads as light on a
-neutral surface rather than a tinted background.
-
-The violet family and the vellum sheet have **no counterpart in that bundle**. What was derived is
-reasoned and contrast-checked rather than sampled, and settled — but has never been seen at full
-size. The first `dark-fantasy` render is the moment to look again.
-
 ## Palette roles
 
 **Voids are warm-leaning near-blacks**, never pure black and never violet-black. `--void-black`
 is the one primitive that never paints a surface — it exists because shadows here are black
 rather than tinted, and a shadow needs something to derive from. The darkest thing a User sees
-is `--void-abyss`. **No two adjacent planes share a brightness.**
+is `--void-abyss`.
 
 **Violet is the action accent — the light.** It emits and never prints: active navigation,
 focus, halos, emitting edges, primary action. Same hue family as `standard`'s content accent,
@@ -41,8 +26,7 @@ deliberately — one brand, two roles. A violet tint filling a selected row is n
 violet-black; the design forbids the second, not the first.
 
 **Blood is the content accent — the ink.** It prints and never glows: drop caps, rubrication,
-tag outlines, destructive actions. Transcribed but **re-roled** — in the source bundle this
-family _was_ the light. A red carrying a glow is a bug, not a variant.
+tag outlines, destructive actions. A red carrying a glow is a bug, not a variant.
 
 **Vellum is the reading sheet.** `--vellum-ink` on `--vellum-0` is the strongest text contrast
 in the product, which is the point of the sheet existing. **Bone is text on the Chrome** — warm
@@ -79,8 +63,7 @@ control produces a ghost rather than a disabled one.
 the plane-brightness rule and lit edges, and real shadow appears only on things genuinely
 floating.
 
-A glow is a wide dim halo, a medium glow, and a thin bright core — a single stroke never reads
-as emission. The glow tokens are the halo and the glow; the core is the element's own color.
+The glow tokens are the halo and the glow; the core is the element's own color.
 
 ### Glass, and where it stops
 

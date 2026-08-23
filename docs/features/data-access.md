@@ -78,29 +78,11 @@ field; localized field errors are #97, with the schema.
 
 ## Which pattern a write gets
 
-```
-Does this touch the server?
-|- no  -> no pattern needed
-`- yes
-   |- READ  -> read rules (below)
-   `- WRITE
-      Can the server's response be anticipated?
-      |- no  -> C: blocking form
-      `- yes
-         Does the User need to know the outcome?
-         |- no  -> A: optimistic without feedback
-         `- yes -> B: optimistic with feedback
-                   editing existing data -> roll back, show the error
-                   creating new data     -> keep it, mark it failed
-```
-
 | Pattern | When | Behavior |
 | --- | --- | --- |
 | **A — optimistic, no feedback** | The response is predictable and the User need not learn it succeeded | Instant update; a failure rolls back silently |
 | **B — optimistic, with feedback** | The response is predictable but the User must learn about a failure | Instant update; a failure surfaces a dismissible error at the element |
 | **C — blocking form** | The response cannot be anticipated: server-side validation, a server-generated identifier, uniqueness, anything moving money | Submit disabled with a pending state; nothing optimistic |
-
-This app has no offline support, so a write is optimistic or blocking.
 
 ## Rollback versus keep
 
@@ -115,7 +97,7 @@ landing, an edit made elsewhere — supersedes it, error included. The transitio
 apart from React in `src/shared/lib/optimisticState.ts`, and `run` resolves with the action's own
 result for a caller that needs the payload.
 
-Two rules come with that snapshot:
+Rules that come with that snapshot:
 
 - **The latest `run` owns the screen.** Each call takes a number, and a response arriving after a
   later call — or after `reset` — resolves its own promise and writes nothing, so a slow first write

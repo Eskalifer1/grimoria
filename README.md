@@ -7,10 +7,6 @@ wizard's grimoire of spells.
 
 ## Getting started
 
-Requires Node.js 24 (`engines`). Yarn 4 is pinned via `packageManager` and a committed
-release in `.yarn/releases`, so no global Yarn install is needed beyond a
-launcher (`yarn` 1.x or Corepack).
-
 ```bash
 yarn install
 cp .env.example .env   # then fill both values in
@@ -23,11 +19,7 @@ Postgres (Neon, ADR-0007). Without it the app runs, but anything touching the da
 ### Database
 
 One Neon project with two branches, matching the git ones: local development and everything
-outside production use `dev`, production uses `main`. Both connection strings come from the Neon
-dashboard's connection widget for the branch — `DATABASE_URL` is the pooled string (the host
-carrying `-pooler`), `DATABASE_URL_UNPOOLED` the direct one. Neon's pooler runs PgBouncer in
-transaction mode, which cannot run schema work, so `src/payload.config.ts` sends dev pushes and
-`payload migrate` down the direct string and request traffic down the pooled one.
+outside production use `dev`, production uses `main`.
 
 Development pushes the config's shape into `dev` on boot. Production is migrated instead: every
 schema change is committed to `src/migrations`, and Vercel's build runs them against `main` first.
@@ -35,33 +27,6 @@ schema change is committed to `src/migrations`, and Vercel's build runs them aga
 
 The app runs at http://localhost:3000, with Payload's admin at `/cms` — the only admin there
 is, for the maintainer's own use (ADR-0005).
-
-## Scripts
-
-| Script              | What it does                                            |
-| ------------------- | ------------------------------------------------------- |
-| `yarn dev`          | Development server                                      |
-| `yarn build`        | Production build — no database work                     |
-| `yarn build:migrate` | What Vercel runs: migrate, then build                  |
-| `yarn migrate:verify-rollback` | Apply/roll back/apply against a throwaway branch |
-| `yarn start`        | Serve the production build                              |
-| `yarn typecheck`    | Next route typegen, then `tsc --noEmit`                 |
-| `yarn lint`         | Biome linter only                                       |
-| `yarn lint:fix`     | Biome linter, applying safe fixes                       |
-| `yarn format`       | Biome formatter, writing changes                        |
-| `yarn format:check` | Biome formatter in check mode                           |
-| `yarn check`        | Biome formatter + linter + import sorting, read-only    |
-| `yarn check:fix`    | The same, applying every safe fix                       |
-| `yarn ci`           | What CI runs — never writes to disk                     |
-| `yarn spellcheck`   | cspell over the repo (code, docs, UI copy)              |
-| `yarn payload`      | Payload's CLI (migrations, `run`, one-off scripts)      |
-| `yarn generate:types` | Regenerate `src/payload-types.ts` from the config     |
-| `yarn generate:importmap` | Regenerate the admin's import map                |
-
-Biome is the single formatter and linter here; there is no Prettier or ESLint.
-Import order is enforced as an assist action, so the editor's "Format Document"
-alone won't fix it — run `yarn check:fix` (or let the committed workspace
-settings organize imports on save).
 
 ## Documentation
 

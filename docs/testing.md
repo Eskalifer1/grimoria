@@ -26,6 +26,9 @@ the pattern is #38, and the `integration` project is declared and empty until it
 `@/api/core/payloadClient` and `next/cache`. `vitest.config.ts` aliases `server-only` to its empty
 build, or importing the action throws before a test runs.
 
+**The `component` project runs through the React Compiler**, as `next build` does, so a test asserts
+what ships rather than the source it was written from.
+
 **An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
 by e2e (#39); the pure functions it calls are covered by unit.
 
@@ -43,8 +46,8 @@ by e2e (#39); the pure functions it calls are covered by unit.
 (`CLAUDE.md`, `## Tooling`). A break surfaces at the file that caused it rather than at the handoff
 gate, so writing an implementation file is followed by no `yarn test` of its own.
 
-**A shared render helper for component tests arrives with the second component test**, wrapping
-whatever providers (`NextIntlClientProvider`, Theme) turn out to be needed by then (#28).
+**Component tests render through `tests/setup/render.tsx`**, which wraps the providers a client
+component needs.
 
 ## Test-first
 
@@ -53,7 +56,7 @@ session 1 of `/task-flow` is where they are recorded.
 
 ## CI required checks
 
-On every PR: install → `yarn ci` → `yarn typecheck` → `yarn spellcheck` (cspell) → `yarn test` →
+Once #42 lands, on every PR: install → `yarn ci` → `yarn typecheck` → `yarn spellcheck` (cspell) → `yarn test` →
 `yarn build`, all required. Playwright e2e runs as an advisory (non-blocking) job until its coverage
 stabilizes. The workflow itself is #42.
 

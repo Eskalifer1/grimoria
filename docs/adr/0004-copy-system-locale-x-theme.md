@@ -2,7 +2,7 @@
 
 All UI text is accessed through a lookup (e.g. `t(key)`), backed by a resource keyed as `[locale][theme][key]` — even though v1 ships a single locale. Two axes exist because dark-fantasy re-skinning (theme) and localization (future feature #11) are independent concerns that would otherwise collide: hardcoding strings now and retrofitting an i18n layer later would mean touching every UI string a second time. Adding a locale later is then just adding a column to the resource, not restructuring how copy is consumed.
 
-**i18n library: `next-intl`**, adopted from day one even though v1 ships a single locale — the whole point of fixing the `[locale][theme][key]` shape early is to avoid retrofitting an i18n layer later, so bringing in the library at the same time is consistent with that reasoning rather than deferring it. `next-intl` is built for the Next.js App Router (server components, typed messages) rather than retrofitted onto it, unlike `i18next`/`react-i18next` which target the Pages Router more naturally.
+**i18n library: `next-intl`**, adopted from day one even though v1 ships a single locale. `next-intl` is built for the Next.js App Router (server components, typed messages) rather than retrofitted onto it, unlike `i18next`/`react-i18next` which target the Pages Router more naturally.
 
 ## Shape on disk
 
@@ -23,7 +23,7 @@ Reading a cookie also opts every localized route out of static rendering, and ma
 
 ## Routing
 
-Routes live under `src/app/(frontend)/[locale]/` with `localePrefix: 'as-needed'`, so v1 URLs stay clean (`/notes`, not `/en/notes`) while the segment already exists. `/en` canonically redirects to `/`. Adding a second locale (#18) is then a change to `src/i18n/routing.ts` rather than moving every route file and rewriting every link — the same retrofit-avoidance argument that motivates the resource shape above, applied to the URL.
+Routes live under `src/app/(frontend)/[locale]/` with `localePrefix: 'as-needed'`, so v1 URLs stay clean (`/notes`, not `/en/notes`) while the segment already exists. `/en` canonically redirects to `/`. Adding a second locale (#18) is then a change to `src/i18n/routing.ts` rather than moving every route file and rewriting every link.
 
 Everything localized lives under `src/app/(frontend)/[locale]/`; `src/proxy.ts` excludes `/cms` and `/api`, since locale rewriting must never touch the backend and Payload ships its own translations. Two catalogs per locale is therefore the whole system — no surface of ours sits outside the localized tree, so none sits outside the theme axis.
 

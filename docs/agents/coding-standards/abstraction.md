@@ -1,19 +1,16 @@
 # Abstraction and reuse
 
 When to factor something out, and what shape it takes so the second caller does not have to
-re-derive it. **Every layer is held to this** — a component, a hook, a style and a test as much as a
-server call. Where code lives is `layers.md`; how a type is written is `typescript.md`.
+re-derive it. Where code lives is `layers.md`; how a type is written is `typescript.md`.
 
 ## Name the values
 
 **A value carrying meaning is a named constant, read through one object.** A status, a role, an
 error code, a limit — `ACTION_STATUS.SUCCESS`, not `'success'` at the call site. The literal is
 written once, in `src/constants/<subject>.ts`, and the union type is derived from the object
-(`type ActionStatus = (typeof ACTION_STATUS)[keyof typeof ACTION_STATUS]`), so renaming a value is
-one edit and a typo fails `tsc` instead of quietly comparing false.
+(`type ActionStatus = (typeof ACTION_STATUS)[keyof typeof ACTION_STATUS]`).
 
-**A set of related values is one object, not loose names**, because they are read as a set and one
-import pulls the whole vocabulary.
+**A set of related values is one object, not loose names.**
 
 ## Write a cross-cutting step once
 
