@@ -9,7 +9,7 @@ type CurrentUser = Pick<User, 'id' | 'name' | 'email' | 'updatedAt'>;
 /**
  * The signed-in User, or `null` for a Guest.
  *
- * Reads through Payload's Local API in-process — no REST or GraphQL round trip —
+ * Reads through Payload's Local API in-process — no HTTP round trip —
  * and shares the request's cached session read, so a layout and its page pay for
  * one lookup. Reading a session opts the caller out of static rendering.
  */

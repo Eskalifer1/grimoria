@@ -85,6 +85,13 @@ export default buildConfig({
     }),
   ],
 
+  // Every read and write goes through the Local API in process
+  // (`docs/features/data-access.md`), so the generated GraphQL endpoint had no
+  // caller and stayed an unauthenticated public surface nobody exercised. #33.
+  graphQL: {
+    disable: true,
+  },
+
   // Names what it is, and also places `importMap.js` — hence the folder name
   // under `(payload)`. ADR-0005.
   routes: {
