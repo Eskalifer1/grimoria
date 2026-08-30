@@ -102,8 +102,15 @@ export default buildConfig({
     },
   },
 
+  // A UUID the browser mints is the row's primary key from the first millisecond,
+  // which is what an optimistic create needs to address a row it has drawn but not
+  // yet sent (ADR-0010). `allowIDOnCreate` is the half that is easy to lose: false,
+  // the adapter silently discards the supplied id and allocates its own, and the
+  // optimistic key is orphaned without anything throwing.
   db: postgresAdapter({
     pool: { connectionString },
+    idType: 'uuid',
+    allowIDOnCreate: true,
   }),
 
   secret: process.env.PAYLOAD_SECRET || '',

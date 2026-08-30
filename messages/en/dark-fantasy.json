@@ -2,8 +2,10 @@
   "actionError": {
     "conflict": "Another hand rewrote this page first. Read it anew.",
     "forbidden": "This rite is sealed against you.",
+    "interrupted": "The working was cut short. Its fate is unknown — look again.",
     "invalidInput": "The words will not hold. Mend them and try again.",
     "notFound": "Nothing of the kind remains here.",
+    "timedOut": "The working hangs unfinished. Look again to learn its fate.",
     "unauthenticated": "Only the named may work this. Sign in.",
     "unexpected": "The working faltered. Attempt it again."
   },
@@ -11,13 +13,21 @@
     "appName": "Grimoria",
     "tagline": "A grimoire binding to memory every spell you have ever learned."
   },
+  "form": {
+    "cancel": "Abandon"
+  },
   "homePage": {
     "createNote": "Inscribe a spell",
     "empty": "No spells are bound to your grimoire yet.",
     "title": "My grimoire"
   },
+  "optimistic": {
+    "dismiss": "Banish",
+    "offline": "The link is severed. What you bind now may not be preserved.",
+    "pending": "Binding…",
+    "problem": "Something here demands your attention."
+  },
   "profilePage": {
-    "dismiss": "Banish the omen",
     "nameLabel": "Bound name",
     "save": "Bind",
     "title": "My sigil"

@@ -10,9 +10,12 @@ import { notFound } from 'next/navigation';
 
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 
+import { getCurrentUser } from '@/api/user/getCurrentUser';
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
+import { OptimisticScope } from '@/shared/components/OptimisticScope';
+import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
 import { cn } from '@/shared/lib/cn';
 
 import '../globals.css';
@@ -92,7 +95,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
 
   // Written for `standard` too: #39 asserts on this attribute, and "no
   // attribute" must not read the same as "the default Theme".
-  const theme = await resolveTheme();
+  const [theme, user] = await Promise.all([resolveTheme(), getCurrentUser()]);
 
   return (
     <html
@@ -107,7 +110,16 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
       )}
     >
       <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          {/* Above every surface and before it: one localStorage slot serves the
+              whole browser, so a machine two Users share must not render the
+              first one's unsaved work to the second. */}
+          <OptimisticScope scope={user?.id ?? null} />
+          {/* At the very top until there is a header to sit under (#1), which is
+              where it stays on a small screen either way. */}
+          <SyncProgressBar className="fixed inset-x-0 top-0 z-50" />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

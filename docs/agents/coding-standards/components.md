@@ -4,9 +4,6 @@ How a React component is built here. Where the file goes is `layers.md` and `nam
 are `typescript.md`, copy is `i18n.md`, styling is `styling.md`. Where a rule is machine-enforced
 the config is named.
 
-Written against React 19 before the first real components exist — revisit once the site shell
-(#75) has landed.
-
 ## Contents
 
 - The server/client boundary
@@ -29,12 +26,10 @@ composes into the browser bundle in one edit — and nothing fails: the page sti
 larger and later.
 
 **Server data reaches a client leaf through a slot.** An interactive wrapper takes `children` or a
-`ReactNode` prop, so React renders the content on the server and the data-fetching module never
-joins the client graph.
+`ReactNode` prop.
 
 **`server-only` and `client-only`.** A module that must never reach the browser — Local API reads,
-a DAL, anything reading `process.env` — starts with `import 'server-only'`, so a client import
-fails the build by name instead of shipping the module to the browser. A `"use server"` file needs
+a DAL, anything reading `process.env` — starts with `import 'server-only'`. A `"use server"` file needs
 neither.
 
 ## State
@@ -51,9 +46,17 @@ Climb only when the rung below stops working.
    write through a Server Action, `docs/features/data-access.md`. Revalidation becomes tag-based
    with Cache Components (#95).
 
+**A value owned outside the component is followed, never copied.** Seeding local state from a prop,
+or a form library's fields from a one-shot `defaultValues`, reads the source once. Read the value on every render, or hand the library its reactive entry point
+(`values`, not `defaultValues`). A one-time seed is correct only when the source is genuinely
+initial and never changes again.
+
+**State that shadows the server is written together with the rule that retires it.** A local
+overlay, a row hidden after a delete, a value held while a save is out — each is a claim the server
+has not made, and the read that disproves it is what ends it.
+
 **Derived values are computed during render, never stored.** Reaching for `useEffect` to keep two
-pieces of state in step means one is derived, and the fix is to delete it — `useEffect` is for
-synchronizing with something outside React, with a cleanup. Machine-enforced:
+pieces of state in step means one is derived, and the fix is to delete it. Machine-enforced:
 `correctness/useHookAtTopLevel`, `correctness/useExhaustiveDependencies`.
 
 **The React Compiler memoizes for us** — `reactCompiler: true` in `next.config.ts`, and the
@@ -79,16 +82,25 @@ Three moves, cheapest first:
   `Header` is a slot, not this pattern.
 
 Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `features/`,
-`entities/` and our `shared/components/`. It is a smoke alarm, not the rule: a file can be badly
-split at 120 lines and fine at 190. **The rule is the seam.**
+`entities/` and our `shared/components/`. It is a smoke alarm, not the rule. **The rule is the seam.**
 
 ## Loading and failure
+
+**A failure that has not happened takes no space.** Nothing is held under a control for a message it
+will most likely never be given — the write is expected to land, and an empty line under every row
+and every field is paid on every render for something rare. The message region is still mounted from
+the first render, because a `role="alert"` built at the moment it has something to say is never
+spoken; empty, it has no height.
+
+**A block that replaces a surface does not resize it.** It shares a grid cell with the surface so the
+box is sized by the tallest state, `invisible` and `inert` rather than unmounted — and once it has
+taken over, it is not handed back until an answer lands. Measured with `PerformanceObserver` on
+`layout-shift`.
 
 - **`error.tsx` and `not-found.tsx` at the root of every route group** — without them an uncaught
   error or missing record lands on a default Next.js screen neither Theme designed.
 - **`loading.tsx` only where a segment actually waits on data**; elsewhere it buys an empty frame.
-- **`<Suspense>` is the finer instrument.** `loading.tsx` replaces the whole segment, so a page with
-  an instant header and a slow list renders nothing until the list arrives. Wrap the slow part
+- **`<Suspense>` is the finer instrument.** Wrap the slow part
   instead, with a fallback holding the same space so nothing jumps.
 
 ## The component file
@@ -98,12 +110,10 @@ local helpers → the component → `export { NoteCard }`. A local helper stays 
 pure and used by this component alone; once it grows dependencies, a test, or a second caller it
 moves to the module's `lib/`.
 
-**Components are declared at the top level** — one declared inside another is a new component type
-every render, discarding its subtree's DOM and state
+**Components are declared at the top level**
 (`correctness/noNestedComponentDefinitions`).
 
-**Conditional markup closes on `null`**, because `&&` prints a literal `0` on an empty list and
-passes review looking right: `{comments.length ? <CommentList items={comments} /> : null}`.
+**Conditional markup closes on `null`**, because `&&` prints a literal `0` on an empty list: `{comments.length ? <CommentList items={comments} /> : null}`.
 
 **Components and module-level functions use `function`**; arrows stay in callbacks and short
 expressions (`style/useReactFunctionComponents`). **Copy comes from `next-intl`** (`i18n.md`),
@@ -124,13 +134,11 @@ The vendored zone keeps whatever shadcn and Radix generate.
 
 ## Documenting props
 
-A component's contract is its props interface, so that is where it is documented — not a JSDoc
-block above the component restating its name. **Every prop carries a one-line `/** */` block**
+**Every prop carries a one-line `/** */` block**
 saying what the consumer cannot read off the type (`/** Rendered in the card's footer — the author
-chip, when a screen has one. */`). Defaults go in the destructuring, visible in the signature and
-needing no documentation.
+chip, when a screen has one. */`). Defaults go in the destructuring.
 
-The universal props take one fixed wording each, so they are not reinvented per component:
+The universal props take one fixed wording each:
 
 ```tsx
   /** The content to render inside <the region>. */

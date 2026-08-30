@@ -2,8 +2,10 @@
   "actionError": {
     "conflict": "That change clashed with another. Reload and try again.",
     "forbidden": "You don't have access to do that.",
+    "interrupted": "We lost track of that save. Check it and try again.",
     "invalidInput": "Check the highlighted field and try again.",
     "notFound": "That no longer exists.",
+    "timedOut": "That save is taking too long. Check whether it went through.",
     "unauthenticated": "Sign in to continue.",
     "unexpected": "Something went wrong. Try again."
   },
@@ -11,13 +13,21 @@
     "appName": "Grimoria",
     "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
   },
+  "form": {
+    "cancel": "Cancel"
+  },
   "homePage": {
     "createNote": "Create a note",
     "empty": "You haven't written anything down yet.",
     "title": "My notes"
   },
+  "optimistic": {
+    "dismiss": "Dismiss",
+    "offline": "You're offline. What you save now may not reach the server.",
+    "pending": "Saving…",
+    "problem": "Something here needs your attention."
+  },
   "profilePage": {
-    "dismiss": "Dismiss error",
     "nameLabel": "Display name",
     "save": "Save",
     "title": "My profile"

@@ -21,8 +21,7 @@ src/
 
 Imports flow strictly downward: `app → views → features → entities → api → shared`. **Sideways is
 forbidden on every layer** — feature from feature, entity from entity, screen module from screen
-module. Machine-enforced (`style/noRestrictedImports`, scoped by path), so a violation is a design
-signal rather than a lint error to route around. Two ways out:
+module. Machine-enforced (`style/noRestrictedImports`, scoped by path). Two ways out:
 
 - **One feature needs another's UI or behavior → compose in `views/`.** The feature does not import
   it; it accepts it as a `ReactNode`. Screen modules are the only place two features meet.
@@ -60,14 +59,13 @@ The composition root for one rendered surface: **pages** (`NotesListPage`) and *
 ## Feature, entity, api and shared structure
 
 - **`features/note/`, `entities/user/`** — `components/`, `hooks/`, `lib/`, `types.ts`.
-- **`api/note/`** — one file per read or action, plus `api/core/` for the session, the permissions,
-  the Payload client and `createAction`.
+- **`api/note/`** — one folder per action and one file per read, plus `api/core/` for the session,
+  the permissions, the Payload client and `createAction`.
 - **`shared/`** — `components/`, `components/ui/`, `hooks/`, `lib/`, `config/`, `types/`.
 
 Create a segment when there is something to put in it; do not invent new segment names.
 
-**A `"use server"` file is a security boundary.** Every export of one is a publicly reachable
-endpoint callable with any arguments, so: one export per file, and it is an intended endpoint. Nothing
+**A `"use server"` file is a security boundary.** One export per file, and it is an intended endpoint. Nothing
 else may be exported — a schema or a type there breaks the module at runtime — so the contract gets
 a sibling file. Helpers are imported, never written under the directive, and the
 companion-helper allowance in `imports.md` never applies here.
@@ -75,23 +73,38 @@ companion-helper allowance in `imports.md` never applies here.
 ### `api/` — the server data layer
 
 **Every call into Payload's Local API lives here**, one folder per domain (`api/user/`,
-`api/note/`), each file one read or one action. `api/` imports `shared/` and `src/constants/` and
-nothing above it, and never another `api/` domain.
+`api/note/`). `api/` imports `shared/` and `src/constants/` and nothing above it, and never another
+`api/` domain.
+
+**An action is a folder, a read is a file.** A read is one function and stays
+`api/user/getCurrentUser.ts`. An action is three things that only make sense together, so it gets a
+folder named for it and they sit inside as `index.ts`, `contract.ts` and `optimistic.ts`:
+
+```
+api/user/
+  getCurrentUser.ts          a read
+  updateName/
+    index.ts                 "use server" — the action, and its only export
+    contract.ts              the Zod schema, because the directive forbids exporting one
+    optimistic.ts            the descriptor the action is written through
+  userOptimisticKeys.ts      the domain's key format, shared by every action in it
+```
+
+Flat, the three files sort apart from each other and a domain with a dozen actions is a drawer
+nobody can read. The key format stays at the domain level because it is the **domain's** vocabulary,
+not one action's — two actions writing one record must not be able to disagree about its key.
+`docs/features/data-access/optimistic-hooks.md` is the reference.
 
 **`api/core/` is the exception every domain may import** — the Payload client, the session, the
-permission helpers and the action wrapper, none of them domain-bound. It sits under `api/` rather
-than in `shared/` because it touches Payload. Inside a domain, siblings are imported relatively;
+permission helpers and the action wrapper, none of them domain-bound. Inside a domain, siblings are imported relatively;
 `core/` is imported by alias. Machine-enforced (`style/noRestrictedImports`),
 along with the fence that makes importing `payload` or `@payload-config` from any other layer a lint
 error — the exempt trees are the Payload-owned ones listed in that override in `biome.json`.
 
-**This departs from Feature-Sliced colocation deliberately** (#49): data access sits in one tree
-rather than in an `api/` segment inside each feature, so there is one obvious place to look for
-everything that touches the database and a backend swap touches one tree.
+**Data access sits in one tree rather than an `api/` segment inside each feature** (#49).
 
 **`entities/` holds domain primitives** — the small UI more than one feature needs; its data comes
-from `api/`. Three rules keep it from becoming a second `features/`: an entity appears only when a
-**second real consumer** does, never speculatively; it holds **primitives only**, so anything that
+from `api/`. An entity appears only when a **second real consumer** does, never speculatively; it holds **primitives only**, so anything that
 decides rather than displays belongs to a feature; and there are **no cross-entity imports**.
 
 **`shared/` has no business-domain attachment.** Promote a **component** only after a second real consumer exists and only if it

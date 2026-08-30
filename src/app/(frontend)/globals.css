@@ -38,5 +38,15 @@
     --dur-fast: 0.01ms;
     --dur: 0.01ms;
     --dur-slow: 0.01ms;
+
+    /*
+     * A loop is stopped, not shortened: collapsed to `--dur-loop`'s 0.01ms the
+     * sweep would strobe, which is the one thing this preference exists to
+     * prevent. The bar still appears while a write is out — its presence is the
+     * signal, and the movement was only ever the decoration on top.
+     */
+    --dur-loop: 0.01ms;
+    --animate-sync-sweep: none;
+    --animate-sync-trail: none;
   }
 }

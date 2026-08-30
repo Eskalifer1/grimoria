@@ -26,6 +26,11 @@ also decides who may act hides the thing a reviewer came to read.
 **The second occurrence is the trigger**, not the third — the same rule of two `layers.md` applies
 to code moving down a layer.
 
+**A predicate two sites both act on is one function, not one phrasing each.** A guard and the code
+it guards deciding the same question separately looks like duplication and behaves like a hole: the
+copies drift, and the guard admits exactly what it exists to refuse. `writtenFields` — which fields
+a write owns — is asked by the runner, the hooks and the transitions alike.
+
 ## Design the shape for the second caller
 
 **A helper is generic over the domain it serves, or it is not a helper.** Anything on a boundary —
@@ -36,6 +41,10 @@ nothing about the one surface that happens to need it first.
 (`data: null` on the failure, `error: null` on the success), so a caller reads the shape before
 narrowing and impossible states — a success with an error — cannot be written down. The discriminant
 is `status`, from the constant.
+
+**Sibling functions in one family answer the same shape.** Two of three transitions returning
+`Entry | null` and the third returning `Entry` leaves every caller checking on the third's behalf,
+and the fourth one written guesses wrong.
 
 **A family of outcomes is one shared vocabulary, not one per feature.** Statuses, error codes, sizes,
 variants — a feature adds a member to the existing set rather than starting a private one beside it,
@@ -52,7 +61,7 @@ the boundary this follows from.
 label are one component and a variant — `styling.md` for how the variant is expressed.
 
 **A hook is named for the behavior it performs**, never for the screen that needed it first:
-`useOptimisticAction`, not `useProfileNameForm`. A hook that cannot serve a second screen is
+`useOptimisticValue`, not `useProfileNameForm`. A hook that cannot serve a second screen is
 component-local code that has not been inlined yet.
 
 ## Document what leaves the module

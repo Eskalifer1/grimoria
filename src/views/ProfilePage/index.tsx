@@ -15,7 +15,7 @@ async function ProfilePage() {
     getTranslations('profilePage'),
   ]);
 
-  if (user === null) {
+  if (!user) {
     // next-intl's `redirect` is destructured off `createNavigation`, so TypeScript
     // does not read it as `never`-returning; the `return` is what narrows `user`.
     redirect({ href: ROUTES.HOME, locale });
@@ -28,7 +28,7 @@ async function ProfilePage() {
       <section className="flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6">
         <h1 className="font-display text-2xl text-text-title">{t('title')}</h1>
         <p className="font-ui text-text-muted">{user.email}</p>
-        <ProfileNameForm name={user.name} />
+        <ProfileNameForm id={user.id} name={user.name} updatedAt={user.updatedAt} />
       </section>
     </main>
   );

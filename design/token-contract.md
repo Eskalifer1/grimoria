@@ -21,6 +21,12 @@ one Theme is the drift this file prevents.
 `--dur-*` values in `globals.css`, so every transition timed by them shortens with them. Motion
 timed any other way escapes that switch and leaves the preference unhonored.
 
+**A loop is stopped, not shortened.** `--dur-loop` and `--ease-loop` time the one repeating
+animation there is, and the same block switches it off by name — collapsed like a transition it
+would strobe, which is what the preference exists to prevent. What the loop decorated has to
+still read without it: `SyncProgressBar` says "a write is out" by being on screen, and the sweep
+is only the movement on top.
+
 ## Tiers — where a raw value is allowed
 
 **A literal color appears exactly once, in tier 1, and everything above refers back.**
@@ -70,6 +76,10 @@ Most names mean what they say. These carry a decision:
   are backdrop blurs on translucent surfaces. A dialog's own body is never translucent — a
   decision should not have the page reading through it.
 - **Disabled is always a color pair, never an `opacity` rule** — `standard-tokens.md` says why.
+- **`--status-failed` is the fourth status, and the only one either Theme may spend a red on.**
+  `dark-fantasy` fills it from the blood ramp it already uses for destructive actions; `standard`
+  carries a red primitive for this name alone. It is a status, not the content accent: an accent
+  never crosses roles.
 - **`--font-reading` and `--font-code` hold the same values in both Themes**, the only tokens
   for which that is true by rule. Both live inside the Note body, which is content the User
   wrote; changing Theme must not change what their own writing looks like to read. **Neither

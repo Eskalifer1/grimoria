@@ -24,7 +24,11 @@ const logger = { debug: vi.fn(), error: vi.fn() };
 // The wrapper touches nothing else on the client; the cast keeps that visible.
 const payloadClient = { logger } as unknown as Payload;
 
-const user = { id: 7, email: 'merlin@example.com', role: ['user'] } as unknown as User;
+const user = {
+  id: '00000000-0000-4000-8000-000000000001',
+  email: 'merlin@example.com',
+  role: ['user'],
+} as unknown as User;
 const schema = z.object({ name: z.string().min(1) });
 
 function signedIn(): void {
@@ -126,6 +130,24 @@ describe('createProtectedAction', () => {
     expect(result.error).toEqual({ code: ACTION_ERROR.UNEXPECTED, fields: null });
     expect(JSON.stringify(result)).not.toContain('password');
     expect(logger.error).toHaveBeenCalled();
+  });
+
+  it('answers CONFLICT when the write lost to a unique index', async () => {
+    const action = createProtectedAction({
+      name: 'test.conflict',
+      schema,
+      handler: async () => {
+        throw Object.assign(new Error('duplicate key value violates unique constraint'), {
+          code: '23505',
+        });
+      },
+    });
+
+    const result = await action({ name: 'Merlin' });
+
+    expect(result.error).toEqual({ code: ACTION_ERROR.CONFLICT, fields: null });
+    // A constraint refusing a write is an answer, not a defect worth a stack trace.
+    expect(logger.error).not.toHaveBeenCalled();
   });
 
   it('answers UNEXPECTED when the Payload client cannot come up', async () => {

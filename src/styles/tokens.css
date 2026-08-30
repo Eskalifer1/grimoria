@@ -71,6 +71,7 @@
   --color-status-live: var(--status-live);
   --color-status-idle: var(--status-idle);
   --color-status-done: var(--status-done);
+  --color-status-failed: var(--status-failed);
 
   --color-scrim-modal: var(--scrim-modal);
 
@@ -110,4 +111,71 @@
   --transition-duration-fast: var(--dur-fast);
   --transition-duration-slow: var(--dur-slow);
   --default-transition-duration: var(--dur);
+}
+
+/*
+ * Not `inline`: that substitutes a token's value into every utility that uses
+ * it, and `globals.css` has to be able to switch these off by name for a User
+ * who asked for less motion. Kept as real custom properties, `animate-sync-*`
+ * compiles to `animation: var(--animate-sync-*)` and the override reaches it.
+ *
+ * The timing is still a Theme's: `--dur-loop` and `--ease-loop` resolve where
+ * the utility lands, not here.
+ */
+@theme {
+  --animate-sync-sweep: sync-sweep var(--dur-loop) var(--ease-loop) infinite;
+  --animate-sync-trail: sync-trail var(--dur-loop) var(--ease-loop) infinite;
+
+  /*
+   * Two passes over one track, and neither is a block sliding at one speed.
+   * Each is a full-width bar scaled from its left edge, so `translateX` and
+   * `scaleX` are both read as a share of the track: the bar stretches as it
+   * picks up speed and draws back in as it leaves, and the stops are spaced
+   * unevenly so the pace changes without the timing function having to — which
+   * is why `--ease-loop` is nearly straight: a curve applies between *every*
+   * pair of stops, and a pronounced one brakes at each of them.
+   *
+   * The lead is on the track for the whole cycle — it grows out of the left edge
+   * and leaves as a sliver on the right, so the one frame where it restarts is a
+   * few pixels wide and nothing to see. The trail is a second, thinner pass on
+   * its own schedule, closing on the lead late in the cycle and passing it.
+   */
+  @keyframes sync-sweep {
+    0% {
+      transform: translateX(0%) scaleX(0.03);
+    }
+    14% {
+      transform: translateX(1%) scaleX(0.22);
+    }
+    40% {
+      transform: translateX(18%) scaleX(0.3);
+    }
+    62% {
+      transform: translateX(42%) scaleX(0.26);
+    }
+    82% {
+      transform: translateX(70%) scaleX(0.18);
+    }
+    100% {
+      transform: translateX(100%) scaleX(0.03);
+    }
+  }
+
+  @keyframes sync-trail {
+    0% {
+      transform: translateX(-22%) scaleX(0.06);
+    }
+    40% {
+      transform: translateX(-10%) scaleX(0.1);
+    }
+    64% {
+      transform: translateX(16%) scaleX(0.2);
+    }
+    80% {
+      transform: translateX(44%) scaleX(0.16);
+    }
+    100% {
+      transform: translateX(104%) scaleX(0.04);
+    }
+  }
 }

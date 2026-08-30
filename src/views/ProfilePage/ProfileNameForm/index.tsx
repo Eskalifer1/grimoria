@@ -1,79 +1,118 @@
 'use client';
 
-import { type FormEvent, useId, useState } from 'react';
+import { useRef } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
 
-import { updateName } from '@/api/user/updateName';
-import { ACTION_ERROR, FAILURE_BEHAVIOR } from '@/constants/action';
+import { updateNameSchema } from '@/api/user/updateName/contract';
+import { updateNameOptimistic } from '@/api/user/updateName/optimistic';
 import { USER_NAME_MAX_LENGTH } from '@/constants/user';
-import { Button } from '@/shared/components/ui/button';
-import { useActionErrorMessage } from '@/shared/hooks/useActionErrorMessage';
-import { useOptimisticAction } from '@/shared/hooks/useOptimisticAction';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormFieldMessage,
+  FormItem,
+  FormLabel,
+} from '@/shared/components/Form';
+import { Input } from '@/shared/components/ui/input';
+import { useOptimisticValue } from '@/shared/hooks/useOptimisticValue';
 
 interface ProfileNameFormProps {
-  /** The name the server last confirmed — the value a failed save rolls back to. */
+  /** The User being renamed. The key the write is addressed by is built from it. */
+  id: string;
+
+  /** The name the server last confirmed. */
   name: string;
+
+  /** That name's `updatedAt`, which is what lets the overlay die once a render catches up. */
+  updatedAt: string;
 }
 
-function ProfileNameForm({ name }: ProfileNameFormProps) {
+/**
+ * The reference surface for pattern B: the value changes on the keystroke that
+ * submits it, nothing is disabled while the write is out, and a failure survives
+ * a reload with the typed name still on screen
+ * (`docs/features/data-access/pattern-b.md`).
+ */
+function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
   const t = useTranslations('profilePage');
-  const toErrorMessage = useActionErrorMessage();
-  const [draft, setDraft] = useState(name);
-  const fieldId = useId();
-  const errorId = useId();
+  const nameInput = useRef<HTMLInputElement>(null);
 
-  // Pattern B, edit semantics: a failure must not leave the User reading a name
-  // the server never stored (docs/features/data-access.md).
-  const { value, error, isPending, run, reset } = useOptimisticAction<string>({
+  const displayName = useOptimisticValue({
+    descriptor: updateNameOptimistic,
+    input: { id, name },
+    field: 'name',
     value: name,
-    failureBehavior: FAILURE_BEHAVIOR.ROLLBACK,
+    version: updatedAt,
   });
 
-  const errorMessage = toErrorMessage(error);
-  // Only a rejected input is the field's own fault; no session and no right are not.
-  const isInputRejected = error?.code === ACTION_ERROR.INVALID_INPUT;
+  const form = useForm({
+    resolver: zodResolver(updateNameSchema),
+    // `values`, not `defaultValues`: the latter is read once, so a name the server
+    // normalized — or an attempt thrown away — would move the text and leave the
+    // input behind, and the next save would revert it.
+    values: { name: displayName.value },
+    // Without this, the answer to one save resets the field and whatever was
+    // typed while that save was in flight is gone.
+    resetOptions: { keepDirtyValues: true },
+  });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  // A failure naming the field is about the value and belongs beside the input;
+  // no session and no right are about the write, and belong to the form.
+  const beside = displayName.fieldError;
 
-    // The draft stays as typed on a failure; only the confirmed name below rolls back.
-    void run(draft, () => updateName({ name: draft }), { successValue: (data) => data.name });
+  /**
+   * The server may store a name it normalized, and `values` only carries that
+   * back into a field react-hook-form does not consider dirty. If the User typed
+   * again while the write was out, the field is newer than the answer and keeps it.
+   */
+  async function save(next: string) {
+    await displayName.run(next);
+
+    if (form.getValues('name') === next) {
+      form.resetField('name');
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-      <p aria-live="polite" className="font-ui text-text-title">
-        {value}
-      </p>
+    <Form
+      error={beside ? null : displayName.error}
+      form={form}
+      isPending={displayName.isPending}
+      onDismiss={displayName.dismiss}
+      onSubmit={(values) => void save(values.name)}
+      returnFocusTo={nameInput}
+      submitLabel={t('save')}
+    >
+      <p className="font-ui text-text-title">{displayName.value}</p>
 
-      <label htmlFor={fieldId} className="font-ui text-text-muted">
-        {t('nameLabel')}
-      </label>
-      <input
-        id={fieldId}
-        value={draft}
-        maxLength={USER_NAME_MAX_LENGTH}
-        aria-invalid={isInputRejected}
-        aria-describedby={errorMessage === null ? undefined : errorId}
-        onChange={(event) => setDraft(event.target.value)}
-        className="rounded-md border border-border-subtle bg-surface-inset p-2 font-ui text-text-body"
+      <FormField
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="font-ui text-text-muted">{t('nameLabel')}</FormLabel>
+            <FormControl error={beside}>
+              <Input
+                {...field}
+                aria-busy={displayName.isPending}
+                className="font-ui"
+                maxLength={USER_NAME_MAX_LENGTH}
+                ref={(node) => {
+                  field.ref(node);
+                  nameInput.current = node;
+                }}
+              />
+            </FormControl>
+            <FormFieldMessage error={beside} />
+          </FormItem>
+        )}
       />
-
-      {errorMessage === null ? null : (
-        <div id={errorId} role="alert" className="flex items-center gap-2 font-ui text-text-accent">
-          {errorMessage}
-          <Button type="button" variant="ghost" size="xs" onClick={reset}>
-            {t('dismiss')}
-          </Button>
-        </div>
-      )}
-
-      <Button type="submit" disabled={isPending} aria-busy={isPending} className="self-start">
-        {t('save')}
-      </Button>
-    </form>
+    </Form>
   );
 }
 
+export type { ProfileNameFormProps };
 export { ProfileNameForm };

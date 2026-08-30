@@ -17,6 +17,9 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: {
       'server-only': resolve('node_modules/server-only/empty.js'),
+      // `next-intl`'s ESM build imports this extensionless, which Next's bundler
+      // resolves and Vite's ESM resolver does not.
+      'next/navigation': resolve('node_modules/next/navigation.js'),
     },
   },
   test: {
@@ -39,6 +42,9 @@ export default defineConfig({
           name: 'component',
           environment: 'jsdom',
           include: ['tests/**/*.test.tsx'],
+          // `next-intl`'s navigation module imports `next/navigation` extensionless,
+          // which only resolves once the package goes through Vite rather than Node.
+          server: { deps: { inline: ['next-intl'] } },
           setupFiles: ['tests/setup/component.ts'],
         },
       },

@@ -41,10 +41,16 @@
   --input: var(--border-strong);
   --ring: var(--border-brand);
 
+  /*
+   * shadcn's `--destructive` is what a primitive turns red for — an invalid
+   * input, a failure alert — which is the same thing `--status-failed` already
+   * means in both Themes. The contract still has no destructive *pair* (#79),
+   * so nothing here fills a surface with it; only text and borders.
+   */
+  --destructive: var(--status-failed);
+
   --radius: var(--radius-md);
 }
-
-/* No `--destructive` alias: the contract has no destructive pair yet (#79). */
 
 @theme inline {
   --color-background: var(--background);
@@ -64,4 +70,5 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
 }

@@ -1,111 +1,107 @@
-# Project dictionary for Grimoria. One word per line, lower-case unless the
-# casing is part of the name. Keep the sections sorted.
 #
-# Add a word here when it is genuinely part of the project's vocabulary. For a
-# one-off (a quoted URL slug, a fixture string), prefer an inline
-# `cspell:ignore` comment in that file instead.
-
+# --- Agent/process vocabulary (skills, workflow docs) ---
+# --- Config keys, CLI flags and file names ---
+# --- Design system: typography, color and CSS terms ---
+# --- General English the bundled dictionaries happen to miss ---
+# --- Names ---
 # --- Product and dark-fantasy vocabulary ---
+# --- Technology and tool names ---
+# `cspell:ignore` comment in that file instead.
+# Add a word here when it is genuinely part of the project's vocabulary. For a
+# casing is part of the name. Keep the sections sorted.
+# one-off (a quoted URL slug, a fixture string), prefer an inline
+# Project dictionary for Grimoria. One word per line, lower-case unless the
+ack
+acks
 arcane
+authjs
+autofix
+biome
+branchable
+centerlines
+codegen
+cooldown
+cspell
+dependabot
+desaturated
 divination
+Eskalifer
+extensionless
+frontmatter
 grimoire
 grimoires
 Grimoria
+IDOR
+importmap
 incantation
-mage
-mages
-necromancer
-rune
-runes
-scrying
-sigil
-sigils
-spellbook
-warlock
-
-# --- Technology and tool names ---
-authjs
-biome
-codegen
-cspell
-dependabot
-neon
-nextjs
-payload
-payloadcms
-payloads
-playwright
-pooler
-postgrest
-sslmode
-sentry
-shadcn
-SIGSEGV
-supabase
-tailwindcss
-turbopack
-vercel
-vitest
-
-# --- Design system: typography, color and CSS terms ---
-centerlines
-desaturated
+jsonc
+Leonxlnx
 letterspaced
+libpq
 linecap
 linejoin
 literata
-Playfair
-retuned
-rgba
-srgb
-unlayered
-WCAG
-wordmark
-
-# --- Agent/process vocabulary (skills, workflow docs) ---
-ack
-acks
-frontmatter
-IDOR
-subtasking
-wayfinder
-wayfinding
-
-# --- Config keys, CLI flags and file names ---
-Wakeup
-Worktree
-autofix
-cooldown
-importmap
-jsonc
+lockdown
+logomark
+mage
+mages
+mattpocock
+necromancer
+neon
+nextjs
 nodeLinker
 noopener
 noreferrer
 opengraph
+pagehide
+payload
+payloadcms
+payloads
+Playfair
+playwright
+pooler
+postgrest
+regenerable
+retuned
+rgba
+roled
+rune
+runes
+scrying
+sentry
 setaf
+shadcn
 shortstat
+sigil
+sigils
+SIGSEGV
+spellbook
+srgb
+sslmode
+subtasking
+supabase
+tailwindcss
+teardowns
 toplevel
+triaging
 tsbuildinfo
 tsconfig
-typegen
-unpooled
-wslview
-yarnrc
-
-# --- Names ---
-Eskalifer
-Leonxlnx
-mattpocock
-
-# --- General English the bundled dictionaries happen to miss ---
-branchable
-libpq
-extensionless
-lockdown
-logomark
-regenerable
-roled
-triaging
+turbopack
 typechecks
+typegen
+unlayered
+unpooled
 unrepresentable
 unvalidated
+vercel
+visibilitychange
+vitest
+Wakeup
+warlock
+wayfinder
+wayfinding
+WCAG
+wordmark
+Worktree
+wslview
+yarnrc

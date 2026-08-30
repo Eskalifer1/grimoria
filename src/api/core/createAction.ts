@@ -8,14 +8,15 @@ import type { z } from 'zod';
 
 import { getPayloadClient } from '@/api/core/payloadClient';
 import { getSessionUser, requireSessionUser } from '@/api/core/session';
+import { isUniqueViolation } from '@/api/core/uniqueViolation';
 import { ACTION_ERROR } from '@/constants/action';
 import type { User } from '@/payload-types';
 import { isActionError } from '@/shared/lib/actionError';
 import {
-  type ActionFieldErrors,
   type ActionResult,
   actionFailure,
   actionSuccess,
+  toFieldErrors,
 } from '@/shared/lib/actionResult';
 
 /** What a handler is handed: its input, already parsed, the caller, and the client to write with. */
@@ -60,26 +61,6 @@ interface ActionDefinition<TSchema extends z.ZodType, TData, TUser extends User 
 type Action<TSchema extends z.ZodType, TData> = (
   input: z.input<TSchema>,
 ) => Promise<ActionResult<TData>>;
-
-/** One entry per field the schema rejected, so a form can place the messages beside its inputs. */
-function toFieldErrors(error: z.ZodError): ActionFieldErrors | null {
-  const fields: Record<string, string[]> = {};
-
-  for (const issue of error.issues) {
-    const field = issue.path.join('.');
-
-    if (field === '') {
-      continue;
-    }
-
-    const messages = fields[field] ?? [];
-
-    messages.push(issue.message);
-    fields[field] = messages;
-  }
-
-  return Object.keys(fields).length === 0 ? null : fields;
-}
 
 /**
  * Reports a defect server-side. Payload's logger carries it once the client is
@@ -159,6 +140,13 @@ async function execute<TSchema extends z.ZodType, TData, TUser extends User | nu
 
     if (isActionError(error)) {
       return actionFailure(error.code, error.fields);
+    }
+
+    // A constraint refusing the write is an answer, not a defect. A create guards a
+    // repeated client-minted id itself (ADR-0010); this is the net under the race
+    // between that check and the insert, and under every other unique index.
+    if (isUniqueViolation(error)) {
+      return actionFailure(ACTION_ERROR.CONFLICT);
     }
 
     // A defect, not a refusal: the caller gets an opaque code and the detail stays here.

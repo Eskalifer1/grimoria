@@ -17,6 +17,8 @@
   --teal-100: #e3f2f0;
   --teal-50: #eff7f6;
 
+  --rose-600: #b3261e;
+
   --violet-600: #7c3aed;
   --violet-500: #8b5cf6;
   --violet-200: #ddcdfb;
@@ -83,6 +85,7 @@
   --status-live: var(--teal-400);
   --status-idle: var(--ink-300);
   --status-done: var(--teal-700);
+  --status-failed: var(--rose-600);
 
   --shadow-card:
     0 1px 2px color-mix(in srgb, var(--ink-900) 4%, transparent),
@@ -110,7 +113,9 @@
   --dur-fast: 140ms;
   --dur: 200ms;
   --dur-slow: 300ms;
+  --dur-loop: 2000ms;
   --ease-standard: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --ease-loop: cubic-bezier(0.25, 0.1, 0.75, 0.9);
   --ease-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
   --press-scale: 0.985;
 

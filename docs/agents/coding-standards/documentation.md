@@ -4,8 +4,8 @@ What a comment carries, and what a JSDoc block adds to a signature. How a compon
 props is `components.md`. Not lint-checkable; held by review and `.claude/rules/`.
 
 **A comment answers _why_** — the reason behind a choice, the constraint that forced it, the cost of
-changing it. **One to three lines.** A comment grown into a paragraph is a decision, and decisions
-live in `docs/adr/` or a feature doc. Where code needs a comment to be followed at all, rename the
+changing it. **Two lines, and three is the exception that has earned it.** A comment grown into a
+paragraph is a decision, and decisions live in `docs/adr/` or a feature doc. Where code needs a comment to be followed at all, rename the
 thing or split the function instead.
 
 **Deferred work is a GitHub issue**, and the code carries a comment naming the number that ends it.

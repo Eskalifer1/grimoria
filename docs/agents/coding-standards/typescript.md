@@ -37,7 +37,15 @@ skips the check, and a plain annotation widens the values back to `string`.
 
 **`null` is data-absent** (Postgres, Payload); **`undefined` is nothing-provided** (optional prop,
 omitted argument). Our own types pick one — `field?: T | null` encodes three states where the
-domain has two.
+domain has two. **A runtime narrowing keeps the same distinction, and takes the expected type from
+the declaration rather than from a sample value**: `typeof stored === typeof fallback` reads `null`
+as `'object'`, so it rejects every value a nullable field legitimately holds.
+
+**Check absence with `!value`, not `value === null`.** For an object, a string or a record the two
+agree, and the short one is what the rest of the file reads like. Spell the comparison out only
+where a falsy value is a *different* answer from an absent one — a timer id of `0`, a timestamp of
+`0`, an empty string, or a union being narrowed against `null` on its way to a type guard
+(`typeof value === 'object' && value !== null`).
 
 ## Domain types come from Payload
 

@@ -95,6 +95,7 @@
   --status-live: var(--violet-light);
   --status-idle: var(--bone-500);
   --status-done: var(--violet-core);
+  --status-failed: var(--blood-light);
 
   --shadow-card: none;
   --shadow-raised: 0 24px 48px color-mix(in srgb, var(--void-black) 55%, transparent);
@@ -118,7 +119,9 @@
   --dur-fast: 120ms;
   --dur: 220ms;
   --dur-slow: 420ms;
+  --dur-loop: 2800ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-loop: cubic-bezier(0.35, 0.05, 0.65, 0.95);
   --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
   --press-scale: 1;
 

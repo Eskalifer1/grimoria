@@ -2,15 +2,21 @@
 
 import { useTranslations } from 'next-intl';
 
-import { ACTION_ERROR, type ActionErrorCode } from '@/constants/action';
+import { ACTION_ERROR } from '@/constants/action';
+import { OPTIMISTIC_ERROR, type OptimisticErrorCode } from '@/constants/optimistic';
 import type { ActionFailureDetail } from '@/shared/lib/actionResult';
 
-const SHARED_CODES: readonly string[] = Object.values(ACTION_ERROR);
+// The store's own codes word themselves the same way an action's do — one
+// `actionError` namespace, so a surface never asks where a failure came from.
+const SHARED_CODES: readonly string[] = [
+  ...Object.values(ACTION_ERROR),
+  ...Object.values(OPTIMISTIC_ERROR),
+];
 
-function toSharedCode(code: string): ActionErrorCode {
+function toSharedCode(code: string): OptimisticErrorCode {
   // A domain may answer with a code of its own; anything without shared copy reads
   // as the generic failure rather than rendering a raw code at a User.
-  return SHARED_CODES.includes(code) ? (code as ActionErrorCode) : ACTION_ERROR.UNEXPECTED;
+  return SHARED_CODES.includes(code) ? (code as OptimisticErrorCode) : ACTION_ERROR.UNEXPECTED;
 }
 
 /**
@@ -25,7 +31,7 @@ function toSharedCode(code: string): ActionErrorCode {
 function useActionErrorMessage(): (error: ActionFailureDetail<string> | null) => string | null {
   const t = useTranslations('actionError');
 
-  return (error) => (error === null ? null : t(toSharedCode(error.code)));
+  return (error) => (error ? t(toSharedCode(error.code)) : null);
 }
 
 export { useActionErrorMessage };

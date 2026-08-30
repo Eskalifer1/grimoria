@@ -41,7 +41,6 @@
       "ListMcpResourcesTool",
       "ReadMcpResourceTool",
       "ReadMcpResourceDirTool",
-      "mcp__chrome-devtools",
       "mcp__ide",
       "mcp__claude_ai_Google_Drive",
 

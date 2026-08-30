@@ -49,6 +49,8 @@ The **vocabulary**. _How_ to write a string it does not cover is
 | Create a note | Inscribe a spell |
 | Search | Divination / Scrying _(TBD — pick one, keep consistent)_ |
 | User / Profile | Mage |
+| Save | Bind |
+| Dismiss | Banish |
 
 **Intentionally incomplete** — expand it as each UI surface actually gets built, so the mapping
 stays grounded in real screens. **A term invented while writing copy is added here in the same

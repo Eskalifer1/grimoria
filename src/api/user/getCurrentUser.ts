@@ -4,7 +4,7 @@ import { getSessionUser } from '@/api/core/session';
 import type { User } from '@/payload-types';
 
 /** What a profile surface renders. Not the Payload document, which carries the auth internals. */
-type CurrentUser = Pick<User, 'id' | 'name' | 'email'>;
+type CurrentUser = Pick<User, 'id' | 'name' | 'email' | 'updatedAt'>;
 
 /**
  * The signed-in User, or `null` for a Guest.
@@ -20,7 +20,7 @@ async function getCurrentUser(): Promise<CurrentUser | null> {
     return null;
   }
 
-  return { id: user.id, name: user.name, email: user.email };
+  return { id: user.id, name: user.name, email: user.email, updatedAt: user.updatedAt };
 }
 
 export type { CurrentUser };

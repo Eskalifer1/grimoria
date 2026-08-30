@@ -1,3 +1,5 @@
+import type { z } from 'zod';
+
 import { ACTION_STATUS, type ActionErrorCode } from '@/constants/action';
 
 /** Schema messages per field path, as `safeParse` reports them. `null` when the failure is not a validation one. */
@@ -63,5 +65,30 @@ function isActionSuccess<TData, TCode extends string>(
   return result.status === ACTION_STATUS.SUCCESS;
 }
 
+/**
+ * One entry per field the schema rejected, so a form can place the messages
+ * beside its inputs. Here rather than in the action wrapper, so that anything
+ * answering an `ActionResult` — a test double included — reports a rejected
+ * field the same way without going near Payload.
+ */
+function toFieldErrors(error: z.ZodError): ActionFieldErrors | null {
+  const fields: Record<string, string[]> = {};
+
+  for (const issue of error.issues) {
+    const field = issue.path.join('.');
+
+    if (field === '') {
+      continue;
+    }
+
+    const messages = fields[field] ?? [];
+
+    messages.push(issue.message);
+    fields[field] = messages;
+  }
+
+  return Object.keys(fields).length === 0 ? null : fields;
+}
+
 export type { ActionFailure, ActionFailureDetail, ActionFieldErrors, ActionResult, ActionSuccess };
-export { actionFailure, actionSuccess, isActionSuccess };
+export { actionFailure, actionSuccess, isActionSuccess, toFieldErrors };

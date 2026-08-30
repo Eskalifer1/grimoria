@@ -20,6 +20,14 @@ bad run wrote.
 
 `src/migrations` is excluded from Biome and cspell.
 
+## Ids are UUIDs
+
+Every table's primary key is a `uuid` the browser may supply (`idType: 'uuid'`,
+`allowIDOnCreate: true` — ADR-0010). Postgres cannot cast a `serial` column to `uuid` in place, so a
+database still holding the integer schema fails the dev push with `column "id" cannot be cast
+automatically to type uuid`. Drop and recreate that database's schema: there is one migration, and
+`dev` holds nothing worth keeping.
+
 ## Verifying the `down` half
 
 Prove the `down` half against a throwaway branch cut off `main`:

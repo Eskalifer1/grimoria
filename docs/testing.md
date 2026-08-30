@@ -20,14 +20,11 @@ decision worth testing, extract the decision — `resolveTheme()` reads cookies 
 `toTheme()` it delegates to is pure and unit-tested.
 
 **Payload access control (`Role`, `Visibility`) runs against real Postgres and is never mocked** —
-the pattern is #38, and the `integration` project is declared and empty until it lands.
+the pattern is #38.
 
 **A Server Action is tested at the `unit` layer with its seams mocked** — `@/api/core/session`,
 `@/api/core/payloadClient` and `next/cache`. `vitest.config.ts` aliases `server-only` to its empty
 build, or importing the action throws before a test runs.
-
-**The `component` project runs through the React Compiler**, as `next build` does, so a test asserts
-what ships rather than the source it was written from.
 
 **An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
 by e2e (#39); the pure functions it calls are covered by unit.
@@ -40,14 +37,22 @@ by e2e (#39); the pure functions it calls are covered by unit.
 
 ## Running
 
-`yarn test` runs every project once and exits — this is what CI (#42) and `/checks` call.
+`yarn test` is what CI (#42) and `/checks` call.
 
 **A file written under `src/` runs its covering test as it is written**, from the `PostToolUse` hook
-(`CLAUDE.md`, `## Tooling`). A break surfaces at the file that caused it rather than at the handoff
-gate, so writing an implementation file is followed by no `yarn test` of its own.
+(`CLAUDE.md`, `## Tooling`). Writing an implementation file is followed by no `yarn test` of its own.
 
 **Component tests render through `tests/setup/render.tsx`**, which wraps the providers a client
-component needs.
+component needs. `tests/setup/component.ts` installs a `localStorage` stand-in, because this jsdom
+build ships none and without it anything reading it runs memory-only — a suite asserting that
+something survives a reload would pass without ever touching the slot.
+
+**A value that is both shown and edited is asserted in both places.** A test that reads the rendered
+text alone goes green while the control beside it holds something else.
+
+**`yarn test` never touches a database.** Vitest does not read `.env`, so an integration file guards
+itself on `process.env.DATABASE_URL` and skips without one. `yarn test:integration` supplies the
+variables and runs that project alone; it writes to the Neon `dev` branch and cleans up after itself.
 
 ## Test-first
 

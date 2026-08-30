@@ -35,7 +35,7 @@ const getSessionUser = cache(async (): Promise<User | null> => {
 async function requireSessionUser(): Promise<User> {
   const user = await getSessionUser();
 
-  if (user === null) {
+  if (!user) {
     throw new ActionError(ACTION_ERROR.UNAUTHENTICATED);
   }
 

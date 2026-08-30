@@ -97,7 +97,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {};
@@ -135,7 +135,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   /**
    * Users chosen display name
    */
@@ -171,12 +171,12 @@ export interface User {
    */
   banExpires?: string | null;
   account?: {
-    docs?: (number | Account)[];
+    docs?: (string | Account)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   session?: {
-    docs?: (number | Session)[];
+    docs?: (string | Session)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -197,7 +197,7 @@ export interface User {
  * via the `definition` "accounts".
  */
 export interface Account {
-  id: number;
+  id: string;
   /**
    * The id of the account as provided by the SSO or equal to userId for credential accounts
    */
@@ -209,7 +209,7 @@ export interface Account {
   /**
    * The user that the account belongs to
    */
-  user: number | User;
+  user: string | User;
   /**
    * The access token of the account. Returned by the provider
    */
@@ -248,7 +248,7 @@ export interface Account {
  * via the `definition` "sessions".
  */
 export interface Session {
-  id: number;
+  id: string;
   /**
    * The date and time when the session will expire
    */
@@ -270,11 +270,11 @@ export interface Session {
   /**
    * The user that the session belongs to
    */
-  user: number | User;
+  user: string | User;
   /**
    * The admin who is impersonating this session
    */
-  impersonatedBy?: (number | null) | User;
+  impersonatedBy?: (string | null) | User;
 }
 /**
  * Verifications are used to verify authentication requests
@@ -283,7 +283,7 @@ export interface Session {
  * via the `definition` "verifications".
  */
 export interface Verification {
-  id: number;
+  id: string;
   /**
    * The identifier of the verification request
    */
@@ -306,7 +306,7 @@ export interface Verification {
  * via the `definition` "rateLimit".
  */
 export interface RateLimit {
-  id: number;
+  id: string;
   /**
    * The key for the rate limit.
    */
@@ -321,7 +321,7 @@ export interface RateLimit {
  * via the `definition` "admin-invitations".
  */
 export interface AdminInvitation {
-  id: number;
+  id: string;
   role: 'admin' | 'user' | 'moderator';
   token: string;
   /**
@@ -337,7 +337,7 @@ export interface AdminInvitation {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -354,36 +354,36 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'sessions';
-        value: number | Session;
+        value: string | Session;
       } | null)
     | ({
         relationTo: 'accounts';
-        value: number | Account;
+        value: string | Account;
       } | null)
     | ({
         relationTo: 'verifications';
-        value: number | Verification;
+        value: string | Verification;
       } | null)
     | ({
         relationTo: 'rateLimit';
-        value: number | RateLimit;
+        value: string | RateLimit;
       } | null)
     | ({
         relationTo: 'admin-invitations';
-        value: number | AdminInvitation;
+        value: string | AdminInvitation;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -393,10 +393,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -416,7 +416,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requireSessionUser } from '@/api/core/session';
 import { updateName } from '@/api/user/updateName';
-import { updateNameSchema } from '@/api/user/updateNameContract';
+import { updateNameSchema } from '@/api/user/updateName/contract';
 import { ACTION_ERROR, ACTION_STATUS } from '@/constants/action';
 import { USER_NAME_MAX_LENGTH } from '@/constants/user';
 import type { User } from '@/payload-types';
@@ -16,7 +16,11 @@ const payloadClient = { update, logger: { debug: vi.fn(), error: vi.fn() } };
 
 vi.mock('@/api/core/payloadClient', () => ({ getPayloadClient: async () => payloadClient }));
 
-const user = { id: 7, email: 'merlin@example.com', role: ['user'] } as unknown as User;
+const user = {
+  id: '00000000-0000-4000-8000-000000000001',
+  email: 'merlin@example.com',
+  role: ['user'],
+} as unknown as User;
 
 describe('updateNameSchema', () => {
   it('rejects an empty name', () => {

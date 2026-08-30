@@ -45,19 +45,5 @@ const ACTION_ERROR = {
 
 type ActionErrorCode = (typeof ACTION_ERROR)[keyof typeof ACTION_ERROR];
 
-/**
- * What an optimistic write does with the value on screen when it fails
- * (`docs/features/data-access.md` → Rollback versus keep).
- */
-const FAILURE_BEHAVIOR = {
-  /** Editing existing data: restore the server's value, so nothing unsaved is shown as saved. */
-  ROLLBACK: 'rollback',
-
-  /** Creating new data: leave it on screen and mark it failed, so nothing the User typed is thrown away. */
-  KEEP: 'keep',
-} as const;
-
-type FailureBehavior = (typeof FAILURE_BEHAVIOR)[keyof typeof FAILURE_BEHAVIOR];
-
-export type { ActionErrorCode, ActionStatus, FailureBehavior };
-export { ACTION_ERROR, ACTION_STATUS, FAILURE_BEHAVIOR };
+export type { ActionErrorCode, ActionStatus };
+export { ACTION_ERROR, ACTION_STATUS };

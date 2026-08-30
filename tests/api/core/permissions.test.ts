@@ -4,7 +4,7 @@ import { hasRole, isAdmin } from '@/api/core/permissions';
 import { ROLE } from '@/constants/role';
 import type { User } from '@/payload-types';
 
-function userWith(role: User['role'], id = 1): User {
+function userWith(role: User['role'], id = '00000000-0000-4000-8000-000000000001'): User {
   return { id, role, name: 'Merlin', email: 'merlin@example.com' } as User;
 }
 
