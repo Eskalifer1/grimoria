@@ -28,13 +28,6 @@ Four things that break silently — nothing fails, review passes, and the cost s
 
 ## Styling from inside a component
 
-`docs/agents/coding-standards/styling.md` holds the rules; these four compile clean and still
-miss:
-
-- **Duration is a name** — `duration-fast`, `duration-slow`, or no class for the contract
-  default. `duration-200` compiles and takes its value from outside the contract.
-- **`focus-visible:ring-*` loses.** Focus is one unlayered rule in `globals.css` that outranks
-  utilities, so the class compiles and changes nothing.
-- **`motion-reduce:` is already handled** centrally, by collapsing the durations.
-- **`style` is a lint error.** A value unknown at build time passes only through a
-  `biome-ignore` naming which value is computed.
+**Read `docs/agents/coding-standards/styling.md` before writing a class.** Duration, focus,
+reduced motion and the `style` attribute each compile clean here and still miss what the contract
+holds.

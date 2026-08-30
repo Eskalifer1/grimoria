@@ -9,12 +9,14 @@ wizard's grimoire of spells.
 
 ```bash
 yarn install
-cp .env.example .env   # then fill both values in
+cp .env.example .env   # then fill the blank values in
 yarn dev
 ```
 
-`PAYLOAD_SECRET` is any long random string (`openssl rand -hex 32`); `DATABASE_URL` points at
-Postgres (Neon, ADR-0007). Without it the app runs, but anything touching the database fails.
+`PAYLOAD_SECRET` and `BETTER_AUTH_SECRET` are each any long random string (`openssl rand -hex 32`),
+and they are not the same value; `DATABASE_URL` points at Postgres (Neon, ADR-0007). Without it the
+app runs, but anything touching the database fails. The `SEED_ADMIN_*` values are read by `yarn seed`
+alone. Every variable carries its own comment in `.env.example`.
 
 ### Database
 

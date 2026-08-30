@@ -8,6 +8,15 @@ that carries it outside the app is [The icon set](#the-icon-set).
 **No wordmark, no lockup** — the name is never set as a graphic, and the sidebar head carries the
 mark alone.
 
+## Contents
+
+- Skeleton
+- `dark-fantasy` — wear
+- `dark-fantasy` — light and color
+- Never
+- Limits
+- The icon set
+
 ## Skeleton
 
 A diamond ribbon, 45° only, folding back at the right vertex into a crossbar — that fold is what

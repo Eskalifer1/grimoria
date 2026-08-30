@@ -52,6 +52,9 @@ when any file but `src/api/user/userOptimisticKeys.ts` opens a string with `user
 | `useBrickRoad` | "Is there a problem below this point, and where is it" |
 | `useOptimisticStore` | The store this part of the tree writes through. The singleton unless a provider says otherwise |
 | `useOptimisticScope` | Names whose overlay the store may hold, so one browser does not serve two Users |
+| `useOptimisticReset` | Wipes every overlay synchronously, the seam a screen resets through. Nothing calls it until sign-out lands (#1) |
+| `useLastSettledStatus` | How the last write that finished ended, while the next is still out — a first attempt read apart from a retry |
+| `useIsOffline` | The browser's own answer, signage only: a write still goes out and still fails |
 
 **`useOptimisticValue` and `useOptimisticRecord` are two readings of one subject.** They differ only
 in how the entry is shaped into props — one field or all of them — so the subscription, the

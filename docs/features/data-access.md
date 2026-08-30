@@ -41,7 +41,8 @@ note → B.
 | A form that must wait for the server | `docs/features/data-access/pattern-c.md` |
 | A surface with nothing partial worth showing | `docs/features/data-access/pattern-d.md` |
 | Choosing or writing a hook, or a descriptor | `docs/features/data-access/optimistic-hooks.md` |
-| Changing the store, its entry shape or its persistence | `docs/features/data-access/store.md` |
+| Changing the store or its entry shape | `docs/features/data-access/store.md` |
+| Changing what survives a reload, a second tab or a clock | `docs/features/data-access/persistence.md` |
 | Writing a Server Action, a read, or `src/api/` | `docs/features/data-access/api-local.md` |
 
 Each pattern file is **self-sufficient**: an agent that opens one writes working code without

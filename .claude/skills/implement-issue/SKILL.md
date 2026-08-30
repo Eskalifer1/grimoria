@@ -12,6 +12,11 @@ allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkou
 A `ready-for-agent` ticket, from branch to the commit the user runs. `/task-flow` decides which
 issues reach here; `failures.md` in this folder covers a step that cannot complete.
 
+## Contents
+
+The ticket · Where the tree stands · The standards profiles · Steps: 3 route the standards,
+4 implement, 5 judge the branch, 6 triage, 7 docs, 8 handoff
+
 **Start this in an empty session** — every turn of this flow re-reads whatever the conversation
 already holds. **Invoked with history behind it — say so, and ask for `/clear` before going on.**
 

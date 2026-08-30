@@ -5,6 +5,14 @@ names exist. The full name list is `src/styles/standard.css` — the two Theme f
 other's checklist. This document holds the rules governing them, and the meanings a name does
 not carry on its own.
 
+## Contents
+
+- The rules
+- Tiers — where a raw value is allowed
+- The two accents
+- What the names do not say
+- Spacing — one scale, no token
+
 ## The rules
 
 **Every name is defined in every Theme.** Where a Theme has nothing for one, the value is

@@ -39,8 +39,8 @@ next session repeats.
 `<standards>` is `docs/agents/coding-standards/`.
 
 - **Creating a file under `src/`, or deciding where code belongs** — layers, folders, file names,
-  imports, comments: `<standards>/layers.md` (lint-enforced), `routing.md`, `naming.md`,
-  `imports.md`, `documentation.md`.
+  imports, comments: `<standards>/layers.md` (lint-enforced), `<standards>/routing.md`,
+  `<standards>/naming.md`, `<standards>/imports.md`, `<standards>/documentation.md`.
 - **Writing a type, or reaching for `any`, `as`, `!`, `@ts-ignore`**: `<standards>/typescript.md`.
 - **Writing something a second caller will reuse, repeating a check, or typing a bare string a
   constant should hold** — wrappers, result unions, shared error codes, documented options:

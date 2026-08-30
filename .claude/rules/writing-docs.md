@@ -17,6 +17,16 @@ the environment cannot say, once, and stop.
 **The reader is a frontier model mid-task**, not a newcomer. It holds the stack, the language and
 the framework already; it is missing only the local fact it has no way to derive.
 
+## Contents
+
+- What earns a line
+- How to phrase it
+- How it is shaped
+- CLAUDE.md is a switchboard
+- Say it once, in as few words as carry it
+- What keeps it true
+- The deletion pass
+
 ## What earns a line
 
 - **The no-op test.** A line earns its place by changing behavior against the model's default.

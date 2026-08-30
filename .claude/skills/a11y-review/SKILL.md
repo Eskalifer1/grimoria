@@ -12,6 +12,10 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, 
 
 **Run the review below now and report what it finds.** Change no code, and ask nothing.
 
+## Contents
+
+1. Gate 2. Read the full file 3. The seven categories 4. What Biome holds 5. Severity 6. Report
+
 **The range is `$0`, or `dev` when `$0` is empty.**
 
 **`dev`, not `dev...HEAD`.** `/implement-issue` hands the branch over uncommitted, so a three-dot

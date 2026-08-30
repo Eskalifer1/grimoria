@@ -3,6 +3,18 @@
 How a User signs in, how a session is read, and what guards `role` — the mechanics behind #32.
 Why Better Auth rather than Payload's own auth is ADR-0009; what `role` means is ADR-0003.
 
+## Contents
+
+- Shape
+- Reading a session
+- What a User may do
+- Rate limiting
+- Registration
+- Seeding the first admin
+- Theme
+- Where it is checked
+- Gotchas
+
 ## Shape
 
 `payload-auth`'s `betterAuthPlugin` in `src/payload.config.ts` generates six collections —

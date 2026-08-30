@@ -33,7 +33,8 @@ in the product, which is the point of the sheet existing. **Bone is text on the 
 off-white, because the source's violet-tinted grays are ruled out for the same reason a violet
 field is.
 
-`--line-glow` is deliberately **not** a primitive: it is violet at 35%, so it derives from one.
+**An emitting edge is deliberately not a primitive**: `--glow-text` is violet at 35%, so it derives
+from one.
 
 ## Interactive states
 

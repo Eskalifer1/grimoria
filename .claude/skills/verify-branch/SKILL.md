@@ -12,6 +12,11 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 
 # Judge issue #$0 — `$1` round
 
+## Contents
+
+1. Where the branch stands 2. What the round covers 3. Gate 4. Requirements 5. Review axes
+6. Acceptance 7. Report — then the appendix of axes `RUN:` names
+
 **Report what you find and stop. Change no file** except the one gate-fingerprint line in section 3.
 The agent that called this owns every fix.
 

@@ -12,7 +12,7 @@ Each layer is a Vitest project in `vitest.config.ts`, except e2e, which is a sep
 | --- | --- | --- | --- |
 | `unit` | A pure function — no DOM, no database, no `next/headers` | node | `tests/**/*.test.ts` |
 | `component` | A React component's rendered output and its response to interaction | jsdom + React Testing Library | `tests/**/*.test.tsx` |
-| e2e | A journey through the running app in a real browser, in both Themes | Playwright | `e2e/` |
+| e2e | A journey through the running app in a real browser, in both Themes | Playwright | `e2e/` — not built, #39 |
 
 **Push a test down to the cheapest layer that still exercises the logic.** Where impure code wraps a
 decision worth testing, extract the decision — `resolveTheme()` reads cookies and Payload, while the
