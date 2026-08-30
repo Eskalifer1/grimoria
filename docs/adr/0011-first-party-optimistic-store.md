@@ -20,6 +20,11 @@ carries an error the User can still see after they have walked away and come bac
 
 - **TanStack Query's mutation cache** — the closest fit, and rejected for the reason above: it
   arrives attached to a query layer this app does not have.
+- **TanStack DB** — the nearest thing that exists, and the one a reader will ask about: optimistic
+  mutations, transactions, an error per transaction, `localStorage` collections. It rolls a failure
+  back, which is the opposite of the rule this store is built around, and it holds a transaction in
+  memory, so a reload loses the error its collections were never persisting. It is a client store
+  besides, and putting the reads on the client is what disqualified TanStack Query above.
 - **Zustand, Jotai, Redux** — a general state container for one specific, small, well-understood
   shape. `useSyncExternalStore` is the primitive these are built on and it is in React already.
 - **`useOptimistic` alone** — the framework default, and the honest first answer. It fails the one
