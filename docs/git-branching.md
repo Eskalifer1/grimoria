@@ -9,6 +9,6 @@ lands where are `docs/git-workflow.md`.
 
 **Name it `<type>/<issue>-<slug>`** — `type` is one of the ten Conventional Commit types in
 `docs/git-workflow.md`, `issue` is the number, `slug` is two to four kebab-case words from the
-title. `feat/83-user-avatar-upload`.
+title. `feat/76-notes-list-page`.
 
 **Nothing enforces this yet** — #43 is canonical for enforcement.

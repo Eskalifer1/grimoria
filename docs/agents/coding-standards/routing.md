@@ -5,8 +5,7 @@ belongs to is `layers.md`; names are `naming.md`.
 
 `app/` splits into two route groups and every route belongs to one: `(frontend)/` is ours,
 `(payload)/` is Payload's. Each has its own root layout, which is what makes the split real — the
-themed, localized layout never wraps the admin, and Payload's CSS never reaches the product. Groups
-do not appear in URLs. `app/` itself cannot move: Next.js resolves it at `app/` or `src/app/` only.
+themed, localized layout never wraps the admin, and Payload's CSS never reaches the product.
 **`favicon.ico` is honored only at the root of `app/`** — inside a group it is ignored silently,
 surfacing as one fewer route in the build table.
 
@@ -39,11 +38,9 @@ own handler under `/api` would collide with that catch-all; the escape hatch is
 `routes.api: '/api/payload'`.
 
 **Payload's GraphQL API is off** — `graphQL.disable` in `src/payload.config.ts`, with its two
-generated route files deleted. Every read and write goes through the Local API in process, so the
-endpoint carried no caller. The `graphql` package stays in `package.json` regardless: `payload`
+generated route files deleted. The `graphql` package stays in `package.json` regardless: `payload`
 declares it as a peer dependency. #33 settled this.
 
 `src/app/(payload)/**` and `src/payload-types.ts` are generated: Biome and cspell skip both, and
-both are committed — `payload-types.ts` feeds every layer's domain types, so generating it at build
-time would break `tsc` on a clean clone. Regenerate with `yarn generate:types` and
+both are committed. Regenerate with `yarn generate:types` and
 `yarn generate:importmap`.

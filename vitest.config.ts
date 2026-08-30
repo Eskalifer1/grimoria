@@ -5,9 +5,9 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 /**
- * Three projects, one per test layer — which layer a piece of code belongs to
- * is `docs/testing.md`. A pure function must not pay for a fake DOM, and
- * `yarn test` must stay runnable without a database.
+ * Two projects, one per test layer — which layer a piece of code belongs to is
+ * `docs/testing.md`. A pure function must not pay for a fake DOM, and no test
+ * reaches a database: every seam that would is mocked.
  */
 export default defineConfig({
   // `server-only` throws on import outside a React Server Component, which is the
@@ -30,7 +30,6 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['tests/**/*.test.ts'],
-          exclude: ['tests/**/*.integration.test.ts'],
         },
       },
       {
@@ -46,14 +45,6 @@ export default defineConfig({
           // which only resolves once the package goes through Vite rather than Node.
           server: { deps: { inline: ['next-intl'] } },
           setupFiles: ['tests/setup/component.ts'],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: 'integration',
-          environment: 'node',
-          include: ['tests/**/*.integration.test.ts'],
         },
       },
     ],

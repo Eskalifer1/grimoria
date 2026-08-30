@@ -15,7 +15,6 @@
     "generate:importmap": "yarn payload generate:importmap",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:integration": "node --env-file-if-exists=.env node_modules/vitest/vitest.mjs run --project integration",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
     "format": "biome format --write",
