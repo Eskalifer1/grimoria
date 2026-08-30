@@ -37,8 +37,8 @@ const updateName = createProtectedAction({
 - **One exported action per `"use server"` file, and nothing else — not a schema, not a type.** Every
   export of such a file is a public endpoint reachable with arbitrary arguments, and the loader that
   rewrites the file leaves a broken reference behind for an export that is not an async function.
-  The schema lives beside it in `<action>Contract.ts`, which promotes to a shared module on its
-  second consumer.
+  An action is a folder — `index.ts` holds the action, `contract.ts` the schema, `optimistic.ts`
+  the client-side transition — and the schema promotes to a shared module on its second consumer.
 - **A handler refuses by throwing an `ActionError`** carrying a code (`notFoundError()`,
   `forbiddenError()`); the wrapper turns it into the failure member. Anything else that throws is a
   defect: logged server-side, returned as `UNEXPECTED`.

@@ -62,7 +62,8 @@ next session repeats.
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Reading data or writing it back** — where a Payload query lives, what a Server Action returns,
-  optimistic or blocking, rollback on failure, revalidation: `docs/features/data-access.md`.
+  optimistic or blocking, rollback on failure, revalidation: `docs/features/data-access.md`, and
+  `docs/features/data-access/api-local.md` for the `src/api/` layer and the action contract.
 - **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
 - **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
   `docs/agents/labels.md`.
