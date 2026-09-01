@@ -78,6 +78,7 @@ SIGSEGV
 spellbook
 srgb
 sslmode
+statusline
 subtasking
 supabase
 tailwindcss

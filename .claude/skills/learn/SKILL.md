@@ -1,6 +1,6 @@
 ---
 name: learn
-description: Turn a correction the user just gave about how code is written into a standing rule in docs/agents/coding-standards/. Judges whether the point generalizes beyond the case that provoked it, finds the doc that owns it, proposes the exact lines, and writes only after a nod. Invoked as /learn, and run without being asked whenever the user rejects an approach rather than a fact.
+description: Turn a correction the user just gave about how code is written into a standing rule in docs/agents/coding-standards/. Proposes the lines, writes after a nod. /learn; run unasked when the user rejects an approach.
 ---
 
 # Learn from a correction

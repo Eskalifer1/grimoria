@@ -1,6 +1,6 @@
 ---
 name: implement-issue
-description: Implement a `ready-for-agent` tracker issue from branch to commit handoff — standards routed, test-first slices in their own subagents, a judging round in its own context when the diff earns one, triage, docs sync. Invoked as /implement-issue <issue-number>, and dispatched to by /task-flow for a ready ticket.
+description: Implement a ready-for-agent tracker issue from branch to commit handoff — standards routed, test-first slices in subagents, a judging round, triage, docs sync. /implement-issue <n>; dispatched by task-flow.
 argument-hint: "[issue-number]"
 model: opus
 effort: medium

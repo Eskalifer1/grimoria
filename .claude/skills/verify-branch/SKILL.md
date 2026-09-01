@@ -1,6 +1,6 @@
 ---
 name: verify-branch
-description: Judge a branch someone else wrote — the full gate, the ticket's requirements, the review axes the diff earns, and one verdict per acceptance criterion. Runs in its own context on a cheaper model, reads code only, and repairs nothing. Invoked as /verify-branch <issue-number> <full|recheck>, and by /implement-issue at step 5.
+description: Judge a branch someone else wrote — the full gate, the ticket's requirements, the review axes the diff earns, one verdict per acceptance criterion. Reads only. /verify-branch <n> <full|recheck>; implement-issue step 5.
 argument-hint: "[issue-number] [full|recheck]"
 context: fork
 agent: general-purpose

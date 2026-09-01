@@ -1,6 +1,6 @@
 ---
 name: bug-hunt-review
-description: Hunt latent correctness bugs in a branch's changed code — edge inputs, floating promises, swallowed failures, state that disagrees with itself, assertions standing in for checks, the server/client boundary, cache and revalidation, and Payload hook ordering. Every finding names the input that breaks and the wrong output it produces. Reads code only; runs nothing and repairs nothing. Invoked as /bug-hunt-review [range], and by /verify-branch as the bug-hunt axis.
+description: Hunt latent correctness bugs in a branch's diff — edge inputs, floating promises, swallowed failures, server/client boundary, cache, Payload hook order. Reads only. /bug-hunt-review [range]; verify-branch axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose

@@ -5,8 +5,30 @@
   "disableRemoteControl": true,
   "disableClaudeAiConnectors": true,
   "disableArtifact": true,
+  "enableArtifact": false,
+  "includeGitInstructions": false,
+  "syncClaudeAiSkills": false,
+  "claudeMdExcludes": ["**/.claude/rules/context7.md"],
+  "skillListingMaxDescChars": 220,
+
+  "_comment_deny_context": "The first deny block trims the system prompt, not just permissions: ReportFindings is unused here (no skill calls it), ListAgents is dead with disableRemoteControl on, and each Task(<agent>) line drops that row from the agent listing. Delete a Task line to get that agent back. general-purpose and the project agents (slice, slice-fill, wiring, review-axis) stay.",
+  "_comment_skillOverrides": "user-invocable-only = hidden from the listing, still runs when you type /name. off = hidden everywhere. Delete a line to bring the skill back; the _when note on each says when that is worth doing.",
+  "_when_task_flow": "user-invocable-only: only you start a ticket run; no skill dispatches to it.",
+  "_when_docs_audit": "user-invocable-only: only you start a docs rot sweep.",
+  "_when_find_skills": "off: turn on when you want to search for and install new agent skills.",
+  "_when_audit_context": "off: turn on when you want a nao context audit (RULES.md, table coverage, data model).",
+  "_when_optimize_agent_docs": "off: turn on when you want the dotfiles docs rebuilt into a retrieval-optimized knowledge layer.",
+  "skillOverrides": {
+    "task-flow": "user-invocable-only",
+    "docs-audit": "user-invocable-only",
+    "find-skills": "off",
+    "audit-context": "off",
+    "optimize-agent-docs": "off"
+  },
+
   "env": {
-    "CLAUDE_CODE_DISABLE_BUNDLED_SKILLS": "1"
+    "CLAUDE_CODE_DISABLE_BUNDLED_SKILLS": "1",
+    "MAX_MCP_OUTPUT_TOKENS": "10000"
   },
   "enabledPlugins": {
     "mattpocock-skills@claude-plugins-official": true
@@ -27,6 +49,11 @@
   "permissions": {
     "allow": ["Bash(.claude/bin/e2e-run.sh:*)"],
     "deny": [
+      "ReportFindings",
+      "ListAgents",
+      "Task(Plan)",
+      "Task(statusline-setup)",
+
       "CronCreate",
       "CronDelete",
       "CronList",

@@ -1,6 +1,6 @@
 ---
 name: implement-issue-simple
-description: Implement a small, low-risk change end to end — branch, code, gate, commit title — with no slices, no judging round and no review axes. For a mechanical sweep across many files, a copy fix, a config bump, a rename, or a one-file change whose blast radius the user already knows. Invoked as /implement-issue-simple [issue-number].
+description: Implement a small, low-risk change end to end — branch, code, gate, commit title. No slices, no judging round, no review axes. For sweeps, copy fixes, config bumps, renames. /implement-issue-simple [n].
 argument-hint: "[issue-number]"
 model: sonnet
 effort: medium

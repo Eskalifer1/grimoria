@@ -1,6 +1,6 @@
 ---
 name: a11y-review
-description: Review a branch's changed React components for accessibility defects that Biome's static a11y rules cannot see — semantics, accessible names, keyboard reach, ARIA state, form wiring, dynamic states, and locale markup. Reads code only; runs no browser and repairs nothing. Invoked as /a11y-review [range], and by /verify-branch as the a11y axis.
+description: Review a branch's changed React components for a11y defects Biome can't catch — semantics, accessible names, keyboard reach, ARIA, forms, locale markup. Reads only. /a11y-review [range]; verify-branch axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose

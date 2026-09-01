@@ -1,6 +1,6 @@
 ---
 name: payload-security-review
-description: Review a branch's changed server surfaces for security defects the framework does not hold — collection access control, IDOR, Local API access bypass, unauthenticated route handlers and Server Actions, unvalidated input, race conditions on writes, leaked secrets and stack traces, and the injection trio (XSS, SQL, SSRF). Reads code only; runs nothing and repairs nothing. Invoked as /payload-security-review [range], and by /verify-branch as the security axis.
+description: Security review of a branch's changed server surfaces — access control, IDOR, open handlers and Server Actions, unvalidated input, secrets, XSS/SQL/SSRF. Reads only. /payload-security-review [range]; verify-branch axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose

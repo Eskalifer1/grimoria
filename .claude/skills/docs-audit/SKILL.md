@@ -1,6 +1,6 @@
 ---
 name: docs-audit
-description: Sweep the documentation set for rot — dead references, contradictions, duplication, bloat and stale auto-memory — rank the proven findings, then apply exactly the ones you name. Reports in Ukrainian; edits nothing before you choose.
+description: Sweep the docs set for rot — dead references, contradictions, duplication, bloat, stale auto-memory — rank the proven findings, then apply exactly the ones you name. Reports in Ukrainian; edits nothing first.
 argument-hint: "[path]"
 disable-model-invocation: true
 ---

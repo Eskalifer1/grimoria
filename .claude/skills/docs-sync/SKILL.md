@@ -1,6 +1,6 @@
 ---
 name: docs-sync
-description: Sync this repo's documentation (CONTEXT.md, docs/adr/, docs/features/*.md, docs/agents/*.md, CLAUDE.md) with a change that was just made or just discussed, so docs never drift from what the code/process actually does. Invoked manually after a conversation that decided something worth documenting, and by /implement-issue at step 7. Always proposes before writing — never edits docs unconfirmed.
+description: Sync this repo's docs (CONTEXT.md, docs/adr, docs/features, docs/agents, CLAUDE.md) with a change just made or just discussed, so they never drift. Proposes before writing. /docs-sync; implement-issue step 7.
 ---
 
 ## Two ways in
