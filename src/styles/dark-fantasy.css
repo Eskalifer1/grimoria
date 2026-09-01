@@ -89,6 +89,17 @@
   --action-quiet-fg: var(--text-body);
   --action-quiet-fg-disabled: var(--bone-700);
 
+  /*
+   * The dark fill under light ink, against the Theme's usual light-on-dark
+   * action: blood is the ramp that prints and never glows.
+   */
+  --action-destructive-bg: var(--blood-sigil);
+  --action-destructive-bg-hover: var(--blood-clot);
+  --action-destructive-bg-pressed: var(--blood-clot);
+  --action-destructive-fg: var(--blood-mist);
+  --action-destructive-bg-disabled: var(--void-slate);
+  --action-destructive-fg-disabled: var(--bone-700);
+
   --focus-ring:
     0 0 0 1px var(--violet-light), 0 0 16px color-mix(in srgb, var(--violet-light) 25%, transparent);
 
@@ -130,4 +141,11 @@
   --font-meta: var(--font-barlow), sans-serif;
   --font-reading: var(--font-literata), serif;
   --font-code: var(--font-jetbrains-mono), monospace;
+
+  /* Playfair Display is drawn at its own width — tightening it closes the counters. */
+  --ls-display: 0;
+  --ls-title: 0;
+  --ls-body: 0;
+  --ls-meta: 0.14em;
+  --ls-mono: 0.06em;
 }

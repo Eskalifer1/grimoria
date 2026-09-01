@@ -11,13 +11,17 @@ offset, a progress width — is the one case that survives it, through a `biome-
 reason names the value being computed; Biome rejects a reasonless suppression.
 
 **A value outside the tokens does not compile.** `tokens.css` removes Tailwind's own color,
-radius, shadow, blur, font and easing scales, so `bg-red-500` and `shadow-lg` fail the build
-rather than shipping a value nothing links to the design system. Do not add them back: needing
+radius, shadow, blur, font, easing and tracking scales, so `bg-red-500` and `shadow-lg` fail the
+build rather than shipping a value nothing links to the design system. Do not add them back: needing
 a value the tokens lack means `design/token-contract.md` is missing a name, and adding one is a
 change to that contract.
 
-Font size is the one scale still open — the two Themes name their type scales differently, so
-`text-*` stays until #79 settles one set of names.
+**Font size and line height are Tailwind's own scale**, like spacing — `text-*` is the type scale
+and there is no token to reach for. **Tracking is a token**: the first three `--ls-*` ride on the
+`text-*` step, so `text-3xl` already carries the tracking measured for it, and the two that follow
+a font role rather than a size are `tracking-meta` and `tracking-mono`. Tailwind's own tracking
+scale is dropped, so `tracking-wide` fails the build; `tracking-tight` survives only as the alias
+`shadcn-adapter.css` restores for the vendored zone. `design/token-contract.md` holds the argument.
 
 **Duration is written as a name**: `duration-fast`, `duration-slow`, or no class at all, which
 is the contract's own default. `duration-200` is the exception the build cannot catch — a bare

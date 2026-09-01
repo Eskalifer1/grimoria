@@ -84,19 +84,12 @@ labels take wide tracking, a mono stating a fact does not. **Literata is shared 
 
 ### Type scale
 
-Not in the CSS — Tailwind's `text-*` still owns font size until #79 settles one set of names
-across both Themes.
+**Size and line height are Tailwind's `text-*`, and there is no token for them** —
+`token-contract.md` says why. Tracking is the part that is this Theme's, and the five `--ls-*`
+values are in the CSS.
 
-```
---fs-display-1: 48px   --fs-body-lg: 17px    --lh-tight: 1.05    --ls-display: -0.03em
---fs-display-2: 34px   --fs-body:    15px    --lh-title: 1.15    --ls-title:   -0.02em
---fs-title-1:   28px   --fs-label:   14px    --lh-snug:  1.35    --ls-body:     0
---fs-title-2:   22px   --fs-meta:    12px    --lh-body:  1.6     --ls-mono:     0.06em
---fs-title-3:   18px   --fs-micro:   11px                        --ls-mono-label: 0.14em
-```
-
-Measured off the reference image rather than derived — a high-confidence approximation #74's
-render may adjust, not fixed truth.
+**Plus Jakarta Sans is tightened as it grows** — that is what separates a display line from a
+heading when one family carries both.
 
 ## Deliberately not settled
 

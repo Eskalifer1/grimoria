@@ -42,12 +42,14 @@
   --ring: var(--border-brand);
 
   /*
-   * shadcn's `--destructive` is what a primitive turns red for — an invalid
-   * input, a failure alert — which is the same thing `--status-failed` already
-   * means in both Themes. The contract still has no destructive *pair* (#79),
-   * so nothing here fills a surface with it; only text and borders.
+   * shadcn's `--destructive` fills a surface as often as it tints text, so it
+   * takes the action pair rather than `--status-failed` — a status is what a
+   * thing *is*, not what a control does. The foreground is aliased because
+   * `ui/button.tsx` reaches for a `text-white` that no longer compiles;
+   * `DestructiveButton` is what applies it.
    */
-  --destructive: var(--status-failed);
+  --destructive: var(--action-destructive-bg);
+  --destructive-foreground: var(--action-destructive-fg);
 
   --radius: var(--radius-md);
 }
@@ -71,4 +73,13 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  /*
+   * `tokens.css` drops Tailwind's tracking scale, and two vendored primitives
+   * spell their title tracking `tracking-tight` — a name we cannot edit out of
+   * `ui/`. Restored as the alias it always meant, so the class keeps compiling
+   * and now resolves per Theme instead of to Tailwind's fixed -0.025em.
+   */
+  --tracking-tight: var(--ls-title);
 }

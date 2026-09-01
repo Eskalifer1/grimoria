@@ -111,18 +111,13 @@ display serif never appears on these.
 
 ### Type scale
 
-Not in the CSS — Tailwind's `text-*` still owns font size until #79.
+**Size and line height are Tailwind's `text-*`, and there is no token for them** —
+`token-contract.md` says why. Tracking is the part that is this Theme's, and the five `--ls-*`
+values are in the CSS.
 
-```
---fs-display: 52px   --fs-body-lg: 20px   --lh-display: 1.08
---fs-h1:      40px   --fs-body:    17px   --lh-heading: 1.18   --ls-caps:  .14em
---fs-h2:      32px   --fs-label:   13px   --lh-body:    1.6    --ls-label: .08em
---fs-h3:      24px   --fs-micro:   11px   --lh-ui:      1.35
---fs-h4:      20px
-```
-
-Measured off the source screenshot, a different product at a different density. **Weaker than
-`standard`'s** — a starting point for the first render, not a decision.
+**Playfair Display is set at the width it was drawn at.** It is a high-contrast face whose
+counters close when it is tightened, so display and title take nothing where `standard` takes a
+negative value.
 
 ## Deliberately not settled
 

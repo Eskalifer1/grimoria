@@ -11,7 +11,7 @@ not carry on its own.
 - Tiers — where a raw value is allowed
 - The two accents
 - What the names do not say
-- Spacing — one scale, no token
+- Spacing and type size — one scale, no token
 
 ## The rules
 
@@ -84,10 +84,12 @@ Most names mean what they say. These carry a decision:
   are backdrop blurs on translucent surfaces. A dialog's own body is never translucent — a
   decision should not have the page reading through it.
 - **Disabled is always a color pair, never an `opacity` rule** — `standard-tokens.md` says why.
-- **`--status-failed` is the fourth status, and the only one either Theme may spend a red on.**
-  `dark-fantasy` fills it from the blood ramp it already uses for destructive actions; `standard`
-  carries a red primitive for this name alone. It is a status, not the content accent: an accent
-  never crosses roles.
+- **`--status-failed` is the fourth status, and the only status either Theme may spend a red on.**
+  It says what a thing _is_, so it never doubles as the fill of a control that acts.
+- **`--action-destructive-*` is the third action family**, six names mirroring
+  `--action-primary-*`. **Both Themes fill it with a dark red under light ink** — the one place
+  `dark-fantasy` does not answer with light. A Theme may spend one red on both this and
+  `--status-failed`.
 - **`--font-reading` and `--font-code` hold the same values in both Themes**, the only tokens
   for which that is true by rule. Both live inside the Note body, which is content the User
   wrote; changing Theme must not change what their own writing looks like to read. **Neither
@@ -103,7 +105,7 @@ Most names mean what they say. These carry a decision:
 - **The five radii** carry one of the sharpest differences between the Themes: `standard` is
   round where `dark-fantasy` is cut.
 
-## Spacing — one scale, no token
+## Spacing and type size — one scale, no token
 
 **Every gap, pad and margin is a multiple of 4px**, and this is the one group whose _values_ are
 identical in both Themes rather than just its names, which is why it is named here and in
@@ -112,3 +114,15 @@ neither value document.
 **There is no spacing token and none is to be added.** Tailwind's utilities already _are_ this
 scale, so a `--space-6` would be a second copy of a value the framework holds. Anything not a
 multiple of four is a hairline, a font metric, or a bug.
+
+**Font size and line height are Tailwind's scale, by the same argument.** `text-*` is the type
+scale — both Themes step through the same sizes. The reading sheet's looser measure is
+`leading-relaxed` on the one component that renders Note body.
+
+**Letter spacing is the exception, and stays a token**, because it follows the type family and
+the Themes do not share one: `standard` tightens a grotesque as it grows, `dark-fantasy` sets
+Playfair Display at its drawn width. Five names — `--ls-display`, `--ls-title`, `--ls-body`,
+`--ls-meta`, `--ls-mono`. The first three reach components as the modifier paired to a `text-*`
+step, so a size cannot be written without its tracking; the last two follow a font role rather
+than a size and are `tracking-meta` and `tracking-mono`. Tailwind's own tracking scale is dropped
+in `tokens.css`, so a fixed value cannot outrank a Theme.

@@ -7,8 +7,10 @@
 @theme {
   /*
    * Dropped so that a utility whose value is not a token cannot compile —
-   * `bg-red-500`, `rounded-xl`, `shadow-lg`, `ease-out`. Font sizes are left
-   * alone: no contract name exists to replace them with yet (#79).
+   * `bg-red-500`, `rounded-xl`, `shadow-lg`, `ease-out`, `tracking-wide`. Font
+   * size and line height are the exception and stay Tailwind's, by the same
+   * argument that leaves spacing to it (`design/token-contract.md`); tracking
+   * goes because it is the one type value the two Themes disagree on.
    */
   --color-*: initial;
   --font-*: initial;
@@ -16,6 +18,7 @@
   --shadow-*: initial;
   --blur-*: initial;
   --ease-*: initial;
+  --tracking-*: initial;
 }
 
 /*
@@ -68,6 +71,13 @@
   --color-action-quiet-fg: var(--action-quiet-fg);
   --color-action-quiet-fg-disabled: var(--action-quiet-fg-disabled);
 
+  --color-action-destructive-bg: var(--action-destructive-bg);
+  --color-action-destructive-bg-hover: var(--action-destructive-bg-hover);
+  --color-action-destructive-bg-pressed: var(--action-destructive-bg-pressed);
+  --color-action-destructive-fg: var(--action-destructive-fg);
+  --color-action-destructive-bg-disabled: var(--action-destructive-bg-disabled);
+  --color-action-destructive-fg-disabled: var(--action-destructive-fg-disabled);
+
   --color-status-live: var(--status-live);
   --color-status-idle: var(--status-idle);
   --color-status-done: var(--status-done);
@@ -80,6 +90,35 @@
   --font-reading: var(--font-reading);
   --font-meta: var(--font-meta);
   --font-code: var(--font-code);
+
+  /*
+   * Tracking rides on the size utility rather than standing beside it, so
+   * `text-3xl` cannot be written without the tracking measured for it. Tailwind
+   * emits the modifier as `letter-spacing: var(--tw-tracking, var(--ls-title))`,
+   * which is a `var()` the Theme still resolves — verified, not assumed.
+   */
+  --text-lg--letter-spacing: var(--ls-body);
+  --text-base--letter-spacing: var(--ls-body);
+  --text-sm--letter-spacing: var(--ls-body);
+  --text-xs--letter-spacing: var(--ls-body);
+
+  --text-4xl--letter-spacing: var(--ls-title);
+  --text-3xl--letter-spacing: var(--ls-title);
+  --text-2xl--letter-spacing: var(--ls-title);
+  --text-xl--letter-spacing: var(--ls-title);
+
+  --text-9xl--letter-spacing: var(--ls-display);
+  --text-8xl--letter-spacing: var(--ls-display);
+  --text-7xl--letter-spacing: var(--ls-display);
+  --text-6xl--letter-spacing: var(--ls-display);
+  --text-5xl--letter-spacing: var(--ls-display);
+
+  /*
+   * The two that follow a font role instead of a size: metadata is caps at any
+   * size it is set at, and code carries its tracking wherever it lands.
+   */
+  --tracking-meta: var(--ls-meta);
+  --tracking-mono: var(--ls-mono);
 
   --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);

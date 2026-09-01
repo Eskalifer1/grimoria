@@ -18,6 +18,7 @@
   --teal-50: #eff7f6;
 
   --rose-600: #b3261e;
+  --rose-800: #8c1d18;
 
   --violet-600: #7c3aed;
   --violet-500: #8b5cf6;
@@ -80,6 +81,13 @@
   --action-quiet-fg: var(--ink-700);
   --action-quiet-fg-disabled: var(--ink-300);
 
+  --action-destructive-bg: var(--rose-600);
+  --action-destructive-bg-hover: var(--rose-800);
+  --action-destructive-bg-pressed: var(--rose-800);
+  --action-destructive-fg: var(--paper-0);
+  --action-destructive-bg-disabled: var(--paper-100);
+  --action-destructive-fg-disabled: var(--ink-300);
+
   --focus-ring: 0 0 0 2px var(--teal-400);
 
   --status-live: var(--teal-400);
@@ -124,4 +132,11 @@
   --font-meta: var(--font-jetbrains-mono), monospace;
   --font-reading: var(--font-literata), serif;
   --font-code: var(--font-jetbrains-mono), monospace;
+
+  /* Plus Jakarta Sans is tightened as it grows; the mono values are shared. */
+  --ls-display: -0.03em;
+  --ls-title: -0.02em;
+  --ls-body: 0;
+  --ls-meta: 0.14em;
+  --ls-mono: 0.06em;
 }
