@@ -50,6 +50,9 @@ next session repeats.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
   Values outside the tokens do not compile.
 - **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`.
+- **Building a form** — the `Form.*` primitives, `useOptimisticForm`/`useActionForm`, validation
+  copy:
+  `docs/features/forms.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.
 - **Designing or styling a UI surface**: `design/standard-design.md`,
@@ -76,8 +79,8 @@ next session repeats.
 - **Writing or running tests, choosing a test layer, or touching CI**: `docs/testing.md`.
 - **Reviewing a diff, or judging whether a review finding is legitimate**:
   `<standards>/review-boundaries.md`.
-- **Keyboard reach, screen-reader names, focus order, ARIA state, or what a11y level we hold**:
-  `<standards>/accessibility.md`.
+- **Accessibility — what a keyboard and screen-reader User is promised**, and reviewing a surface
+  against it with `/a11y-review`: `<standards>/accessibility.md`.
 - **Writing a collection's access control, a route handler, a Server Action, or anything reading
   User input** — who may do what: `docs/features/auth.md`.
 - **Triaging a Dependabot PR**: `docs/dependency-updates.md`.

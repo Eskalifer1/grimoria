@@ -14,7 +14,9 @@
     "tagline": "A grimoire binding to memory every spell you have ever learned."
   },
   "form": {
-    "cancel": "Abandon"
+    "cancel": "Abandon",
+    "reset": "Unbind",
+    "save": "Bind"
   },
   "homePage": {
     "createNote": "Inscribe a spell",
@@ -28,8 +30,13 @@
     "problem": "Something here demands your attention."
   },
   "profilePage": {
+    "nameHint": "{limit} marks at the most.",
     "nameLabel": "Bound name",
-    "save": "Bind",
     "title": "My sigil"
+  },
+  "validation": {
+    "required": "Nothing is written here.",
+    "tooLong": "Too many marks — {limit} at the most.",
+    "tooShort": "Too few marks — {limit} at the least."
   }
 }

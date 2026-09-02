@@ -181,29 +181,29 @@ action's schema strips the id back off before the write.
 | Client-side validation, from the action's own Zod schema | The failure, until it is dismissed or fixed |
 | Nothing that outlives the component | Everything that crosses a reload |
 
-**The resolver is built from the action's contract schema** — `zodResolver(updateNameSchema)`, one
-schema checked in the browser and again on the server.
+**`useOptimisticForm` is the seam, and `optimisticFormStatus` is what feeds it:**
 
-**The field follows the optimistic value through `values`, never `defaultValues`.** The optimistic
-value is the half that survives a reload, so a failed save comes back with what was typed still in
-the field and the reason still under it — but `defaultValues` is read once, at mount.
+```tsx
+const nameForm = useOptimisticForm({
+  schema: updateNameSchema,
+  values: { name: displayName.value },
+  writeStatus: optimisticFormStatus('name', displayName),
+  write: (values) => displayName.run(values.name),
+});
+```
 
-**`values` carries the answer back only into a field nothing was typed into since.** The form is
-built with `resetOptions: { keepDirtyValues: true }`, and the submit clears the dirty mark itself
-once it has checked that the field still holds what it sent. Without the option, an answer landing
-while the User typed again takes what they typed; without the clear, a name the server normalized
-never reaches the input and the next save reverts it.
+It builds the resolver from the action's contract schema and follows the store through `values`,
+because the store is what answers with the value here. What that costs and how the dirty mark is
+cleared is `docs/features/forms.md`.
 
 **Where a server failure lands is decided by whether it names a field.** A code carrying
-`fields.<name>` is about the value and renders through `<FormFieldMessage>` beside the input; anything
-else — no session, no right — is about the write and is handed to `<Form error={...}>`, which draws
-it under the fields and above the submit row. The client's own rejection is worded from the same
-`invalidInput` key the server's would be, so Zod's English never reaches a User.
+`fields.<name>` is about the value and renders beside that input; anything else — no session, no
+right — is about the write and renders in the footer. `optimisticFormStatus` drops the second when
+the server named a field, because the store files that failure in both places and drawing both
+prints it twice.
 
-**`<Form>` owns the error row and the submit row.** A screen passes `error`, `onDismiss`,
-`submitLabel` and — where there is somewhere to go back to — `onCancel`; it writes no `<ErrorRow>` and
-no submit button of its own. Written per form, each one would decide the order and the focus return
-again, and a form that forgot the message would refuse silently.
+**How a form is built here, in full, is `docs/features/forms.md`** — the `Form.*` namespace, what
+`Form.Footer` draws, and where the schema's own refusals are worded.
 
 ## Saying the app is busy, globally
 

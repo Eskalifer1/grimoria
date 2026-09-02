@@ -136,8 +136,15 @@
       "includes": ["src/shared/components/ui/**"],
       "linter": {
         "rules": {
+          "a11y": {
+            "useSemanticElements": "off"
+          },
           "nursery": {
             "noInlineStyles": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off",
+            "noDoubleEquals": "off"
           },
           "style": {
             "useConsistentTypeDefinitions": "off",

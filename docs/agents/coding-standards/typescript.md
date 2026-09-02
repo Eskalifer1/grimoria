@@ -47,6 +47,9 @@ where a falsy value is a *different* answer from an absent one — a timer id of
 `0`, an empty string, or a union being narrowed against `null` on its way to a type guard
 (`typeof value === 'object' && value !== null`).
 
+**Drop falsy entries with `filter(Boolean)`.** Neither it nor `(x) => !!x` narrows the element type,
+so the shorter one wins; a filter that must narrow spells the comparison out (`(x) => x !== null`).
+
 ## Domain types come from Payload
 
 `src/payload-types.ts` is the source of truth for every collection and document shape. Derive from

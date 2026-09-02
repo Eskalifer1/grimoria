@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { ACTION_ERROR } from '@/constants/action';
 import { OPTIMISTIC_ERROR } from '@/constants/optimistic';
 import { ErrorRow } from '@/shared/components/ErrorRow';
-import { clientFailure } from '@/shared/lib/optimistic/entry';
+import { clientFailure as failure } from '@/shared/lib/optimistic/entry';
 
 import {
   announced,
@@ -17,8 +17,6 @@ import {
 
 const copy = messages.optimistic;
 const errorCopy = messages.actionError;
-
-const failure = clientFailure;
 
 describe('ErrorRow', () => {
   it('keeps its region mounted and silent when nothing failed', () => {

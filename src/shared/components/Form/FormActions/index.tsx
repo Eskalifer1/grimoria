@@ -1,53 +1,24 @@
 'use client';
 
-import type { RefObject } from 'react';
+import type { ReactNode } from 'react';
 
-import { useTranslations } from 'next-intl';
-
-import { Button } from '@/shared/components/ui/button';
+import { cn } from '@/shared/lib/cn';
 
 interface FormActionsProps {
-  /** The submit button's label. */
-  submitLabel: string;
+  /** The content to render inside the action row — submit, and whatever sits beside it. */
+  children: ReactNode;
 
-  /** Whether a write is out. The button stays live — nothing is disabled (pattern B). */
-  isPending?: boolean;
-
-  /** Shows a cancel button beside submit. Omitted where there is nothing to go back to. */
-  onCancel?: () => void;
-
-  /** The cancel button's label. Defaults to the shared word. */
-  cancelLabel?: string;
-
-  /** Reaches the submit button, which is where focus returns after a dismissal. */
-  submitRef?: RefObject<HTMLButtonElement | null>;
+  /** Additional classes, merged onto the root element. */
+  className?: string;
 }
 
 /**
- * The row a form ends with. Here rather than in each form so the order, the
- * spacing and the busy state are decided once.
+ * The row a form ends with. Here rather than in each form so the order and the
+ * spacing are decided once, and taking children rather than labels so a form
+ * adding a control adds a child and not a prop.
  */
-function FormActions({
-  submitLabel,
-  isPending,
-  onCancel,
-  cancelLabel,
-  submitRef,
-}: FormActionsProps) {
-  const t = useTranslations('form');
-
-  return (
-    <div className="flex items-center gap-2 self-start">
-      <Button aria-busy={isPending} ref={submitRef} type="submit">
-        {submitLabel}
-      </Button>
-      {onCancel ? (
-        <Button onClick={onCancel} type="button" variant="ghost">
-          {cancelLabel ?? t('cancel')}
-        </Button>
-      ) : null}
-    </div>
-  );
+function FormActions({ children, className }: FormActionsProps) {
+  return <div className={cn('flex items-center gap-2 self-start', className)}>{children}</div>;
 }
 
 export type { FormActionsProps };

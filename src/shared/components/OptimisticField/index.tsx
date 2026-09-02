@@ -70,7 +70,7 @@ function OptimisticField<TInput, TData, TField extends Extract<keyof TInput, str
       >
         {shown.value}
       </span>
-      <ErrorRow errors={error ? [error] : []} onDismiss={shown.dismiss} returnFocusTo={valueRef} />
+      <ErrorRow onDismiss={shown.dismiss} returnFocusTo={valueRef} errors={error ? [error] : []} />
     </span>
   );
 }

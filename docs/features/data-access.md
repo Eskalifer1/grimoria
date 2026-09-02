@@ -44,6 +44,7 @@ note → B.
 | Changing the store or its entry shape | `docs/features/data-access/store.md` |
 | Changing what survives a reload, a second tab or a clock | `docs/features/data-access/persistence.md` |
 | Writing a Server Action, a read, or `src/api/` | `docs/features/data-access/api-local.md` |
+| Building a form — primitives, `useActionForm`, validation copy | `docs/features/forms.md` |
 
 Each pattern file is **self-sufficient**: an agent that opens one writes working code without
 opening a sibling. The duplication between them is the design.

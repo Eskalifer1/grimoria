@@ -12,6 +12,18 @@ paths:
 server/client rules, the state ladder, the composition ladder, and how props are documented.
 This file is a reminder, not a substitute.
 
+## COMMENTS: TWO LINES, OR NONE
+
+**A comment answers _why_, in one or two lines. Three is an exception that has to earn it.**
+Anything longer is a decision, and decisions live in `docs/features/` or `docs/adr/`.
+
+**Delete a comment that says what the line already says.** `// read here rather than there`,
+`// runs the write`, `// the id the label points at` — the code is the sentence. If a line needs
+prose to be followed at all, rename the thing or split the function.
+
+**This is strictest inside components.** Markup is read by shape; a paragraph between two elements
+hides the tree it is explaining.
+
 Four things that break silently — nothing fails, review passes, and the cost shows up later:
 
 - **`views/` never carries `"use client"`.** It is a composition root: the directive pulls

@@ -70,7 +70,8 @@ failure. `useActionErrorMessage()` turns a failure into a sentence, and an unkno
 generic one rather than reaching a User raw. A validation failure also carries `fields` — the
 schema's own messages per field path, in English and outside `messages/`, so they are a server-side
 diagnostic and not something a surface renders. A form places its own copy beside the input, keyed
-by the field; localized field errors are #97, with the schema.
+by the field, and words the schema's own refusals from catalog keys the schema carries —
+`docs/features/forms.md`.
 
 ## Reads
 

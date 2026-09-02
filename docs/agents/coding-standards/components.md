@@ -47,9 +47,13 @@ Climb only when the rung below stops working.
    with Cache Components (#95).
 
 **A value owned outside the component is followed, never copied.** Seeding local state from a prop,
-or a form library's fields from a one-shot `defaultValues`, reads the source once. Read the value on every render, or hand the library its reactive entry point
-(`values`, not `defaultValues`). A one-time seed is correct only when the source is genuinely
-initial and never changes again.
+or a form library's fields from a one-shot `defaultValues`, reads the source once. Read the value on
+every render, or hand the library its reactive entry point (`values`, not `defaultValues`).
+
+**Follow a source only where something outside will actually answer with the value; otherwise take a
+seed.** Bound to a source nothing ever moves, the component is dragged back to what it held before
+its own write. Who owns the write owns the value:
+`docs/features/forms.md` decides it per write pattern.
 
 **State that shadows the server is written together with the rule that retires it.** A local
 overlay, a row hidden after a delete, a value held while a save is out — each is a claim the server
@@ -66,6 +70,12 @@ written by hand; one added anyway is added **against a measurement**. **The comp
 cannot lower, silently** — a default in a destructured parameter (`{ compare = Object.is }`) costs
 the whole function its memoization, so default in the body instead.
 
+**A live nested read never goes in the same allocation as the object it hangs off.**
+`{ form, isPending: form.formState.isSubmitting }` collapses to a dependency on `form` alone, and a
+library handing back one object for the component's life then freezes the value forever. The read is
+safe on its own, and safe in an allocation `form` is not part of — so return the object and let the
+caller read through it.
+
 **Refs point down, never up** — a ref handing data back to a parent is state belonging at rung 2.
 
 ## When a component grows
@@ -79,7 +89,9 @@ Three moves, cheapest first:
   regions**. The root attaches its regions to keep one export
   (`Object.assign(CardRoot, { Header: CardHeader })`), which carries no client boundary across
   itself, so a compound component lives entirely on one side of it; a server root with a client
-  `Header` is a slot, not this pattern.
+  `Header` is a slot, not this pattern. **Where the root is a named region itself** — `Form.Root`
+  beside `Form.Field` — the family is a plain object instead (`const Form = { Root, Field, … }`), so
+  there is one way to write the root rather than two. The rule either way is **one export**.
 
 Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `features/`,
 `entities/` and our `shared/components/`. It is a smoke alarm, not the rule. **The rule is the seam.**
@@ -113,6 +125,11 @@ moves to the module's `lib/`.
 **Components are declared at the top level**
 (`correctness/noNestedComponentDefinitions`).
 
+**Props are destructured in the signature**, however many there are — the type already lists them,
+and `props.x` at each use reads as a second name for the same thing. **A namespace is for an object
+whose name carries meaning**: a hook's return (`status.isPending`, `displayName.value`) says where
+the value came from, which a bare `isPending` does not.
+
 **Conditional markup closes on `null`**, because `&&` prints a literal `0` on an empty list: `{comments.length ? <CommentList items={comments} /> : null}`.
 
 **Components and module-level functions use `function`**; arrows stay in callbacks and short
@@ -128,11 +145,19 @@ enforced by `style/noJsxLiterals`.
   differently? Then it describes the parent's intent, which is not the component's business.
 - **Booleans carry `is`, `has`, `can` or `should`** — `should` turns behavior on and off
   (`shouldAutoFocus`), the others describe state (`isOpen`).
+- **A prop mirroring a native attribute of the control it configures keeps that attribute's name** —
+  `required`, `disabled`, `readOnly`. Renaming it to `isRequired` puts two names on one thing and
+  breaks the spread onto the element.
 - **Props types are `{ComponentName}Props`.**
 
 The vendored zone keeps whatever shadcn and Radix generate.
 
 ## Documenting props
+
+**A component wrapping another derives its props from the one it wraps** — `interface ErrorRowProps
+extends Omit<MessageRowProps, 'sentences'>`, with `Pick`, `Omit` and `Partial` for the parts that
+differ. Retyping them puts a second copy of the contract one file away from the first, and the two
+drift on the next prop added to the inner component.
 
 **Every prop carries a one-line `/** */` block**
 saying what the consumer cannot read off the type (`/** Rendered in the card's footer — the author

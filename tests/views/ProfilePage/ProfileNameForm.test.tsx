@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { updateName } from '@/api/user/updateName';
 import { ACTION_ERROR } from '@/constants/action';
 import { OPTIMISTIC_STORAGE_KEY } from '@/constants/optimistic';
+import { USER_NAME_MAX_LENGTH } from '@/constants/user';
 import { actionFailure, actionSuccess } from '@/shared/lib/actionResult';
 import { serializeEntries } from '@/shared/lib/optimistic/persistence';
 import { optimisticStore } from '@/shared/lib/optimistic/store';
@@ -21,6 +22,7 @@ vi.mock('@/api/user/updateName', () => ({ updateName: vi.fn() }));
 
 const copy = messages.profilePage;
 const errorCopy = messages.actionError;
+const formCopy = messages.form;
 
 const USER = {
   id: '00000000-0000-4000-8000-000000000001',
@@ -33,8 +35,12 @@ function renderForm() {
   return renderWithProviders(<ProfileNameForm {...USER} />);
 }
 
+/**
+ * By accessible name, not by label text: the required `*` sits inside the label
+ * and is `aria-hidden`, so the name a screen reader reads is the label alone.
+ */
 function nameInput(): HTMLInputElement {
-  const input = screen.getByLabelText(copy.nameLabel);
+  const input = screen.getByRole('textbox', { name: copy.nameLabel });
 
   if (!(input instanceof HTMLInputElement)) {
     throw new Error('the name field is not an input');
@@ -52,7 +58,7 @@ async function typeNameAndSave(next: string) {
   fireEvent.change(nameInput(), { target: { value: next } });
 
   await act(async () => {
-    fireEvent.click(screen.getByRole('button', { name: copy.save }));
+    fireEvent.click(screen.getByRole('button', { name: formCopy.save }));
   });
 }
 
@@ -134,11 +140,33 @@ describe('ProfileNameForm', () => {
     expect(nameInput()).toHaveValue('Morgan of Avalon');
   });
 
+  it('follows the answer to a name the schema itself trimmed', async () => {
+    vi.mocked(updateName).mockResolvedValue(saved('Morgan'));
+
+    renderForm();
+    await typeNameAndSave('  Morgan  ');
+
+    expect(vi.mocked(updateName)).toHaveBeenCalledWith({ id: USER.id, name: 'Morgan' });
+    // The schema answers with a value the field never held, so a naive comparison
+    // reads the field as typed-into-since and leaves it dirty forever.
+    await waitFor(() => expect(nameInput()).toHaveValue('Morgan'));
+  });
+
   it('refuses an empty name from the shared schema, without calling the action', async () => {
     renderForm();
     await typeNameAndSave('');
 
-    expect(await findAnnounced()).toHaveTextContent(errorCopy.invalidInput);
+    // The rule that refused it, in the Theme's words — not the resolver's English
+    // and not the generic "check the highlighted field".
+    expect(await findAnnounced()).toHaveTextContent(messages.validation.required);
+    expect(vi.mocked(updateName)).not.toHaveBeenCalled();
+  });
+
+  it('refuses a name past the length the contract allows, naming the bound', async () => {
+    renderForm();
+    await typeNameAndSave('x'.repeat(USER_NAME_MAX_LENGTH + 1));
+
+    expect(await findAnnounced()).toHaveTextContent(`${USER_NAME_MAX_LENGTH}`);
     expect(vi.mocked(updateName)).not.toHaveBeenCalled();
   });
 
@@ -154,7 +182,25 @@ describe('ProfileNameForm', () => {
 
     expect(message).toHaveTextContent(errorCopy.invalidInput);
     expect(nameInput()).toHaveAttribute('aria-invalid', 'true');
-    expect(nameInput()).toHaveAttribute('aria-describedby', message.id);
+    // Beside the rule the field already describes, not instead of it.
+    expect(nameInput()).toHaveAccessibleDescription(new RegExp(errorCopy.invalidInput));
+  });
+
+  it('lets a failure the server pinned on the field be thrown away too', async () => {
+    vi.mocked(updateName).mockResolvedValue(
+      actionFailure(ACTION_ERROR.INVALID_INPUT, { name: ['taken'] }),
+    );
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+    await findAnnounced();
+
+    // Pattern B keeps the reason across a reload, so without a way out the only
+    // exit from a message beside a field is another write that lands.
+    fireEvent.click(screen.getByRole('button', { name: messages.optimistic.dismiss }));
+
+    await waitFor(() => expectNothingAnnounced());
+    expect(nameInput()).toHaveAttribute('aria-invalid', 'false');
   });
 
   it('puts a failure that names no field under the form, dismissible', async () => {
@@ -172,6 +218,76 @@ describe('ProfileNameForm', () => {
     await waitFor(() => expectNothingAnnounced());
     // Dismissing throws the attempt away, so the server's name is what is left.
     expect(screen.getByText('Merlin')).toBeInTheDocument();
+  });
+
+  it('clears the reason once a later write lands', async () => {
+    vi.mocked(updateName)
+      .mockResolvedValueOnce(actionFailure(ACTION_ERROR.INVALID_INPUT, { name: ['taken'] }))
+      .mockResolvedValueOnce(saved('Arthur'));
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+    await findAnnounced();
+
+    await typeNameAndSave('Arthur');
+
+    // The store files the answer over the attempt, so nothing is left to dismiss
+    // and the field stops reading as the culprit.
+    await waitFor(() => expectNothingAnnounced());
+    expect(nameInput()).toHaveAttribute('aria-invalid', 'false');
+  });
+
+  it('loses the server’s reason to the resolver, which is the newer answer', async () => {
+    vi.mocked(updateName).mockResolvedValue(
+      actionFailure(ACTION_ERROR.INVALID_INPUT, { name: ['taken'] }),
+    );
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+    await findAnnounced();
+
+    fireEvent.change(nameInput(), { target: { value: '' } });
+
+    // One message at a time, and the resolver's is the one about the value now
+    // in the field. The server's is still filed, and comes back if this is fixed.
+    await waitFor(() => expect(announced()).toHaveTextContent(messages.validation.required));
+    expect(screen.queryByText(errorCopy.invalidInput)).not.toBeInTheDocument();
+  });
+
+  it('draws a failure naming a field this form has no input for under the form', async () => {
+    vi.mocked(updateName).mockResolvedValue(
+      actionFailure(ACTION_ERROR.INVALID_INPUT, { avatar: ['too large'] }),
+    );
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+
+    // A message beside nothing is a message no one reads, so it stays where the
+    // form's own failures go — and the name field is not blamed for it.
+    expect(await findAnnounced()).toHaveTextContent(errorCopy.invalidInput);
+    expect(nameInput()).toHaveAttribute('aria-invalid', 'false');
+  });
+
+  it('keeps a name typed while the write was out, over the answer that lands', async () => {
+    let settle = (): void => {};
+    vi.mocked(updateName).mockReturnValue(
+      new Promise((resolve) => {
+        settle = () => resolve(saved('Morgan of Avalon'));
+      }),
+    );
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+    fireEvent.change(nameInput(), { target: { value: 'Arthur' } });
+
+    await act(async () => {
+      settle();
+    });
+
+    // The draft is newer than the answer, so the answer takes the text and leaves
+    // the field alone.
+    expect(nameInput()).toHaveValue('Arthur');
+    expect(screen.getByText('Morgan of Avalon')).toBeInTheDocument();
   });
 
   it('restores the optimistic value after unmounting mid-flight', async () => {
@@ -244,6 +360,27 @@ describe('ProfileNameForm', () => {
 
     // A discarded attempt that stays in the field comes back on the next save.
     await waitFor(() => expect(nameInput()).toHaveValue('Merlin'));
+  });
+
+  it('keeps the field’s own refusal when the write’s failure is dismissed', async () => {
+    vi.mocked(updateName).mockResolvedValue(actionFailure(ACTION_ERROR.UNEXPECTED));
+
+    renderForm();
+    await typeNameAndSave('Morgan');
+    await findAnnounced();
+
+    // Emptying the field is refused by the resolver, which is a separate answer
+    // from the one the write came back with.
+    fireEvent.change(nameInput(), { target: { value: '' } });
+
+    await waitFor(() => expect(nameInput()).toHaveAttribute('aria-invalid', 'true'));
+
+    fireEvent.click(screen.getByRole('button', { name: messages.optimistic.dismiss }));
+
+    // Throwing the attempt away moves `values`, which resets the form — and a
+    // reset clears the resolver's errors unless it is told not to.
+    await waitFor(() => expect(nameInput()).toHaveValue(''));
+    expect(announced()).toHaveTextContent(messages.validation.required);
   });
 
   it('follows a dismissal made in another tab', async () => {

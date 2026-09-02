@@ -14,7 +14,9 @@
     "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
   },
   "form": {
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "save": "Save"
   },
   "homePage": {
     "createNote": "Create a note",
@@ -28,8 +30,13 @@
     "problem": "Something here needs your attention."
   },
   "profilePage": {
+    "nameHint": "Up to {limit} characters.",
     "nameLabel": "Display name",
-    "save": "Save",
     "title": "My profile"
+  },
+  "validation": {
+    "required": "This cannot be empty.",
+    "tooLong": "Use {limit} characters or fewer.",
+    "tooShort": "Use at least {limit} characters."
   }
 }

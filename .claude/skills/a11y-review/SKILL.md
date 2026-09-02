@@ -1,6 +1,6 @@
 ---
 name: a11y-review
-description: Review a branch's changed React components for a11y defects Biome can't catch — semantics, accessible names, keyboard reach, ARIA, forms, locale markup. Reads only. /a11y-review [range]; verify-branch axis.
+description: Review a branch's changed React components against every WCAG 2.2 AA criterion Biome can't catch — semantics, names, keyboard, ARIA state, forms and auth, timing, pointer targets, page level, locale. Reads only. /a11y-review [range]; verify-branch axis.
 argument-hint: "[range]"
 context: fork
 agent: general-purpose
@@ -14,7 +14,7 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git merge-base:*), Read, 
 
 ## Contents
 
-1. Gate 2. Read the full file 3. The seven categories 4. What Biome holds 5. Severity 6. Report
+1. Gate 2. Read the full file 3. The eleven categories 4. What Biome holds 5. Severity 6. Report
 
 **The range is `$0`, or `dev` when `$0` is empty.**
 
@@ -42,42 +42,41 @@ about what a future component might do.
 ## 2. Read the full file, judge the changed lines
 
 Read every changed `.tsx` whole, plus each file that renders a changed component (`grep` its export
-name). A `<button>` is correct or broken only against the element that contains it, and the diff
-hunk hides that.
+name).
 
 **Report on lines this range changed.** A line the range left alone is reportable only where the
 change made it wrong — a new `role="list"` around an old child, a lifted state that orphans an
 `aria-controls`.
 
-## 3. The seven categories
+## 3. The eleven categories
 
-Walk all seven per file, in this order. Each holds an accessible-name check, so a component with no
-interactive elements still fails category 2 if it renders an image.
+**Read `checklist.md` in this directory before judging anything.** It carries every Level A and AA
+success criterion in WCAG 2.2 under these eleven headings, with what each one looks like in a React
+diff, plus the criteria held by a token or a browser instead.
 
-1. **Semantics** — the element carries the meaning: `button` for an action, `a[href]` for a
-   destination, `ul`/`li` for a list, `nav`/`main`/`header`/`footer` landmarks placed once each per
-   page. Heading levels descend by one and start at a single `h1`.
+Walk all eleven per file, in this order. A category applies whether or not the file has interactive
+elements — a component rendering one image still fails category 2.
+
+1. **Semantics and structure** — the element carries the meaning, and visual grouping has markup
+   behind it. Landmarks placed once each per page, headings descending from a single `h1`.
 2. **Accessible name** — every interactive element and every image resolves to a name a screen
-   reader can speak: visible text, `aria-label`, `aria-labelledby`, or `alt`. Icon-only controls and
-   links whose only content is a glyph are the usual break.
-3. **Keyboard** — every action reachable and operable with Tab, Enter, Space, Escape, and arrow keys
-   where a widget pattern expects them. Focus moves into an opened dialog or menu and returns to the
-   trigger on close. DOM order matches reading order, so tab order follows it.
-4. **State** — `aria-expanded`, `aria-current`, `aria-selected`, `aria-pressed`, `aria-disabled`
-   track the component's real state on every branch, including the initial render.
-5. **Forms** — each control has a `label` bound by `htmlFor`/`id`. Validation errors are tied to the
-   control by `aria-describedby` and marked `aria-invalid`; the submit path moves focus to the first
-   error.
-6. **Dynamic** — loading, empty, and error states announce themselves: `aria-live` or `role="status"`
-   on the region that swaps, `aria-busy` on the control that is waiting. Content appearing after a
-   user action without a live region is silent to a screen reader.
-7. **Locale** — `lang` (and `dir` where the locale needs it) is set on the document and on any inline
-   span in another language. Text nodes come from `next-intl` per
-   `docs/agents/coding-standards/i18n.md`; a hardcoded string is unlocalized to a screen reader as
-   much as to the eye.
-
-`src/admin/` is the maintainer's own admin surface — **report only `high` findings there** and skip
-the rest.
+   reader can speak, and an `aria-label` never contradicts the visible text.
+3. **Keyboard and focus** — every action reachable and operable by key, focus moving into and back
+   out of what opens, and never trapped.
+4. **ARIA state** — the state properties track real state on every branch, including first render.
+5. **Forms** — labels, error wiring, `autocomplete`, confirmation before something irreversible, and
+   an authentication path that allows paste and autofill.
+6. **Dynamic content** — what changes announces itself, and nothing runs on a timer the User cannot
+   stop.
+7. **Pointer and target** — no action bound to pointer-down, and every gesture or drag has a plain
+   click equivalent.
+8. **Page level** — skip link, route title, consistent nav and help placement. Judged on layouts and
+   route files, not on every component.
+9. **Non-visual cues** — nothing carried by color, shape or position alone.
+10. **Locale** — `lang` (and `dir` where the locale needs it) on the document and on inline spans in
+    another language; no hardcoded strings.
+11. **Layout resilience** — no `px` type scale, no fixed height around growing text, no orientation
+    lock.
 
 ## 4. What Biome already holds — never report these
 
@@ -95,12 +94,10 @@ useKeyWithClickEvents useKeyWithMouseEvents useMediaCaption useSemanticElements 
 useValidAriaProps useValidAriaRole useValidAriaValues useValidAutocomplete useValidLang
 ```
 
-The value this review adds is what a single-file lint rule cannot see: the name a component resolves
-to across its props, focus and reading order across elements, state that lies on one branch,
-announcement of a state change, and the label bound in a different file.
-
 **Color contrast and focus-ring styling are out of scope** — tokens hold them
-(`src/styles/standard.css`, `dark-fantasy.css`), and this review reads no rendered pixels.
+(`src/styles/standard.css`, `dark-fantasy.css`), and this review reads no rendered pixels. Target
+size, reflow and focus obscured by a sticky element are measured in a browser, not here; the
+"held elsewhere" table in `checklist.md` says what remains reportable from the code for each.
 
 ## 5. Severity
 
@@ -113,8 +110,7 @@ announcement of a state change, and the label bound in a different file.
 ## 6. Report
 
 **Every finding cites a WCAG 2.2 AA success criterion by number and name** — `1.1.1 Non-text
-Content`, `2.1.1 Keyboard`, `2.4.6 Headings and Labels`, `4.1.2 Name, Role, Value`. A finding with no
-criterion behind it is taste, and `review-boundaries.md` drops it.
+Content`. A finding with no criterion behind it is taste, and `review-boundaries.md` drops it.
 
 Each finding carries: the file and line, one sentence on what breaks, the criterion, and the concrete
 fix.
@@ -122,7 +118,7 @@ fix.
 **Called as a review axis by `/verify-branch`** — return the fields /verify-branch asks for, `axis: "a11y"`,
 the criterion in the `rule` field.
 
-**Called directly** — a markdown table, most severe first, then one line naming which of the seven
-categories came back clean.
+**Called directly** — a markdown table, most severe first, then one line naming which of the
+eleven categories came back clean.
 
 Zero findings is a complete answer. Report it in one line and add nothing.

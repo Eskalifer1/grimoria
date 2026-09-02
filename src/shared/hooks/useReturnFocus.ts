@@ -1,8 +1,10 @@
 'use client';
 
-import { type RefObject, useCallback } from 'react';
+import type { RefObject } from 'react';
 
-/** The chain a node hangs from, read before the change that takes part of it away. */
+/** The `input` types that carry a selection at all. `setSelectionRange` throws on the rest. */
+const CARET_INPUT_TYPES = new Set(['text', 'search', 'url', 'tel', 'password']);
+
 function ancestorsOf(from: HTMLElement | null): HTMLElement[] {
   const chain: HTMLElement[] = [];
 
@@ -13,14 +15,10 @@ function ancestorsOf(from: HTMLElement | null): HTMLElement[] {
   return chain;
 }
 
-/** The `input` types that carry a selection at all. `setSelectionRange` throws on the rest. */
-const CARET_INPUT_TYPES = new Set(['text', 'search', 'url', 'tel', 'password']);
-
 /**
- * Puts the caret after the value rather than in front of it. A browser restores
- * the selection an element held the last time it was focused, and one that has
- * never been focused has none — so a bare `focus()` lands at index 0, which reads
- * as the field having jumped to the start.
+ * A browser restores the selection an element held the last time it was focused,
+ * and one never focused has none — so a bare `focus()` lands at index 0, in front
+ * of what is there, and typing prepends.
  */
 function caretToEnd(node: HTMLElement) {
   const isCaretField =
@@ -31,16 +29,9 @@ function caretToEnd(node: HTMLElement) {
     return;
   }
 
-  const end = node.value.length;
-
-  node.setSelectionRange(end, end);
+  node.setSelectionRange(node.value.length, node.value.length);
 }
 
-/**
- * Puts focus on the intended element, or on the nearest ancestor that outlived
- * the change. An ancestor that cannot hold focus is given `tabindex="-1"`, which
- * keeps it out of the tab order while letting it be reached.
- */
 function focusSurvivor(intended: HTMLElement | null, chain: readonly HTMLElement[]) {
   if (intended?.isConnected) {
     intended.focus();
@@ -55,6 +46,7 @@ function focusSurvivor(intended: HTMLElement | null, chain: readonly HTMLElement
     return;
   }
 
+  // `tabindex="-1"` keeps it out of the tab order while letting it be reached.
   if (!survivor.hasAttribute('tabindex')) {
     survivor.tabIndex = -1;
   }
@@ -66,11 +58,11 @@ function focusSurvivor(intended: HTMLElement | null, chain: readonly HTMLElement
  * Runs something that removes the focused control, then puts focus somewhere a
  * keyboard User can carry on from. A browser drops focus to the document body
  * when the focused element leaves the document, which returns them to the top of
- * the page with no way back.
+ * the page with no way back (WCAG 2.2 AA, 2.4.3).
  *
- * The intended target needs `tabIndex={-1}` to accept focus. A change that takes
- * the target with it — a failed create dismissed row and all — falls back to the
- * nearest ancestor still standing, which is what a deletion should fall back to.
+ * The intended target needs `tabIndex={-1}` unless it is focusable already. A
+ * change that takes the target with it — a failed create dismissed row and all —
+ * falls back to the nearest ancestor still standing.
  *
  * @param removing the element being removed, whose ancestors are the fallback
  * @param intended where focus belongs afterwards
@@ -79,20 +71,17 @@ function useReturnFocus(
   removing: RefObject<HTMLElement | null>,
   intended?: RefObject<HTMLElement | null>,
 ): (change: () => void) => void {
-  return useCallback(
-    (change: () => void) => {
-      const standing = ancestorsOf(removing.current);
+  return (change: () => void) => {
+    const standing = ancestorsOf(removing.current);
 
-      change();
+    change();
 
-      // After the commit, not before it: what the change removes is not gone from
-      // the document until React has painted.
-      requestAnimationFrame(() => {
-        focusSurvivor(intended?.current ?? null, standing);
-      });
-    },
-    [removing, intended],
-  );
+    // After the commit, not before it: what the change removes is not gone from
+    // the document until React has painted.
+    requestAnimationFrame(() => {
+      focusSurvivor(intended?.current ?? null, standing);
+    });
+  };
 }
 
 export { useReturnFocus };

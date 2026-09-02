@@ -133,6 +133,13 @@ record rather than from memory, not to narrate progress.
 .claude/bin/judge-needed.sh
 ```
 
+**The script decides, not this context.** It is the only thing that may skip this step: run it, read
+the first word, do what it says. A green suite is not a reason to skip — the tests this context
+wrote check what this context thought to check, which is what a judging round exists to find. Nor is
+a small-feeling diff, a careful implementation, or a slice that already reviewed itself. **Skipping
+without a printed `JUDGE: skip` is a failure of this step**, and reporting it as skipped when the
+script was never run is worse.
+
 **`JUDGE: skip` ends this step.** The branch touched only helpers, constants, tests, docs or config
 — what can be wrong there, the gate and the tests already catch. Run section 8's gate now instead,
 give the acceptance verdicts straight from the diff, and record the step as skipped with the reason

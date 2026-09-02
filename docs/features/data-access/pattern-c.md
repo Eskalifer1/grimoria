@@ -30,55 +30,46 @@ async function handleSubmit(values: NameForm) {
 
 **The draft survives a failure.** The inputs keep what the User typed; only the message changes.
 
-## The one place disabling is right
+## The one place refusing a submit is right
 
-**Submit is disabled while the request is in flight, and only submit.** This is the only pattern in
-which anything is disabled, and the reason is that the write must not be repeated. The inputs stay
-live.
+**Submit is refused while the request is in flight, and only submit.** This is the only pattern that
+refuses anything, and the reason is that the write must not be repeated. The inputs stay live.
 
-**A disabled attribute says nothing to a screen reader** (WCAG 2.2 AA, 4.1.2) — carry `aria-busy` on
-the control as well.
+**The refusal is `aria-disabled` plus a guard in the form's own submit handler, never the `disabled`
+attribute.** A browser blurs a control the moment it is disabled, dropping a keyboard User to the
+document body for the length of the write and never bringing them back (WCAG 2.2 AA, 2.4.3). The
+guard has to sit on the form rather than the button, because the Enter key submits the form and no
+button ever sees it.
+
+**A disabled attribute also says nothing to a screen reader** (4.1.2) — carry `aria-busy` on the
+control as well.
 
 ## Wiring a field to its message
 
-`<FormControl>` owns `aria-invalid` and `aria-describedby`, so neither is ever hand-written:
+**`useActionForm` is this pattern** — it holds the failure the write answered
+with, reads flight from `isSubmitting`, and locks submit and nothing else. `values` is a seed here,
+not a live binding: nothing outside answers with the value, so a form bound to the surface would
+revert what it just saved.
 
 ```tsx
-<FormField
-  name="name"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>{t('nameLabel')}</FormLabel>
-      <FormControl error={failure}>
-        <Input {...field} />
-      </FormControl>
-      <FormFieldMessage error={failure} />
-    </FormItem>
-  )}
-/>
+const nameForm = useActionForm({ schema, values, write: updateName });
+
+<Form.Root {...nameForm}>
+  <Form.Field label={t('nameLabel')} name="name" render={({ field }) => <Input {...field} />} />
+  <Form.Footer />
+</Form.Root>;
 ```
 
-Everything but `FormControl` and `FormFieldMessage` is shadcn's, re-exported from
-`shared/components/Form` so a surface has one import. Ours replace the two the primitive gets wrong
-for us: the vendored control reads only react-hook-form's error, and a field the **server** refused
-would be drawn valid; the vendored message unmounts when empty, and an alert region built at the
-moment it has something to say is never spoken.
-
-**The message region is mounted from the first render and takes no room while it is empty** — a
-`role="alert"` built at the moment it has something to say is never spoken, and a line held under
-every field costs the form more than the shift a rare failure makes (`components.md`).
-
-**Both refusals are worded from the `actionError` catalog, never from the resolver.** The schema
-rejecting a field reads as `invalidInput`; the server's own code words itself. The schema wins when
-both have something to say — it is the newer answer, and a stale server reason beside a value the
-User has already corrected is worse than none. A valid field is `aria-invalid="false"` and describes
-nothing. `message` is the escape hatch for a form whose rejection means more than "invalid".
+`Form.Field` owns `aria-invalid` and `aria-describedby`, keeps its message region mounted and
+`sr-only` while empty, and merges the resolver's refusal with the server's — the resolver wins,
+being the newer answer. **How a form is built here, in full, is `docs/features/forms.md`**; the
+rules above are what this pattern leans on.
 
 Server-side field errors arrive as `error.fields`, keyed by field path, **in English and outside
-`messages/`** — a diagnostic, not something to render. Localized field errors are #97.
+`messages/`** — a diagnostic. What renders is the failure's code, worded from `actionError`, and the
+schema's own refusals are worded per rule from `validation`.
 
 ## Where it is used
 
-`src/views/ProfilePage/ProfileNameForm/` is the standing example, and it is **the surface that
-started this work by getting it wrong**: it disables its submit from a flight state that should have
-been optimistic. Its rewrite is #97.
+Nothing yet. `src/views/ProfilePage/ProfileNameForm/` is pattern B, and the day a name gains a
+uniqueness rule it moves here — it already carries the schema and the form layer this pattern uses.
