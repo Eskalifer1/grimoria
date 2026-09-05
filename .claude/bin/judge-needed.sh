@@ -19,7 +19,10 @@ names=$(git diff --name-only "$base" 2>/dev/null)
 [ -z "$names" ] && { echo "JUDGE: run — the diff came back empty, which is a broken range, not a clean branch"; exit 0; }
 
 files=$(printf '%s\n' "$names" | grep -c .)
-lines=$(git diff --shortstat "$base" 2>/dev/null | grep -oE '[0-9]+ (insertion|deletion)' | grep -oE '^[0-9]+' | paste -sd+ - | bc 2>/dev/null)
+# `awk`, not `paste | bc`: `bc` is not on every machine, and the `: "${lines:=0}"` fallback below
+# turned its absence into a zero line count — which silently flips a branch that earned a round into
+# a skip. `awk` is POSIX and sums in one process.
+lines=$(git diff --shortstat "$base" 2>/dev/null | grep -oE '[0-9]+ (insertion|deletion)' | awk '{s+=$1} END {print s+0}')
 : "${lines:=0}"
 
 # Anything outside this set is code an axis can have something to say about.

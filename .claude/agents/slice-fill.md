@@ -25,9 +25,21 @@ with one `yarn check --write` over the paths and one `git add -N`.
 
 ```
 FILES    <path — created|changed, one per line>
-SEAM     <each prop, export, route or message key this slice hands another — name and shape>
+SEAM     <name and shape  ←  who should consume it>
 DECIDED  <what was chosen, and what was rejected where a reviewer would propose it back>
 TESTS    <hook silent | the one failure, verbatim>
 LEFT     <what this slice deliberately did not do>
 ASK      <none | the call it could not settle>
 ```
+
+**Write those six lines to the ledger path the prompt names, and return them too.** The file is
+yours alone, so nothing you write races another slice.
+
+**Every `SEAM` names its consumer** — the component, route or module that should read this prop,
+export, route or message key. A seam you cannot name a consumer for is not a seam yet; put it under
+`ASK` instead of publishing it into nothing. The wiring pass checks the claim you make here, so a
+bare name like `orientation` with no consumer costs it a repo-wide grep and tells it nothing.
+
+**Never write a file another slice also writes** — barrel `index.ts(x)` re-exports,
+`tests/setup/*`, `package.json`, `.cspell/*`, and every CLI install belong to the parent context.
+Report the line the barrel needs under `SEAM` and leave the barrel alone.

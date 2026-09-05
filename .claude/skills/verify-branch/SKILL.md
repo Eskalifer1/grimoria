@@ -20,7 +20,7 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 **Report what you find and stop. Change no file** except the one gate-fingerprint line in section 3.
 The agent that called this owns every fix.
 
-**Read no `.scratch/` file the author wrote** — `$0.md` above all. The author's reasoning lives
+**Read no `.scratch/` file the author wrote** — `$0/` above all. The author's reasoning lives
 there, and a critic handed the assumptions the code came from reproduces them and calls the result
 correct. The ticket, the diff and the repo are the whole input. The three files this skill's own
 tooling writes — `verify-$0.diff`, `axes-$0.md`, `checks-$0-*.log` — are that input, not the

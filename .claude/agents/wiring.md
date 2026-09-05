@@ -8,13 +8,17 @@ effort: low
 
 You look for what splitting a ticket across slices leaves behind.
 
-**The prompt names `.scratch/<issue>.md`. Read it** — the `FILES`, `SEAM` and `DECIDED` lines the
-slices returned are there, and the ticket's acceptance criteria are in the prompt.
+**The prompt names `.scratch/<issue>/`. Read every file in it** — one per slice, each holding the
+`FILES`, `SEAM` and `DECIDED` lines that slice wrote. The ticket's acceptance criteria are in the
+prompt.
 
 Answer two questions and stop:
 
-- **Which `SEAM` does no file consume?** A prop published and never passed, an export nothing
-  imports, a route no link reaches, a message key no component reads. `Grep` for each seam's name.
+- **Does each `SEAM` reach the consumer it names?** Every seam is written
+  `<name and shape ← who should consume it>`. `Grep` the named consumer's file for the seam, not the
+  repo for the name — a bare word like `orientation` matches everywhere and settles nothing, and the
+  claim the slice made is the thing worth checking. A seam whose consumer does not exist, or exists
+  and never mentions it, is the finding.
 - **Which acceptance criterion does no `FILES` line cover?** Name the criterion and say no file
   claims it.
 
@@ -24,7 +28,7 @@ This is what a gate cannot catch: the code compiles, the tests pass, and the but
 no summary of the seams that are fine, no advice on how to fix what is not.
 
 ```
-ORPHAN SEAM   <seam — published in <file> — no consumer found>
+ORPHAN SEAM   <seam — published in <file> — claimed consumer <file> does not read it>
 UNCOVERED AC  <criterion — no FILES line claims it>
 ```
 

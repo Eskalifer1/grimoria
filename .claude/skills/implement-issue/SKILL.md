@@ -1,7 +1,7 @@
 ---
 name: implement-issue
 description: Implement a ready-for-agent tracker issue from branch to commit handoff — standards routed, test-first slices in subagents, a judging round, triage, docs sync. /implement-issue <n>; dispatched by task-flow.
-argument-hint: "[issue-number]"
+argument-hint: "[issue-number] [adversarial: true|false, default true]"
 model: opus
 effort: medium
 allowed-tools: Bash(gh issue view:*), Bash(gh issue comment:*), Bash(git checkout:*), Bash(git diff:*), Bash(git status:*), Bash(git add:*), Bash(.claude/bin/standards.sh:*), Bash(.claude/bin/judge-needed.sh), Bash(.claude/bin/gate.sh:*)
@@ -15,7 +15,8 @@ issues reach here; `failures.md` in this folder covers a step that cannot comple
 ## Contents
 
 The ticket · Where the tree stands · The standards profiles · Steps: 3 route the standards,
-4 implement, 5 judge the branch, 6 triage, 7 docs, 8 handoff
+4 implement, 5 judge the branch, 5.5 see it in a browser, 6 triage, 6.5 adversarial review,
+7 docs, 8 handoff
 
 **Start this in an empty session** — every turn of this flow re-reads whatever the conversation
 already holds. **Invoked with history behind it — say so, and ask for `/clear` before going on.**
@@ -28,7 +29,7 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 
 ## Where the tree stands
 
-!`echo "branch: $(git branch --show-current)  |  HEAD: $(git log --oneline -1)"; echo "--- uncommitted ---"; git status --short | head -20; echo "--- prior state for this ticket ---"; if [ -s .scratch/$0.md ]; then head -40 .scratch/$0.md; else echo "(none — fresh start)"; fi; echo "--- test layout ---"; ls tests 2>/dev/null`
+!`echo "branch: $(git branch --show-current)  |  HEAD: $(git log --oneline -1)"; echo "--- uncommitted ---"; git status --short | head -20; echo "--- prior state for this ticket ---"; if [ -d .scratch/$0 ]; then ls .scratch/$0; echo; head -40 .scratch/$0/log.md 2>/dev/null; else echo "(none — fresh start)"; fi; echo "--- test layout ---"; ls tests 2>/dev/null`
 
 ## The standards profiles
 
@@ -37,8 +38,9 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 **These three blocks are the orientation.** Do not re-run `git status`, `git branch`, `git log`,
 `ls tests` or `gh issue view` to learn what they already say.
 
-**A `.scratch/$0.md` with content means a previous session got partway.** Resume from where it
-stopped; `failures.md` covers the abandoned case.
+**A `.scratch/$0/` with content means a previous session got partway.** Resume from where it
+stopped; `failures.md` covers the abandoned case. **The ledger is a folder** — one file per slice,
+written by the slice itself, plus `log.md` for what this context records.
 
 ## Steps
 
@@ -48,7 +50,9 @@ stopped; `failures.md` covers the abandoned case.
 | 3 | Route the standards this task touches | here |
 | 4 | Implement test-first, record the decisions | `/mattpocock-skills:tdd` |
 | 5 | Judge the branch, when it earns it | `/verify-branch $0 full` |
+| 5.5 | See it in a browser, when the branch drew something | `browser-check` subagent |
 | 6 | Triage and fix | here |
+| 6.5 | A hostile second opinion, unless `$1` is `false` | `/adversarial-review` |
 | 7 | `/docs-sync`, when the branch earns it | here |
 | 8 | Full gate, propose a commit title, stop | `docs/git-workflow.md` |
 
@@ -80,14 +84,14 @@ full ones — and every extra seam between slices is a wire nobody owns (#66).
 **One or two slices — they run here.** There is no third subagent to carry the standards instead, so
 run `standards.sh` per step 3 and write the code in this context.
 
-**A ticket that touches one file skips the ledger** — no `.scratch/$0.md`, no wiring pass. Both carry
+**A ticket that touches one file skips the ledger** — no `.scratch/$0/`, no wiring pass. Both carry
 facts between contexts, and a single file crosses no seam and hands nothing on. Step 8 reports from
 what this context did. **Judge it by the files the code actually touched, not by the ticket's
 estimate**; the moment a second file is written, the ledger rules below apply from that point on.
 
 **Three or more — every slice runs in a fresh subagent, starting with the first.** A slice kept here
 is paid for again on every turn that follows it. **This context then runs `standards.sh` not at all**
-— it dispatches, collects six lines, and keeps the ledger.
+— it dispatches, reads six lines back, and keeps `log.md`.
 
 **Invoking this skill is the request for those subagents.** A standing instruction to spawn none
 unless asked is answered here: the user asked, by name, when they typed `/implement-issue`.
@@ -100,30 +104,49 @@ unless asked is answered here: the user asked, by name, when they typed `/implem
   routes and layouts, placeholder pages, re-exports, a catalog entry per string. It runs cheaper and
   thinks less, which is right for work with nothing left to decide.
 
-**The subagent's prompt carries five things and no more**: the seam, the acceptance criteria that
-seam serves, the `standards.sh` profile names from step 3, the `FILES`/`DECIDED` lines already in
-`.scratch/$0.md`, and any doc outside the profiles, by path. **The six lines it returns, the hook,
+**The subagent's prompt carries six things and no more**: the seam, the acceptance criteria that
+seam serves, the `standards.sh` profile names from step 3, the `FILES`/`DECIDED` lines from the
+slice files already in `.scratch/$0/`, any doc outside the profiles by path, and **the ledger path
+`.scratch/$0/slice-<n>.md` it writes its own six lines to**. **The six lines it returns, the hook,
 and the template loop are in its own definition** — do not restate them.
 
-**Append `FILES`, `SEAM` and `DECIDED` to `.scratch/$0.md` as each slice returns**, and carry
-nothing else forward.
+**The slice writes its own ledger file; this context does not transcribe it.** Read the folder when
+a later step needs it — a copy made here is a rephrasing, and step 8 would report from the
+rephrasing.
 
-**After the last slice, dispatch one `subagent_type: wiring`** — give it the path
-`.scratch/$0.md` and the acceptance criteria, nothing else. It reports which seam no file consumes
-and which criterion no `FILES` line covers: a prop published and never passed, or a criterion no
-slice owned. That is what splitting a ticket produces and what no gate catches — the code compiles,
+#### Waves, not one long line
+
+**Slices that settle a seam run alone; slices built on a settled seam run together.** Dispatch the
+seam-setting `slice` first and by itself — a slice sent in parallel with the one whose `DECIDED` it
+needs re-invents that decision instead of reading it, which is how one branch ends up with two
+helpers that disagree at the edges. Everything downstream goes out in a single block of `Agent`
+calls.
+
+**Files two slices would both touch belong to this context, not to either slice.** Barrel
+`index.ts(x)` re-exports, `tests/setup/*`, `package.json`, `.cspell/*`, and every CLI run
+(`shadcn add`, `yarn add`) are done here — before dispatch when the slices need the result, after
+the last slice when they only feed it. Two agents writing one file race the hook's `git add -N` on
+`index.lock`, and a file that misses it is invisible to `gate.sh`'s fingerprint, which then skips a
+gate over code it never saw. Each slice reports what its barrel line should be under `SEAM` and
+writes none of it.
+
+**After the last slice, dispatch one `subagent_type: wiring`** — give it the folder
+`.scratch/$0/` and the acceptance criteria, nothing else. It reports which seam never reached the
+consumer its slice named and which criterion no `FILES` line covers: a prop published and never
+passed, or a criterion no slice owned. That is what splitting a ticket produces and what no gate catches — the code compiles,
 the tests pass, and the button does nothing. This context decides what to fix.
 
 **A ticket whose deliverable runs nothing — a skill file, a doc, a config — is built without a
 test.** Vitest has no seam to grab, and a test asserting on the file's own wording pins the wording
-and proves nothing. Write the line saying so to `.scratch/$0.md` under `## Decisions`; the
+and proves nothing. Write the line saying so to `.scratch/$0/log.md` under `## Decisions`; the
 acceptance criteria at step 5 verify this class of ticket.
 
-**Write `.scratch/$0.md` twice and no more** — once when the code is done, carrying the profiles
-routed under `## Read` and, under `## Decisions`, one line per decision: what was chosen, and what
-was rejected where a reviewer would plausibly propose it back. Once more when step 5 returns,
-carrying its report. **Each write is a full turn**, and the file exists so the handoff reports from
-record rather than from memory, not to narrate progress.
+**`.scratch/$0/log.md` is this context's own file, and it takes one block per step that returned a
+result** — `## Read` with the profiles routed and any doc taken by path, `## Decisions` for calls
+made here rather than in a slice, then one block each from steps 5, 5.5, 6 and 7 as they land.
+**Nothing else goes in it.** The file exists so the handoff reports from record rather than from
+memory; a block that narrates progress, restates a slice file, or announces what comes next is a
+whole turn paid to say nothing, and step 8 reads past it.
 
 ### 5 — judge the branch, when it earns it
 
@@ -153,7 +176,21 @@ review axes the diff earns, and a verdict per acceptance criterion.
 the gate and the axes that found something. What is still open goes into an issue comment as known
 debt, in the shape `docs/agents/issue-tracker.md` fixes.
 
-**A round returns a terse report.** **Append it to `.scratch/$0.md` as it arrives.**
+**A round returns a terse report.** **Append it to `.scratch/$0/log.md` as it arrives.**
+
+### 5.5 — see it in a browser, when the branch drew something
+
+**Dispatch one `subagent_type: browser-check` when the diff touches `src/views/`, `src/app/` or
+`src/styles/`.** A green suite is not a look: jsdom has no layout, so a control that renders and
+tests clean can still sit at the far edge of its card, animate against nothing, or draw a 16px
+target. Give it the acceptance criteria, the URLs to open, and the accessibility categories the
+surface owes — it reads `standards.sh ui` itself.
+
+**A surface no route reaches needs a probe page, and this context writes it** — a temporary view
+plus its route, removed here before step 8. The agent changes no file.
+
+**Its report is a block in `.scratch/$0/log.md`.** What it measures is fact; whether a measurement
+is wrong for this design is this context's call.
 
 ### 6 — triage
 
@@ -171,6 +208,29 @@ Decide here; reach for the user only at the end:
 - **Ask when the call is genuinely open**, both readings defensible. Everything under `ASK` in the
   round's report is already one of these.
 
+### 6.5 — a hostile second opinion
+
+**`$1` is `false` — skip this step and say so in the report.** Anything else, including empty, runs
+it. The flag is the user's call on whether the ticket is worth the round, and it is the only thing
+that skips this step.
+
+**`/adversarial-review $(git merge-base dev HEAD)`.** Three personas over the branch, each trying to
+break it. It overlaps the axes step 5 already ran, on purpose: what it finds is what those axes
+looked at and passed.
+
+**One round here. A second is the user's to start by name.**
+
+**Its findings go through step 6, not around it.** The rule that a fix reaching outside the ticket
+goes to the user rather than into the branch holds hardest here, because this step is the one that
+generates such fixes: a token, a shared primitive, a dependency the ticket never asked about. Fix
+what sits inside the ticket, propose the rest as its own issue.
+
+**It probes with temporary edits and restores them.** Its first report line says whether the branch
+came back byte-identical; anything else, repair the named files here before triaging a single
+finding.
+
+**Append its verdict and what was accepted or rejected to `.scratch/$0/log.md`.**
+
 ### 7 — docs
 
 **`/docs-sync` only when the branch changed behavior, architecture or scope** — a new module, a
@@ -179,6 +239,16 @@ this step and says so in the report. Its deletion pass runs over anything writte
 
 ### 8 — handoff
 
+**A collection changed means a migration in the same branch.** Ask before the gate:
+
+```sh
+git diff --name-only $(git merge-base dev HEAD) -- src/collections migrations
+```
+
+A file under `src/collections/` with nothing new under `migrations/` — **generate it here and go
+on**, with `yarn payload migrate:create <name>`. It is the ticket's own work, not a finding to
+raise; `docs/database-migrations.md` has the naming and the rollback proof.
+
 ```sh
 .claude/bin/gate.sh $0 full
 ```
@@ -186,11 +256,12 @@ this step and says so in the report. Its deletion pass runs over anything writte
 One last time, over code and docs together. **It skips itself when nothing moved since its last
 green run**, and on red it prints the head of every failed log — read none of them back.
 
-Then the report, **assembled from `.scratch/$0.md` rather than from memory**: the standards routed,
-what the gates and the axes found, which axes were skipped and why, what was fixed, what was
-rejected and why, what `/docs-sync` cut, and the acceptance verdict per criterion.
+Then the report, **assembled from `.scratch/$0/` rather than from memory** — the slice files and
+`log.md` together: the standards routed, what the gates and the axes found, which axes were skipped
+and why, what the browser showed, what was fixed, what was rejected and why, what `/docs-sync` cut,
+and the acceptance verdict per criterion.
 
-**A step with no line in `.scratch/$0.md` is reported as unrecorded, not reconstructed.** Say which
+**A step with no block in `.scratch/$0/log.md` is reported as unrecorded, not reconstructed.** Say which
 steps are missing and hand over anyway; the user decides whether to re-run them. **A one-file ticket
 reports from this context instead** — step 4 gave it no ledger to read, and nothing is unrecorded.
 
