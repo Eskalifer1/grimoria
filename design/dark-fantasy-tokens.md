@@ -45,14 +45,10 @@ behind, and a primary action picks up `--glow-accent-sm`. No underlines, no scal
 `standard` acknowledges a press by moving the surface, this Theme takes light away.
 
 **The primary action is a lit surface, not a saturated one.** Its fill is `--violet-light` with
-near-black on top, so the button reads as _the light_ rather than an object painted in the
-accent color — which is what "violet is light" means when it becomes a control.
-
-That also fixes an accessibility failure, and this is the part not to undo: saturated
-`--violet-core` as a fill gives only **3.49:1** under near-black text, where `--violet-light`
-gives **9.89:1**. Hover brightens to `--violet-mist` rather than darkening. `--violet-dim`
-exists only so press has somewhere to go — dropping straight to `--violet-core` was the first
-attempt and fails the same way, 3.49:1 for as long as the pointer is held.
+near-black on top, so the button reads as _the light_ rather than an object painted in the accent
+color. **Not to undo**: `--violet-core` as a fill gives **3.49:1** under near-black text where
+`--violet-light` gives **9.89:1**, so hover brightens to `--violet-mist` and press drops to
+`--violet-dim` — never to `--violet-core`, in either state.
 
 **Disabled is a color pair, never `opacity`** — which applies harder here: dimming a glowing
 control produces a ghost rather than a disabled one.

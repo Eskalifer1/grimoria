@@ -51,9 +51,9 @@ next session repeats.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
   Values outside the tokens do not compile.
 - **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`.
-- **Building a form** — the `Form.*` primitives, `useOptimisticForm`/`useActionForm`, validation
-  copy:
-  `docs/features/forms.md`.
+- **Building a form** — `useOptimisticForm`/`useActionForm`, validation copy, where a failure lands:
+  `docs/features/forms.md`. **Reaching for a bound control, or one the catalog has no entry for**:
+  `docs/features/forms/controls.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.
 - **Designing or styling a UI surface**: `design/standard-design.md`,

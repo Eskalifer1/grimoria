@@ -132,9 +132,6 @@ app look like a template.
 
 - Not flavored. No wizard, spell, grimoire, scribe or archive vocabulary — that belongs to the
   other theme. Interface text here is plain and direct.
-- Not a uniform grid of equal cards.
-- Not bounded by borders. Panels are defined by shadow and by being brighter than the field.
-- Not gray. Backgrounds are white or near-white; mid-grays are for text, not surfaces.
 - Not pastel everywhere. The tint family is for categorization and small fills; large areas stay
   white.
 - Not decorative at the cost of density. This is a tool for scanning many notes quickly, and

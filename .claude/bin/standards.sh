@@ -30,7 +30,7 @@ profile() {
     server) echo "$core docs/features/auth.md" ;;
     design) echo "$core design/standard-design.md design/dark-fantasy-design.md design/token-contract.md docs/features/site-layout.md" ;;
     data)   echo "$core docs/features/data-access.md docs/features/data-access/api-local.md" ;;
-    form)   echo "$ui $s/i18n.md docs/features/forms.md" ;;
+    form)   echo "$ui $s/i18n.md docs/features/forms.md docs/features/forms/controls.md" ;;
     test)   echo "$core docs/testing.md" ;;
     db)     echo "$core docs/database-migrations.md" ;;
     *)      echo "" ;;

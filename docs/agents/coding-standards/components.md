@@ -94,18 +94,16 @@ Three moves, cheapest first:
   there is one way to write the root rather than two. The rule either way is **one export**.
 
 **A control the form layer already binds is reached for by name**, and one it does not is built on
-`Form.Field` rather than on a second copy of its wiring — `docs/features/forms.md`.
+`Form.Field` — `docs/features/forms/controls.md`.
 
 Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `features/`,
 `entities/` and our `shared/components/`. It is a smoke alarm, not the rule. **The rule is the seam.**
 
 ## Loading and failure
 
-**A failure that has not happened takes no space.** Nothing is held under a control for a message it
-will most likely never be given — the write is expected to land, and an empty line under every row
-and every field is paid on every render for something rare. The message region is still mounted from
-the first render, because a `role="alert"` built at the moment it has something to say is never
-spoken; empty, it has no height.
+**A failure that has not happened takes no space.** The message region is still mounted from the
+first render — a `role="alert"` built at the moment it has something to say is never spoken — but
+empty it has no height.
 
 **A block that replaces a surface does not resize it.** It shares a grid cell with the surface so the
 box is sized by the tallest state, `invisible` and `inert` rather than unmounted — and once it has
@@ -159,8 +157,7 @@ The vendored zone keeps whatever shadcn and Radix generate.
 
 **A component wrapping another derives its props from the one it wraps** — `interface ErrorRowProps
 extends Omit<MessageRowProps, 'sentences'>`, with `Pick`, `Omit` and `Partial` for the parts that
-differ. Retyping them puts a second copy of the contract one file away from the first, and the two
-drift on the next prop added to the inner component.
+differ.
 
 **Every prop carries a one-line `/** */` block**
 saying what the consumer cannot read off the type (`/** Rendered in the card's footer — the author

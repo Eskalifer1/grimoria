@@ -67,6 +67,8 @@ Never apply edits before this checkpoint, even when the change seems obvious.
 
 Hand **every** doc written or edited in step 7 to **one** subagent, in a single call. Its only inputs are the file paths and `.claude/rules/writing-docs.md` — no transcript, no reason for the change. Its brief: return the lines to cut and why, grouped by file, never a rewrite or an addition.
 
+**The pass reports the trace `writing-docs.md` asks for** — per file, the line count before and after, and the largest section it considered and kept with what makes it survive. **A file it returns no cuts for is reported as such and left alone**; padding a report with a cut that loses a condition is the one failure this pass can cause.
+
 **One subagent for all of them, not one per file.** What the pass needs isolating from is the reason the edit was made, and that reason is the same for every file in the set; a context per file buys nothing and pays a fresh entry price each time.
 
 Apply the cuts that hold.

@@ -57,18 +57,6 @@ it when the two share an attempt; another field's unsaved value never does.
 **A toggle, a switch, a Theme picker takes `onFailure: 'rollback'`.** The field goes back to the
 server's value and the reason still shows. A switch has nowhere to hold a value the server refused,
 so the default leaves the message explaining a state the User can see is not true.
-
-```tsx
-const theme = useOptimisticValue({
-  descriptor: setThemeOptimistic,
-  input: { id: user.id },
-  field: 'theme',
-  onFailure: 'rollback',
-  value: user.theme,
-  version: user.updatedAt,
-});
-```
-
 `tests/shared/hooks/useOptimisticValue.test.tsx` — "hands the field back to the server and says
 why" — is the shape, until the Theme toggle lands.
 
@@ -125,8 +113,7 @@ Render each row through `<OptimisticRow>`:
 **A pending indicator waits 200 ms**, and errors are never delayed. `usePendingDelay` owns the
 threshold; no surface writes its own.
 
-**Dimming never disables.** No
-component here renders `disabled` or `aria-disabled` from flight.
+**Dimming never disables.** No component here renders `disabled` or `aria-disabled` from flight.
 
 **Failure rendering follows what the server has.** A failed update or removal returns to full
 opacity — the row exists. A failed insert stays dim — it does not. **The message is never dimmed
@@ -162,48 +149,21 @@ A call site hands over an input and the descriptor builds the key. The store and
 format is spelled in exactly one file per domain (`src/api/user/userOptimisticKeys.ts`).
 
 **`<OptimisticScope>` is mounted once, in the locale layout**, above everything and before it in the
-JSX. One `localStorage` slot serves the whole browser, so a machine two Users share would otherwise
-render the first one's unsaved work to the second — and a screen that forgot to mount it would be
-that machine. No page mounts its own.
+JSX. One `localStorage` slot serves the whole browser, so a screen mounting its own would render one
+User's unsaved work to the next on a shared machine. No page mounts its own.
 
 A descriptor's input is what the key is built from, and it may be **wider than the action's own**:
-`updateName` takes a name and no id, 
-but the key needs a User to point at. The descriptor is declared over `{ id, name }`, and the
-action's schema strips the id back off before the write.
+`updateName` takes a name and no id, but the key needs a User to point at. The descriptor is
+declared over `{ id, name }`, and the action's schema strips the id back off before the write.
 
 ## Forms
 
-**react-hook-form owns the field; the store owns the write.**:
+**react-hook-form owns the field; the store owns the write.** Field state and client-side
+validation die with the component; the optimistic value and the failure cross a reload.
 
-| Owned by react-hook-form | Owned by the store |
-| --- | --- |
-| Field state, `touched`, `isSubmitting` | The optimistic value |
-| Client-side validation, from the action's own Zod schema | The failure, until it is dismissed or fixed |
-| Nothing that outlives the component | Everything that crosses a reload |
-
-**`useOptimisticForm` is the seam, and `optimisticFormStatus` is what feeds it:**
-
-```tsx
-const nameForm = useOptimisticForm({
-  schema: updateNameSchema,
-  values: { name: displayName.value },
-  writeStatus: optimisticFormStatus('name', displayName),
-  write: (values) => displayName.run(values.name),
-});
-```
-
-It builds the resolver from the action's contract schema and follows the store through `values`,
-because the store is what answers with the value here. What that costs and how the dirty mark is
-cleared is `docs/features/forms.md`.
-
-**Where a server failure lands is decided by whether it names a field.** A code carrying
-`fields.<name>` is about the value and renders beside that input; anything else — no session, no
-right — is about the write and renders in the footer. `optimisticFormStatus` drops the second when
-the server named a field, because the store files that failure in both places and drawing both
-prints it twice.
-
-**How a form is built here, in full, is `docs/features/forms.md`** — the `Form.*` namespace, what
-`Form.Footer` draws, and where the schema's own refusals are worded.
+**`useOptimisticForm` is the seam and `optimisticFormStatus` is what feeds it** — the store answers
+with the value, so the form follows it through `values`. The whole of it, including where a server
+failure lands, is `docs/features/forms.md`.
 
 ## Saying the app is busy, globally
 
@@ -224,11 +184,8 @@ name rather than collapsing their duration, which would strobe.
 ## Where it is used
 
 `src/views/ProfilePage/ProfileNameForm/` is the reference, and the file every later form is copied
-from. Sign-in and sign-up (#1) come next.
+from. Sign-in and sign-up (#1) come next. A name has no uniqueness rule and no server-side
+transformation — **the day one appears, the form moves to pattern C.**
 
-A name has no uniqueness
-rule and no server-side transformation. **The day one appears, the
-form moves to pattern C**.
-
-What proves the list and record hooks is
-`tests/shared/hooks/*.test.tsx`, running against the notes double in `tests/fixtures/notes/`.
+What proves the list and record hooks is `tests/shared/hooks/*.test.tsx`, running against the notes
+double in `tests/fixtures/notes/`.

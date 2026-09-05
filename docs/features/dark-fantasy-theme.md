@@ -45,17 +45,14 @@ The **vocabulary**. Catalog mechanics — keys, namespaces, where a string is re
 |---|---|
 | Note | Spell |
 | (a User's notes, collectively) | Grimoire |
-| Public notes page | _(TBD — "The Codex" or "Archive of Spells")_ |
 | Create a note | Inscribe a spell |
-| Search | Divination / Scrying _(TBD — pick one, keep consistent)_ |
 | User / Profile | Mage |
 | Save | Bind |
 | Dismiss | Banish |
 
-**Intentionally incomplete** — expand it as each UI surface actually gets built, so the mapping
-stays grounded in real screens. **A term invented while writing copy is added here in the same
-change**, or the next string invents a second word for the same thing. Mockup strings are not
-entries: nothing is added until it is actually chosen.
+**A term invented while writing copy is added here in the same change**, or the next string invents
+a second word for the same thing. **A term not yet chosen is not a row** — the table holds what is
+settled, and #7 is canonical for what is still open.
 
 ## Writing a string the table does not cover
 
@@ -80,10 +77,3 @@ string, which renders in the same layout.
 6. **Data is never flavored** — numbers, dates, user names, note titles, file names.
 7. **A new term goes in the table above**, same change, or the next string invents a second word
    for the same thing.
-
-## Open questions
-
-- Copy for the public listing page, search/filter labels, and admin-adjacent-but-visible
-  strings such as error messages.
-- Whether achievements, notifications and other future features get flavor terms now or when
-  they are built.

@@ -37,6 +37,13 @@ the framework already; it is missing only the local fact it has no way to derive
   tree, `--help` output. A doc restating them is a cache, and a cache earns its load only where
   the lookup is expensive. Cache the unwritten convention, the reason behind a choice, the gotcha
   no config confesses — and leave the one-command lookups where they cannot go stale.
+- **The code is a source of truth too, and the larger one.** What a module exports, the fields of a
+  type, the members of a namespace, an option's name and shape, a token's value, a contrast ratio, a
+  schema's fields, a constant, a route — the reader opens the file and reads them faster than the
+  doc can restate them. **Name the symbol and the path, and let the reader open it**:
+  "`BoundControlProps` in `Form/types.ts`" over the props table. Write what stays true when the file
+  is read: which of two shapes to reach for, the constraint the file cannot state, the failure the
+  obvious reading produces.
 - **A line closes a failure that was observed.** Written after watching a run go wrong, not in
   anticipation of one.
 
@@ -108,6 +115,12 @@ condition or a name to save words makes the doc wrong, which costs far more than
   goes in a collapsed "Old patterns" note; dates inside prose go nowhere.
 - **A rejected alternative lives in the issue or ADR that settled it**, and the rule it produced
   links there by number.
+- **A copied list rots silently.** A table of exports, options or token values disagrees with the
+  code on the first rename, and no gate catches it. Point at the symbol instead — a pointer stays
+  right through the rename, and a wrong pointer fails a grep.
+- **An open question lives in the issue that will close it.** A doc states what is settled; a `TBD`
+  in a table, an "Open questions" section, a choice named but not made all read as fact to a model
+  mid-task. Carry the question to the tracker and leave the row out until it is answered.
 
 ## The deletion pass
 
@@ -117,5 +130,7 @@ point, and cut the abstract ones. A value already readable in the file the doc p
 another doc already states, replaced by a pointer to it. Every clause justifying an instruction
 rather than qualifying it, and the story of how the current state came about.
 
-**The pass leaves a trace.** Name what was cut when handing the doc over. A pass with nothing
-reported did not run.
+**The pass leaves a trace.** Report per file: the line count before and after, what was cut, and
+**the largest section considered and kept, with what makes it survive the no-op test**. A pass
+reporting only cuts read as a pass that stopped at the easy ones; a pass reporting nothing did not
+run.
