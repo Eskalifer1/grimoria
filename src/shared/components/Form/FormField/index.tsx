@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useId, useRef } from 'react';
+import { type ComponentProps, type ReactNode, useId, useRef } from 'react';
 
 import {
   Controller,
@@ -68,6 +68,23 @@ interface FormFieldProps<TValues extends FieldValues, TName extends FieldPath<TV
   /** Marks the field as one that must be filled: a red `*` by the label, `aria-required` on the control. */
   required?: boolean;
 
+  /** How the label and the control sit against each other. The vendored `Field` owns what each word draws. */
+  orientation?: ComponentProps<typeof Field>['orientation'];
+
+  /**
+   * Whether the control can carry a `<label for>`. A `role="radiogroup"` cannot,
+   * and names itself with `aria-labelledby` instead of taking a dead `for`.
+   */
+  hasLabelableControl?: boolean;
+
+  /**
+   * Whether the label is drawn before the control. Only `horizontal` sees it: the
+   * label has `flex-auto` there, so first pushes the control to the far edge — the
+   * settings row — and after sits it against the control, where a toggle's word
+   * belongs (GOV.UK, Carbon and shadcn's own `Field` example put the box first).
+   */
+  isLabelFirst?: boolean;
+
   /** Draws the control. Spread `field` onto it; `error` is there for a control that wants it. */
   render: (props: FormFieldRenderProps<TValues, TName>) => ReactNode;
 
@@ -94,6 +111,9 @@ function FormField<TValues extends FieldValues, TName extends FieldPath<TValues>
   description,
   isDescriptionHidden,
   required,
+  orientation,
+  hasLabelableControl = true,
+  isLabelFirst = true,
   render,
   className,
 }: FormFieldProps<TValues, TName>) {
@@ -119,19 +139,22 @@ function FormField<TValues extends FieldValues, TName extends FieldPath<TValues>
         // Only the server's gets a way out — the resolver's goes when the value does.
         const isDismissible = !fieldState.error && refused !== null;
 
+        // `select-text` undoes the registry's checkbox-case block; `gap-0` keeps
+        // the required mark against the word rather than beside it.
+        const drawnLabel = (
+          <FieldLabel className="gap-0 select-text" htmlFor={hasLabelableControl ? id : undefined}>
+            {label}
+            {required ? (
+              <span aria-hidden className="text-status-failed">
+                {REQUIRED_MARK}
+              </span>
+            ) : null}
+          </FieldLabel>
+        );
+
         return (
-          <Field className={className} data-invalid={!!error}>
-            {/* `select-text`: the registry blocks selection for the checkbox
-                case. A label over a text input has no such job. `gap-0`: the
-                mark belongs to the word, not beside it. */}
-            <FieldLabel className="gap-0 select-text" htmlFor={id}>
-              {label}
-              {required ? (
-                <span aria-hidden className="text-status-failed">
-                  {REQUIRED_MARK}
-                </span>
-              ) : null}
-            </FieldLabel>
+          <Field className={className} data-invalid={!!error} orientation={orientation}>
+            {isLabelFirst ? drawnLabel : null}
             {description ? (
               <FieldDescription className={cn(isDescriptionHidden && 'sr-only')} id={descriptionId}>
                 {description}
@@ -154,6 +177,7 @@ function FormField<TValues extends FieldValues, TName extends FieldPath<TValues>
               },
               error,
             })}
+            {isLabelFirst ? null : drawnLabel}
             <MessageRow
               id={messageId}
               onDismiss={isDismissible ? (write.dismiss ?? undefined) : undefined}

@@ -6,6 +6,7 @@ import { ACTION_ERROR } from '@/constants/action';
 import { REQUIRED_MARK } from '@/constants/form';
 import { VALIDATION_ERROR } from '@/constants/validation';
 import { Form } from '@/shared/components/Form';
+import type { FormFieldProps } from '@/shared/components/Form/FormField';
 import { Input } from '@/shared/components/ui/input';
 import { useActionForm } from '@/shared/hooks/form/useActionForm';
 import type { FormResult } from '@/shared/hooks/form/useFormSeam';
@@ -66,6 +67,9 @@ interface ProbeProps {
   /** Draws the reset button beside submit. */
   isResettable?: boolean;
 
+  /** The layout the field hands the vendored `Field`. */
+  orientation?: FormFieldProps<{ name: string }, 'name'>['orientation'];
+
   /** The contract the resolver checks against. Defaults to the one-rule schema. */
   schema?: typeof schema;
 
@@ -114,11 +118,12 @@ function ProbeForm({
   isDescriptionHidden,
   required,
   isResettable,
+  orientation,
   onCancel,
   ...form
 }: Pick<
   ProbeProps,
-  'description' | 'isDescriptionHidden' | 'required' | 'isResettable' | 'onCancel'
+  'description' | 'isDescriptionHidden' | 'required' | 'isResettable' | 'orientation' | 'onCancel'
 > &
   FormResult<{ name: string }>) {
   return (
@@ -128,6 +133,7 @@ function ProbeForm({
         isDescriptionHidden={isDescriptionHidden}
         label={LABEL}
         name="name"
+        orientation={orientation}
         render={({ field }) => <Input {...field} />}
         required={required}
       />
@@ -171,6 +177,13 @@ describe('Form', () => {
     renderWithProviders(<Probe />);
 
     expect(nameInput()).toHaveAttribute('id', screen.getByText(LABEL).getAttribute('for'));
+  });
+
+  it('lays the field out the way the call site asked', () => {
+    renderWithProviders(<Probe orientation="horizontal" />);
+
+    // The vendored `Field` owns the layout; the form layer only carries the word.
+    expect(screen.getByRole('group')).toHaveAttribute('data-orientation', 'horizontal');
   });
 
   it('runs the write with the parsed values', async () => {

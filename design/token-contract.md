@@ -29,6 +29,11 @@ one Theme is the drift this file prevents.
 `--dur-*` values in `globals.css`, so every transition timed by them shortens with them. Motion
 timed any other way escapes that switch and leaves the preference unhonored.
 
+**A utility naming no timing still moves on the Theme's.** `--default-transition-duration` and
+`--default-transition-timing-function` in `tokens.css` alias `--dur` and `--ease-standard`, and
+`globals.css` sets `--tw-animation-duration` and `--tw-ease` for the registry animations that read
+neither.
+
 **A loop is stopped, not shortened.** `--dur-loop` and `--ease-loop` time the one repeating
 animation there is, and the same block switches it off by name — collapsed like a transition it
 would strobe, which is what the preference exists to prevent. What the loop decorated has to

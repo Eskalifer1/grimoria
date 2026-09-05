@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* `animate-in`, `zoom-in-95` and the rest are this plugin's, not Tailwind's. */
+@import "tw-animate-css";
+
 @import "../../styles/tokens.css";
 @import "../../styles/standard.css";
 @import "../../styles/dark-fantasy.css";
@@ -29,11 +32,25 @@
 }
 
 /*
- * Every transition is timed by these three, so collapsing them here mutes both
- * Themes at once — the vendored zone included, which no component-level
- * `motion-reduce:` could reach.
+ * The registry animations read these two and nothing else — neither falls back to
+ * a contract value — and both are registered `inherits: false`, so they are set
+ * per element. A `duration-*` or `ease-*` class still wins over `*`.
  */
+*,
+::before,
+::after {
+  --tw-animation-duration: var(--dur-fast);
+  --tw-ease: var(--ease-standard);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* The same lever stops every registry animation, vendored zone included. */
+  *,
+  ::before,
+  ::after {
+    --tw-animation-duration: 0.01ms;
+  }
+
   :root {
     --dur-fast: 0.01ms;
     --dur: 0.01ms;

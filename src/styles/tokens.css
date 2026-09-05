@@ -150,6 +150,9 @@
   --transition-duration-fast: var(--dur-fast);
   --transition-duration-slow: var(--dur-slow);
   --default-transition-duration: var(--dur);
+
+  /* The same for the curve; `globals.css` sets the animation half of the pair. */
+  --default-transition-timing-function: var(--ease-standard);
 }
 
 /*

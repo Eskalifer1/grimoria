@@ -24,6 +24,7 @@ cooldown
 cspell
 dependabot
 desaturated
+describedby
 divination
 Eskalifer
 extensionless

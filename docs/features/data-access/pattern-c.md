@@ -55,7 +55,7 @@ revert what it just saved.
 const nameForm = useActionForm({ schema, values, write: updateName });
 
 <Form.Root {...nameForm}>
-  <Form.Field label={t('nameLabel')} name="name" render={({ field }) => <Input {...field} />} />
+  <Form.Input label={t('nameLabel')} name="name" />
   <Form.Footer />
 </Form.Root>;
 ```

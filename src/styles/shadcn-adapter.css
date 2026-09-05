@@ -82,4 +82,21 @@
    * and now resolves per Theme instead of to Tailwind's fixed -0.025em.
    */
   --tracking-tight: var(--ls-title);
+
+  /*
+   * The same for the shadow scale: `shadow-md` and `shadow-xs` are spelled in
+   * `ui/`, and with the namespace dropped both compiled to nothing — a menu over
+   * the page with only a border to say so.
+   */
+  --shadow-md: var(--shadow-raised);
+  --shadow-xs: var(--shadow-card);
+}
+
+/*
+ * The contract pairs the raised surface with a backdrop blur, and a registry
+ * popover paints itself `bg-popover` with no blur class of its own. Unlayered, so
+ * it outranks `@layer utilities`; `--blur-raised` is `0` in standard.
+ */
+.bg-popover {
+  backdrop-filter: blur(var(--blur-raised));
 }

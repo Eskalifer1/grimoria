@@ -12,11 +12,17 @@ import {
 import { SUBMIT_LOCK } from '@/constants/form';
 import { FormActions } from '@/shared/components/Form/FormActions';
 import { FormCancel } from '@/shared/components/Form/FormCancel';
+import { FormCheckbox } from '@/shared/components/Form/FormCheckbox';
 import { FormError } from '@/shared/components/Form/FormError';
 import { FormField } from '@/shared/components/Form/FormField';
 import { FormFooter } from '@/shared/components/Form/FormFooter';
+import { FormInput } from '@/shared/components/Form/FormInput';
+import { FormRadioGroup } from '@/shared/components/Form/FormRadioGroup';
 import { FormReset } from '@/shared/components/Form/FormReset';
+import { FormSelect } from '@/shared/components/Form/FormSelect';
 import { FormSubmit } from '@/shared/components/Form/FormSubmit';
+import { FormSwitch } from '@/shared/components/Form/FormSwitch';
+import { FormTextarea } from '@/shared/components/Form/FormTextarea';
 import { useSkipWhilePending } from '@/shared/hooks/useSkipWhilePending';
 import { WriteStatusContext } from '@/shared/hooks/useWriteStatus';
 import { cn } from '@/shared/lib/cn';
@@ -96,6 +102,12 @@ function FormRoot<TValues extends FieldValues>({
 const Form = {
   Root: FormRoot,
   Field: FormField,
+  Input: FormInput,
+  Textarea: FormTextarea,
+  Checkbox: FormCheckbox,
+  Switch: FormSwitch,
+  Select: FormSelect,
+  RadioGroup: FormRadioGroup,
   Error: FormError,
   Actions: FormActions,
   Submit: FormSubmit,

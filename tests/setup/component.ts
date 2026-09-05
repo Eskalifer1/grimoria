@@ -23,8 +23,49 @@ function installStorage() {
   });
 }
 
+/**
+ * jsdom implements no `ResizeObserver`, and Radix measures the control it hides
+ * behind a toggle with one — so a checkbox or a switch throws on mount rather
+ * than rendering. Nothing here asserts on a size, so an observer that never
+ * reports is the whole stand-in.
+ */
+class NoopResizeObserver implements ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+/**
+ * Radix's `Select` captures the pointer and scrolls the open list into view; jsdom
+ * has neither, so the keypress that opens the list throws before an option
+ * renders. Only what is missing is filled — this patches every component test.
+ */
+function installPointerApis() {
+  if (Element.prototype.hasPointerCapture === undefined) {
+    Element.prototype.hasPointerCapture = () => false;
+  }
+
+  if (Element.prototype.setPointerCapture === undefined) {
+    Element.prototype.setPointerCapture = () => undefined;
+  }
+
+  if (Element.prototype.releasePointerCapture === undefined) {
+    Element.prototype.releasePointerCapture = () => undefined;
+  }
+
+  if (Element.prototype.scrollIntoView === undefined) {
+    Element.prototype.scrollIntoView = () => undefined;
+  }
+}
+
+installPointerApis();
+
 if (window.localStorage === undefined) {
   installStorage();
+}
+
+if (window.ResizeObserver === undefined) {
+  window.ResizeObserver = NoopResizeObserver;
 }
 
 afterEach(cleanup);

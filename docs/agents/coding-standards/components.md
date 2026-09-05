@@ -93,6 +93,9 @@ Three moves, cheapest first:
   beside `Form.Field` — the family is a plain object instead (`const Form = { Root, Field, … }`), so
   there is one way to write the root rather than two. The rule either way is **one export**.
 
+**A control the form layer already binds is reached for by name**, and one it does not is built on
+`Form.Field` rather than on a second copy of its wiring — `docs/features/forms.md`.
+
 Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `features/`,
 `entities/` and our `shared/components/`. It is a smoke alarm, not the rule. **The rule is the seam.**
 

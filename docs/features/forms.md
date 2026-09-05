@@ -9,6 +9,7 @@ is the form half of B and C alike.
 - The shape
 - `useActionForm`
 - The `Form.*` namespace
+- The two control layers
 - Where a refusal comes from
 - Where a failure lands
 - What is refused
@@ -29,12 +30,7 @@ const nameForm = useOptimisticForm({
 });
 
 <Form.Root {...nameForm}>
-  <Form.Field
-    label={t('nameLabel')}
-    name="name"
-    render={({ field }) => <Input {...field} />}
-    required
-  />
+  <Form.Input label={t('nameLabel')} name="name" required />
   <Form.Footer />
 </Form.Root>;
 ```
@@ -126,6 +122,12 @@ prop**.
 | --- | --- |
 | `Form.Root` | The `<form>`, and the two contexts its parts read from |
 | `Form.Field` | One field: label, description, control, and the one message under it |
+| `Form.Input` | A text input, bound |
+| `Form.Textarea` | A multi-line input, bound |
+| `Form.Checkbox` | A `boolean`, bound, its label beside it |
+| `Form.Switch` | A `boolean`, bound, its label beside it |
+| `Form.Select` | One string from `options`, bound, in a Radix listbox |
+| `Form.RadioGroup` | One string from `options`, bound, drawn as radios |
 | `Form.Error` | The failure that belongs to the write and to no field |
 | `Form.Actions` | The row a form ends with |
 | `Form.Submit` | The button that sends it, labeled `form.save` unless given children |
@@ -174,6 +176,80 @@ paragraph and a test.
 **The primitives underneath are `src/shared/components/ui/field.tsx`**, from the shadcn registry —
 the vendored zone, consumed and never edited (`styling.md`). The legacy `ui/form.tsx` is gone;
 blocks pulled from the registry now land in markup this repo already has.
+
+## The two control layers
+
+Every control exists twice, and the second layer is thin.
+
+**Uncontrolled** is the shadcn registry primitive under `src/shared/components/ui/` — value in,
+`onChange` out, no knowledge that forms exist. Vendored, consumed and never edited (`styling.md`)
+
+**Bound** is one component per control in the `Form` namespace. It takes `name`, reaches the form
+through context, renders `Form.Field` internally, and hands the primitive whatever that control's
+value adapter needs.
+
+**Which one:** inside a form, the bound one, always. Outside a form — a filter bar, a settings row
+that writes on change — the primitive with your own `useState`. A control the catalog has no entry
+for is built on `Form.Field`, which stays public; forking the ARIA wiring is what this layer exists
+to prevent.
+
+**The adapter is the point.** `Form.Field` hands a render prop `value` and `onChange`; a checkbox
+wants `checked` and `onCheckedChange`, a Radix select wants `onValueChange`. Written at the call
+site that mapping is wrong silently — a checkbox handed `value` renders unchecked forever and no
+resolver complains. Written here it is written once.
+
+**Props spread flat onto the control**, and a bound component's props are the primitive's own
+(`BoundControlProps` in `Form/types.ts`) minus every prop the binding owns, plus `label`,
+`description`, `isDescriptionHidden`, `isLabelFirst` and `orientation`. No nested `inputProps`:
+there is one slot underneath, so there is nothing to disambiguate.
+
+**What the binding writes, a call site cannot write.** `value`, `defaultValue`, `onChange`,
+`onBlur`, `id`, `ref`, `name` and `required` are dropped from the props type, so reaching for one is
+a compile error rather than a handler that never fires. A control with Radix names of its own drops
+those too — `checked` and `onCheckedChange` on the toggles, `onValueChange` on the option controls.
+
+**`disabled` is the exception, and the one prop the two sides share.** A call site closes a control
+for reasons the form knows nothing about, so it stays passable and merges as `field.disabled ??
+disabled`: a form closed as a whole wins, and otherwise the call site's answer stands.
+
+Two limits worth knowing before hunting for a bug:
+
+- **`aria-invalid`, `aria-describedby` and `aria-required` are the binding's, and no `Omit` can say
+  so** — TypeScript exempts every hyphenated JSX attribute from prop checking, so one written at a
+  call site compiles and is then discarded by the spread. A field wanting to say more passes
+  `description`.
+- **`required` never reaches the DOM** — the form runs `noValidate`, so the native attribute would
+  fire nothing. `name` does reach it on `Form.Input`, `Form.Textarea` and the two toggles, because
+  react-hook-form's own `field` carries it; it does not on `Form.Select` or `Form.RadioGroup`.
+
+Four things the catalog settles, each once:
+
+- **`Form.Checkbox` and `Form.Switch` hold a `boolean`**, and their label sits beside the control
+  through `Form.Field`'s `orientation`, which they default to `horizontal`. **The label is drawn
+  after the control**, against the box it names — `Field` gives the label `flex-auto`, so drawing it
+  first would push the control to the far edge of the card. That far edge is the settings row, and
+  `isLabelFirst` asks for it: the pattern for a toggle that writes the moment it moves, which a
+  toggle inside a form with a submit button is not. Control first is what GOV.UK, Carbon and
+  shadcn's own `Field` example all draw for a checkbox. **Which field a control
+  is bound to is not typechecked** — the form is read from context, so `TValues` has no inference
+  site and `name` is checked as a bare `string`. Binding a toggle to a string field compiles.
+  A group of checkboxes writing into one array is a
+  `fieldset` with a `legend` and different ARIA — a different component, when a screen asks.
+- **`Form.Select` and `Form.RadioGroup` take `options: readonly FormOption[]`**, not children.
+  Children would make each call site import primitives out of `ui/` and hand-wire an `id`/`htmlFor`
+  pair per radio — the render prop this layer removes, one level down. A caller wanting groups or
+  separators drops to `Select` directly.
+- **The radio group is named by `aria-labelledby`.** Its root is a `<div role="radiogroup">`, which
+  no `<label for>` can reach, so the label is handed down wrapped in a span the component owns the id
+  of. Each option's own id is built from its **position**, not its value: a value with a space in it
+  makes an id the spec disallows and the label stops naming its radio.
+- **`Select` is the Radix registry item, not `native-select`.** A native `<select>` carries neither
+  Theme's material, and the system picker it gives on mobile does not pay for a control that looks
+  like nothing else on the surface.
+
+Out of the catalog on purpose: date and combobox (neither is a registry item), number, OTP and
+slider. A numeric field is `Form.Input` with `inputMode="numeric"` — `type="number"` brings a scroll
+wheel that changes the value and a `NaN` on empty.
 
 ## Where a refusal comes from
 
@@ -257,5 +333,12 @@ a screen reader (4.1.2). Locking a whole form would need `pattern-c.md` changed 
 renders, so a test asserts what a User sees. `tests/shared/components/Form.test.tsx` covers the
 layer, `tests/views/ProfilePage/ProfileNameForm.test.tsx` covers pattern B end to end, and the
 pattern C lock is covered by a harness form inside the first that calls the hook without a `writeStatus`.
+
+**A bound control is tested as a binding**, one file per control under
+`tests/shared/components/Form/`, rendered inside a real `useForm` with a resolver: the initial value
+reaches the control, interacting moves the form's value in that control's own terms, a rejection
+marks it `aria-invalid` and points `aria-describedby` at the catalog's words, and a native prop
+arrives on the control. **No test in those files passes `control` to anything** — the prop-drilling
+rule made executable.
 
 `src/shared/components/ui/**` is not tested (`docs/testing.md`).

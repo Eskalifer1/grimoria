@@ -6,7 +6,6 @@ import { updateNameSchema } from '@/api/user/updateName/contract';
 import { updateNameOptimistic } from '@/api/user/updateName/optimistic';
 import { USER_NAME_MAX_LENGTH } from '@/constants/user';
 import { Form } from '@/shared/components/Form';
-import { Input } from '@/shared/components/ui/input';
 import { useOptimisticForm } from '@/shared/hooks/form/useOptimisticForm';
 import { useOptimisticValue } from '@/shared/hooks/useOptimisticValue';
 import { optimisticFormStatus } from '@/shared/lib/formStatus';
@@ -49,26 +48,21 @@ function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
   return (
     <Form.Root {...nameForm}>
       <p className="font-ui text-text-title">{displayName.value}</p>
-      <Form.Field
+      <Form.Input
+        aria-busy={displayName.isPending}
+        // The name the User chose to be seen as, which is not their own — `name`
+        // would offer to autofill the one on their bank card.
+        autoComplete="nickname"
+        className="font-ui"
         // Screen-reader only: `maxLength` truncates without a word, so the bound
         // has to be stated before typing (3.3.2) — but a rule spelled out under
         // every field is noise on screen, and the `*` already says required.
         description={t('nameHint', { limit: USER_NAME_MAX_LENGTH })}
         isDescriptionHidden
         label={<span className="font-ui text-text-muted">{t('nameLabel')}</span>}
+        maxLength={USER_NAME_MAX_LENGTH}
         name="name"
         required
-        render={({ field }) => (
-          <Input
-            {...field}
-            aria-busy={displayName.isPending}
-            // The name the User chose to be seen as, which is not their own —
-            // `name` would offer to autofill the one on their bank card.
-            autoComplete="nickname"
-            className="font-ui"
-            maxLength={USER_NAME_MAX_LENGTH}
-          />
-        )}
       />
       <Form.Footer />
     </Form.Root>

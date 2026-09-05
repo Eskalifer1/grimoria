@@ -25,8 +25,14 @@ scale is dropped, so `tracking-wide` fails the build; `tracking-tight` survives 
 
 **Duration is written as a name**: `duration-fast`, `duration-slow`, or no class at all, which
 is the contract's own default. `duration-200` is the exception the build cannot catch — a bare
-number is not a scale lookup, so there is no scale to drop. Reduced motion is handled once, by
-collapsing those durations in `globals.css`, so a component carries no `motion-reduce:` variant.
+number is not a scale lookup, so there is no scale to drop. **The curve works the same way** —
+`ease-standard`, `ease-emphasized`, or nothing, which is `--ease-standard`. Reduced motion is
+handled once, by collapsing those durations in `globals.css`, so a component carries no
+`motion-reduce:` variant.
+
+**`animate-in`, `fade-in-0` and the rest come from `tw-animate-css`**, not Tailwind, and read
+neither default above — `globals.css` sets what they do read, so a registry primitive animates on
+the Theme's timing without a class. `design/token-contract.md` holds the argument.
 
 **Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
 what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
