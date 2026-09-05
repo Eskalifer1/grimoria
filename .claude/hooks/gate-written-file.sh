@@ -7,7 +7,6 @@
 # swallowed deliberately: a broken hook must not stop a session.
 
 root="${CLAUDE_PROJECT_DIR:-$(pwd)}"
-[ -x "$root/node_modules/.bin/biome" ] || exit 0
 
 payload=$(node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);process.stdout.write((j.tool_name||"")+"\n"+(j.tool_input?.file_path||""))}catch{}})' 2>/dev/null) || exit 0
 tool=$(printf '%s' "$payload" | head -1)
@@ -33,11 +32,16 @@ status=0
 
 case "$file" in
   *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.css|*.json|*.jsonc)
-    # --no-errors-on-unmatched: a path biome.json ignores processes zero files and would otherwise
-    # exit non-zero, reporting a clean file as broken.
-    if ! biome_out=$("$root/node_modules/.bin/biome" check --write --no-errors-on-unmatched "$file" 2>&1); then
-      out="$biome_out"
-      status=1
+    # The binary is checked here, not at the top: `git add -N` and the writing-rule note below need
+    # no Biome, and a top-level guard silently skipped both in the window before `yarn install` —
+    # leaving a new file invisible to `git diff dev`, the range every gate and judging round reads.
+    if [ -x "$root/node_modules/.bin/biome" ]; then
+      # --no-errors-on-unmatched: a path biome.json ignores processes zero files and would otherwise
+      # exit non-zero, reporting a clean file as broken.
+      if ! biome_out=$("$root/node_modules/.bin/biome" check --write --no-errors-on-unmatched "$file" 2>&1); then
+        out="$biome_out"
+        status=1
+      fi
     fi
     ;;
 esac
@@ -71,7 +75,19 @@ case "$file" in
     case "${rel##*/}" in index.*) subject=${rel%/*} ;; esac
     for t in "$root/tests/$subject.test.ts" "$root/tests/$subject.test.tsx"; do
       [ -f "$t" ] || continue
-      if ! test_out=$(cd "$root" && yarn vitest run "${t#"$root"/}" --reporter dot 2>&1); then
+      # macOS ships no `timeout`, so perl's alarm is the portable wall clock. Five minutes is far
+      # past any single test file here — reaching it means hung, not slow, and a hung hook takes
+      # the whole session with it, uninterruptible.
+      if command -v perl >/dev/null 2>&1; then
+        set -- perl -e 'alarm shift; exec @ARGV' 300 yarn vitest run "${t#"$root"/}" --reporter dot
+      else
+        set -- yarn vitest run "${t#"$root"/}" --reporter dot
+      fi
+      test_out=$(cd "$root" && "$@" 2>&1)
+      rc=$?
+      if [ "$rc" -ne 0 ]; then
+        # 128 + SIGALRM(14) — perl fired the alarm rather than vitest reporting a failure.
+        [ "$rc" -eq 142 ] && test_out="$t hung and was killed after 5 minutes. Run it yourself before writing this file again."
         out="$out
 $(printf '%s\n' "$test_out" | tail -40)"
         status=1
