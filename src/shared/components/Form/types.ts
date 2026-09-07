@@ -10,10 +10,10 @@ import type { FormFieldProps } from '@/shared/components/Form/FormField';
  * a type error rather than a prop the spread would discard. `disabled` stays
  * passable, and the rest spreads flat onto the control.
  *
- * **Two holes it cannot close.** Hyphenated JSX attributes escape prop checking,
- * so a call site's `aria-invalid`, `aria-describedby` or `aria-required` compiles
- * and is then overwritten. And `TValues` has no inference site — the form comes
- * from context — so `name` is checked as a bare `string`.
+ * **The hole it cannot close.** Hyphenated JSX attributes escape prop checking, so
+ * a call site's `aria-invalid`, `aria-describedby` or `aria-required` compiles and
+ * is then overwritten. `name` itself is checked, through the namespace the form's
+ * hook hands back (`TypedForm` in `Form/typedForm.ts`).
  */
 type BoundControlProps<
   TControl,

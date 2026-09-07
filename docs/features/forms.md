@@ -15,19 +15,19 @@ surface gets is `docs/features/data-access.md`.
 
 ## The shape
 
-Two calls and a tree. Both hooks return exactly what `Form.Root` takes, so it spreads:
+Two calls and a tree. **The hook hands back the namespace the form draws with**, already bound to it:
 
 ```tsx
 'use client';
 
-const nameForm = useOptimisticForm({
+const { Form } = useOptimisticForm({
   schema: updateNameSchema,
   values: { name: displayName.value },
   writeStatus: optimisticFormStatus('name', displayName),
   write: (values) => displayName.run(values.name),
 });
 
-<Form.Root {...nameForm}>
+<Form.Root>
   <Form.Input label={t('nameLabel')} name="name" required />
   <Form.Footer />
 </Form.Root>;
@@ -35,6 +35,16 @@ const nameForm = useOptimisticForm({
 
 `src/views/ProfilePage/ProfileNameForm/` is that written out, and the file the next form is copied
 from.
+
+**That `Form.Root` takes `className` and `children` and nothing else** — the binding is the hook's.
+Every `name` under it is checked against the schema's **input** type, so a typo and a toggle on a
+string field both fail `tsc` (ADR 0013). The type is `TypedForm` in
+`src/shared/components/Form/typedForm.ts`; a field rendered by a component the form does not own
+takes it as one prop rather than losing the check.
+
+**The hook also still returns `form`, `writeStatus` and `onSubmit`** — `form` for `watch`,
+`setValue` and `formState`, the three together for the untyped `Form.Root` imported from
+`@/shared/components/Form`, which is what a form built without either hook spreads them onto.
 
 ## The two hooks
 
@@ -71,8 +81,6 @@ every hand-written `form.reset()` and quietly turn it into a partial one. Three 
 **A write that never answers is a failure too.** A Server Action rejects rather than returning an
 `ActionResult` when the network goes, so the hook catches and records the generic `unexpected` —
 uncaught, the form falls silent with a live button and nothing said.
-
-**A form too exotic for the hook** skips it and passes any `UseFormReturn` to `Form.Root`.
 
 ## Where a refusal comes from
 

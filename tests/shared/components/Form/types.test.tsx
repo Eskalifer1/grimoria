@@ -1,6 +1,11 @@
+// cspell:ignore naem
 import { describe, expect, it } from 'vitest';
+import { z } from 'zod';
 
 import { Form } from '@/shared/components/Form';
+import type { TypedForm } from '@/shared/components/Form/typedForm';
+import { useActionForm } from '@/shared/hooks/form/useActionForm';
+import { actionSuccess } from '@/shared/lib/actionResult';
 
 const LABEL = 'Name';
 
@@ -84,5 +89,90 @@ describe('a bound control’s props', () => {
     ];
 
     expect(accepted).toHaveLength(7);
+  });
+});
+
+const profileSchema = z.object({
+  name: z.string(),
+  bio: z.string(),
+  age: z.number(),
+  terms: z.boolean(),
+  rank: z.string(),
+});
+
+/**
+ * The typed namespace the hook hands back. Nothing renders — the elements are
+ * built inside a component that is never mounted, and `tsc` over the repo is what
+ * runs these cases.
+ */
+function TypedProbe() {
+  const { Form: Bound } = useActionForm({
+    schema: profileSchema,
+    values: { name: '', bio: '', age: 0, terms: false, rank: 'novice' },
+    write: (values) => Promise.resolve(actionSuccess(values)),
+  });
+
+  return (
+    <Bound.Root>
+      <Bound.Input label={LABEL} name="name" />
+      <Bound.Textarea label={LABEL} name="bio" />
+      {/* A path, not a value type: a number field takes a text control. */}
+      <Bound.Input inputMode="numeric" label={LABEL} name="age" />
+      <Bound.Checkbox label={LABEL} name="terms" />
+      <Bound.Switch label={LABEL} name="terms" />
+      <Bound.Select label={LABEL} name="rank" options={RANKS} />
+      <Bound.RadioGroup label={LABEL} name="rank" options={RANKS} />
+      <Bound.Field label={LABEL} name="age" render={({ field }) => <input {...field} />} />
+      <Bound.Input
+        label={LABEL}
+        // @ts-expect-error `naem` is no field of this form, so the control would write nowhere.
+        name="naem"
+      />
+      <Bound.Checkbox
+        label={LABEL}
+        // @ts-expect-error `name` holds a string, and a toggle writes a boolean.
+        name="name"
+      />
+      <Bound.Switch
+        label={LABEL}
+        // @ts-expect-error `age` holds a number, and a toggle writes a boolean.
+        name="age"
+      />
+      <Bound.Select
+        label={LABEL}
+        // @ts-expect-error `age` holds a number, and an option is a string.
+        name="age"
+        options={RANKS}
+      />
+      <Bound.RadioGroup
+        label={LABEL}
+        // @ts-expect-error `terms` holds a boolean, and an option is a string.
+        name="terms"
+        options={RANKS}
+      />
+      <Bound.Field
+        label={LABEL}
+        // @ts-expect-error `Form.Field` is bound the same way, so the escape hatch is checked too.
+        name="naem"
+        // The name is what is under test; a `render` reading the field would report
+        // the same rejection a second time, on a line the annotation does not cover.
+        render={() => <input />}
+      />
+      <Bound.Footer />
+    </Bound.Root>
+  );
+}
+
+/** A control listed in `Form` and not in `TypedForm` fails here, and nowhere else. */
+type EveryControlIsTyped = keyof typeof Form extends keyof TypedForm<{ name: string }>
+  ? true
+  : false;
+
+describe('a typed form’s `name`', () => {
+  it('is checked against the form’s own values', () => {
+    const everyControlIsTyped: EveryControlIsTyped = true;
+
+    expect(everyControlIsTyped).toBe(true);
+    expect(TypedProbe).toBeTypeOf('function');
   });
 });

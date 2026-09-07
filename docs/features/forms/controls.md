@@ -66,7 +66,8 @@ for is built on `Form.Field`, which stays public.
 renders unchecked forever and no resolver complains.
 
 **Props spread flat onto the control**, shaped by `BoundControlProps` in `Form/types.ts`, whose
-JSDoc names the two holes the type cannot close. No nested `inputProps`. **`disabled` is the one
+JSDoc names the one hole the type cannot close: hyphenated JSX attributes escape prop checking, so a
+call site's `aria-invalid` compiles and is then overwritten. No nested `inputProps`. **`disabled` is the one
 prop the two sides share** and merges as `field.disabled ?? disabled`: a form closed as a whole
 wins, and otherwise the call site's answer stands.
 
@@ -74,8 +75,9 @@ wins, and otherwise the call site's answer stands.
 
 - **`Form.Checkbox` and `Form.Switch` draw their label after the control**, against the box it
   names. `isLabelFirst` asks for the far edge instead: the pattern for a toggle that writes the
-  moment it moves, which a toggle inside a form with a submit button is not. **Which field a control
-  is bound to is not typechecked** — binding a toggle to a string field compiles. A group of
+  moment it moves, which a toggle inside a form with a submit button is not. **A toggle binds to a `boolean`
+  field and an option control to a `string` one, checked by `tsc`** wherever the namespace came from
+  the hook (`docs/features/forms.md`). A group of
   checkboxes writing into one array is a `fieldset` with a `legend` and different ARIA, so it is a
   different component when a screen asks for one.
 - **`Form.Select` and `Form.RadioGroup` take `options`, not children.** Children would make each

@@ -28,12 +28,12 @@ import { WriteStatusContext } from '@/shared/hooks/useWriteStatus';
 import { cn } from '@/shared/lib/cn';
 import { type FormStatus, IDLE_FORM_STATUS } from '@/shared/lib/formStatus';
 
-interface FormRootProps<TValues extends FieldValues> {
+interface FormRootProps<TValues extends FieldValues, TOutput extends FieldValues = TValues> {
   /** The `useForm` return. Published on context, so no field is handed a `control` prop. */
-  form: UseFormReturn<TValues>;
+  form: UseFormReturn<TValues, unknown, TOutput>;
 
   /** Runs with the parsed values once the resolver has agreed to them. */
-  onSubmit: SubmitHandler<TValues>;
+  onSubmit: SubmitHandler<TOutput>;
 
   /** The content to render inside the form — its fields, and whatever else it holds. */
   children: ReactNode;
@@ -56,15 +56,18 @@ interface FormRootProps<TValues extends FieldValues> {
  * is refusing; the refusal itself has to sit on the form, or the Enter key sends
  * a second write no button was ever clicked for.
  *
- * Takes the whole of `useActionForm`'s return — `<Form.Root {...nameForm}>`.
+ * **This is the untyped root**, taking the binding as props. A form built by
+ * `useOptimisticForm` or `useActionForm` reaches for the `Form.Root` those hooks
+ * hand back instead, which arrives bound and checks its fields' `name`
+ * (`docs/features/forms.md`).
  */
-function FormRoot<TValues extends FieldValues>({
+function FormRoot<TValues extends FieldValues, TOutput extends FieldValues = TValues>({
   form,
   onSubmit,
   children,
   writeStatus,
   className,
-}: FormRootProps<TValues>) {
+}: FormRootProps<TValues, TOutput>) {
   const write = writeStatus ?? IDLE_FORM_STATUS;
   const isSubmitLocked = write.submitLock === SUBMIT_LOCK.SUBMIT;
   const submitOnce = useSkipWhilePending(form.handleSubmit(onSubmit), isSubmitLocked);

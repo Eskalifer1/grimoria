@@ -6,6 +6,7 @@ import type { FieldValues } from 'react-hook-form';
 
 import { SUBMIT_LOCK, VALUE_OWNER } from '@/constants/form';
 import { type FormOptions, type FormResult, useFormSeam } from '@/shared/hooks/form/useFormSeam';
+import { useTypedForm } from '@/shared/hooks/form/useTypedForm';
 import { drawnFieldErrors, type FormFailure } from '@/shared/lib/formStatus';
 
 /**
@@ -36,18 +37,18 @@ function useActionForm<TInput extends FieldValues, TOutput extends FieldValues =
     }
   }
 
-  return {
-    form,
-    writeStatus: {
-      // A reason no field took has to stay in the footer, or it is lost.
-      error: Object.keys(fieldErrors).length > 0 ? null : failure,
-      fieldErrors,
-      dismiss: () => setFailure(null),
-      isPending: form.formState.isSubmitting,
-      submitLock: SUBMIT_LOCK.SUBMIT,
-    },
-    onSubmit,
+  const writeStatus = {
+    // A reason no field took has to stay in the footer, or it is lost.
+    error: Object.keys(fieldErrors).length > 0 ? null : failure,
+    fieldErrors,
+    dismiss: () => setFailure(null),
+    isPending: form.formState.isSubmitting,
+    submitLock: SUBMIT_LOCK.SUBMIT,
   };
+
+  const boundForm = useTypedForm({ form, writeStatus, onSubmit });
+
+  return { form, writeStatus, onSubmit, Form: boundForm };
 }
 
 export { useActionForm };

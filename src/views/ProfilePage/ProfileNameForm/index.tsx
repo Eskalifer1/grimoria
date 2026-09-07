@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { updateNameSchema } from '@/api/user/updateName/contract';
 import { updateNameOptimistic } from '@/api/user/updateName/optimistic';
 import { USER_NAME_MAX_LENGTH } from '@/constants/user';
-import { Form } from '@/shared/components/Form';
 import { useOptimisticForm } from '@/shared/hooks/form/useOptimisticForm';
 import { useOptimisticValue } from '@/shared/hooks/useOptimisticValue';
 import { optimisticFormStatus } from '@/shared/lib/formStatus';
@@ -38,7 +37,7 @@ function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
     version: updatedAt,
   });
 
-  const nameForm = useOptimisticForm({
+  const { Form } = useOptimisticForm({
     schema: updateNameSchema,
     values: { name: displayName.value },
     writeStatus: optimisticFormStatus('name', displayName),
@@ -46,7 +45,7 @@ function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
   });
 
   return (
-    <Form.Root {...nameForm}>
+    <Form.Root>
       <p className="font-ui text-text-title">{displayName.value}</p>
       <Form.Input
         aria-busy={displayName.isPending}

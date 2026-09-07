@@ -118,6 +118,10 @@ is genuinely domain-agnostic — if the second consumer needs it _because it sho
 destination is `entities/`. A **generic function** (formatter, guard, pure helper) may go in on
 first use; the test is "is this inherently generic?", not "might I copy-paste it someday?".
 
+**`shared/hooks/form/` imports `shared/components/Form`**, a hook depending on a component. The one
+such exception, and it has no cycle — the form layer imports `useSkipWhilePending` and
+`useWriteStatus`, never these hooks (ADR 0013).
+
 ### `shared/components/ui/` — the vendored zone
 
 Restructuring `ui/` breaks shadcn's CLI update path, so this one path is an explicit exception zone: files stay exactly as the CLI

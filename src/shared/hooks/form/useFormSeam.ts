@@ -12,6 +12,7 @@ import type { z } from 'zod';
 
 import { ACTION_ERROR } from '@/constants/action';
 import { VALUE_OWNER, type ValueOwner } from '@/constants/form';
+import type { TypedForm } from '@/shared/components/Form/typedForm';
 import { type ActionResult, actionFailure } from '@/shared/lib/actionResult';
 import type { FormStatus } from '@/shared/lib/formStatus';
 
@@ -36,7 +37,13 @@ interface FormOptions<
 }
 
 interface FormResult<TInput extends FieldValues, TOutput extends FieldValues = TInput> {
-  /** The `useForm` return, handed to `Form.Root`. */
+  /**
+   * The namespace this form draws with, already bound to it: `Form.Root` needs no
+   * props of the binding, and every `name` under it is checked against `TInput`.
+   */
+  Form: TypedForm<TInput>;
+
+  /** The `useForm` return — `watch`, `setValue`, `formState`. Still handed to the untyped `Form.Root`. */
   form: UseFormReturn<TInput, unknown, TOutput>;
 
   /** What the server has said, handed to `Form.Root`. */
