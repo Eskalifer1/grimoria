@@ -34,3 +34,15 @@ confirmation.
 fifteen lines, American English, no file table and no gate output.
 
 Held by `permissions.deny` in `.claude/settings.json`.
+
+## Closing an issue deletes its branch
+
+**Closing an issue deletes the branch the work sat on**, in the same turn, unless the user asks to
+keep it. A branch whose issue is closed is merged history under a name nobody reads again.
+
+- **Work done straight on `dev` or `main` deletes nothing.** There is no task branch to remove, and
+  these two are never deleted.
+- **Delete with `git branch -d`, never `-D`.** The safe form refuses a branch holding commits `dev`
+  does not, which is the one case worth stopping over: report it and ask rather than forcing it.
+- **A branch checked out in a worktree blocks its own deletion.** `git worktree prune` clears a
+  stale one; a live one is the user's call.
