@@ -64,6 +64,8 @@ next session repeats.
   `design/dark-fantasy-tokens.md`. **Adding or renaming one**: `design/token-contract.md`, both
   Themes in one change.
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
+- **Adding a response header, changing the Content Security Policy, or asking why a script, font
+  or frame is refused**: `docs/features/security-headers.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Reading data or writing it back** — where a Payload query lives, what a Server Action returns,
   optimistic or blocking, rollback on failure, revalidation: `docs/features/data-access.md`, and

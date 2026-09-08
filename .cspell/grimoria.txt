@@ -6,11 +6,11 @@
 # --- Names ---
 # --- Product and dark-fantasy vocabulary ---
 # --- Technology and tool names ---
-# `cspell:ignore` comment in that file instead.
 # Add a word here when it is genuinely part of the project's vocabulary. For a
 # casing is part of the name. Keep the sections sorted.
 # one-off (a quoted URL slug, a fixture string), prefer an inline
 # Project dictionary for Grimoria. One word per line, lower-case unless the
+# `cspell:ignore` comment in that file instead.
 ack
 acks
 arcane
@@ -19,6 +19,7 @@ autofix
 biome
 branchable
 centerlines
+clickjacking
 codegen
 cooldown
 cspell
@@ -29,9 +30,11 @@ divination
 Eskalifer
 extensionless
 frontmatter
+geolocation
 grimoire
 grimoires
 Grimoria
+HSTS
 IDOR
 importmap
 incantation
@@ -53,6 +56,7 @@ nextjs
 nodeLinker
 noopener
 noreferrer
+nosniff
 opengraph
 pagehide
 payload
@@ -62,6 +66,7 @@ Playfair
 playwright
 pooler
 postgrest
+prerendered
 regenerable
 retuned
 rgba

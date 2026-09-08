@@ -35,7 +35,8 @@ by e2e (#39); the pure functions it calls are covered by unit.
 
 - **The vendored zone** — `src/shared/components/ui/**` is shadcn's code (`layers.md`).
 - **Config and constants** — `next.config.ts`, `src/constants/**`, and anything with no branch.
-  `src/constants/env.ts` is the exception: it parses and defaults, so its schema is tested.
+  `src/constants/env.ts` and `securityHeaders.ts` are the exceptions: one parses and defaults, the
+  other branches on scope and environment, so both are tested.
 - **Plain re-exports and one-line wrappers** around a library, such as `cn()`.
 
 ## Running

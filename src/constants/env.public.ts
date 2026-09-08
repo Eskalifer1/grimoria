@@ -13,4 +13,13 @@ const publicEnvSchema = z.object({});
 
 const PUBLIC_ENV = publicEnvSchema.parse({});
 
-export { PUBLIC_ENV, publicEnvSchema };
+/**
+ * Which build this is. It lives here rather than in `env.ts` because the modules
+ * that branch on it also run where the boot parse cannot — the Edge runtime and
+ * Next's config load. Next replaces this read literally, so it costs nothing and
+ * exposes nothing.
+ */
+const NODE_ENVIRONMENT: 'development' | 'production' | 'test' =
+  process.env.NODE_ENV ?? 'development';
+
+export { NODE_ENVIRONMENT, PUBLIC_ENV, publicEnvSchema };
