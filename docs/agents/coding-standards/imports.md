@@ -6,6 +6,11 @@ rule is machine-enforced the config is named and is the source of truth.
 **Order is machine-enforced and auto-fixable** (`assist.actions.source.organizeImports`). Do not
 hand-sort, and do not restate the group list anywhere — changing it is an edit to `biome.json`.
 
+**No two `overrides` in `biome.json` may cover the same path and set the same rule.** Severity merges
+across them, but a rule's `options` are replaced by the last one, so the earlier patterns go silently
+dead — an import fence that reports nothing and looks enforced. One override owns a path, carrying
+that path's full list.
+
 **Alias vs. relative** turns on the module boundary, never the number of `../`. A **module** is
 one directory directly under a layer. Inside its own module: relative, so it can be moved without
 rewriting its internals. Crossing into another module or layer: `@/`. Inside `shared/`: `@/`,

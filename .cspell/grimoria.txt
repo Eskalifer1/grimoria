@@ -80,6 +80,7 @@ spellbook
 srgb
 sslmode
 statusline
+stringbool
 subtasking
 supabase
 tailwindcss

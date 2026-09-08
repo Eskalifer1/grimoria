@@ -8,29 +8,11 @@ import { betterAuthPlugin } from 'payload-auth/better-auth/plugin';
 
 import { withInviteExpiry } from './collections/admin-invitations';
 import { withProfileFields } from './collections/users';
+import { BETTER_AUTH_URL, DATABASE_URL, PAYLOAD_SECRET } from './constants/env';
 import { ROUTES } from './constants/routes';
 import { SESSION_EXPIRES_IN, SESSION_UPDATE_AGE } from './constants/user';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Neon's pooled endpoint runs PgBouncer in transaction mode, where the `SET`
-// statements schema work relies on do not survive between transactions. Schema
-// work is exactly the two cases the adapter itself checks for: dev push
-// (`NODE_ENV !== 'production'`) and `payload migrate` (`PAYLOAD_MIGRATING`).
-// Everything else is serverless request traffic, which is what pooling is for.
-const isSchemaOperation =
-  process.env.NODE_ENV !== 'production' || process.env.PAYLOAD_MIGRATING === 'true';
-
-// Neon hands out `sslmode=require`, which `pg` treats as `verify-full` today
-// and warns about on every boot, because `pg@9` will downgrade it to libpq's
-// weaker meaning. Asking for `verify-full` outright keeps the behavior we
-// already have — Neon's certificates are publicly trusted — and drops the
-// warning, without every environment having to edit its own connection string.
-const connectionString = (
-  isSchemaOperation
-    ? process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL || ''
-    : process.env.DATABASE_URL || ''
-).replace('sslmode=require', 'sslmode=verify-full');
 
 export default buildConfig({
   // None of our own yet. `users`, `sessions`, `accounts`, `verifications` and
@@ -62,7 +44,7 @@ export default buildConfig({
         // Better Auth reads this from the environment on its own, but the
         // admin's login screen is handed the value from here, so it is passed
         // explicitly. Unset, both fall back to the request's own origin.
-        baseURL: process.env.BETTER_AUTH_URL,
+        baseURL: BETTER_AUTH_URL,
 
         emailAndPassword: { enabled: true },
 
@@ -115,12 +97,12 @@ export default buildConfig({
   // the adapter silently discards the supplied id and allocates its own, and the
   // optimistic key is orphaned without anything throwing.
   db: postgresAdapter({
-    pool: { connectionString },
+    pool: { connectionString: DATABASE_URL },
     idType: 'uuid',
     allowIDOnCreate: true,
   }),
 
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: PAYLOAD_SECRET,
 
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

@@ -51,6 +51,7 @@
       },
       "style": {
         "noJsxLiterals": "error",
+        "noProcessEnv": "error",
         "useConsistentTypeDefinitions": {
           "level": "error",
           "options": {
@@ -233,6 +234,10 @@
               "options": {
                 "patterns": [
                   {
+                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
+                  },
+                  {
                     "group": ["@/app/**", "@/views/**"],
                     "message": "views/ may import features/, entities/, api/ and shared/ only, and never another screen module \u2014 see docs/agents/coding-standards/layers.md."
                   },
@@ -256,6 +261,10 @@
               "level": "error",
               "options": {
                 "patterns": [
+                  {
+                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
+                  },
                   {
                     "group": ["@/app/**", "@/views/**", "@/features/**"],
                     "message": "features/ may import entities/ and shared/ only. Cross-feature: compose in views/ or move the primitive to entities/ \u2014 see docs/agents/coding-standards/layers.md."
@@ -281,32 +290,16 @@
               "options": {
                 "patterns": [
                   {
+                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
+                  },
+                  {
                     "group": ["@/app/**", "@/views/**", "@/features/**", "@/entities/**"],
                     "message": "entities/ may import shared/ only, and never another entity \u2014 see docs/agents/coding-standards/layers.md."
                   },
                   {
                     "group": ["payload", "payload/**", "@payload-config"],
                     "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "includes": ["src/app/**", "src/views/**", "src/features/**", "src/entities/**"],
-      "linter": {
-        "rules": {
-          "style": {
-            "noRestrictedImports": {
-              "level": "error",
-              "options": {
-                "patterns": [
-                  {
-                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
-                    "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
                   }
                 ]
               }
@@ -388,12 +381,26 @@
               "options": {
                 "patterns": [
                   {
+                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
+                  },
+                  {
                     "group": ["payload", "payload/**", "@payload-config"],
                     "message": "Payload's Local API is reached through src/api/ only \u2014 see docs/agents/coding-standards/layers.md."
                   }
                 ]
               }
             }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/constants/env.ts", "src/constants/env.public.ts", "tests/setup/env.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noProcessEnv": "off"
           }
         }
       }

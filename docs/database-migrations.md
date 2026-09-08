@@ -47,7 +47,7 @@ running deploy keeps serving the schema it was built for.
 
 **`yarn build` alone touches no database.**
 
-Payload's CLI sets `PAYLOAD_MIGRATING`, which `src/payload.config.ts` reads to send schema work down
+Payload's CLI sets `PAYLOAD_MIGRATING`, which `src/constants/env.ts` reads to send schema work down
 the direct connection string and request traffic down the pooled one.
 
 ### What Vercel production holds
@@ -57,7 +57,7 @@ the direct connection string and request traffic down the pooled one.
 | `DATABASE_URL` | Neon `main`, pooled |
 | `DATABASE_URL_UNPOOLED` | Neon `main`, direct |
 | `PAYLOAD_SECRET` | A secret of its own, not the one in `.env` |
-| `BETTER_AUTH_SECRET` | Likewise. Better Auth throws at boot in production if it is missing — nothing passes it `secret`, so there is no fallback |
+| `BETTER_AUTH_SECRET` | Likewise. Nothing passes Better Auth a `secret`, so there is no fallback |
 | `BETTER_AUTH_URL` | The production origin, written out — unset, a post-sign-in redirect can land on a preview URL |
 
 The function region is set in Vercel's settings to match the Neon project's region, never in a

@@ -12,6 +12,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 
 import { getCurrentUser } from '@/api/user/getCurrentUser';
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
+import { METADATA_BASE_URL } from '@/constants/env.server';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
   // `opengraph-image.jpg` sits beside this file, and Open Graph needs absolute
   // URLs; without a base Next resolves it against localhost and the card 404s
   // wherever the link is actually shared.
-  metadataBase: new URL(process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(METADATA_BASE_URL),
   title: APP_NAME,
   description: APP_DESCRIPTION,
   openGraph: {

@@ -1,6 +1,8 @@
 import config from '@payload-config';
 import { getPayloadAuth } from 'payload-auth/better-auth/plugin';
 
+import { parseSeedEnv } from '@/constants/env';
+
 /**
  * Makes the first admin exist with the password in `SEED_ADMIN_*` — `yarn seed`,
  * safe to re-run. A new account is created through Better Auth's own sign-up so
@@ -11,13 +13,11 @@ import { getPayloadAuth } from 'payload-auth/better-auth/plugin';
  * The role is written through the Local API afterwards, the only path allowed
  * to touch `role` at all.
  */
-const email = process.env.SEED_ADMIN_EMAIL;
-const password = process.env.SEED_ADMIN_PASSWORD;
-const name = process.env.SEED_ADMIN_NAME ?? 'Admin';
-
-if (!email || !password) {
-  throw new Error('Set SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD before running the seed');
-}
+const {
+  SEED_ADMIN_EMAIL: email,
+  SEED_ADMIN_NAME: name,
+  SEED_ADMIN_PASSWORD: password,
+} = parseSeedEnv();
 
 const payload = await getPayloadAuth(config);
 

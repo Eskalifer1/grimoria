@@ -30,6 +30,7 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['tests/**/*.test.ts'],
+          setupFiles: ['tests/setup/env.ts'],
         },
       },
       {
@@ -44,7 +45,7 @@ export default defineConfig({
           // `next-intl`'s navigation module imports `next/navigation` extensionless,
           // which only resolves once the package goes through Vite rather than Node.
           server: { deps: { inline: ['next-intl'] } },
-          setupFiles: ['tests/setup/component.ts'],
+          setupFiles: ['tests/setup/env.ts', 'tests/setup/component.ts'],
         },
       },
     ],

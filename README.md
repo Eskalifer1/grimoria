@@ -13,10 +13,21 @@ cp .env.example .env   # then fill the blank values in
 yarn dev
 ```
 
-`PAYLOAD_SECRET` and `BETTER_AUTH_SECRET` are each any long random string (`openssl rand -hex 32`),
-and they are not the same value; `DATABASE_URL` points at Postgres (Neon, ADR-0007). Without it the
-app runs, but anything touching the database fails. The `SEED_ADMIN_*` values are read by `yarn seed`
-alone. Every variable carries its own comment in `.env.example`.
+The app validates its environment at startup (`src/constants/env.ts`) and refuses to boot with a
+missing or malformed variable, naming every one of them in a single error.
+
+- `PAYLOAD_SECRET` and `BETTER_AUTH_SECRET` — each any long random string (`openssl rand -hex 32`),
+  and not the same value. Required.
+- `DATABASE_URL` — the pooled Postgres string (Neon, ADR-0007). Required.
+- `DATABASE_URL_UNPOOLED` — the same branch's direct string, used for schema work. Optional; falls
+  back to `DATABASE_URL`.
+- `BETTER_AUTH_URL` — the origin auth builds its URLs from. Optional: unset, Better Auth uses the
+  request's own origin. Write it out in production so a post-sign-in redirect cannot land on a
+  preview URL.
+- `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_ADMIN_NAME` — read by `yarn seed` alone, never at
+  boot.
+
+Every variable carries its own comment in `.env.example`.
 
 ### Database
 

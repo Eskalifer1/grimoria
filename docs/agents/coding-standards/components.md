@@ -29,7 +29,8 @@ larger and later.
 `ReactNode` prop.
 
 **`server-only` and `client-only`.** A module that must never reach the browser — Local API reads,
-a DAL, anything reading `process.env` — starts with `import 'server-only'`. A `"use server"` file needs
+a DAL — starts with `import 'server-only'`. The environment is already behind one: read it from
+`@/constants/env.server`, or `@/constants/env.public` in the browser. A `"use server"` file needs
 neither.
 
 ## State
