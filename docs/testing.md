@@ -33,7 +33,7 @@ by e2e (#39); the pure functions it calls are covered by unit.
 
 ## What is not tested
 
-- **The vendored zone** — `src/shared/components/ui/**` is shadcn's code (`layers.md`).
+- **`src/shared/components/ui/**`** — the registry's own code, ours to edit but not to cover (`layers.md`).
 - **Config and constants** — `next.config.ts`, `src/constants/**`, and anything with no branch.
   `src/constants/env.ts` and `securityHeaders.ts` are the exceptions: one parses and defaults, the
   other branches on scope and environment, so both are tested.
@@ -47,7 +47,9 @@ by e2e (#39); the pure functions it calls are covered by unit.
 `CLAUDE.md` → `## Tooling`.
 
 **Component tests render through `tests/setup/render.tsx`**, which wraps the providers a client
-component needs. `tests/setup/component.ts` installs a `localStorage` stand-in, because this jsdom
+component needs. `tests/setup/component.ts` installs a `matchMedia` stand-in that matches nothing — the toaster asks
+it for `prefers-reduced-motion` on mount and throws without one, and what the preference changes is
+a browser fact rather than a jsdom one. It installs a `localStorage` stand-in too, because this jsdom
 build ships none and without it anything reading it runs memory-only — a suite asserting that
 something survives a reload would pass without ever touching the slot.
 

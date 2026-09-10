@@ -7,7 +7,7 @@ import { useOptimisticStore } from '@/shared/hooks/useOptimisticStore';
 import type { ActionResult } from '@/shared/lib/actionResult';
 import type { OptimisticDescriptor } from '@/shared/lib/optimistic/descriptor';
 import type { OptimisticEntry, OptimisticPatch } from '@/shared/lib/optimistic/entry';
-import { runOptimistic } from '@/shared/lib/optimistic/run';
+import { runOptimistic } from '@/shared/lib/optimistic/runOptimistic';
 import { writtenFields } from '@/shared/lib/optimistic/transitions';
 
 /** What every optimistic hook is given: an action, the row it addresses, and that row's version. */
@@ -82,13 +82,15 @@ function useOptimisticSubject<TInput, TData>({
       const fields = writtenFields(undefined, patch);
 
       return runOptimistic(descriptor, Object.assign({}, input, patch), {
-        optimisticData: patch,
-        fields,
-        sourceVersion,
+        data: {
+          optimisticPatch: patch,
+          claimedFields: fields,
+          sourceVersion,
+          // `keep` leaves the refused value on screen with the reason beside it;
+          // the other two hand the named fields back to the server.
+          rolledBackFields: onFailure === 'keep' ? undefined : fields,
+        },
         store,
-        // `keep` leaves the refused value on screen with the reason beside it;
-        // the other two hand the named fields back to the server.
-        rollback: onFailure === 'keep' ? undefined : fields,
         isSilent: onFailure === 'silent',
       });
     },

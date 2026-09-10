@@ -1,7 +1,7 @@
 /*
  * shadcn/ui speaks its own token names. Translating them here, once, keeps
  * `src/shared/components/ui/` unedited and the CLI a working update path
- * (`layers.md` → the vendored zone). A primitive needing a name not listed
+ * (`layers.md` → the registry zone). A primitive needing a name not listed
  * below is a decision about what that name means in both Themes — make it here.
  */
 
@@ -76,7 +76,7 @@
   --color-destructive-foreground: var(--destructive-foreground);
 
   /*
-   * `tokens.css` drops Tailwind's tracking scale, and two vendored primitives
+   * `tokens.css` drops Tailwind's tracking scale, and two registry primitives
    * spell their title tracking `tracking-tight` — a name we cannot edit out of
    * `ui/`. Restored as the alias it always meant, so the class keeps compiling
    * and now resolves per Theme instead of to Tailwind's fixed -0.025em.
@@ -99,4 +99,114 @@
  */
 .bg-popover {
   backdrop-filter: blur(var(--blur-raised));
+}
+
+/*
+ * `sonner` injects its stylesheet at runtime and unlayered, so it outranks every
+ * utility class whatever the specificity — the `html` prefix is what wins back the
+ * values it hardcodes. `[data-sonner-theme]` is matched for the same reason: the library
+ * sets its own palette on `[data-sonner-toaster][data-sonner-theme]`, which
+ * outweighs a bare attribute and painted the toast white in both Themes.
+ */
+html [data-sonner-toaster][data-sonner-theme] {
+  --normal-bg: var(--popover);
+  --normal-text: var(--popover-foreground);
+  --normal-border: var(--border);
+  --border-radius: var(--radius);
+
+  font-family: var(--font-ui);
+}
+
+html [data-sonner-toast][data-styled="true"] {
+  box-shadow: var(--shadow-raised);
+  font-size: var(--text-sm);
+
+  /*
+   * The raised surface is translucent in dark-fantasy, and the blur is what makes
+   * that read as glass rather than as mud. `.bg-popover` above pairs the two for a
+   * registry popover; the toast paints itself through `--normal-bg`, so it needs
+   * the pair spelled again. `--blur-raised` is `0` in standard.
+   */
+  backdrop-filter: blur(var(--blur-raised));
+}
+
+/*
+ * A toast says which kind it is with a colored edge and icon, never a colored
+ * fill: `--status-*` is the contract's vocabulary for what a thing *is*, and a
+ * filled surface would owe both Themes a readable ink pair for every type.
+ */
+html [data-sonner-toast][data-styled="true"][data-type="success"] {
+  --normal-border: var(--status-done);
+
+  box-shadow:
+    inset 3px 0 0 var(--status-done),
+    var(--shadow-raised);
+}
+
+html [data-sonner-toast][data-styled="true"][data-type="error"] {
+  --normal-border: var(--status-failed);
+
+  box-shadow:
+    inset 3px 0 0 var(--status-failed),
+    var(--shadow-raised);
+}
+
+html [data-sonner-toast][data-styled="true"][data-type="info"] {
+  --normal-border: var(--status-live);
+
+  box-shadow:
+    inset 3px 0 0 var(--status-live),
+    var(--shadow-raised);
+}
+
+html [data-sonner-toast][data-styled="true"][data-type="success"] [data-icon] {
+  color: var(--status-done);
+}
+
+html [data-sonner-toast][data-styled="true"][data-type="error"] [data-icon] {
+  color: var(--status-failed);
+}
+
+html [data-sonner-toast][data-styled="true"][data-type="info"] [data-icon] {
+  color: var(--status-live);
+}
+
+/*
+ * The library hardcodes `.4s`, so the toast slid on its own clock and ignored the
+ * one lever `globals.css` pulls to stop every animation under
+ * `prefers-reduced-motion` (`styling.md`). `--dur-slow` is the arriving-surface
+ * step — at `--dur` the toast left the screen too fast to read as leaving.
+ */
+html [data-sonner-toast] {
+  transition-duration: var(--dur-slow);
+}
+
+/*
+ * Both states are owned here, not just the hover: the library's resting fill is a
+ * hardcoded light gray, so a themed hover alone read as the control vanishing.
+ * The 24px is WCAG 2.2 AA 2.5.8 — it ships at 20px.
+ */
+html [data-sonner-toast][data-styled="true"] [data-close-button] {
+  width: 24px;
+  height: 24px;
+  background: var(--surface-inset);
+  border-color: var(--border-subtle);
+  color: var(--text-body);
+}
+
+html [data-sonner-toast][data-styled="true"]:hover [data-close-button]:hover {
+  background: var(--surface-selected);
+  border-color: var(--border-strong);
+  color: var(--text-brand);
+}
+
+/*
+ * The library's own ring is a black shadow at 20% alpha, which is all but
+ * invisible on dark-fantasy's near-black raised surface (WCAG 2.2 AA 1.4.11).
+ * `globals.css` declares the real one unlayered; sonner's rule is more specific
+ * and injected later, so it is restated here rather than left to win.
+ */
+html [data-sonner-toast][data-styled="true"] [data-close-button]:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }

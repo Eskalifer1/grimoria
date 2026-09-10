@@ -1,11 +1,15 @@
 # Comments and documentation
 
 What a comment carries, and what a JSDoc block adds to a signature. How a component documents its
-props is `components.md`. Not lint-checkable; held by review and `.claude/rules/`.
+props is `components.md`.
 
 **A comment answers _why_** — the reason behind a choice, the constraint that forced it, the cost of
 changing it. **Two lines, and three is the exception that has earned it.** A comment grown into a
-paragraph is a decision, and decisions live in `docs/adr/` or a feature doc. Where code needs a comment to be followed at all, rename the
+paragraph is a decision, and decisions live in `docs/adr/` or a feature doc; the comment then
+carries one line and the doc's path. **A fourth line is refused as a file is written** — Biome has
+no such rule, so `.claude/hooks/long-comment.awk` counts the run and the `PostToolUse` hook hands it
+back (`CLAUDE.md` → `## Tooling`). JSDoc is exempt, being the export's contract, and is still read
+against the rest of this file. Where code needs a comment to be followed at all, rename the
 thing or split the function instead.
 
 **Deferred work is a GitHub issue**, and the code carries a comment naming the number that ends it.

@@ -97,6 +97,22 @@ $(printf '%s\n' "$test_out" | tail -40)"
     ;;
 esac
 
+# Biome has no rule for how long a comment is, and this is the correction that keeps coming back:
+# a comment grown into a paragraph is a decision, and decisions live in docs, not in a function body
+# (`docs/agents/coding-standards/documentation.md`). JSDoc is exempt — it is the export's contract.
+case "$file" in
+  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs)
+    if [ -f "$root/.claude/hooks/long-comment.awk" ]; then
+      runs=$(awk -f "$root/.claude/hooks/long-comment.awk" "$file" 2>/dev/null)
+      if [ -n "$runs" ]; then
+        out="$out
+Comment runs over three lines, at line:length — $(printf '%s' "$runs" | tr '\n' ' '). Cut each to two lines, or move the reasoning to the doc that owns it."
+        status=1
+      fi
+    fi
+    ;;
+esac
+
 # The rules injection fires on Edit, not on the Write that creates a file, so a new doc under the
 # `paths:` globs of .claude/rules/writing-docs.md is drafted before the rule governing it ever
 # loads. Hand the rule back here, on Write alone — on Edit the injection already did it.

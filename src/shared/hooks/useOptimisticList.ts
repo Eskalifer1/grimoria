@@ -7,7 +7,7 @@ import { useOptimisticStore } from '@/shared/hooks/useOptimisticStore';
 import { type ActionResult, isActionSuccess } from '@/shared/lib/actionResult';
 import type { OptimisticDescriptor } from '@/shared/lib/optimistic/descriptor';
 import { listRows, type OptimisticListRow } from '@/shared/lib/optimistic/list';
-import { runOptimistic } from '@/shared/lib/optimistic/run';
+import { runOptimistic } from '@/shared/lib/optimistic/runOptimistic';
 
 interface UseOptimisticListOptions<TItem, TAddInput, TAddData, TRemoveInput, TRemoveData> {
   /** The server's list, re-read on every render. */
@@ -91,10 +91,9 @@ function useOptimisticList<TItem extends object, TAddInput, TAddData, TRemoveInp
       store.reconcile(key, version?.(item) ?? null);
     }
 
-    // A key the server has stopped sending is a removal it has agreed to, so there
-    // is nothing left to hide. Held past that, the key outlives the row it was
-    // about and hides the next row to arrive under it — a re-seed, a restore, an
-    // insert reusing the id — with no way back but a reload.
+    // A key the server has stopped sending is a removal it agreed to. Held past
+    // that, it hides the next row to arrive under the same id — a re-seed, a
+    // restore, an insert — with no way back but a reload.
     setRemoved((held) =>
       held.every((key) => live.has(key)) ? held : held.filter((key) => live.has(key)),
     );
@@ -109,7 +108,7 @@ function useOptimisticList<TItem extends object, TAddInput, TAddData, TRemoveInp
       return runOptimistic(add, input, {
         // `fromEntries` rather than a spread: a patch is an index signature and
         // an item is usually an interface, which has none.
-        optimisticData: Object.fromEntries(Object.entries(draft(input))),
+        data: { optimisticPatch: Object.fromEntries(Object.entries(draft(input))) },
         store,
       });
     },
@@ -117,7 +116,10 @@ function useOptimisticList<TItem extends object, TAddInput, TAddData, TRemoveInp
     async remove(item) {
       const key = keyOf(item);
       // No fields: a delete owns the whole row, not one of its values.
-      const result = await runOptimistic(remove, identify(item), { fields: [], store });
+      const result = await runOptimistic(remove, identify(item), {
+        data: { claimedFields: [] },
+        store,
+      });
 
       if (isActionSuccess(result)) {
         // Held only until the read that proves it: the effect above drops the key

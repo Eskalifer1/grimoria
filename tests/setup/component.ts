@@ -58,7 +58,33 @@ function installPointerApis() {
   }
 }
 
+/**
+ * This jsdom build ships no `matchMedia`, and `sonner` asks it for
+ * `prefers-reduced-motion` on mount — so the toaster throws before a toast is
+ * ever raised. Every query answers "not matched": a preference is a browser
+ * fact, and what it changes is asserted there rather than here.
+ */
+function installMatchMedia() {
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: (query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      dispatchEvent: () => false,
+    }),
+  });
+}
+
 installPointerApis();
+
+if (window.matchMedia === undefined) {
+  installMatchMedia();
+}
 
 if (window.localStorage === undefined) {
   installStorage();

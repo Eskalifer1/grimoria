@@ -6,7 +6,7 @@ paths:
 # Editing a stylesheet here
 
 **Read `docs/agents/coding-standards/styling.md` before changing values here.** It holds the
-utility rules, the vendored zone, and which file holds what. This file is a reminder, not a
+utility rules, the `ui/` zone, and which file holds what. This file is a reminder, not a
 substitute.
 
 Four things the build stays silent about:

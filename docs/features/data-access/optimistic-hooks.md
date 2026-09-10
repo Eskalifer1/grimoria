@@ -34,7 +34,7 @@ against that action's input and result rather than against `unknown`.
 
 **A call site never writes a key, and never touches the store.**
 
-Enforced twice: `biome.json` bans `@/shared/lib/optimistic/store` and `@/shared/lib/optimistic/run`
+Enforced twice: `biome.json` bans `@/shared/lib/optimistic/store` and `@/shared/lib/optimistic/runOptimistic`
 from `app/`, `views/`, `features/` and `entities/`, and
 `tests/shared/lib/optimistic/storeBoundary.test.ts` fails when any file outside the hooks imports the
 store. The key **format** is enforced the same way: `tests/api/user/userOptimisticKeys.test.ts` fails

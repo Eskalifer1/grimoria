@@ -73,6 +73,44 @@ diagnostic and not something a surface renders. A form places its own copy besid
 by the field, and words the schema's own refusals from catalog keys the schema carries —
 `docs/features/forms.md`.
 
+## Calling one from the client
+
+**`runAction` (`src/shared/lib/action/run.ts`) is the only way a client calls a Server Action.** It
+awaits the `ActionResult`, turns a thrown transport into `UNEXPECTED` with the original logged, and
+raises the toast — so the fourth call site written cannot forget any of the three. `runOptimistic`
+and `useFormSeam` route their write through it; a call made straight from an event handler uses it
+directly.
+
+**Review holds this, not lint** — Biome cannot tell a Server Action from any other async function.
+
+**Options are grouped by subject, not spread flat.** Everything about the toast is
+`toast: { scope, isEnabled, successMessage }`, typed as `ActionToastOptions` and taken by
+`runOptimistic` under the same name; everything `runOptimistic` writes to the store is
+`data: { optimisticPatch, claimedFields, sourceVersion, successPatch, failurePatch,
+rolledBackFields, settledPatch }`.
+
+**`scope` decides which failures are spoken**, and the rule is that whatever already draws a
+failure owns it:
+
+| Caller | Scope | Why |
+| --- | --- | --- |
+| A bare `runAction` from an event handler | `UNPLACED` (the default) | Nothing holds the failure, but a field or a footer might |
+| `runOptimistic`, and any form | `NONE` | The store records every failure and the surface draws it |
+| A write whose surface may be gone when the answer lands | `ALL` | A row already removed from the list that held it |
+
+`isSilent` and `toast: { isEnabled: false }` raise nothing at all, success included.
+`toast.successMessage` is the only thing that confirms a success, and it is unaffected by the scope —
+a confirmation has nowhere else to go.
+
+**The deadline speaks for itself.** `runOptimistic`'s timeout is the one failure nothing is
+awaiting, so `runAction` never reaches it; it calls `raiseFailure` from the timer under the same
+option group, or a stalled write is recorded against a key nothing renders and said nowhere.
+
+**Two `runAction` calls nest** wherever a form's write is an optimistic one — the form seam wraps
+`runOptimistic`, which wraps the action. Both take `NONE`, so neither speaks. Where a caller
+overrides only one of the two, the toast id is the code and the library replaces rather than stacks,
+so one sentence still reaches the screen.
+
 ## Reads
 
 - **A read is a plain async function**, not an action: no directive, `import 'server-only'` at the

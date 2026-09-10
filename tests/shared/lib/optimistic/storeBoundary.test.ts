@@ -19,7 +19,7 @@ const STORE = 'src/shared/lib/optimistic/store.ts';
  * the runner's default, and the context's.
  */
 const ALLOWED_IMPORTERS = [
-  'src/shared/lib/optimistic/run.ts',
+  'src/shared/lib/optimistic/runOptimistic.ts',
   'src/shared/hooks/useOptimisticStore.ts',
 ];
 

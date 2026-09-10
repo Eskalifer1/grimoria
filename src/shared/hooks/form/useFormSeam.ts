@@ -10,10 +10,11 @@ import {
 } from 'react-hook-form';
 import type { z } from 'zod';
 
-import { ACTION_ERROR } from '@/constants/action';
 import { VALUE_OWNER, type ValueOwner } from '@/constants/form';
+import { TOAST_SCOPE, type ToastMessageKey } from '@/constants/toast';
 import type { TypedForm } from '@/shared/components/Form/typedForm';
-import { type ActionResult, actionFailure } from '@/shared/lib/actionResult';
+import { runAction } from '@/shared/lib/action/runAction';
+import type { ActionResult } from '@/shared/lib/actionResult';
 import type { FormStatus } from '@/shared/lib/formStatus';
 
 interface FormOptions<
@@ -34,6 +35,12 @@ interface FormOptions<
 
   /** Runs on what the schema produced, once it agrees. */
   write: (values: TOutput) => Promise<ActionResult<TData, string>>;
+
+  /**
+   * The `toast` copy key confirming a success, for a write whose result the
+   * screen does not otherwise show. A form naming none confirms nothing.
+   */
+  successMessage?: ToastMessageKey;
 }
 
 interface FormResult<TInput extends FieldValues, TOutput extends FieldValues = TInput> {
@@ -74,17 +81,16 @@ interface FormSeam<
  * nothing outside will ever answer.
  */
 function useFormSeam<TInput extends FieldValues, TOutput extends FieldValues, TData>(
-  { schema, values, write }: FormOptions<TInput, TOutput, TData>,
+  { schema, values, write, successMessage }: FormOptions<TInput, TOutput, TData>,
   owner: ValueOwner,
 ): FormSeam<TInput, TOutput, TData> {
   const form = useForm<TInput, unknown, TOutput>({
     resolver: zodResolver(schema),
     // Refused once the field is left, not only once the write is attempted.
     mode: 'onTouched',
-    // `resetOptions` belongs to the surface-owned branch alone: it governs the
-    // reset a `values` change fires, and a form-owned one has no `values`. Set
-    // for both, it is only lent to every hand-written `reset` and quietly turns
-    // it into something else.
+    // `resetOptions` belongs to the surface-owned branch alone — it governs the
+    // reset a `values` change fires, and a form-owned one has no `values`
+    // (`docs/features/forms.md`).
     ...(owner === VALUE_OWNER.SURFACE
       ? { values, resetOptions: { keepDirtyValues: true, keepErrors: true } }
       : // `DeepPartial` refuses a value of an unresolved generic.
@@ -96,17 +102,13 @@ function useFormSeam<TInput extends FieldValues, TOutput extends FieldValues, TD
     // against to tell a draft from a value already sent.
     const sent = form.getValues();
 
-    try {
-      const result = await write(submitted);
-      return { result, sent };
-    } catch (error) {
-      // An action answers with its failures, so reaching here is the transport
-      // breaking or a defect in our own code — logged, or the only trace of it
-      // is a generic sentence a User reads.
-      console.error({ err: error }, 'A form write threw instead of answering');
+    // `Form.Error` draws every failure no field took, so a toast beside it would
+    // state one problem twice. A success has nowhere else to go, so it speaks.
+    const result = await runAction(() => write(submitted), {
+      toast: { scope: TOAST_SCOPE.NONE, successMessage },
+    });
 
-      return { result: actionFailure(ACTION_ERROR.UNEXPECTED), sent };
-    }
+    return { result, sent };
   }
 
   return { form, runWrite };

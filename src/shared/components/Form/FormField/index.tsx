@@ -68,7 +68,7 @@ interface FormFieldProps<TValues extends FieldValues, TName extends FieldPath<TV
   /** Marks the field as one that must be filled: a red `*` by the label, `aria-required` on the control. */
   required?: boolean;
 
-  /** How the label and the control sit against each other. The vendored `Field` owns what each word draws. */
+  /** How the label and the control sit against each other. The registry `Field` owns what each word draws. */
   orientation?: ComponentProps<typeof Field>['orientation'];
 
   /**

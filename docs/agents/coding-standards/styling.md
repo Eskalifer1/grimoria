@@ -21,7 +21,7 @@ and there is no token to reach for. **Tracking is a token**: the first three `--
 `text-*` step, so `text-3xl` already carries the tracking measured for it, and the two that follow
 a font role rather than a size are `tracking-meta` and `tracking-mono`. Tailwind's own tracking
 scale is dropped, so `tracking-wide` fails the build; `tracking-tight` survives only as the alias
-`shadcn-adapter.css` restores for the vendored zone. `design/token-contract.md` holds the argument.
+`shadcn-adapter.css` restores for `ui/`. `design/token-contract.md` holds the argument.
 
 **Duration is written as a name**: `duration-fast`, `duration-slow`, or no class at all, which
 is the contract's own default. `duration-200` is the exception the build cannot catch — a bare
@@ -50,21 +50,23 @@ Tailwind's `dark` variant is deliberately pointed at a class this app never sets
 a Theme either: `prefers-color-scheme` chooses nothing here.
 
 **Focus comes from one rule and needs no class.** `globals.css` declares `:focus-visible`
-unlayered, which outranks every utility — including a vendored primitive's. A
+unlayered, which outranks every utility — including a registry primitive's. A
 `focus-visible:ring-*` written in our own code compiles and then loses to it.
 
-**The vendored zone is consumed, never edited.** `src/shared/components/ui/` is CLI output — not
-hand-edited to change a token, fix a variant, or match our formatting.
+**`src/shared/components/ui/` is editable, and a token fix belongs in the file** — `layers.md`
+holds the rule and when to wrap instead.
 
 - shadcn's vocabulary is translated **once**, in `src/styles/shadcn-adapter.css`. A primitive
   needing a name that file lacks is a decision about what that name means in both Themes.
 - Biome's formatter and import sorting are **off** there, and style rules disagreeing with the
-  CLI are disabled for it — that is what keeps `shadcn add <x>` a no-op diff. A newly added
-  primitive tripping another rule gets the rule disabled for the zone, not the file fixed.
-- **A wrapper over a primitive is earned where the CLI output stops short** — the primitive does not
-  exist in shadcn, or it does not carry by default what has to hold by default here (a token, a
-  translated label, an accessibility attribute). Not "to make it reusable": the CLI already ships
-  `cva` variants, `asChild`, and a caller `className` merged through `cn`.
+  CLI are disabled for it — a smaller diff on the next `add` is worth more than matching our
+  formatting. A newly added primitive tripping another rule gets the rule disabled for the zone.
+- **Editing a primitive is re-applied by hand after `shadcn add --overwrite`.** Commit first, and
+  keep the edit small enough to re-read out of a diff.
+- **A registry entry that is only a thin wrapper over a library is not copied in at all.** Where the
+  CLI output adds nothing but props and a dependency of its own — `sonner`, whose shadcn file reads
+  a `next-themes` provider this app never mounts — the library is wrapped directly outside `ui/`
+  and its own injected CSS is overridden in `shadcn-adapter.css`. One library, not two.
 
 **`cn` from `@/shared/lib/cn` is the only way class names are combined** — it resolves Tailwind
 conflicts, which makes a caller's `className` an override rather than a coin flip. Use `cva`

@@ -79,8 +79,9 @@ every hand-written `form.reset()` and quietly turn it into a partial one. Three 
   top-level raw values, so **a form whose value is an object or an array needs its own reset.**
 
 **A write that never answers is a failure too.** A Server Action rejects rather than returning an
-`ActionResult` when the network goes, so the hook catches and records the generic `unexpected` —
-uncaught, the form falls silent with a live button and nothing said.
+`ActionResult` when the network goes, and `runAction` — which every form write goes through — turns
+that into the generic `unexpected`. Uncaught, the form would fall silent with a live button and
+nothing said.
 
 ## Where a refusal comes from
 
@@ -108,6 +109,29 @@ English messages reach a User only where the client was bypassed; what renders i
 code, worded from `actionError`.
 
 ## Where a failure lands
+
+**Four surfaces, and a failure takes exactly one.** The first three are bound to a place on screen;
+the toast is what catches a failure whose place is gone.
+
+| What failed | Where it is said |
+| --- | --- |
+| A field's own value | `Form.Field`, beside the input |
+| The form, with no field to blame | `Form.Error`, in the footer |
+| The whole surface, unusable until an answer lands | `BlockingView` over it |
+| Something that already happened somewhere else | the toast |
+
+**A form raises no failure toast at all.** `useFormSeam` passes `TOAST_SCOPE.NONE`, because
+`Form.Error` draws every failure no field took — the footer is the form's own answer to "nowhere
+else to put it", and a toast beside it states one problem twice. **A pattern B form makes that
+decision twice**, once in the seam and once in `runOptimistic` underneath it, and both default to
+`NONE`.
+
+**A success still speaks**, since a confirmation has nowhere else to go: `successMessage:
+TOAST_MESSAGE.CREATED` on the form's own options raises a toast worded from the `toast` namespace. A form that names none
+says nothing, which is right wherever the changed value is already on screen.
+
+**The cost, accepted:** a form write that answers after the User has navigated away is silent —
+the footer went with the page.
 
 - **The server named a field** → beside that field, drawn by `Form.Field`, and nowhere else.
 - **The server named no field** — no session, no right, offline → the footer, drawn by `Form.Error`,

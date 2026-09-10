@@ -81,11 +81,13 @@ shortstat
 sigil
 sigils
 SIGSEGV
+sonner
 spellbook
 srgb
 sslmode
 statusline
 stringbool
+stylesheet
 subtasking
 supabase
 tailwindcss

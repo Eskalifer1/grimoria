@@ -4,7 +4,7 @@ import * as React from "react"
 import { cn } from "@/shared/lib/cn"
 import { Switch as SwitchPrimitive } from "radix-ui"
 
-// Edited against the vendored-zone rule: the `before:` box grows the pointer
+// Edited here rather than wrapped: the `before:` box grows the pointer
 // target to WCAG 2.2 AA 2.5.8's 24x24.
 function Switch({
   className,

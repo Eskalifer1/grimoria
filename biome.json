@@ -234,7 +234,10 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "group": [
+                      "@/shared/lib/optimistic/store",
+                      "@/shared/lib/optimistic/runOptimistic"
+                    ],
                     "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
                   },
                   {
@@ -262,7 +265,10 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "group": [
+                      "@/shared/lib/optimistic/store",
+                      "@/shared/lib/optimistic/runOptimistic"
+                    ],
                     "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
                   },
                   {
@@ -290,7 +296,10 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "group": [
+                      "@/shared/lib/optimistic/store",
+                      "@/shared/lib/optimistic/runOptimistic"
+                    ],
                     "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
                   },
                   {
@@ -381,7 +390,10 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@/shared/lib/optimistic/store", "@/shared/lib/optimistic/run"],
+                    "group": [
+                      "@/shared/lib/optimistic/store",
+                      "@/shared/lib/optimistic/runOptimistic"
+                    ],
                     "message": "The optimistic store is written through a descriptor and one of the hooks in @/shared/hooks \u2014 a screen never names a key. See docs/features/data-access/optimistic-hooks.md."
                   },
                   {

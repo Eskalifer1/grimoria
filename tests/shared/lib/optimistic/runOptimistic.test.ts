@@ -1,10 +1,11 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ACTION_ERROR } from '@/constants/action';
 import { OPTIMISTIC_ERROR, PENDING_ACTION } from '@/constants/optimistic';
+import { TOAST_SCOPE } from '@/constants/toast';
 import { type ActionResult, actionFailure, actionSuccess } from '@/shared/lib/actionResult';
 import { optimisticDescriptor } from '@/shared/lib/optimistic/descriptor';
-import { runOptimistic } from '@/shared/lib/optimistic/run';
+import { runOptimistic } from '@/shared/lib/optimistic/runOptimistic';
 import { createOptimisticStore, type OptimisticStore } from '@/shared/lib/optimistic/store';
 
 interface Note {
@@ -37,9 +38,17 @@ function deferred<TValue>() {
   return { promise, resolve: (value: TValue) => resolve?.(value) };
 }
 
+const { raisedError } = vi.hoisted(() => ({ raisedError: vi.fn() }));
+
+// The toast surface itself is `tests/shared/components/Toaster.test.tsx`; here it
+// only has to be observable, and the runner must not reach a real one.
+vi.mock('sonner', () => ({ toast: { error: raisedError, success: vi.fn() } }));
+
 let store: OptimisticStore;
 
 beforeEach(() => {
+  vi.clearAllMocks();
+
   store = createOptimisticStore({ storage: null });
 });
 
@@ -52,8 +61,7 @@ describe('runOptimistic', () => {
       descriptor,
       { id: ID, title: 'Typed' },
       {
-        optimisticData: { title: 'Typed' },
-        sourceVersion: '2026-01-01T00:00:00.000Z',
+        data: { optimisticPatch: { title: 'Typed' }, sourceVersion: '2026-01-01T00:00:00.000Z' },
         store,
       },
     );
@@ -79,10 +87,7 @@ describe('runOptimistic', () => {
     await runOptimistic(
       descriptor,
       { id: ID, title: 'Typed' },
-      {
-        optimisticData: { title: 'Typed' },
-        store,
-      },
+      { data: { optimisticPatch: { title: 'Typed' } }, store },
     );
 
     const entry = store.getEntry(`probe:${ID}`);
@@ -101,15 +106,14 @@ describe('runOptimistic', () => {
     expect(store.getEntry(`probe:${ID}`)?.error?.code).toBe(ACTION_ERROR.NOT_FOUND);
   });
 
-  it('applies failureData, which is what a rollback is', async () => {
+  it('applies the failure patch, which is what a rollback is', async () => {
     const descriptor = probeDescriptor(async () => actionFailure(ACTION_ERROR.CONFLICT));
 
     await runOptimistic(
       descriptor,
       { id: ID, title: 'Typed' },
       {
-        optimisticData: { title: 'Typed' },
-        failureData: { title: 'Server' },
+        data: { optimisticPatch: { title: 'Typed' }, failurePatch: { title: 'Server' } },
         store,
       },
     );
@@ -136,18 +140,12 @@ describe('runOptimistic', () => {
     const first = runOptimistic(
       descriptor,
       { id: ID, title: 'First' },
-      {
-        optimisticData: { title: 'First' },
-        store,
-      },
+      { data: { optimisticPatch: { title: 'First' } }, store },
     );
     const second = runOptimistic(
       descriptor,
       { id: ID, title: 'Second' },
-      {
-        optimisticData: { title: 'Second' },
-        store,
-      },
+      { data: { optimisticPatch: { title: 'Second' } }, store },
     );
 
     fast.resolve(actionSuccess({ id: ID, title: 'Second', updatedAt: '2026-01-03T00:00:00.000Z' }));
@@ -167,7 +165,7 @@ describe('runOptimistic', () => {
     await runOptimistic(
       descriptor,
       { id: ID, title: 'Typed' },
-      { optimisticData: { title: 'Typed' } },
+      { data: { optimisticPatch: { title: 'Typed' } } },
     );
 
     expect(optimisticStore.getEntry(`probe:${ID}`)?.patch).toEqual({ title: 'Typed' });
@@ -187,20 +185,24 @@ describe('runOptimistic', () => {
 });
 
 describe('the mapper slots', () => {
-  it('lets a hand-written successData beat the server value', async () => {
+  it('lets a hand-written success patch beat the server value', async () => {
     const descriptor = probeDescriptor(async () =>
       actionSuccess({ id: ID, title: 'Server', updatedAt: '2026-01-02T00:00:00.000Z' }),
     );
 
-    await runOptimistic(descriptor, { id: ID }, { successData: { title: 'Chosen' }, store });
+    await runOptimistic(
+      descriptor,
+      { id: ID },
+      { data: { successPatch: { title: 'Chosen' } }, store },
+    );
 
     expect(store.getEntry(`probe:${ID}`)?.patch).toEqual({ title: 'Chosen' });
   });
 
-  it('applies finallyData on both paths', async () => {
+  it('applies the settled patch on both paths', async () => {
     const failing = probeDescriptor(async () => actionFailure(ACTION_ERROR.UNEXPECTED));
 
-    await runOptimistic(failing, { id: ID }, { finallyData: { saving: false }, store });
+    await runOptimistic(failing, { id: ID }, { data: { settledPatch: { saving: false } }, store });
 
     expect(store.getEntry(`probe:${ID}`)?.patch).toEqual({ saving: false });
   });
@@ -217,7 +219,7 @@ describe('a descriptor without mappers', () => {
     await runOptimistic(
       descriptor,
       { id: ID },
-      { sourceVersion: '2026-01-01T00:00:00.000Z', store },
+      { data: { sourceVersion: '2026-01-01T00:00:00.000Z' }, store },
     );
 
     // Nothing to overlay and nothing to say: written back, the key would sit in
@@ -259,11 +261,7 @@ describe('a request that never answers', () => {
     void runOptimistic(
       descriptor,
       { id: ID, title: 'Typed' },
-      {
-        optimisticData: { title: 'Typed' },
-        store,
-        timeoutMs: DEADLINE_MS,
-      },
+      { data: { optimisticPatch: { title: 'Typed' } }, store, timeoutMs: DEADLINE_MS },
     );
 
     await afterTheDeadline();
@@ -277,6 +275,32 @@ describe('a request that never answers', () => {
     expect(entry?.patch).toEqual({ title: 'Typed' });
   });
 
+  it('speaks it too, for a caller whose surface may already be gone', async () => {
+    const descriptor = probeDescriptor(() => deferred<ActionResult<Note>>().promise);
+
+    void runOptimistic(
+      descriptor,
+      { id: ID },
+      { store, timeoutMs: DEADLINE_MS, toast: { scope: TOAST_SCOPE.ALL } },
+    );
+
+    await afterTheDeadline();
+
+    // Nothing awaits this failure, so `runAction` never reaches it — the deadline
+    // raises it itself or a stalled write is recorded and never mentioned.
+    expect(raisedError).toHaveBeenCalledTimes(1);
+  });
+
+  it('says nothing by default, because the store records it and the surface draws it', async () => {
+    const descriptor = probeDescriptor(() => deferred<ActionResult<Note>>().promise);
+
+    void runOptimistic(descriptor, { id: ID }, { store, timeoutMs: DEADLINE_MS });
+
+    await afterTheDeadline();
+
+    expect(raisedError).not.toHaveBeenCalled();
+  });
+
   it('still settles the answer when it arrives late', async () => {
     const pending = deferred<ActionResult<Note>>();
     const descriptor = probeDescriptor(() => pending.promise);
@@ -284,11 +308,7 @@ describe('a request that never answers', () => {
     const call = runOptimistic(
       descriptor,
       { id: ID, title: 'Typed' },
-      {
-        optimisticData: { title: 'Typed' },
-        store,
-        timeoutMs: DEADLINE_MS,
-      },
+      { data: { optimisticPatch: { title: 'Typed' } }, store, timeoutMs: DEADLINE_MS },
     );
 
     await afterTheDeadline();
@@ -296,10 +316,9 @@ describe('a request that never answers', () => {
       actionSuccess({ id: ID, title: 'Saved', updatedAt: '2026-01-02T00:00:00.000Z' }),
     );
 
-    // The request was never cancelled — a Server Action cannot be — so a late
-    // answer is still the truth, and it clears the deadline's failure. The
-    // answer still owns the field: the timeout retired the flight state but
-    // opened no newer write, so nothing has taken the field over.
+    // A late answer is still the truth, and it clears the deadline's failure. It
+    // still owns the field too: the timeout retired the flight state but opened
+    // no newer write, so nothing has taken the field over.
     await expect(call).resolves.toMatchObject({ status: 'success' });
     expect(store.getEntry(`probe:${ID}`)?.patch).toEqual({ title: 'Saved' });
     expect(store.getEntry(`probe:${ID}`)?.error).toBeNull();

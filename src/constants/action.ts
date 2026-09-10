@@ -45,5 +45,17 @@ const ACTION_ERROR = {
 
 type ActionErrorCode = (typeof ACTION_ERROR)[keyof typeof ACTION_ERROR];
 
+/**
+ * The failures that outlive the surface that asked for them. Nothing on screen
+ * draws these — a session ends, a right is refused, a defect escapes — so they
+ * are what a form still lets the toast speak for (`src/constants/toast.ts`).
+ * Every other code has a place: a field, a footer, a blocked surface.
+ */
+const UNPLACED_ACTION_ERRORS: readonly ActionErrorCode[] = [
+  ACTION_ERROR.UNAUTHENTICATED,
+  ACTION_ERROR.FORBIDDEN,
+  ACTION_ERROR.UNEXPECTED,
+];
+
 export type { ActionErrorCode, ActionStatus };
-export { ACTION_ERROR, ACTION_STATUS };
+export { ACTION_ERROR, ACTION_STATUS, UNPLACED_ACTION_ERRORS };

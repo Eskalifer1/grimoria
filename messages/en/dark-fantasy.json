@@ -34,6 +34,12 @@
     "nameLabel": "Bound name",
     "title": "My sigil"
   },
+  "toast": {
+    "created": "Wrought anew.",
+    "dismiss": "Banish",
+    "regionLabel": "Tidings",
+    "saved": "Bound."
+  },
   "validation": {
     "required": "Nothing is written here.",
     "tooLong": "Too many marks — {limit} at the most.",

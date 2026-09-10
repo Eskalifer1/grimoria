@@ -34,6 +34,12 @@
     "nameLabel": "Display name",
     "title": "My profile"
   },
+  "toast": {
+    "created": "Created.",
+    "dismiss": "Dismiss",
+    "regionLabel": "Notifications",
+    "saved": "Saved."
+  },
   "validation": {
     "required": "This cannot be empty.",
     "tooLong": "Use {limit} characters or fewer.",

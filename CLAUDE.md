@@ -12,7 +12,8 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 
 **A file written with `Write` or `Edit` comes back formatted, spell-checked and tested** — a
 `PostToolUse` hook (`.claude/hooks/gate-written-file.sh`) runs Biome and cspell on it, the covering
-test when it sits under `src/`, and `git add -N` when it is new. **A `Write` that creates a doc gets
+test when it sits under `src/`, and `git add -N` when it is new. It also **refuses a comment run
+over three lines** outside JSDoc, which Biome cannot see (`<standards>/documentation.md`). **A `Write` that creates a doc gets
 `.claude/rules/writing-docs.md` handed back** — the rules injection fires on `Edit` alone, so the
 first draft is written without it. Fix what it hands back; silence means green. **A file created any other way — a heredoc, a generator — gets none of that** and needs
 `yarn check --write` and `git add -N` by hand.
@@ -51,8 +52,9 @@ next session repeats.
 - **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
   Values outside the tokens do not compile.
 - **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`.
-- **Building a form** — `useOptimisticForm`/`useActionForm`, validation copy, where a failure lands:
-  `docs/features/forms.md`. **Reaching for a bound control, or one the catalog has no entry for**:
+- **Building a form, or deciding where a failure is said** — `useOptimisticForm`/`useActionForm`,
+  validation copy, the four-way rule that sends one to a field, a footer, a blocked surface or the
+  toast: `docs/features/forms.md`. **Reaching for a bound control, or one the catalog has no entry for**:
   `docs/features/forms/controls.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.

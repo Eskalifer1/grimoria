@@ -91,6 +91,9 @@ Most names mean what they say. These carry a decision:
 - **Disabled is always a color pair, never an `opacity` rule** — `standard-tokens.md` says why.
 - **`--status-failed` is the fourth status, and the only status either Theme may spend a red on.**
   It says what a thing _is_, so it never doubles as the fill of a control that acts.
+- **A toast says which kind it is with `--status-*` on its edge and icon, never as a fill.** A
+  filled surface would owe both Themes a readable ink pair per type, and `dark-fantasy` spends no
+  green: success there reads violet, failure blood-red.
 - **`--action-destructive-*` is the third action family**, six names mirroring
   `--action-primary-*`. **Both Themes fill it with a dark red under light ink** — the one place
   `dark-fantasy` does not answer with light. A Theme may spend one red on both this and

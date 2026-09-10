@@ -5,7 +5,7 @@ import { cn } from "@/shared/lib/cn"
 import { CheckIcon } from "lucide-react"
 import { Checkbox as CheckboxPrimitive } from "radix-ui"
 
-// Edited against the vendored-zone rule: the `before:` box grows the pointer
+// Edited here rather than wrapped: the `before:` box grows the pointer
 // target to WCAG 2.2 AA 2.5.8's 24x24.
 function Checkbox({
   className,

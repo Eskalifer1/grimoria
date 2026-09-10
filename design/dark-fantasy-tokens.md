@@ -74,8 +74,9 @@ opaque, because it is chrome and a translucent sidebar over a moving list is unr
 reading sheet** is opaque, because it is a physical object and long-form reading is never
 compromised by decoration. A dialog's body is opaque too, over a `--blur-modal` scrim.
 
-`--surface-inverse` resolves to the vellum sheet: where `standard` inverts to near-black for a
-tooltip, this Theme inverts to parchment.
+`--surface-inverse` resolves to the vellum sheet: where `standard` inverts to near-black, this
+Theme inverts to parchment. **Nothing is on it** — the toast and the tooltip both take
+`--surface-raised` and its blur, so every raised surface here is glass.
 
 ## Radii and motion
 

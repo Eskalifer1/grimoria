@@ -118,17 +118,28 @@ is genuinely domain-agnostic — if the second consumer needs it _because it sho
 destination is `entities/`. A **generic function** (formatter, guard, pure helper) may go in on
 first use; the test is "is this inherently generic?", not "might I copy-paste it someday?".
 
-**`shared/hooks/form/` imports `shared/components/Form`**, a hook depending on a component. The one
-such exception, and it has no cycle — the form layer imports `useSkipWhilePending` and
-`useWriteStatus`, never these hooks (ADR 0013).
+**`shared/hooks/form/` imports `shared/components/Form`**, a hook depending on a component. It has
+no cycle — the form layer imports `useSkipWhilePending` and `useWriteStatus`, never these hooks
+(ADR 0013). **`shared/lib/action/runAction.ts` imports `shared/components/Toaster/raiseToast`** on the
+same terms: a toast body has to be a React element for the active Theme to word it at render, and
+`lib/` may hold neither JSX nor `next-intl`. Those two arrows are the whole list.
 
-### `shared/components/ui/` — the vendored zone
+**A client calls a Server Action through `runAction` and nothing else** — the awaited result, the
+thrown transport and the toast are decided once (`docs/features/data-access/api-local.md`).
 
-Restructuring `ui/` breaks shadcn's CLI update path, so this one path is an explicit exception zone: files stay exactly as the CLI
-writes them (kebab-case, multiple exports, no folder-plus-`index.tsx`) and fixes go upstream or
-into a wrapper; the rule of two does not apply, so a primitive is installed the first time it is
-needed; and everything we write ourselves, wrappers included, lives **outside** `ui/` under normal
-rules.
+### `shared/components/ui/` — the registry zone
+
+**The code in `ui/` is ours to edit**, which is shadcn's own model: the CLI copies source in, and
+`shadcn add --overwrite` replaces it, so an update is re-applied by hand against a clean commit.
+Files keep the CLI's own shape (kebab-case, multiple exports, no folder-plus-`index.tsx`), the rule
+of two does not apply — a primitive is installed the first time it is needed — and anything we
+write from nothing lives **outside** `ui/` under normal rules.
+
+**Edit the file when the fix belongs to the primitive** — a token, a variant, an attribute it
+should always carry. **Wrap it when the fix belongs to us** — a translated label, a project rule the
+next `add` must not silently drop. **A library that injects its own stylesheet is reached from
+neither**: `sonner` ships its CSS inside the package, so it is overridden in
+`src/styles/shadcn-adapter.css` and wrapped directly, with no file in `ui/` at all.
 
 `components.json` pins every alias, or the CLI writes into the wrong tree. `utils` points at
 `shared/lib/cn.ts`, not a `lib/utils.ts` grab-bag.

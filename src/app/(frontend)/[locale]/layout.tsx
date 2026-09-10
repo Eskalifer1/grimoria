@@ -17,14 +17,14 @@ import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
+import { Toaster } from '@/shared/components/Toaster';
 import { cn } from '@/shared/lib/cn';
 
 import '../globals.css';
 
-// Both Themes' families are declared, but a face is only fetched once rendered
-// text resolves to it — which is why `preload` is off: a preload link fetches
-// regardless, and half of these are unused on any render. Revisited in #75.
-// Weights are omitted where the family has a variable axis; Barlow has none (#54).
+// `preload` is off because half of these are unused on any render and a preload
+// link fetches regardless (#75). Weights are omitted where the family has a
+// variable axis; Barlow has none (#54).
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
   subsets: ['latin'],
@@ -120,6 +120,10 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
               where it stays on a small screen either way. */}
           <SyncProgressBar className="fixed inset-x-0 top-0 z-50" />
           {children}
+          {/* Last, so the live region it mounts sits after the page's own
+              content in the reading order and a toast is announced where the
+              User already is. */}
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -50,7 +50,7 @@ the first wrapper around a child; the guard is this paragraph and a test.
 Every control exists twice, and the second layer is thin.
 
 **Uncontrolled** is the shadcn registry primitive under `src/shared/components/ui/` — value in,
-`onChange` out, no knowledge that forms exist. The vendored zone, consumed and never edited
+`onChange` out, no knowledge that forms exist. The registry zone, kept as close to the CLI's output as it can be
 (`styling.md`); `field.tsx` is what the bound layer draws with.
 
 **Bound** is one component per control in the `Form` namespace. It takes `name`, reaches the form

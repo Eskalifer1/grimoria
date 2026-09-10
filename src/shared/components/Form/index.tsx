@@ -96,7 +96,7 @@ function FormRoot<TValues extends FieldValues, TOutput extends FieldValues = TVa
 
 /**
  * The form layer, reached through one import. Dot notation because this family is
- * ours rather than vendored, and what a form varies it varies by children —
+ * ours rather than the registry's, and what a form varies it varies by children —
  * `Form.Footer` is the preset most forms want, and everything under it stays
  * reachable for a form that wants something else.
  *

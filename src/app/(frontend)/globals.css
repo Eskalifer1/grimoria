@@ -23,7 +23,7 @@
 
 /*
  * A shadow rather than a color because the Themes focus differently, and
- * unlayered so it outranks `@layer utilities` — a vendored primitive's
+ * unlayered so it outranks `@layer utilities` — a registry primitive's
  * `focus-visible:ring-*` would otherwise win and flatten dark-fantasy's bloom.
  */
 :focus-visible {
@@ -44,7 +44,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The same lever stops every registry animation, vendored zone included. */
+  /* The same lever stops every registry animation, `ui/` included. */
   *,
   ::before,
   ::after {

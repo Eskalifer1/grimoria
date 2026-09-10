@@ -14,7 +14,7 @@ Component types climb a ladder, only when the current rung hurts: **inline in `i
 **`NoteCard/types.ts`** when they bury the component → **`features/<name>/types.ts`** when more than
 one place needs them. Domain shapes are not on this ladder (`typescript.md`).
 
-The vendored zone (`layers.md`) is the one exception to all of the above.
+`ui/` (`layers.md`) is the one exception to all of the above — it keeps the CLI's file shape.
 
 ## Naming
 
@@ -31,8 +31,16 @@ one side of the client/server boundary, must not share a file with subjects that
 
 **Every other file** camelCase, named for its
 subject (`useNoteList.ts`, `createNote.ts`) and written as a plain file — only components get the
-folder treatment. A name says what the thing is or does; `data`, `helper`, `utils`, `handleClick2`
-fail that. The vendored zone is exempt.
+folder treatment. **A file named for a folder's subject is still named for its export**:
+`action/runAction.ts`, not `action/run.ts`, so the import line says what it brings. `ui/`
+keeps the CLI's own file names.
+
+**A name says what the thing is or does**, and that holds for a local as much as an export.
+`data`, `helper`, `utils`, `handleClick2` fail it — and so does **a bare verb**: `run`, `settle`,
+`handle`, `process` name the shape of the work rather than the work. `runAction`,
+`resolveWriteResult`, `settleFailure` name it. **Length is not the measure** — `key` and `fields`
+say enough where the subject is obvious, and a name is not improved by making it longer than the
+fact it carries.
 
 ## Tests
 

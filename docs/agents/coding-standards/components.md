@@ -152,7 +152,7 @@ enforced by `style/noJsxLiterals`.
   breaks the spread onto the element.
 - **Props types are `{ComponentName}Props`.**
 
-The vendored zone keeps whatever shadcn and Radix generate.
+A file under `ui/` keeps whatever shadcn and Radix generate, until we have a reason to change it.
 
 ## Documenting props
 
@@ -177,4 +177,4 @@ The universal props take one fixed wording each:
   ref?: Ref<HTMLDivElement>;
 ```
 
-The vendored zone is exempt — we do not hand-edit those files.
+A file under `ui/` is exempt: an edit there stays as close to the CLI's own shape as it can.

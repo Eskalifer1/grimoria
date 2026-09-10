@@ -56,8 +56,10 @@ not perceivable at these durations. The token exists because `dark-fantasy` genu
 Every shadow is the ink at a low percentage rather than a hand-mixed gray, so the whole set
 follows if the ink is retuned. Every surface is opaque, so the blur tokens are `0`.
 
-`--surface-inverse` is this Theme's near-black, carrying tooltips and toasts — the only place
-`standard` sets light text on a dark surface, and it exists so the Theme can do that at all.
+`--surface-inverse` is this Theme's near-black — the only place `standard` sets light text on a
+dark surface, and it exists so the Theme can do that at all. **Neither the toast nor the tooltip is
+on it**: both take `--surface-raised`, so one name carries every raised surface and, in
+`dark-fantasy`, the blur that goes with it.
 
 ## Radii and motion
 
