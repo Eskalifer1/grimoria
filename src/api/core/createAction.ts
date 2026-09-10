@@ -51,7 +51,7 @@ interface ActionDefinition<TSchema extends z.ZodType, TData, TUser extends User 
 
   /**
    * Route patterns whose page data this write invalidates, revalidated only after
-   * it succeeds — `ROUTE_PATTERNS`, not `ROUTES`, since Next matches the pattern
+   * it succeeds — `ROUTE_PATTERNS`, not `ROUTES`, since Next matches the route
    * with its dynamic segments. Becomes tag-based in #95.
    */
   revalidatePaths?: readonly string[];

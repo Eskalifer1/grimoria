@@ -90,10 +90,20 @@ path allowed to write `role`.
 
 ## Theme
 
-`resolveTheme()` (`src/i18n/resolveTheme.ts`) reads a logged-in User's Theme from their profile and
-falls back to the cookie only for Guests — the cookie is client-writable and per-device, so letting
-it win would put a User's Theme outside the server's control. The session read is wrapped in
-React's `cache()`, so the page that asks for the same User pays nothing.
+`user.theme` is the stored truth and the `theme` cookie is what renders, for Users and Guests alike.
+`resolveTheme()` (`src/i18n/resolveTheme.ts`) reads the `[theme]` root param and nothing else;
+`src/proxy.ts` is the only place the cookie is read, which is what lets a page be prerendered
+(ADR-0015).
+
+**The two are reconciled whenever Better Auth hands out a session.** `sessionCookiesPlugin`
+(`src/auth/`) matches on `ctx.context.newSession` rather than on a list of paths — sign-up, every
+sign-in method, session refresh — and writes the profile's Theme into the cookie alongside the
+`optimistic-scope` cookie carrying the User id. Signing out clears the scope and leaves the Theme,
+which is a device preference and also words the sign-out screen. A Theme changed on another device,
+or in Payload's admin, reaches this one at its next session write.
+
+Both cookies are readable by JavaScript by design: the scope during `OptimisticScope`'s first
+render, the Theme by the toggle in #78, which owes a write to `user.theme` and the cookie together.
 
 ## Where it is checked
 

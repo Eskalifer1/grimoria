@@ -25,9 +25,10 @@ everything", for the same reason the vellum Page exists. The constraint itself i
 
 ## How it's built
 
-Copy comes from a `locale × theme` catalog and the choice is stored per User, in a cookie for
-Guests (ADR-0004). Both Themes fill the whole token contract in `src/styles/`, and the active
-Theme is a `data-theme` attribute on `<html>`, resolved on the server alongside the copy.
+Copy comes from a `locale × theme` catalog, the choice is stored per User and carried in a cookie
+for everyone (ADR-0004), and the cookie is what the proxy turns into a hidden route segment so both
+Themes are prerendered (ADR-0015). Both Themes fill the whole token contract in `src/styles/`, and
+the active Theme is a `data-theme` attribute on `<html>`, resolved on the server alongside the copy.
 
 **The operating system never selects this Theme.** A visitor whose system is in dark mode still
 gets `standard`: `prefers-color-scheme` chooses nothing here. This Theme is a different identity

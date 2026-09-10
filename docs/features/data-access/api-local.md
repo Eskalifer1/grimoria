@@ -52,8 +52,8 @@ const updateName = createProtectedAction({
   asked through `src/api/core/permissions.ts` — `role` is a list, so `user.role === 'admin'` is
   always wrong.
 - **`revalidatePaths` takes `ROUTE_PATTERNS`, never `ROUTES`.** Next matches the route as it is
-  declared, and every page sits under `[locale]`, so `/profile` matches nothing and the screen keeps
-  reading stale data. A failing revalidation is logged and the call still answers success — the row
+  declared, and every page sits under `[theme]/[locale]`, so `/profile` matches nothing and the
+  screen keeps reading stale data. A failing revalidation is logged and the call still answers success — the row
   is written, and a failure there would show the User an outcome the database disagrees with.
 - **A handler may navigate.** `redirect` and `notFound` throw a sentinel Next has to see, so the
   wrapper rethrows it before it can be mistaken for a defect.

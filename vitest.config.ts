@@ -17,9 +17,10 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: {
       'server-only': resolve('node_modules/server-only/empty.js'),
-      // `next-intl`'s ESM build imports this extensionless, which Next's bundler
+      // `next-intl`'s ESM build imports these extensionless, which Next's bundler
       // resolves and Vite's ESM resolver does not.
       'next/navigation': resolve('node_modules/next/navigation.js'),
+      'next/server': resolve('node_modules/next/server.js'),
     },
   },
   test: {
@@ -30,6 +31,9 @@ export default defineConfig({
           name: 'unit',
           environment: 'node',
           include: ['tests/**/*.test.ts'],
+          // The proxy pulls in `next-intl`'s middleware, whose extensionless
+          // `next/server` import only resolves once the package goes through Vite.
+          server: { deps: { inline: ['next-intl'] } },
           setupFiles: ['tests/setup/env.ts'],
         },
       },

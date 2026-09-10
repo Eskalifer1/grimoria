@@ -15,8 +15,9 @@ Each layer is a Vitest project in `vitest.config.ts`, except e2e, which is a sep
 | e2e | A journey through the running app in a real browser, in both Themes | Playwright | `e2e/` — not built, #39 |
 
 **Push a test down to the cheapest layer that still exercises the logic.** Where impure code wraps a
-decision worth testing, extract the decision — `resolveTheme()` reads cookies and Payload, while the
-`toTheme()` it delegates to is pure and unit-tested.
+decision worth testing, extract the decision — `sessionCookiesPlugin` can only run inside Better
+Auth, while the `sessionCookiesFor()` it delegates to takes an outcome and returns cookies, and is
+unit-tested.
 
 **No test reaches a database.** Every seam that would — `@/api/core/payloadClient`,
 `@/api/core/session` — is mocked, and a test that creates, updates or deletes a real row does not

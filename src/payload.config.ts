@@ -6,6 +6,7 @@ import { admin } from 'better-auth/plugins';
 import { buildConfig } from 'payload';
 import { betterAuthPlugin } from 'payload-auth/better-auth/plugin';
 
+import { sessionCookiesPlugin } from './auth/sessionCookiesPlugin';
 import { withInviteExpiry } from './collections/admin-invitations';
 import { withProfileFields } from './collections/users';
 import { BETTER_AUTH_URL, DATABASE_URL, PAYLOAD_SECRET } from './constants/env';
@@ -48,10 +49,8 @@ export default buildConfig({
 
         emailAndPassword: { enabled: true },
 
-        // Better Auth counts requests in memory by default, which on serverless
-        // means one counter per instance — ten instances, ten times the limit.
-        // Postgres is the only store every instance shares; `payload-auth` turns
-        // this into the generated `rateLimit` collection.
+        // In memory means one counter per serverless instance — ten instances,
+        // ten times the limit. Postgres is the only store all of them share.
         rateLimit: { storage: 'database' },
 
         // A session slides: any Better Auth request older than `updateAge`
@@ -62,7 +61,7 @@ export default buildConfig({
           updateAge: SESSION_UPDATE_AGE,
         },
 
-        plugins: [admin()],
+        plugins: [admin(), sessionCookiesPlugin()],
       },
     }),
   ],
@@ -91,11 +90,9 @@ export default buildConfig({
     },
   },
 
-  // A UUID the browser mints is the row's primary key from the first millisecond,
-  // which is what an optimistic create needs to address a row it has drawn but not
-  // yet sent (ADR-0010). `allowIDOnCreate` is the half that is easy to lose: false,
-  // the adapter silently discards the supplied id and allocates its own, and the
-  // optimistic key is orphaned without anything throwing.
+  // A browser-minted UUID is the primary key an optimistic create addresses a
+  // drawn-but-unsent row with (ADR-0010). Without `allowIDOnCreate` the adapter
+  // discards it silently and the optimistic key is orphaned.
   db: postgresAdapter({
     pool: { connectionString: DATABASE_URL },
     idType: 'uuid',

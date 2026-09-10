@@ -12,6 +12,11 @@ written once, in `src/constants/<subject>.ts`, and the union type is derived fro
 
 **A set of related values is one object, not loose names.**
 
+**A value derived from a constant set is derived once, into a second constant.** `ROUTE_PATTERNS.PROFILE`,
+not a `routePattern(ROUTES.PROFILE)` call in every action. The builder stays private to the file,
+and the derived object is typed `Record<keyof typeof SOURCE, …>`, so a member added to the source
+and forgotten here is a compile error rather than a call site that never runs.
+
 ## Write a cross-cutting step once
 
 **A step every member of a family performs belongs to a wrapper, not to each member.** Resolving

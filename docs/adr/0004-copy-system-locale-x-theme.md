@@ -16,15 +16,15 @@ Both catalogs are complete rather than dark-fantasy being a sparse overlay on st
 
 Copy is resolved during server rendering, so the active theme has to be known **before** the HTML is built. Two things follow, and neither is optional:
 
-- **Guests store the theme in a cookie, not `localStorage`.** The server never sees `localStorage`, so it would render standard copy and only swap to dark-fantasy after hydration. A flash of the wrong colors is tolerable; a flash of the wrong words is not. `src/i18n/resolveTheme.ts` is the single place this is decided: a logged-in User's Theme comes from their profile, and the cookie answers only for Guests.
+- **The theme travels in a cookie, not `localStorage`.** The server never sees `localStorage`, so it would render standard copy and only swap to dark-fantasy after hydration. A flash of the wrong colors is tolerable; a flash of the wrong words is not.
 - **A theme toggle must round-trip to the server.** Flipping client state alone repaints the colors and leaves the text stale, because no new HTML was ever requested.
 
-Reading a cookie also opts every localized route out of static rendering, and makes the response vary by cookie — a shared CDN cache would otherwise be able to serve one visitor's tonality to another. Caching for the public notes page is deferred to a performance pass of its own; there is nothing cacheable to protect yet.
+**The theme is a hidden route segment, and `src/proxy.ts` is the only place its cookie is read** (ADR-0015). `src/i18n/resolveTheme.ts` reads the `[theme]` root param and nothing else, which is what lets both tonalities be prerendered instead of rendered per request.
 
 ## Routing
 
-Routes live under `src/app/(frontend)/[locale]/` with `localePrefix: 'as-needed'`, so v1 URLs stay clean (`/notes`, not `/en/notes`) while the segment already exists. `/en` canonically redirects to `/`. Adding a second locale (#18) is then a change to `src/i18n/routing.ts` rather than moving every route file and rewriting every link.
+Routes live under `src/app/(frontend)/[theme]/[locale]/` with `localePrefix: 'as-needed'`, so v1 URLs stay clean (`/notes`, not `/en/notes`) while both segments already exist. `/en` canonically redirects to `/`, and so does any URL carrying a theme segment. Adding a second locale (#18) is then a change to `src/i18n/routing.ts` rather than moving every route file and rewriting every link.
 
-Everything localized lives under `src/app/(frontend)/[locale]/`; `src/proxy.ts` excludes `/cms` and `/api`, since locale rewriting must never touch the backend and Payload ships its own translations. Two catalogs per locale is therefore the whole system — no surface of ours sits outside the localized tree, so none sits outside the theme axis.
+Everything localized lives under `src/app/(frontend)/[theme]/[locale]/`; `src/proxy.ts` excludes `/cms` and `/api`, since locale rewriting must never touch the backend and Payload ships its own translations. Two catalogs per locale is therefore the whole system — no surface of ours sits outside the localized tree, so none sits outside the theme axis.
 
 Navigation inside the localized tree goes through `src/i18n/navigation.ts`, not `next/link` and `next/navigation` directly, which drop the active locale.

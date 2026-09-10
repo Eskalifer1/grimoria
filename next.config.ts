@@ -12,10 +12,12 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 
   experimental: {
-    // TypeScript 7 ships no Compiler API, which is what Next normally calls to
-    // type-check a build. This makes it shell out to the `tsc` binary instead.
-    // Without it `next build` fails outright (ADR-0008). Next 16.3 makes this
-    // the default, so it can be deleted on that upgrade — see #77.
+    // Lets `resolveTheme()` read the hidden `[theme]` segment instead of a
+    // cookie, which is what keeps a page static. #95 implies it and drops this.
+    rootParams: true,
+
+    // TypeScript 7 ships no Compiler API, so `next build` fails outright without
+    // this (ADR-0008); it shells out to `tsc` instead. Default in 16.3 — #77.
     useTypeScriptCli: true,
   },
 

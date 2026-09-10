@@ -22,6 +22,13 @@ segment config live alongside it. Three categories of file:
   put arbitrary implementation in `app/`.
 - **Vendored** — the `(payload)` route group. None of these conventions apply.
 
+**Every `(frontend)` route sits under `[theme]/[locale]/`, and neither segment is ever visible.**
+`src/proxy.ts` rewrites an incoming request onto the internal path and a request arriving on one
+answers 308 with the clean URL, so `/notes` stays `/notes` while both Themes are prerendered
+(ADR-0015). Two consequences bind every route file: a metadata convention has to sit beside the
+layout that owns those segments, and `revalidatePath` takes `ROUTE_PATTERNS`, whose entries carry
+the segments Next matches on.
+
 **A route exists twice: as a folder under `app/`, and as a `ROUTES` entry in
 `src/constants/routes.ts`.**
 Adding the folder without the entry is half a route — every `href`, `redirect()` and config value

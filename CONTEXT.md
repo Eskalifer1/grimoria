@@ -17,7 +17,7 @@ A set of values on User determining permission level: `user` (default), `moderat
 _Avoid_: isAdmin flag, permission level (as a separate concept from Role).
 
 **Theme**:
-A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Persisted on the User profile, in a cookie for Guests; orthogonal to locale (ADR-0004). The flavor mapping — what each term becomes — is `docs/features/dark-fantasy-theme.md`.
+A user's chosen visual and copy mode: `standard` or `dark-fantasy`. Stored on the User profile, carried in a cookie for everyone and rendered from a hidden route segment; orthogonal to locale (ADR-0004, ADR-0015). The flavor mapping — what each term becomes — is `docs/features/dark-fantasy-theme.md`.
 _Avoid_: Skin (as the stored value's name — "Theme" is the field, dark-fantasy re-skinning is the feature built on top of it).
 
 **Note**:

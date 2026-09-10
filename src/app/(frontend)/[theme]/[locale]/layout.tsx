@@ -6,21 +6,19 @@ import {
   Playfair_Display,
   Plus_Jakarta_Sans,
 } from 'next/font/google';
-import { notFound } from 'next/navigation';
 
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 
-import { getCurrentUser } from '@/api/user/getCurrentUser';
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
 import { METADATA_BASE_URL } from '@/constants/env.server';
-import { resolveTheme } from '@/i18n/resolveTheme';
+import { THEMES, type Theme } from '@/constants/theme';
 import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
 import { Toaster } from '@/shared/components/Toaster';
 import { cn } from '@/shared/lib/cn';
 
-import '../globals.css';
+import '../../globals.css';
 
 // `preload` is off because half of these are unused on any render and a preload
 // link fetches regardless (#75). Weights are omitted where the family has a
@@ -87,18 +85,22 @@ export const viewport: Viewport = {
   ],
 };
 
-export default async function LocaleLayout({ children, params }: LayoutProps<'/[locale]'>) {
-  const { locale } = await params;
+// The whole product is built ahead of any request: every Theme against every
+// locale, which is only two pages while #18 is open.
+export function generateStaticParams(): Array<{ theme: Theme; locale: string }> {
+  return THEMES.flatMap((theme) => routing.locales.map((locale) => ({ theme, locale })));
+}
 
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+// Neither segment is reachable from outside, so anything not generated above is
+// an address that does not exist — a 404 with no code of ours.
+export const dynamicParams = false;
 
-  // Written for `standard` too: #39 asserts on this attribute, and "no
-  // attribute" must not read the same as "the default Theme".
-  const [theme, user] = await Promise.all([resolveTheme(), getCurrentUser()]);
+export default async function LocaleLayout({ children, params }: LayoutProps<'/[theme]/[locale]'>) {
+  const { theme, locale } = await params;
 
   return (
+    // `data-theme` is written for `standard` too: #39 asserts on it, and "no
+    // attribute" must not read the same as "the default Theme".
     <html
       lang={locale}
       data-theme={theme}
@@ -115,7 +117,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           {/* Above every surface and before it: one localStorage slot serves the
               whole browser, so a machine two Users share must not render the
               first one's unsaved work to the second. */}
-          <OptimisticScope scope={user?.id ?? null} />
+          <OptimisticScope />
           {/* At the very top until there is a header to sit under (#1), which is
               where it stays on a small screen either way. */}
           <SyncProgressBar className="fixed inset-x-0 top-0 z-50" />

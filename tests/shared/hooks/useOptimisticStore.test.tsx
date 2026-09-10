@@ -2,7 +2,11 @@ import { act, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { ACTION_ERROR } from '@/constants/action';
-import { OPTIMISTIC_STORAGE_KEY, PENDING_ACTION } from '@/constants/optimistic';
+import {
+  OPTIMISTIC_SCOPE_COOKIE_NAME,
+  OPTIMISTIC_STORAGE_KEY,
+  PENDING_ACTION,
+} from '@/constants/optimistic';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { useOptimisticEntry } from '@/shared/hooks/useOptimisticEntry';
 import { OptimisticStoreContext } from '@/shared/hooks/useOptimisticStore';
@@ -65,9 +69,14 @@ function Probe({ seen }: { seen: string[] }) {
 function renderUnder(store: OptimisticStore, scope?: string) {
   const seen: string[] = [];
 
+  if (scope !== undefined) {
+    // biome-ignore lint/suspicious/noDocumentCookie: the Cookie Store API is not in this jsdom, and the cookie is what OptimisticScope reads
+    document.cookie = `${OPTIMISTIC_SCOPE_COOKIE_NAME}=${scope}; path=/`;
+  }
+
   render(
     <OptimisticStoreContext.Provider value={store}>
-      {scope === undefined ? null : <OptimisticScope scope={scope} />}
+      {scope === undefined ? null : <OptimisticScope />}
       <Probe seen={seen} />
     </OptimisticStoreContext.Provider>,
   );

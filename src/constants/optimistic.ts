@@ -39,6 +39,15 @@ type OptimisticErrorCode =
 /** The one `localStorage` slot every entry is written to, as a single JSON document. */
 const OPTIMISTIC_STORAGE_KEY = 'grimoria:optimistic:v1';
 
+/**
+ * Names whose overlay the slot above holds. Written at sign-in and readable by
+ * JavaScript on purpose: the scope has to be known during the first client
+ * render, and a session read in the layout would opt every page out of static
+ * rendering. It takes the session's own expiry, so an expired session drops it
+ * without a request.
+ */
+const OPTIMISTIC_SCOPE_COOKIE_NAME = 'optimistic-scope';
+
 /** Bumped when the stored shape changes. A document written by another version is discarded, never half-read. */
 const OPTIMISTIC_SCHEMA_VERSION = 4;
 
@@ -70,6 +79,7 @@ export {
   OPTIMISTIC_PERSIST_DEBOUNCE_MS,
   OPTIMISTIC_REQUEST_TIMEOUT_MS,
   OPTIMISTIC_SCHEMA_VERSION,
+  OPTIMISTIC_SCOPE_COOKIE_NAME,
   OPTIMISTIC_STORAGE_KEY,
   PENDING_ACTION,
 };
