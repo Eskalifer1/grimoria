@@ -35,7 +35,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "graphql": "^16.8.1",
-    "next": "16.2.12",
+    "next": "16.3.3",
     "next-intl": "^4.13.4",
     "payload": "3.87.1",
     "payload-auth": "3.0.0",
