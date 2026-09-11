@@ -35,11 +35,11 @@ timed any other way escapes that switch and leaves the preference unhonored.
 `globals.css` sets `--tw-animation-duration` and `--tw-ease` for the registry animations that read
 neither.
 
-**A loop is stopped, not shortened.** `--dur-loop` and `--ease-loop` time the one repeating
-animation there is, and the same block switches it off by name — collapsed like a transition it
-would strobe, which is what the preference exists to prevent. What the loop decorated has to
-still read without it: `SyncProgressBar` says "a write is out" by being on screen, and the sweep
-is only the movement on top.
+**A loop is stopped, not shortened.** `--dur-loop` and `--ease-loop` time every repeating
+animation, and the same block switches each off by name — collapsed like a transition it would
+strobe, which is what the preference exists to prevent. What the loop decorated has to still
+read without it: `SyncProgressBar` says "a write is out" by being on screen, the mascot skeleton
+holds the drawing's place, and the sweep or the shimmer is only the movement on top.
 
 ## The `--mascot-*` group
 

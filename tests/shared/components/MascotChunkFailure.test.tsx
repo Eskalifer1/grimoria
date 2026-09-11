@@ -5,8 +5,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { MASCOT_POSE } from '@/constants/mascot';
 
-vi.mock('next/dynamic', () => import('next/dist/api/app-dynamic'));
-vi.mock('@/shared/assets/mascot/sad.svg', () => Promise.reject(new Error('chunk lost')));
+// The App Router `dynamic`, handed a loader whose chunk never arrives.
+vi.mock('next/dynamic', async () => {
+  const { default: dynamic } = await import('next/dist/api/app-dynamic');
+  return {
+    default: (_load: unknown, options: Parameters<typeof dynamic>[1]) =>
+      dynamic(() => Promise.reject(new Error('chunk lost')), options),
+  };
+});
 
 describe('Mascot when its chunk fails to load', () => {
   it('leaves the surface standing with an empty box', async () => {

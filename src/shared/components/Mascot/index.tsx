@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import type { ComponentType, SVGProps } from 'react';
 
 import { MASCOT_POSE, type MascotPose } from '@/constants/mascot';
+import Silhouette from '@/shared/assets/mascot/skeleton.svg';
 import { SilentBoundary } from '@/shared/components/SilentBoundary';
 import { cn } from '@/shared/lib/cn';
 
@@ -11,10 +12,17 @@ import { cn } from '@/shared/lib/cn';
  * One chunk per pose, fetched when it first mounts and never for the others; a
  * static import in `error.tsx` would land the drawing in the chunk Next
  * preloads on every page. `loading` is what makes App Router `dynamic` wrap the
- * chunk in its own Suspense — without it the whole surface suspends.
+ * chunk in its own Suspense — without it the whole surface suspends. The
+ * boundary surfaces render on the client only, so the chunk always follows the
+ * copy; the skeleton holds the drawing's place until it lands.
  */
 function pose(load: () => Promise<{ default: ComponentType<SVGProps<SVGSVGElement>> }>) {
-  return dynamic(load, { loading: () => null });
+  return dynamic(load, { loading: MascotSkeleton });
+}
+
+/** One silhouette for every pose — `idle` traced at 256 px — so it rides in the preloaded chunk at under 1 KB. */
+function MascotSkeleton() {
+  return <Silhouette className="size-full" data-skeleton />;
 }
 
 const POSE = {

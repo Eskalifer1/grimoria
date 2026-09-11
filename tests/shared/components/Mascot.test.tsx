@@ -12,7 +12,7 @@ vi.mock('next/dynamic', () => import('next/dist/api/app-dynamic'));
 
 describe('Mascot', () => {
   // First, before another test has fetched a pose: a resolved chunk no longer suspends.
-  it('holds its box and leaves the surface standing while the drawing loads', () => {
+  it('shows a skeleton in its box and leaves the surface standing while the drawing loads', async () => {
     const { container } = render(
       <Suspense fallback={<p>SURFACE-FALLBACK</p>}>
         <h1>TITLE</h1>
@@ -22,7 +22,10 @@ describe('Mascot', () => {
 
     expect(container.textContent).toContain('TITLE');
     expect(container.textContent).not.toContain('SURFACE-FALLBACK');
-    expect(container.querySelector('.mascot')).not.toBeNull();
+    expect(container.querySelector('.mascot svg[data-skeleton]')).not.toBeNull();
+
+    await waitFor(() => expect(container.querySelector('svg:not([data-skeleton])')).not.toBeNull());
+    expect(container.querySelector('svg[data-skeleton]')).toBeNull();
   });
   it('renders every pose as a drawing hidden from assistive technology', async () => {
     for (const pose of Object.values(MASCOT_POSE)) {

@@ -30,9 +30,11 @@ that carry it are `docs/features/site-layout.md`.
 - **Check against the built output:** a pose chunk is the file under `.next/static/chunks/`
   holding `belly-shade` — a class, which svgo keeps; ids it renames. The home page HTML under
   `.next/server/app/` names none of them.
-- **A chunk in flight or lost costs the surface nothing.** `loading` on each `dynamic` is what
-  gives the chunk its own Suspense under the App Router — without it the whole boundary suspends
-  — and `SilentBoundary` around the drawing turns a failed fetch into an empty box.
+- **A chunk in flight shows the silhouette (`assets/mascot/skeleton.svg`, one for every pose), a
+  chunk lost an empty box.** `loading` on each
+  `dynamic` is what gives the chunk its own Suspense under the App Router — without it the whole
+  boundary suspends — and the boundary surfaces render on the client only, so the chunk always
+  lands after the copy. `SilentBoundary` around the drawing swallows a failed fetch.
 
 ## Under Vitest
 

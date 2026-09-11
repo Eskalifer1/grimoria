@@ -95,3 +95,21 @@
 .mascot .prop-mark {
   fill: var(--mascot-prop-mark);
 }
+
+/* The silhouette shown while a pose loads: a flat fill and one highlight sweeping across it. */
+.mascot .skeleton {
+  fill: var(--color-muted-foreground);
+  fill-opacity: 0.18;
+}
+.mascot .shine-edge {
+  stop-color: var(--color-muted-foreground);
+  stop-opacity: 0;
+}
+.mascot .shine-core {
+  stop-color: var(--color-muted-foreground);
+  stop-opacity: 0.3;
+}
+.mascot .shine {
+  transform-box: fill-box;
+  animation: var(--animate-shimmer);
+}

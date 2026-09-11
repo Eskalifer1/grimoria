@@ -167,6 +167,18 @@
 @theme {
   --animate-sync-sweep: sync-sweep var(--dur-loop) var(--ease-loop) infinite;
   --animate-sync-trail: sync-trail var(--dur-loop) var(--ease-loop) infinite;
+  /* Half a loop per pass: a skeleton lives well under a second, and the highlight must reach the shape in that time. */
+  --animate-shimmer: shimmer calc(var(--dur-loop) / 2) var(--ease-loop) infinite;
+
+  /* A highlight crossing a skeleton, off-canvas at both ends. */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 
   /*
    * Two passes over one track, and neither is a block sliding at one speed.

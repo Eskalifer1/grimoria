@@ -9,6 +9,7 @@ of `src/styles/standard.css` and `dark-fantasy.css`.
 - The character
 - The asset contract
 - Labeling a trace
+- The skeleton
 - The next pose
 
 ## The character
@@ -67,6 +68,14 @@ that serve two parts. The tools that did it for the first four poses are in comm
    look at the standard column for a part in the wrong color and at the tail for a sliver of
    rim left behind; adjust, rerun. Round coordinates to one decimal.
 6. **Delete the trace** once the labeled file is right; the file under `src/` is the only SVG.
+
+## The skeleton
+
+`skeleton.svg` is the `idle` pose rendered black at 256 px, flame hidden, outer contour traced
+and simplified to about 230 points — under 1 KB, and it stays one file for every pose. The
+contour is a `clipPath` over two rectangles: `skeleton`, the flat fill, and `shine`, a gradient the
+`--animate-shimmer` loop carries across it; colors and motion are `src/styles/mascot.css`. A
+redraw of `idle` is a retrace of the path alone.
 
 ## The next pose
 

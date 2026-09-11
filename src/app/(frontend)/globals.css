@@ -66,5 +66,6 @@
     --dur-loop: 0.01ms;
     --animate-sync-sweep: none;
     --animate-sync-trail: none;
+    --animate-shimmer: none;
   }
 }
