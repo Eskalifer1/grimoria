@@ -8,6 +8,7 @@ not carry on its own.
 ## Contents
 
 - The rules
+- The `--mascot-*` group
 - Tiers — where a raw value is allowed
 - The two accents
 - What the names do not say
@@ -39,6 +40,14 @@ animation there is, and the same block switches it off by name — collapsed lik
 would strobe, which is what the preference exists to prevent. What the loop decorated has to
 still read without it: `SyncProgressBar` says "a write is out" by being on screen, and the sweep
 is only the movement on top.
+
+## The `--mascot-*` group
+
+**Tier 1, and the one primitive group a component-level stylesheet reads directly.** Each name is
+a class in the mascot SVGs, filled by `src/styles/mascot.css`; the values are the hexes as drawn,
+not aliases into the palette.
+`--mascot-detail` is a `display` value — `none` in `standard` — and a `prop-*` name carries the
+same value in both Themes. Adding a class means adding its token to both files, `design/mascot.md`.
 
 ## Tiers — where a raw value is allowed
 

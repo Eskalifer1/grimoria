@@ -50,10 +50,6 @@ no next-intl, no Theme and no shell: hardcoded English, a reload or a way home. 
 `src/shared/config/fonts.ts` and are styled rather than raw. The second is reached only by a path
 the proxy never rewrote — one with a dot in it (ADR-0016).
 
-**The `illustration` slot is empty on every boundary today.** The artwork — one familiar with a
-per-surface detail, keyed by `BOUNDARY_SURFACE` in `src/constants/boundary.ts` — lands in its own
-issue.
-
 **These surfaces render client-side only** — the initial HTML is empty. ADR-0016 has the upstream
 issue and what was rejected.
 

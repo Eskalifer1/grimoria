@@ -15,16 +15,18 @@ export default defineConfig({
   // import an action or a read directly.
   resolve: {
     tsconfigPaths: true,
-    alias: {
-      'server-only': resolve('node_modules/server-only/empty.js'),
+    alias: [
+      { find: 'server-only', replacement: resolve('node_modules/server-only/empty.js') },
       // `next-intl`'s ESM build imports these extensionless, which Next's bundler
       // resolves and Vite's ESM resolver does not.
-      'next/navigation': resolve('node_modules/next/navigation.js'),
-      'next/server': resolve('node_modules/next/server.js'),
+      { find: 'next/navigation', replacement: resolve('node_modules/next/navigation.js') },
+      { find: 'next/server', replacement: resolve('node_modules/next/server.js') },
       // The font loaders only run inside Next's bundler, so anything importing a
       // root layout throws before a test renders.
-      'next/font/google': resolve('tests/fixtures/nextFont.ts'),
-    },
+      { find: 'next/font/google', replacement: resolve('tests/fixtures/nextFont.ts') },
+      // Same for an SVG: only `@svgr/webpack` makes it a component.
+      { find: /^.*\.svg$/, replacement: resolve('tests/fixtures/svg.tsx') },
+    ],
   },
   test: {
     projects: [

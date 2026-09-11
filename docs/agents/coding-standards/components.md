@@ -123,6 +123,11 @@ taken over, it is not handed back until an answer lands. Measured with `Performa
   status codes.
 - **`<Suspense>` is the finer instrument.** Wrap the slow part
   instead, with a fallback holding the same space so nothing jumps.
+- **`next/dynamic` gets a `loading`, even `() => null`** — under the App Router that is what
+  gives the chunk its own Suspense (`docs/features/mascot.md`).
+- **A part the surface can stand without goes inside `SilentBoundary`**
+  (`shared/components/SilentBoundary/`), so its failure leaves a hole instead of reaching
+  `error.tsx`. It is the one class component; React has no hook for `getDerivedStateFromError`.
 
 ## The component file
 

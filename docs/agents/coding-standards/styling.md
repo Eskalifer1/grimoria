@@ -39,6 +39,11 @@ what the utilities already produce (`p-6` is 24px). There is no spacing token �
 value off the scale means, is `design/token-contract.md`. **Breakpoints are Tailwind's own as
 well** — mobile-first, `sm:` upward.
 
+**A dimension that should follow the viewport is one `clamp()`, not a breakpoint ladder** —
+`size-[clamp(10rem,25vw,16rem)]`: the phone value as the floor, the desktop value as the
+ceiling, both on the 4px scale, and a `vw` term between. A breakpoint is for layout that changes
+shape — columns, what is shown — not for a size that only grows.
+
 **A component never asks which Theme is active.** No `data-theme` condition, no `dark:`
 variant, no Tailwind variant registered for a Theme. Switching Theme is values changing under
 one set of names, so a component reads `--surface-card` and gets the right material. A

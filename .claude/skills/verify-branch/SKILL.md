@@ -108,6 +108,13 @@ with the reason section 1 gave.
   size. Hand each one the axis path the appendix prints and the range; it re-reads its own axis.
   **The appendix then prints paths and no text, so read nothing from it yourself.**
 
+  **Launch them last — after sections 4 and 6 are written — and return the report in the same
+  turn.** Their findings never come back here: this skill runs as a fork, a fork ends with its
+  answer, and what it launched keeps running and reports to the caller as task notifications. A
+  round that answers "waiting for the subagents" has ended, and nobody is waiting; the caller then
+  holds three axis reports and no gate, no divergences and no acceptance verdicts. `AXES RUN`
+  reads `launched: <axis, …> — findings arrive to the caller`.
+
 **Invoking this skill is the request for those subagents.** A standing instruction to spawn none
 unless asked is answered here: the round was asked for by name, and a diff this size judged in one
 pass returns fewer findings than it should.

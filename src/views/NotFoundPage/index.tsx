@@ -1,9 +1,11 @@
 import { useTranslations } from 'next-intl';
 
+import { MASCOT_POSE } from '@/constants/mascot';
 import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/navigation';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { FullPageView } from '@/shared/components/FullPageView';
+import { Mascot } from '@/shared/components/Mascot';
 import { Button } from '@/shared/components/ui/button';
 
 /**
@@ -18,6 +20,7 @@ function NotFoundPage() {
   return (
     <FullPageView>
       <EmptyState
+        illustration={<Mascot pose={MASCOT_POSE.LOST} />}
         heading="h1"
         title={t('title')}
         description={t('description')}

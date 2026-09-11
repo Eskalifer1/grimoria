@@ -59,7 +59,9 @@ A hit outside the primary doc that now disagrees is the drift this skill exists 
 
 Present a short plan to the user before touching any file: which docs you intend to update and why, and which candidate docs you checked and are leaving as-is (and why). Wait for confirmation or feedback.
 
-Never apply edits before this checkpoint, even when the change seems obvious.
+Never apply edits before this checkpoint, even when the change seems obvious — **except when
+called by `/implement-issue`**: that flow asks nothing before its handoff, so apply the plan and
+hand the list of docs changed and left alone to the handoff report, where the user answers once.
 
 ### 7. Apply the confirmed updates
 

@@ -6,7 +6,15 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!.yarn", "!public", "!yarn.lock", "!.claude/workflows", "!src/migrations"]
+    "includes": [
+      "**",
+      "!.yarn",
+      "!public",
+      "!yarn.lock",
+      "!.claude/workflows",
+      "!src/migrations",
+      "!**/*.svg"
+    ]
   },
   "formatter": {
     "enabled": true,

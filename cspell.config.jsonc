@@ -19,6 +19,8 @@
     "src/app/(payload)/**",
     "src/payload-types.ts",
     "src/migrations/**",
+    "src/shared/assets/**/*.svg",
+    "design/mascot/*.svg",
     ".cspell/**",
     ".claude/skills/**",
     ".claude/hooks/**"

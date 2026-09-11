@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ACTION_ERROR, ACTION_STATUS } from '@/constants/action';
@@ -50,6 +50,25 @@ describe('BlockingView', () => {
     // of the tab order and the accessibility tree.
     expect(screen.getByText(SURFACE).parentElement).toHaveAttribute('inert');
     expect(announced()).toHaveTextContent(errorCopy.forbidden);
+  });
+
+  it('draws the sad mascot on a failure, and nothing while pending', async () => {
+    const { container, rerender } = renderWithProviders(
+      <BlockingView status={ACTION_STATUS.FAILURE}>
+        <p>{SURFACE}</p>
+      </BlockingView>,
+    );
+
+    await waitFor(() => expect(container.querySelector('.mascot svg')).not.toBeNull());
+    expect(container.querySelector('.mascot')).toHaveAttribute('aria-hidden', 'true');
+
+    rerender(
+      <BlockingView status={ACTION_STATUS.PENDING}>
+        <p>{SURFACE}</p>
+      </BlockingView>,
+    );
+
+    expect(container.querySelector('.mascot')).toBeNull();
   });
 
   it('words an unexplained failure rather than blocking on nothing', () => {

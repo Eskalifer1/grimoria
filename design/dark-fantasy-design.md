@@ -148,7 +148,8 @@ a thin bright core — a single stroke never reads as emission. The dimmed page 
 soft radial wash in the filament's color: a dark room lit by this object, not a flat scrim.
 The interior stays calm and holds the strongest text contrast, with all the drama at the edge.
 
-**Empty states** carry a line of themed copy and one rune mark. No illustration.
+**Empty states** carry a line of themed copy and one rune mark, and the mascot in its
+`dark-fantasy` coat — black outline, the darker palette, the tail burning (`design/mascot.md`).
 
 ## What this design is not
 

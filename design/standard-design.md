@@ -125,7 +125,8 @@ closed by a hairline.
 needs and columns fill independently, because an even grid of equal cards is what makes a notes
 app look like a template.
 
-**Empty states** carry one plain line explaining what to do, and one action.
+**Empty states** carry one plain line explaining what to do, and one action. The mascot stands
+above them in the reference sheet's palette — soft teal outline, no flame (`design/mascot.md`).
 
 ## What this design is not
 

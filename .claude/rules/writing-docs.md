@@ -68,7 +68,9 @@ the framework already; it is missing only the local fact it has no way to derive
 - **An instruction states what to do and stops.** No justification, no account of how the decision
   was reached, no alternative that lost. Prose after the claim earns its place only by changing what the
   reader does at an edge the claim leaves open. Where a reader would otherwise reverse the rule on
-  their own, the rule links by number to the issue or ADR that settled it.
+  their own, the rule names the ADR that settled it.
+- **An ADR is named by number; an issue never is.** What an issue settled is written into the doc
+  or an ADR; what it left open stays out of the doc.
 
 ## How it is shaped
 
@@ -110,11 +112,11 @@ condition or a name to save words makes the doc wrong, which costs far more than
   Appending is how sediment forms: stale layers that settle because adding feels safe, until
   someone has to core through them to reach what is still live.
 - **Name what holds each rule** — Biome, `tsc`, or review alone.
-- **Anything still moving points at its issue** and says the issue is canonical, instead of
-  describing a state that will change without the doc noticing. A superseded pattern worth keeping
-  goes in a collapsed "Old patterns" note; dates inside prose go nowhere.
-- **A rejected alternative lives in the issue or ADR that settled it**, and the rule it produced
-  links there by number.
+- **Anything still moving stays out of the doc** — a state that will change without the doc
+  noticing is written once it has settled. A superseded pattern worth keeping goes in a collapsed
+  "Old patterns" note; dates inside prose go nowhere.
+- **A rejected alternative lives in the ADR that settled it**, and the rule it produced names the
+  ADR.
 - **A copied list rots silently.** A table of exports, options or token values disagrees with the
   code on the first rename, and no gate catches it. Point at the symbol instead — a pointer stays
   right through the rename, and a wrong pointer fails a grep.

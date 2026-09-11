@@ -5,7 +5,9 @@ import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { ACTION_ERROR, type ActionStatus } from '@/constants/action';
+import { MASCOT_POSE } from '@/constants/mascot';
 import { EmptyState } from '@/shared/components/EmptyState';
+import { Mascot } from '@/shared/components/Mascot';
 import { useActionErrorMessage } from '@/shared/hooks/useActionErrorMessage';
 import { useLastSettledStatus } from '@/shared/hooks/useLastSettledStatus';
 import { usePendingDelay } from '@/shared/hooks/usePendingDelay';
@@ -74,6 +76,7 @@ function BlockingView({ status, error, action, children, className }: BlockingVi
       <EmptyState
         aria-busy={isWaiting || undefined}
         className={cn(LAYER, !isBlocked && HIDDEN)}
+        illustration={isFailed ? <Mascot pose={MASCOT_POSE.SAD} /> : null}
         title={isFailed ? t('problem') : t('pending')}
         description={reason ?? undefined}
         tone={isFailed ? 'failed' : 'neutral'}

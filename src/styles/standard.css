@@ -139,4 +139,40 @@
   --ls-body: 0;
   --ls-meta: 0.14em;
   --ls-mono: 0.06em;
+
+  /*
+   * Mascot — `design/mascot.md`. The reference sheet's own hexes; the outline
+   * is its deep teal, never the black `dark-fantasy` inks with. No flame.
+   */
+  --mascot-ink: #104552;
+  --mascot-skin: #185f6d;
+  --mascot-belly: #c7e8e3;
+  --mascot-belly-shade: #99cbc9;
+  --mascot-belly-line: #6fb0b3;
+  --mascot-horn: #c7e8e3;
+  --mascot-horn-line: #6fb0b3;
+  --mascot-ear: #99cbc9;
+  --mascot-wing: #c9b1f3;
+  --mascot-eye: #fdfdfb;
+  --mascot-iris: #104552;
+  --mascot-iris-glow: #fdfdfb;
+  --mascot-spiral: #c9b1f3;
+  --mascot-flame: #c9b1f3;
+  --mascot-flame-mid: #c9b1f3;
+  --mascot-flame-core: #c9b1f3;
+  --mascot-flame-ink: #104552;
+  --mascot-detail: none;
+
+  --mascot-prop-cover: #2e2524;
+  --mascot-prop-gold: #be9564;
+  --mascot-prop-gold-shade: #9e7745;
+  --mascot-prop-page: #cba886;
+  --mascot-prop-page-shade: #d2bba3;
+  --mascot-prop-ink: #5f4538;
+  --mascot-prop-chain: #5f5859;
+  --mascot-prop-chain-light: #9c9497;
+  --mascot-prop-quill: #f4e7cf;
+  --mascot-prop-smoke: #a298aa;
+  --mascot-prop-scorch: #3d201c;
+  --mascot-prop-mark: #8063a4;
 }

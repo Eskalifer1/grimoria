@@ -1,7 +1,8 @@
 /**
  * The four route boundaries a visitor can land on. One set rather than loose
- * names, because anything keyed by surface — the illustration to come — has to
- * answer for all four or fail to compile.
+ * names, so anything keyed by surface has to answer for all four or fail to
+ * compile. The mascot is keyed by pose instead (`MASCOT_POSE`), two surfaces
+ * sharing one.
  */
 const BOUNDARY_SURFACE = {
   ERROR: 'error',

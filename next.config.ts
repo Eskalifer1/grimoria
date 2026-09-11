@@ -29,6 +29,39 @@ const nextConfig: NextConfig = {
     useTypeScriptCli: true,
   },
 
+  /**
+   * `next dev` and `next build` both run Turbopack, so this is the only SVG
+   * rule. svgo runs inside SVGR: ids are prefixed per file so two mascots on
+   * one page never share one, classes are kept as written because the Theme
+   * stylesheet colors by them, and same-class paths are never merged — a union
+   * of two contours can punch a hole where they overlap.
+   */
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: 'preset-default',
+                    params: {
+                      overrides: { mergePaths: false, convertPathData: { floatPrecision: 1 } },
+                    },
+                  },
+                  { name: 'prefixIds', params: { prefixClassNames: false } },
+                ],
+              },
+            },
+          },
+        ],
+        as: '*.js',
+      },
+    },
+  },
+
   // Next applies every matching rule and the last write of a key wins, so the
   // two Payload paths go last: they match `/:path*` as well, and their looser
   // policy has to survive the app's.

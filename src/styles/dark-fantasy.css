@@ -148,4 +148,41 @@
   --ls-body: 0;
   --ls-meta: 0.14em;
   --ls-mono: 0.06em;
+
+  /*
+   * Mascot — `design/mascot.md`. One class per body part in the SVG, one hex
+   * as drawn per class; not aliases into the palette above, because the
+   * character keeps its own colors. `--mascot-detail` shows the tail flame.
+   */
+  --mascot-ink: #000000;
+  --mascot-skin: #444348;
+  --mascot-belly: #f8e7c6;
+  --mascot-belly-shade: #d9c4ba;
+  --mascot-belly-line: #4f3a37;
+  --mascot-horn: #a86455;
+  --mascot-horn-line: #884d3d;
+  --mascot-ear: #a86455;
+  --mascot-wing: #a86455;
+  --mascot-eye: #fdfdfd;
+  --mascot-iris: #664991;
+  --mascot-iris-glow: #d7a2f7;
+  --mascot-spiral: #efd1fc;
+  --mascot-flame: #a86455;
+  --mascot-flame-mid: #ee9e70;
+  --mascot-flame-core: #f8e7c6;
+  --mascot-flame-ink: #000000;
+  --mascot-detail: inline;
+
+  --mascot-prop-cover: #2e2524;
+  --mascot-prop-gold: #be9564;
+  --mascot-prop-gold-shade: #9e7745;
+  --mascot-prop-page: #cba886;
+  --mascot-prop-page-shade: #d2bba3;
+  --mascot-prop-ink: #5f4538;
+  --mascot-prop-chain: #5f5859;
+  --mascot-prop-chain-light: #9c9497;
+  --mascot-prop-quill: #f4e7cf;
+  --mascot-prop-smoke: #a298aa;
+  --mascot-prop-scorch: #3d201c;
+  --mascot-prop-mark: #8063a4;
 }

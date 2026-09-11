@@ -1,0 +1,97 @@
+/*
+ * The mascot's parts, by class, onto the Theme's `--mascot-*` tokens. The SVGs
+ * under `src/shared/assets/mascot/` carry no color of their own; this is the
+ * only place one is given — `design/mascot.md`.
+ */
+
+.mascot .ink {
+  fill: var(--mascot-ink);
+}
+.mascot .skin {
+  fill: var(--mascot-skin);
+}
+.mascot .belly {
+  fill: var(--mascot-belly);
+}
+.mascot .belly-shade {
+  fill: var(--mascot-belly-shade);
+}
+.mascot .belly-line {
+  fill: var(--mascot-belly-line);
+}
+.mascot .horn {
+  fill: var(--mascot-horn);
+}
+.mascot .horn-line {
+  fill: var(--mascot-horn-line);
+}
+.mascot .ear {
+  fill: var(--mascot-ear);
+}
+.mascot .wing {
+  fill: var(--mascot-wing);
+}
+.mascot .eye {
+  fill: var(--mascot-eye);
+}
+.mascot .iris {
+  fill: var(--mascot-iris);
+}
+.mascot .iris-glow {
+  fill: var(--mascot-iris-glow);
+}
+.mascot .spiral {
+  fill: var(--mascot-spiral);
+}
+.mascot .flame {
+  fill: var(--mascot-flame);
+}
+.mascot .flame-mid {
+  fill: var(--mascot-flame-mid);
+}
+.mascot .flame-core {
+  fill: var(--mascot-flame-core);
+}
+.mascot .flame-ink {
+  fill: var(--mascot-flame-ink);
+}
+.mascot .detail {
+  display: var(--mascot-detail);
+}
+
+.mascot .prop-cover {
+  fill: var(--mascot-prop-cover);
+}
+.mascot .prop-gold {
+  fill: var(--mascot-prop-gold);
+}
+.mascot .prop-gold-shade {
+  fill: var(--mascot-prop-gold-shade);
+}
+.mascot .prop-page {
+  fill: var(--mascot-prop-page);
+}
+.mascot .prop-page-shade {
+  fill: var(--mascot-prop-page-shade);
+}
+.mascot .prop-ink {
+  fill: var(--mascot-prop-ink);
+}
+.mascot .prop-chain {
+  fill: var(--mascot-prop-chain);
+}
+.mascot .prop-chain-light {
+  fill: var(--mascot-prop-chain-light);
+}
+.mascot .prop-quill {
+  fill: var(--mascot-prop-quill);
+}
+.mascot .prop-smoke {
+  fill: var(--mascot-prop-smoke);
+}
+.mascot .prop-scorch {
+  fill: var(--mascot-prop-scorch);
+}
+.mascot .prop-mark {
+  fill: var(--mascot-prop-mark);
+}

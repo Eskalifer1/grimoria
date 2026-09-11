@@ -42,6 +42,10 @@ already holds. **Invoked with history behind it — say so, and ask for `/clear`
 stopped; `failures.md` covers the abandoned case. **The ledger is a folder** — one file per slice,
 written by the slice itself, plus `log.md` for what this context records.
 
+**Nothing is asked before step 8.** The user reads one report and answers every question in it at
+once. What would be asked is recorded in `log.md` under `ASK`, the work goes
+on under the current code, and the handoff carries the questions.
+
 ## Steps
 
 | # | Step | Where |
@@ -83,6 +87,10 @@ full ones — and every extra seam between slices is a wire nobody owns (#66).
 
 **One or two slices — they run here.** There is no third subagent to carry the standards instead, so
 run `standards.sh` per step 3 and write the code in this context.
+
+**Count files, not seams.** A ticket that will touch more than ten files is three slices whatever
+its seam count says. **Work that iterates against an artifact — render, look, adjust — is a slice
+of its own in a subagent, always.**
 
 **A ticket that touches one file skips the ledger** — no `.scratch/$0/`, no wiring pass. Both carry
 facts between contexts, and a single file crosses no seam and hands nothing on. Step 8 reports from
@@ -178,6 +186,11 @@ debt, in the shape `docs/agents/issue-tracker.md` fixes.
 
 **A round returns a terse report.** **Append it to `.scratch/$0/log.md` as it arrives.**
 
+**On a split diff, `AXES RUN` reads `launched: …`** — the fork could not wait for its own
+subagents, so their findings arrive here, one task notification per axis, after the skill has
+returned. **Step 6 starts when the last named axis has landed**, each appended to `log.md`; a step
+6 that triages two of three axes triages a branch nobody judged.
+
 ### 5.5 — see it in a browser, when the branch drew something
 
 **Dispatch one `subagent_type: browser-check` when the diff touches `src/views/`, `src/app/` or
@@ -207,6 +220,10 @@ Decide here; reach for the user only at the end:
   options, and a recommendation.
 - **Ask when the call is genuinely open**, both readings defensible. Everything under `ASK` in the
   round's report is already one of these.
+- **An open call does not stop the flow.** Fix what holds, leave the open call as the code stands,
+  run 6.5 through 8, and put the question in the handoff report with both readings and a
+  recommendation. A flow that stops to ask at step 6 hands the user a branch with no adversarial
+  round, no docs pass and no gate — and the answer, when it comes, reopens every step after it.
 
 ### 6.5 — a hostile second opinion
 
