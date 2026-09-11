@@ -27,7 +27,9 @@ planned that suite, is closed not-planned.
 
 **A Server Action is tested at the `unit` layer with its seams mocked** — `@/api/core/session`,
 `@/api/core/payloadClient` and `next/cache`. `vitest.config.ts` aliases `server-only` to its empty
-build, or importing the action throws before a test runs.
+build, or importing the action throws before a test runs. It aliases `next/font/google` to
+`tests/fixtures/nextFont.ts` for the same reason — the loaders only run inside Next's bundler, so
+anything importing a root layout throws with `Plus_Jakarta_Sans is not a function`.
 
 **An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
 by e2e (#39); the pure functions it calls are covered by unit.

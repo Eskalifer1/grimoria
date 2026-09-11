@@ -102,9 +102,9 @@ it labels rather than titles — carries page and note titles, section headings,
 navigation. An **interface sans** carries everything functional: buttons, form labels, input
 text, meta rows, tooltips, tables; the display serif never appears on these.
 
-A **reading serif** sets the note body on the Page and nowhere else — the one face both themes
-share, so switching theme never changes what long-form reading feels like; the constraint on it
-is `token-contract.md`. A **monospace** carries code, shared for the same reason.
+The interface sans also sets the note body on the Page, as `--font-reading`. A **monospace**
+carries code — the one face both Themes share, so switching Theme never changes what the User's
+own code looks like; the constraint on it is `token-contract.md`.
 
 **Metadata is not monospace here** — breadcrumbs, tags, dates, counts and section labels are the
 interface sans, small, in capitals, widely tracked — the one place the two Themes voice the same
@@ -158,8 +158,8 @@ The interior stays calm and holds the strongest text contrast, with all the dram
 - Not neon. No cyan or electric blue anywhere.
 - Not decorated. Every ornament must emit light, catch it along the edge facing the source, or
   cast a shadow. An ornament doing none of the three is deleted.
-- Not decorative at the cost of reading. Display type stays off small functional controls, and
-  the note body stays in the reading serif under every circumstance.
+- Not decorative at the cost of reading. Display type stays off small functional controls and
+  off the note body under every circumstance.
 
 ## Copy in mockups
 

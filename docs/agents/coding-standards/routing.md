@@ -14,12 +14,16 @@ one screen module as a default re-export with no wrapper
 (`export { NotesListPage as default } from '@/views/NotesListPage';`), and route `metadata` and
 segment config live alongside it. Three categories of file:
 
-- **Re-export from `views/`** — `page.tsx`, `layout.tsx`, `not-found.tsx`.
+- **Re-export from `views/`** — `page.tsx`, `layout.tsx`, `not-found.tsx`, `unauthorized.tsx`,
+  `forbidden.tsx`. The last two mount only under `experimental.authInterrupts`.
 - **May hold implementation**, because Next.js executes them by filename — `error.tsx` and
-  `global-error.tsx` (carrying `"use client"` in that exact file), `loading.tsx`, `route.ts`, and
+  `global-error.tsx` (carrying `"use client"` in that exact file), `global-not-found.tsx`,
+  `loading.tsx`, `route.ts`, and
   the metadata conventions (`opengraph-image.tsx`, `icon.tsx`, `sitemap.ts`, `robots.ts`, …).
   **Open list**: a new Next.js convention joins it by explicit decision, which is not a license to
-  put arbitrary implementation in `app/`.
+  put arbitrary implementation in `app/`. **A `page.tsx` that renders nothing joins it** — it calls
+  an interrupt and returns `never`, so there is no screen module to re-export:
+  `[...rest]/page.tsx` turns an unmatched URL into `notFound()` (ADR-0016).
 - **Vendored** — the `(payload)` route group. None of these conventions apply.
 
 **Every `(frontend)` route sits under `[theme]/[locale]/`, and neither segment is ever visible.**

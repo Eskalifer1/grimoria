@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
 
   experimental: {
+    // What mounts `unauthorized.tsx` and `forbidden.tsx` and gives `unauthorized()`
+    // and `forbidden()` a boundary to render — without it both are dead files.
+    authInterrupts: true,
+
+    // Mounts `app/global-not-found.tsx` for a URL the proxy never rewrote —
+    // without it such a URL gets Next's own unstyled 404.
+    globalNotFound: true,
+
     // Lets `resolveTheme()` read the hidden `[theme]` segment instead of a
     // cookie, which is what keeps a page static. #95 implies it and drops this.
     rootParams: true,

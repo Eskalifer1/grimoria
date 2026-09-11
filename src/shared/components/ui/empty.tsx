@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority"
+import { Slot } from "radix-ui"
 
 import { cn } from "@/shared/lib/cn"
 
@@ -58,9 +59,17 @@ function EmptyMedia({
   )
 }
 
-function EmptyTitle({ className, ...props }: React.ComponentProps<"div">) {
+function EmptyTitle({
+  className,
+  asChild,
+  ...props
+}: React.ComponentProps<"div"> & { asChild?: boolean }) {
+  // Added here, not upstream: a page-level empty state owns the surface's only
+  // `h1`, and a `div` title leaves it without one.
+  const Comp = asChild ? Slot.Root : "div"
+
   return (
-    <div
+    <Comp
       data-slot="empty-title"
       className={cn("text-lg font-medium tracking-tight", className)}
       {...props}

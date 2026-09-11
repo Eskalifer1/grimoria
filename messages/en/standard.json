@@ -11,7 +11,18 @@
   },
   "common": {
     "appName": "Grimoria",
+    "backHome": "Back to home",
     "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
+  },
+  "errorBoundary": {
+    "description": "Something on this page broke before it could finish loading. Trying again often fixes it.",
+    "reference": "Reference {digest}",
+    "retry": "Try again",
+    "title": "This page didn't load"
+  },
+  "forbiddenPage": {
+    "description": "Your account can't open this page. Ask for access if you think that's wrong.",
+    "title": "You don't have access"
   },
   "form": {
     "cancel": "Cancel",
@@ -22,6 +33,10 @@
     "createNote": "Create a note",
     "empty": "You haven't written anything down yet.",
     "title": "My notes"
+  },
+  "notFoundPage": {
+    "description": "The page you asked for isn't here. It may have been moved or deleted.",
+    "title": "Page not found"
   },
   "optimistic": {
     "dismiss": "Dismiss",
@@ -39,6 +54,10 @@
     "dismiss": "Dismiss",
     "regionLabel": "Notifications",
     "saved": "Saved."
+  },
+  "unauthorizedPage": {
+    "description": "This page is for signed-in members. Sign in and open it again.",
+    "title": "You're not signed in"
   },
   "validation": {
     "required": "This cannot be empty.",

@@ -12,10 +12,14 @@ past is not this pattern.
 
 ## It replaces the surface without moving it
 
-The surface, the waiting block and the failure block share one grid cell, so the box is as tall as
-the tallest of the three whatever is showing. Each hidden layer keeps its space — `invisible` rather
-than unmounted — and is `inert`, so it holds that space without being reachable or read out.
-Unmounted instead, taking over and handing back would shift everything below the surface twice.
+The surface and the block share one grid cell, so the box is as tall as the taller of the two
+whatever is showing. The hidden one keeps its space — `invisible` rather than unmounted — and is
+`inert`, so it holds that space without being reachable or read out. Unmounted instead, taking over
+and handing back would shift everything below the surface twice.
+
+**The block is one `EmptyState`** (`shared/components/EmptyState/`) — the same leaf a 404 and an
+empty list draw through — titled `optimistic.pending` while waiting, and `optimistic.problem` over
+the worded failure, with the `action`, once failed.
 
 ## The shape
 

@@ -75,13 +75,13 @@ families; these are the **weights to load**, which it does not carry:
 | `--font-display` | Plus Jakarta Sans | 700, 800 |
 | `--font-ui` | Plus Jakarta Sans | 400, 500, 600 |
 | `--font-meta` | JetBrains Mono | 400, 700 |
-| `--font-reading` | Literata — _shared_ | 400, 700 + italic |
+| `--font-reading` | Plus Jakarta Sans | 400, 700 + italic |
 | `--font-code` | JetBrains Mono — _shared_ | 400, 700 |
 
 **Plus Jakarta Sans carries display and interface from one family**, separated by weight and
 size rather than a second face. **JetBrains Mono carries all metadata** and code inside Notes —
 chosen over a display monospace because code is primary content here, not an accent; caps
-labels take wide tracking, a mono stating a fact does not. **Literata is shared with
+labels take wide tracking, a mono stating a fact does not. **JetBrains Mono is shared with
 `dark-fantasy`**; what that constrains is `token-contract.md`.
 
 ### Type scale

@@ -1,11 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import {
-  Barlow,
-  JetBrains_Mono,
-  Literata,
-  Playfair_Display,
-  Plus_Jakarta_Sans,
-} from 'next/font/google';
 
 import { NextIntlClientProvider } from 'next-intl';
 
@@ -16,45 +9,9 @@ import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
 import { Toaster } from '@/shared/components/Toaster';
-import { cn } from '@/shared/lib/cn';
+import { FONT_VARIABLES } from '@/shared/config/fonts';
 
 import '../../globals.css';
-
-// `preload` is off because half of these are unused on any render and a preload
-// link fetches regardless (#75). Weights are omitted where the family has a
-// variable axis; Barlow has none (#54).
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: '--font-plus-jakarta-sans',
-  subsets: ['latin'],
-  preload: false,
-});
-
-const playfairDisplay = Playfair_Display({
-  variable: '--font-playfair-display',
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  preload: false,
-});
-
-const barlow = Barlow({
-  variable: '--font-barlow',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  preload: false,
-});
-
-const literata = Literata({
-  variable: '--font-literata',
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  preload: false,
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  variable: '--font-jetbrains-mono',
-  subsets: ['latin'],
-  preload: false,
-});
 
 export const metadata: Metadata = {
   // `opengraph-image.jpg` sits beside this file, and Open Graph needs absolute
@@ -101,17 +58,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   return (
     // `data-theme` is written for `standard` too: #39 asserts on it, and "no
     // attribute" must not read the same as "the default Theme".
-    <html
-      lang={locale}
-      data-theme={theme}
-      className={cn(
-        plusJakartaSans.variable,
-        playfairDisplay.variable,
-        barlow.variable,
-        literata.variable,
-        jetBrainsMono.variable,
-      )}
-    >
+    <html lang={locale} data-theme={theme} className={FONT_VARIABLES}>
       <body>
         <NextIntlClientProvider>
           {/* Above every surface and before it: one localStorage slot serves the

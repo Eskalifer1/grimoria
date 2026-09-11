@@ -11,7 +11,18 @@
   },
   "common": {
     "appName": "Grimoria",
+    "backHome": "Return to the grimoire",
     "tagline": "A grimoire binding to memory every spell you have ever learned."
+  },
+  "errorBoundary": {
+    "description": "Something in the working broke before this page could form. Attempting it again often mends it.",
+    "reference": "Sigil {digest}",
+    "retry": "Attempt again",
+    "title": "This page would not form"
+  },
+  "forbiddenPage": {
+    "description": "Your name cannot open this page. Ask to be admitted if the seal is wrong.",
+    "title": "The seal holds against you"
   },
   "form": {
     "cancel": "Abandon",
@@ -22,6 +33,10 @@
     "createNote": "Inscribe a spell",
     "empty": "No spells are bound to your grimoire yet.",
     "title": "My grimoire"
+  },
+  "notFoundPage": {
+    "description": "The page you sought is not at this address. It was unbound, or never written.",
+    "title": "No such page is bound"
   },
   "optimistic": {
     "dismiss": "Banish",
@@ -39,6 +54,10 @@
     "dismiss": "Banish",
     "regionLabel": "Tidings",
     "saved": "Bound."
+  },
+  "unauthorizedPage": {
+    "description": "This page is for the named alone. Sign in and open it again.",
+    "title": "You are unnamed here"
   },
   "validation": {
     "required": "Nothing is written here.",

@@ -21,8 +21,16 @@ first draft is written without it. Fix what it hands back; silence means green. 
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
 version that resolves rather than disabling the gate.
 
-**American English in everything written down or posted to GitHub**, guarded by `yarn spellcheck`.
-Local discussion is the exception.
+## Which language to write in
+
+**Talk to the User in Ukrainian** — every reply in the session, in any skill, including the
+questions a flow stops to ask and the report it hands over. This holds whatever language the User
+last typed in.
+
+**Write American English in everything that outlives the session**, guarded by `yarn spellcheck`:
+code, comments, docs, commit messages, issue and PR bodies, labels, titles, and anything else posted
+to GitHub. A path, a symbol, a command and a quoted gate output stay verbatim inside a Ukrainian
+sentence.
 
 ## Keep docs current
 

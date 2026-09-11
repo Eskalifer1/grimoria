@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { ACTION_ERROR, type ActionStatus } from '@/constants/action';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from '@/shared/components/ui/empty';
+import { EmptyState } from '@/shared/components/EmptyState';
 import { useActionErrorMessage } from '@/shared/hooks/useActionErrorMessage';
 import { useLastSettledStatus } from '@/shared/hooks/useLastSettledStatus';
 import { usePendingDelay } from '@/shared/hooks/usePendingDelay';
@@ -13,7 +13,7 @@ import { isFailure, isPending } from '@/shared/lib/actionStatus';
 import { cn } from '@/shared/lib/cn';
 import { clientFailure, type OptimisticFailure } from '@/shared/lib/optimistic/entry';
 
-/** One of the three states, all in the same cell so the box never changes size. */
+/** Surface and block share one cell, so taking over does not move what is below. */
 const LAYER = 'col-start-1 row-start-1';
 
 /** Keeps the space and gives up the tab order and the accessibility tree. */
@@ -43,9 +43,9 @@ interface BlockingViewProps {
  * The last resort (pattern D): the surface itself replaced, because there is
  * nothing partial worth showing.
  *
- * All three layers share one grid cell, so no transition costs a layout shift.
- * A hidden layer keeps its space and is `inert`, so it holds it without being
- * reachable.
+ * Surface and block share one grid cell, so taking over does not move what is
+ * below. The hidden surface keeps its space and is `inert`, so it holds it
+ * without being reachable.
  *
  * See docs/features/data-access/pattern-d.md.
  */
@@ -71,17 +71,14 @@ function BlockingView({ status, error, action, children, className }: BlockingVi
       <div className={cn(LAYER, isBlocked && HIDDEN)} inert={isBlocked}>
         {children}
       </div>
-      <Empty aria-busy={isWaiting || undefined} className={cn(LAYER, !isWaiting && HIDDEN)}>
-        <EmptyHeader>
-          <EmptyDescription>{t('pending')}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
-      <Empty className={cn(LAYER, !isFailed && HIDDEN)}>
-        <EmptyHeader>
-          <EmptyDescription className="text-status-failed">{reason}</EmptyDescription>
-        </EmptyHeader>
-        {action ? <EmptyContent>{action}</EmptyContent> : null}
-      </Empty>
+      <EmptyState
+        aria-busy={isWaiting || undefined}
+        className={cn(LAYER, !isBlocked && HIDDEN)}
+        title={isFailed ? t('problem') : t('pending')}
+        description={reason ?? undefined}
+        tone={isFailed ? 'failed' : 'neutral'}
+        action={isFailed ? action : null}
+      />
     </div>
   );
 }

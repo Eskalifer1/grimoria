@@ -139,7 +139,7 @@
   --font-display: var(--font-playfair-display), serif;
   --font-ui: var(--font-barlow), sans-serif;
   --font-meta: var(--font-barlow), sans-serif;
-  --font-reading: var(--font-literata), serif;
+  --font-reading: var(--font-barlow), sans-serif;
   --font-code: var(--font-jetbrains-mono), monospace;
 
   /* Playfair Display is drawn at its own width — tightening it closes the counters. */

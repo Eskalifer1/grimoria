@@ -102,6 +102,10 @@ Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `f
 
 ## Loading and failure
 
+**A surface with nothing to show renders `EmptyState`** (`shared/components/EmptyState/`) — an
+empty list, a missing record, a page that threw — at the heading level the surface owns. Its shape
+and where it sits are `docs/features/site-layout.md`.
+
 **A failure that has not happened takes no space.** The message region is still mounted from the
 first render — a `role="alert"` built at the moment it has something to say is never spoken — but
 empty it has no height.
@@ -113,7 +117,10 @@ taken over, it is not handed back until an answer lands. Measured with `Performa
 
 - **`error.tsx` and `not-found.tsx` at the root of every route group** — without them an uncaught
   error or missing record lands on a default Next.js screen neither Theme designed.
-- **`loading.tsx` only where a segment actually waits on data**; elsewhere it buys an empty frame.
+- **`loading.tsx` only in the segment that actually waits on data**, never at a group root. It
+  wraps everything below it in a Suspense boundary, which makes every response in that group stream
+  — and a streamed response answers 200, so `notFound()` and `unauthorized()` below it lose their
+  status codes.
 - **`<Suspense>` is the finer instrument.** Wrap the slow part
   instead, with a fallback holding the same space so nothing jumps.
 

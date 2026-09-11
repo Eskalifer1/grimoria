@@ -50,6 +50,8 @@ The **vocabulary**. Catalog mechanics — keys, namespaces, where a string is re
 | User / Profile | Mage |
 | Save | Bind |
 | Dismiss | Banish |
+| Access / permission | Seal |
+| Error reference / digest | Sigil |
 
 **A term invented while writing copy is added here in the same change**, or the next string invents
 a second word for the same thing. **A term not yet chosen is not a row** — the table holds what is

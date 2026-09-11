@@ -95,10 +95,9 @@ theme's one deliberately technical note, and what keeps a soft, rounded design f
 unserious. Usually uppercase and letterspaced when it labels a region, plain when it states a
 fact.
 
-A **reading serif** for the note body and nowhere else — the one face `standard` does not own,
-since `dark-fantasy` sets the note body in the same serif so switching theme never changes what
-long-form reading feels like. Generous leading; the constraint on it is
-`token-contract.md`.
+The interface sans also sets the note body, as `--font-reading`, with generous leading. A
+**monospace** carries code — the one face both Themes share, so switching Theme never changes what
+the User's own code looks like; the constraint on it is `token-contract.md`.
 
 **Display weights never appear on small functional controls.**
 

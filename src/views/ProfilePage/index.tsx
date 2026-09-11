@@ -1,26 +1,20 @@
-import { getLocale, getTranslations } from 'next-intl/server';
+import { unauthorized } from 'next/navigation';
+
+import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/api/user/getCurrentUser';
-import { ROUTES } from '@/constants/routes';
-import { redirect } from '@/i18n/navigation';
 
 import { ProfileNameForm } from './ProfileNameForm';
 
 // Throwaway surface proving the #49 data path end to end: one Local API read on
 // the server, one optimistic write from a client leaf. #1 replaces it.
 async function ProfilePage() {
-  const [user, locale, t] = await Promise.all([
-    getCurrentUser(),
-    getLocale(),
-    getTranslations('profilePage'),
-  ]);
+  const [user, t] = await Promise.all([getCurrentUser(), getTranslations('profilePage')]);
 
   if (!user) {
-    // next-intl's `redirect` is destructured off `createNavigation`, so TypeScript
-    // does not read it as `never`-returning; the `return` is what narrows `user`.
-    redirect({ href: ROUTES.HOME, locale });
-
-    return null;
+    // A 401 surface rather than a redirect home, so a signed-out visitor is told
+    // what happened instead of landing somewhere they did not ask for.
+    unauthorized();
   }
 
   return (

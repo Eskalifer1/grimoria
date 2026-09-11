@@ -21,6 +21,9 @@ export default defineConfig({
       // resolves and Vite's ESM resolver does not.
       'next/navigation': resolve('node_modules/next/navigation.js'),
       'next/server': resolve('node_modules/next/server.js'),
+      // The font loaders only run inside Next's bundler, so anything importing a
+      // root layout throws before a test renders.
+      'next/font/google': resolve('tests/fixtures/nextFont.ts'),
     },
   },
   test: {

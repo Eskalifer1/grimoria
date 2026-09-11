@@ -31,6 +31,32 @@ collapse choice** — the rail is a decision, not a breakpoint.
 cookie for Guests, same rule as `Theme` and for the same reason (ADR-0004); otherwise the sidebar
 jumps on every load. **Anything else that becomes a persisted UI preference inherits this rule.**
 
+## Boundary surfaces
+
+**Every "nothing here" surface is one `EmptyState`** (`shared/components/EmptyState/`) — an
+illustration slot, a title at the heading level the caller names, a description, an action and a
+reference line. A route boundary centers it in `FullPageView` with `heading="h1"`; an empty list
+drops it into its card at `h2`. `not-found.tsx`, `unauthorized.tsx` and `forbidden.tsx` under
+`[locale]` re-export a screen module from `views/`; `error.tsx` holds its own `"use client"`
+implementation. `EmptyTitle` takes `asChild` so the heading element is the caller's.
+
+**The error boundary never renders `error.message`** — Next strips it in production, so showing it
+would make dev and prod two different screens, and a Payload or Postgres throw would leak schema
+detail. `error.digest` renders as a quiet reference line instead.
+
+**`src/app/global-error.tsx` and `src/app/global-not-found.tsx` replace `<html>`**, so they carry
+no next-intl, no Theme and no shell: hardcoded English, a reload or a way home. Both draw on bare
+`:root`, which is `standard`, so they carry `STANDARD_FONT_VARIABLES` from
+`src/shared/config/fonts.ts` and are styled rather than raw. The second is reached only by a path
+the proxy never rewrote — one with a dot in it (ADR-0016).
+
+**The `illustration` slot is empty on every boundary today.** The artwork — one familiar with a
+per-surface detail, keyed by `BOUNDARY_SURFACE` in `src/constants/boundary.ts` — lands in its own
+issue.
+
+**These surfaces render client-side only** — the initial HTML is empty. ADR-0016 has the upstream
+issue and what was rejected.
+
 ## Content area
 
 - **No global top bar.** A persistent bar above the page would duplicate the page masthead and

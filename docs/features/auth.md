@@ -43,6 +43,10 @@ one.
 Server-Action cookie write loops the admin panel's `buildFormState`). Sliding rides on the
 client's own `/api/auth/*` traffic.
 
+**A Guest reaching a members-only page gets `unauthorized()`, not a redirect** — a redirect to the
+home page tells them nothing about why they left. `ProfilePage` is the pattern; the 401 surface it
+raises is `docs/features/site-layout.md`.
+
 A session is a row plus one `better-auth.session_token` cookie holding a **signed** token — the
 value from a sign-in response body is the bare token and will not authenticate a request on its
 own.

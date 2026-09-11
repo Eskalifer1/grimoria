@@ -98,10 +98,11 @@ Most names mean what they say. These carry a decision:
   `--action-primary-*`. **Both Themes fill it with a dark red under light ink** — the one place
   `dark-fantasy` does not answer with light. A Theme may spend one red on both this and
   `--status-failed`.
-- **`--font-reading` and `--font-code` hold the same values in both Themes**, the only tokens
-  for which that is true by rule. Both live inside the Note body, which is content the User
-  wrote; changing Theme must not change what their own writing looks like to read. **Neither
-  Theme may override the reading face for decoration**, and the Note body is set at a measure of
+- **`--font-code` holds the same value in both Themes**, the only token for which that is true by
+  rule: code inside a Note is content the User wrote, and changing Theme must not change what
+  their own code looks like to read. **`--font-reading` takes each Theme's own text face** — a
+  fifth family bought a shared reading voice at one download nothing else used (#106). **Neither
+  Theme may set a display face on the reading token**, and the Note body is set at a measure of
   roughly 68–75 characters under both. Which families fill them, and at which weights, is each
   Theme's token document.
 - **`--font-display` and `--font-ui` may resolve to one family** — `standard` does exactly that,

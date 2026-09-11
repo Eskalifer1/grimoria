@@ -130,7 +130,7 @@
   --font-display: var(--font-plus-jakarta-sans), sans-serif;
   --font-ui: var(--font-plus-jakarta-sans), sans-serif;
   --font-meta: var(--font-jetbrains-mono), monospace;
-  --font-reading: var(--font-literata), serif;
+  --font-reading: var(--font-plus-jakarta-sans), sans-serif;
   --font-code: var(--font-jetbrains-mono), monospace;
 
   /* Plus Jakarta Sans is tightened as it grows; the mono values are shared. */

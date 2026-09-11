@@ -44,7 +44,6 @@ letterspaced
 libpq
 linecap
 linejoin
-literata
 lockdown
 logomark
 mage

@@ -42,5 +42,9 @@ cost of making `<html lang>` a lie, which breaks hreflang (#93) and a second loc
   than a 404, which would punish whoever clicked a real link.
 - **A session revoked from another device leaves a stale scope cookie.** It names a `localStorage`
   slot and unlocks no data.
+- **`src/app/layout.tsx` may never exist.** A layout above `[theme]/[locale]` becomes *the* root
+  layout, which leaves those segments with nothing to generate accessors from — the build fails on
+  `Export theme doesn't exist in target module`. ADR-0016 covers what this costs the boundary
+  surfaces.
 - **Metadata may not call `t()`.** Both prerendered Themes have to emit an identical `<head>`, or a
   shared link preview would depend on the Theme of whoever copied the link.

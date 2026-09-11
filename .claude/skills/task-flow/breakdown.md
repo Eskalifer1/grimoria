@@ -5,9 +5,6 @@ Reached from `SKILL.md` when the issue has `epic` and no sub-issues. **No code.*
 The chain is `/mattpocock-skills:grilling` → `to-spec` → `to-tickets`. The last two cannot be
 invoked — read their bodies as `spec.md` describes. Below is where this repo departs from them.
 
-**Ask the grilling questions in Ukrainian** — it is local discussion. Everything written down
-stays American English: the spec, the issue bodies, the labels, the titles.
-
 ## Depth — before to-tickets runs
 
 `docs/agents/labels.md` sets it. **An enhancement to a bigger feature is a line in the

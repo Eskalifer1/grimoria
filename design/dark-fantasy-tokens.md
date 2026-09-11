@@ -90,21 +90,21 @@ The CSS names the families; these are the **weights to load**, which it does not
 
 | Token | Family | Weights |
 |---|---|---|
-| `--font-display` | Playfair Display | 400, 500, 600, 700 + italic |
-| `--font-ui` | Barlow | 400, 500, 600, 700 |
+| `--font-display` | Playfair Display | 400, 500, 600, 700 |
+| `--font-ui` | Barlow | 400, 500, 600 |
 | `--font-meta` | Barlow — letterspaced caps | 500, 600 |
-| `--font-reading` | Literata — _shared_ | 400, 700 + italic |
+| `--font-reading` | Barlow | 400, 600 |
 | `--font-code` | JetBrains Mono — _shared_ | 400, 700 |
 
 **Playfair Display** carries titles, section headings, and sidebar navigation in small capitals
 with wide tracking — high-contrast and classical, and it holds its weight at small sizes on a
 dark field where a finer old-style serif would go thin and shimmer.
 
-**Barlow** carries everything functional and, as `--font-meta`, the dates, counts and section
-labels `standard` sets in monospace. Always small (11–14px) and letterspaced (0.08–0.14em); the
+**Barlow** carries everything functional, the Note body as `--font-reading`, and — as
+`--font-meta` — the dates, counts and section labels `standard` sets in monospace. Always small (11–14px) and letterspaced (0.08–0.14em); the
 display serif never appears on these.
 
-**Literata and JetBrains Mono are shared**; what that constrains is `token-contract.md`.
+**JetBrains Mono is shared**; what that constrains is `token-contract.md`.
 
 ### Type scale
 
