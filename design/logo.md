@@ -72,8 +72,9 @@ genuinely sharp vertices stay sharp. Five rubbed patches, lifted from a traced v
 - The other theme's palette: teal is `standard`, red ink is `dark-fantasy`, and violet belongs to
   the interface's light rather than to the mark.
 - A wobble in `standard`, or a steady hand in `dark-fantasy`.
-- Redrawn "close enough" — downstream marks, decorative icons and the empty-state rune inherit the
-  grid, the 45° discipline and the stroke-to-gap ratio, or they stop reading as family.
+- Redrawn "close enough" — the decorative marks (`design/marks.md`) inherit the grid, the 45°
+  discipline and the stroke-to-gap ratio, or they stop reading as family. The empty state is the
+  mascot's (`design/mascot.md`), not a rune.
 
 Each has one scoped exception in [The icon set](#the-icon-set), forced by a platform, and nowhere
 else.

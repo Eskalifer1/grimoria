@@ -64,6 +64,8 @@ next session repeats.
   validation copy, the four-way rule that sends one to a field, a footer, a blocked surface or the
   toast: `docs/features/forms.md`. **Reaching for a bound control, or one the catalog has no entry for**:
   `docs/features/forms/controls.md`.
+- **Showing a loading indicator, or drawing a divider between sections**:
+  `docs/features/loader-and-rule.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.
 - **Designing or styling a UI surface**: `design/standard-design.md`,

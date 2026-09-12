@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <title>Grimoria loading rune</title>
+  <!-- Loading rune, standard execution: the skeleton of loading-rune-dark-fantasy.svg, steady,
+       in currentColor. A faint track, and light running along it. See design/marks.md. -->
+  <style>
+    @media (prefers-reduced-motion: reduce) {
+      .grimoria-loading-std-run { display: none; }
+      .grimoria-loading-std-track { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .grimoria-loading-std-run-outer { animation: grimoria-loading-std-run-outer 2.4s linear infinite; }
+      .grimoria-loading-std-run-inner { animation: grimoria-loading-std-run-inner 2.4s linear infinite; }
+    }
+    @keyframes grimoria-loading-std-run-outer {
+      to { stroke-dashoffset: -565.7; }
+    }
+    @keyframes grimoria-loading-std-run-inner {
+      to { stroke-dashoffset: 226.3; }
+    }
+  </style>
+  <g stroke="currentColor" stroke-width="24" stroke-linejoin="round">
+    <path class="grimoria-loading-std-track" opacity=".25" d="M128 28 228 128 128 228 28 128Z M128 88 168 128 128 168 88 128Z"/>
+    <g class="grimoria-loading-std-run" stroke-linecap="round">
+      <path class="grimoria-loading-std-run-outer" d="M128 28 228 128 128 228 28 128Z" stroke-dasharray="124.5 441.2"/>
+      <path class="grimoria-loading-std-run-inner" d="M128 88 168 128 128 168 88 128Z" stroke-dasharray="49.8 176.5"/>
+    </g>
+  </g>
+</svg>

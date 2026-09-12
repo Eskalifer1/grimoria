@@ -12,6 +12,7 @@
   "common": {
     "appName": "Grimoria",
     "backHome": "Return to the grimoire",
+    "loading": "Summoning",
     "tagline": "A grimoire binding to memory every spell you have ever learned."
   },
   "errorBoundary": {

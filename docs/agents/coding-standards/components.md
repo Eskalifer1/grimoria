@@ -106,6 +106,9 @@ Machine-enforced — `style/noExcessiveLinesPerFile`, 200 lines, on `views/`, `f
 empty list, a missing record, a page that threw — at the heading level the surface owns. Its shape
 and where it sits are `docs/features/site-layout.md`.
 
+**A wait is drawn by `Loader`, a divider by `Rule`** (`docs/features/loader-and-rule.md`) — the
+one loading indicator and the one horizontal rule, each executed per Theme on the server.
+
 **A failure that has not happened takes no space.** The message region is still mounted from the
 first render — a `role="alert"` built at the moment it has something to say is never spoken — but
 empty it has no height.

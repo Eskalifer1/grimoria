@@ -12,6 +12,7 @@
   "common": {
     "appName": "Grimoria",
     "backHome": "Back to home",
+    "loading": "Loading",
     "tagline": "A personal knowledge base for saving and rediscovering things you've learned."
   },
   "errorBoundary": {

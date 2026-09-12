@@ -123,7 +123,8 @@ app's geometry, for a bar this product does not have. They belong to
 `docs/features/site-layout.md` and wait on #74.
 
 **Runes and the filament modal** — described in the design doc; the bundle renders a plain
-blurred dialog and a spinning sigil instead. The icon half is #56.
+blurred dialog and a spinning sigil instead. The divider ornament and the loading rune are drawn
+— `design/marks.md`; the modal is not.
 
 **Backdrop imagery** — local and dissolving behind mastheads, not the bundle's tiled photograph
 under the whole screen. No asset exists yet.
