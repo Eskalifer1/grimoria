@@ -283,4 +283,5 @@ steps are missing and hand over anyway; the user decides whether to re-run them.
 reports from this context instead** — step 4 gave it no ledger to read, and nothing is unrecorded.
 
 Propose a commit title and **stop** — the user runs the commit, and the issue is closed only after
-they confirm it landed.
+they confirm it landed. **Closing deletes the branch in the same turn** — `docs/git-workflow.md`
+has the command and the one case that keeps it.
