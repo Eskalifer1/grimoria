@@ -77,15 +77,105 @@ describe.each(Object.entries(THEMES))('%s', (_theme, path) => {
   });
 });
 
+const TYPE_STEPS = [
+  'xs',
+  'sm',
+  'base',
+  'lg',
+  'xl',
+  '2xl',
+  '3xl',
+  '4xl',
+  '5xl',
+  '6xl',
+  '7xl',
+  '8xl',
+  '9xl',
+] as const;
+
+const SPACE_STEPS = ['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'] as const;
+
+const SPACE_PAIRS = ['sm-lg', 'md-lg', 'lg-xl', 'xl-2xl'] as const;
+
+// `clamp(<min>rem, <intercept>rem + <slope>vw, <max>rem)` — the shape both fluid scales take.
+const FLUID = /^clamp\(([\d.]+)rem,\s*[\d.]+rem\s*\+\s*[\d.]+vw,\s*([\d.]+)rem\)$/;
+
+interface FluidRange {
+  min: number;
+  max: number;
+}
+
+// The two ends of a fluid declaration in rem, or `null` where it is not one.
+function fluidRange(value: string | undefined): FluidRange | null {
+  const match = value?.match(FLUID);
+
+  if (!match) {
+    return null;
+  }
+
+  return { min: Number(match[1]), max: Number(match[2]) };
+}
+
+function ranges(names: readonly string[], tokens: Map<string, string>): FluidRange[] {
+  return names.map((name) => fluidRange(tokens.get(name))).filter((range) => range !== null);
+}
+
+function isStrictlyIncreasing(values: number[]): boolean {
+  return values.every((value, index) => index === 0 || value > (values[index - 1] ?? Number.NaN));
+}
+
 describe('the Tailwind bridge', () => {
   const css = read('src/styles/tokens.css');
+  const tokens = declarations(css);
 
   it.each(LETTER_SPACING)('wires --ls-%s to a utility', (role) => {
     expect(css).toContain(`var(--ls-${role})`);
   });
 
-  it('leaves size and line height to Tailwind, dropping neither namespace', () => {
+  it('leaves line height to Tailwind, dropping neither namespace', () => {
     expect(css).not.toMatch(/--(text|leading)-\*:\s*initial/);
+  });
+
+  it.each(TYPE_STEPS)('sets --text-%s as a clamp with a rem + vw preferred term', (step) => {
+    expect(fluidRange(tokens.get(`--text-${step}`))).not.toBeNull();
+  });
+
+  it('starts --text-base at 1rem', () => {
+    expect(fluidRange(tokens.get('--text-base'))?.min).toBe(1);
+  });
+
+  it('keeps the type steps in order at both ends', () => {
+    const steps = ranges(
+      TYPE_STEPS.map((step) => `--text-${step}`),
+      tokens,
+    );
+
+    expect(steps).toHaveLength(TYPE_STEPS.length);
+    expect(isStrictlyIncreasing(steps.map((range) => range.min))).toBe(true);
+    expect(isStrictlyIncreasing(steps.map((range) => range.max))).toBe(true);
+  });
+
+  it.each([...SPACE_STEPS, ...SPACE_PAIRS])(
+    'sets --spacing-%s as a clamp with a rem + vw preferred term',
+    (step) => {
+      expect(fluidRange(tokens.get(`--spacing-${step}`))).not.toBeNull();
+    },
+  );
+
+  it('keeps the space steps in order at both ends', () => {
+    const steps = ranges(
+      SPACE_STEPS.map((step) => `--spacing-${step}`),
+      tokens,
+    );
+
+    expect(steps).toHaveLength(SPACE_STEPS.length);
+    expect(isStrictlyIncreasing(steps.map((range) => range.min))).toBe(true);
+    expect(isStrictlyIncreasing(steps.map((range) => range.max))).toBe(true);
+  });
+
+  it('leaves Tailwind’s 4px multiplier alone', () => {
+    expect(tokens.has('--spacing')).toBe(false);
+    expect(css).not.toMatch(/--spacing-\*:\s*initial/);
   });
 
   it('drops Tailwind’s tracking scale, so a fixed value cannot outrank a Theme', () => {

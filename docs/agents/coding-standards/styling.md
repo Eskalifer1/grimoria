@@ -1,7 +1,7 @@
 # Styling conventions
 
 How code expresses a design decision. What a surface looks like is `design/`; the values are
-`src/styles/*.css`. This is how code is allowed to say it.
+`src/styles/*.css`.
 
 **Tailwind utilities in JSX are the styling mechanism.** Handwritten CSS lives in `src/styles/` and
 holds **tokens only**.
@@ -16,8 +16,9 @@ build rather than shipping a value nothing links to the design system. Do not ad
 a value the tokens lack means `design/token-contract.md` is missing a name, and adding one is a
 change to that contract.
 
-**Font size and line height are Tailwind's own scale**, like spacing — `text-*` is the type scale
-and there is no token to reach for. **Tracking is a token**: the first three `--ls-*` ride on the
+**Two scales govern size** — fluid type (`text-*`) and the space palette (`--spacing-3xs` …
+`--spacing-3xl`) vs Tailwind's 4px `--spacing` scale; which a value takes, and everything else
+responsive beyond mobile-first, is `<standards>/responsive.md`. **Tracking is a token**: the first three `--ls-*` ride on the
 `text-*` step, so `text-3xl` already carries the tracking measured for it, and the two that follow
 a font role rather than a size are `tracking-meta` and `tracking-mono`. Tailwind's own tracking
 scale is dropped, so `tracking-wide` fails the build; `tracking-tight` survives only as the alias
@@ -34,15 +35,8 @@ handled once, by collapsing those durations in `globals.css`, so a component car
 neither default above — `globals.css` sets what they do read, so a registry primitive animates on
 the Theme's timing without a class. `design/token-contract.md` holds the argument.
 
-**Spacing is Tailwind's own scale.** Every gap, pad and margin is a multiple of 4px, which is
-what the utilities already produce (`p-6` is 24px). There is no spacing token — why, and what a
-value off the scale means, is `design/token-contract.md`. **Breakpoints are Tailwind's own as
-well** — mobile-first, `sm:` upward.
-
-**A dimension that should follow the viewport is one `clamp()`, not a breakpoint ladder** —
-`size-[clamp(10rem,25vw,16rem)]`: the phone value as the floor, the desktop value as the
-ceiling, both on the 4px scale, and a `vw` term between. A breakpoint is for layout that changes
-shape — columns, what is shown — not for a size that only grows.
+**Breakpoints are Tailwind's own** — mobile-first, `sm:` upward. A size that follows the viewport
+comes from the fluid scale, not a one-off `clamp()`; `<standards>/responsive.md` holds the rest.
 
 **A component never asks which Theme is active.** No `data-theme` condition, no `dark:`
 variant, no Tailwind variant registered for a Theme. Switching Theme is values changing under
@@ -73,16 +67,11 @@ holds the rule and when to wrap instead.
   a `next-themes` provider this app never mounts — the library is wrapped directly outside `ui/`
   and its own injected CSS is overridden in `shadcn-adapter.css`. One library, not two.
 
-**`cn` from `@/shared/lib/cn` is the only way class names are combined** — it resolves Tailwind
-conflicts, which makes a caller's `className` an override rather than a coin flip. Use `cva`
+**`cn` from `@/shared/lib/cn` is the only way class names are combined**. Use `cva`
 once a component has more than two or three visual variants; below that inline conditionals are
 clearer.
 
 ## Where the token files live
-
-`src/app/(frontend)/globals.css` imports, in order: `tokens.css` (contract names → Tailwind utilities),
-`standard.css` (values on bare `:root`), `dark-fantasy.css` (values behind
-`:root[data-theme=…]`), `shadcn-adapter.css`.
 
 `standard` sits on bare `:root` so a surface the Theme mechanism does not reach — anything
 rendered before `data-theme` is resolved — still renders in a complete Theme. The dark-fantasy selector carries

@@ -5,8 +5,7 @@ Themes, and only the material differs (`design/standard-design.md`,
 `design/dark-fantasy-design.md`, and `design/logo.md` for the mark those zones carry).
 
 **The full structure is settled in the Site layout epic (#73), whose first comment is canonical**
-— including the navigation items, which are still moving as their features land. Only what
-constrains implementation is repeated here.
+— including the navigation items, which are still moving as their features land.
 
 ## Shells
 
@@ -21,24 +20,22 @@ A single `Sidebar` component, not two that look alike.
 
 - **Persistent** — desktop, authenticated User. Always visible beside the content.
 - **Drawer** — opened by a burger, overlaying the content. Mobile always, and Guests always,
-  **at any viewport width**. In drawer mode a thin bar carries the burger and the brand mark;
-  without it there is nothing to open the drawer from.
+  **at any viewport width**. In drawer mode a thin bar carries the burger and the brand mark.
+
+The breakpoint the two modes switch on is `<standards>/responsive.md`, not restated here.
 
 The persistent sidebar collapses to an **icon rail**. **Width never overrides the User's
 collapse choice** — the rail is a decision, not a breakpoint.
 
 **Collapse state is a server-resolved preference** — on the User profile when authenticated, in a
-cookie for Guests, same rule as `Theme` and for the same reason (ADR-0004); otherwise the sidebar
-jumps on every load. **Anything else that becomes a persisted UI preference inherits this rule.**
+cookie for Guests, same rule as `Theme` and for the same reason (ADR-0004). **Anything else that becomes a persisted UI preference inherits this rule.**
 
 ## Boundary surfaces
 
-**Every "nothing here" surface is one `EmptyState`** (`shared/components/EmptyState/`) — an
-illustration slot, a title at the heading level the caller names, a description, an action and a
-reference line. A route boundary centers it in `FullPageView` with `heading="h1"`; an empty list
+**Every "nothing here" surface is one `EmptyState`** (`shared/components/EmptyState/`). A route boundary centers it in `FullPageView` with `heading="h1"`; an empty list
 drops it into its card at `h2`. `not-found.tsx`, `unauthorized.tsx` and `forbidden.tsx` under
 `[locale]` re-export a screen module from `views/`; `error.tsx` holds its own `"use client"`
-implementation. `EmptyTitle` takes `asChild` so the heading element is the caller's.
+implementation.
 
 **The error boundary never renders `error.message`** — Next strips it in production, so showing it
 would make dev and prod two different screens, and a Payload or Postgres throw would leak schema
@@ -55,15 +52,11 @@ issue and what was rejected.
 
 ## Content area
 
-- **No global top bar.** A persistent bar above the page would duplicate the page masthead and
-  cost vertical space in a product that is mostly reading and scanning.
+- **No global top bar.**
 - **Masthead**: page title plus a monospace count/status line, nothing else in v1. The slot
-  opposite the title is reserved and deliberately empty, so adding one control later does not
-  re-balance the page.
-- **No search and no filters anywhere** — deferred to #4. A ⌘K palette stays compatible because
-  it needs no chrome, but is not promised.
-- The Notes list is a **masonry grid of cards**; what a card is made of is settled with the
-  Notes list page design (#74).
+  opposite the title is reserved and deliberately empty.
+- **No search and no filters anywhere** — deferred to #4.
+- The Notes list is a **masonry grid of cards**.
 
 The reference images in `design/` are working files and are **not canonical for structure** —
 they show a global top bar, search field, filter and view-toggle controls, and a promotional

@@ -40,6 +40,8 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#fcfcfe' },
     { media: '(prefers-color-scheme: dark)', color: '#171614' },
   ],
+  // Without it every `env(safe-area-inset-*)` reads 0 on a notched phone.
+  viewportFit: 'cover',
 };
 
 // The whole product is built ahead of any request: every Theme against every

@@ -1,15 +1,14 @@
 /*
  * The bridge from `design/token-contract.md`'s names to Tailwind utilities.
- * Values live in `standard.css` and `dark-fantasy.css`; the spacing scale is
- * Tailwind's own `--spacing`, which is already the contract's 4px step.
+ * Values live in `standard.css` and `dark-fantasy.css`; the 4px scale inside a
+ * component is Tailwind's own `--spacing`, and the two fluid scales are below.
  */
 
 @theme {
   /*
    * Dropped so that a utility whose value is not a token cannot compile —
-   * `bg-red-500`, `rounded-xl`, `shadow-lg`, `ease-out`, `tracking-wide`. Font
-   * size and line height are the exception and stay Tailwind's, by the same
-   * argument that leaves spacing to it (`design/token-contract.md`); tracking
+   * `bg-red-500`, `rounded-xl`, `shadow-lg`, `ease-out`, `tracking-wide`. Line
+   * height stays Tailwind's unitless ratio, riding on the fluid size; tracking
    * goes because it is the one type value the two Themes disagree on.
    */
   --color-*: initial;
@@ -19,6 +18,45 @@
   --blur-*: initial;
   --ease-*: initial;
   --tracking-*: initial;
+
+  /*
+   * Both scales interpolate 320px → 1536px, and both Themes share them. Type is
+   * a 1.2 ratio at the floor and 1.25 at the ceiling, so a caption barely moves
+   * while a display step does; the `rem +` keeps browser zoom working (WCAG 1.4.4).
+   */
+  --text-xs: clamp(0.6875rem, 0.6711rem + 0.0822vw, 0.75rem);
+  --text-sm: clamp(0.8125rem, 0.7961rem + 0.0822vw, 0.875rem);
+  --text-base: clamp(1rem, 0.9671rem + 0.1645vw, 1.125rem);
+  --text-lg: clamp(1.1875rem, 1.1217rem + 0.3289vw, 1.4375rem);
+  --text-xl: clamp(1.4375rem, 1.3553rem + 0.4112vw, 1.75rem);
+  --text-2xl: clamp(1.75rem, 1.6349rem + 0.5757vw, 2.1875rem);
+  --text-3xl: clamp(2.0625rem, 1.8816rem + 0.9046vw, 2.75rem);
+  --text-4xl: clamp(2.5rem, 2.2533rem + 1.2336vw, 3.4375rem);
+  --text-5xl: clamp(3rem, 2.6546rem + 1.727vw, 4.3125rem);
+  --text-6xl: clamp(3.5625rem, 3.0855rem + 2.3849vw, 5.375rem);
+  --text-7xl: clamp(4.3125rem, 3.6875rem + 3.125vw, 6.6875rem);
+  --text-8xl: clamp(5.1875rem, 4.3487rem + 4.1941vw, 8.375rem);
+  --text-9xl: clamp(6.1875rem, 5.0526rem + 5.6743vw, 10.5rem);
+
+  /*
+   * The air around things — section gaps, gutters, card and dialog padding — as
+   * multiples of `--text-base`'s two ends (16px → 18px), so `p-md` and `gap-lg`
+   * compile beside the numeric `p-4`. The pairs run one step's floor to the next's ceiling.
+   */
+  --spacing-3xs: clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem);
+  --spacing-2xs: clamp(0.5rem, 0.4836rem + 0.0822vw, 0.5625rem);
+  --spacing-xs: clamp(0.75rem, 0.7171rem + 0.1645vw, 0.875rem);
+  --spacing-sm: clamp(1rem, 0.9671rem + 0.1645vw, 1.125rem);
+  --spacing-md: clamp(1.5rem, 1.4507rem + 0.2467vw, 1.6875rem);
+  --spacing-lg: clamp(2rem, 1.9342rem + 0.3289vw, 2.25rem);
+  --spacing-xl: clamp(3rem, 2.9013rem + 0.4934vw, 3.375rem);
+  --spacing-2xl: clamp(4rem, 3.8684rem + 0.6579vw, 4.5rem);
+  --spacing-3xl: clamp(6rem, 5.8026rem + 0.9868vw, 6.75rem);
+
+  --spacing-sm-lg: clamp(1rem, 0.6711rem + 1.6447vw, 2.25rem);
+  --spacing-md-lg: clamp(1.5rem, 1.3026rem + 0.9868vw, 2.25rem);
+  --spacing-lg-xl: clamp(2rem, 1.6382rem + 1.8092vw, 3.375rem);
+  --spacing-xl-2xl: clamp(3rem, 2.6053rem + 1.9737vw, 4.5rem);
 }
 
 /*

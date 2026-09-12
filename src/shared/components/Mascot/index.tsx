@@ -59,7 +59,7 @@ function Mascot({ pose, className }: MascotProps) {
   return (
     <span
       aria-hidden="true"
-      className={cn('mascot block size-[clamp(10rem,25vw,16rem)]', className)}
+      className={cn('mascot block size-[clamp(10rem,8.4211rem_+_7.8947vw,16rem)]', className)}
     >
       {/* A chunk that fails to fetch leaves the box empty rather than taking the surface down. */}
       <SilentBoundary>

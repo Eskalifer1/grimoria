@@ -30,7 +30,7 @@ function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
     <html lang="en" className={STANDARD_FONT_VARIABLES}>
       <body>
-        <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6 text-center">
+        <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
           <h1 className="font-display text-2xl text-text-title">{TITLE}</h1>
           <p className="max-w-sm font-ui text-text-muted">{DESCRIPTION}</p>
           <Button onClick={reset}>{RELOAD}</Button>

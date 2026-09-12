@@ -14,8 +14,7 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 `PostToolUse` hook (`.claude/hooks/gate-written-file.sh`) runs Biome and cspell on it, the covering
 test when it sits under `src/`, and `git add -N` when it is new. It also **refuses a comment run
 over three lines** outside JSDoc, which Biome cannot see (`<standards>/documentation.md`). **A `Write` that creates a doc gets
-`.claude/rules/writing-docs.md` handed back** — the rules injection fires on `Edit` alone, so the
-first draft is written without it. Fix what it hands back; silence means green. **A file created any other way — a heredoc, a generator — gets none of that** and needs
+`.claude/rules/writing-docs.md` handed back**. Fix what it hands back; silence means green. **A file created any other way — a heredoc, a generator — gets none of that** and needs
 `yarn check --write` and `git add -N` by hand.
 
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
@@ -35,14 +34,13 @@ sentence.
 ## Keep docs current
 
 Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
-done any session that changed behavior, architecture or scope — drift is a bug. `/implement-issue`
+done any session that changed behavior, architecture or scope. `/implement-issue`
 runs it at its handoff; nothing else prompts for it.
 
 ## A correction becomes a standard
 
 Run `/learn` in the same turn as the fix, and **report its judgment either way** — recorded in
-`<standards>/*.md`, or left local and why. A correction acted on and not written down is one the
-next session repeats.
+`<standards>/*.md`, or left local and why.
 
 ## Where to look, by task
 
@@ -66,6 +64,8 @@ next session repeats.
   `docs/features/forms/controls.md`.
 - **Showing a loading indicator, or drawing a divider between sections**:
   `docs/features/loader-and-rule.md`.
+- **Building a surface that must adapt to the viewport, a touch target, a safe area, a fluid size
+  or space**: `<standards>/responsive.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.
 - **Designing or styling a UI surface**: `design/standard-design.md`,

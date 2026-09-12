@@ -44,7 +44,7 @@ the worse failure.
 
 **There is no separate pressed color.** Press is `--press-scale` with the hover color held, so
 `--action-primary-bg-pressed` repeats the hover value rather than adding a third step that is
-not perceivable at these durations. The token exists because `dark-fantasy` genuinely uses it.
+not perceivable at these durations.
 
 **A filled button darkens on hover, never lightens.** No control is ever faded with opacity.
 
@@ -57,48 +57,34 @@ Every shadow is the ink at a low percentage rather than a hand-mixed gray, so th
 follows if the ink is retuned. Every surface is opaque, so the blur tokens are `0`.
 
 `--surface-inverse` is this Theme's near-black — the only place `standard` sets light text on a
-dark surface, and it exists so the Theme can do that at all. **Neither the toast nor the tooltip is
+dark surface. **Neither the toast nor the tooltip is
 on it**: both take `--surface-raised`, so one name carries every raised surface and, in
 `dark-fantasy`, the blur that goes with it.
 
 ## Radii and motion
 
-Radii are generous and consistent. Hover is `--dur-fast` on color and `--dur` on shadow.
+Hover is `--dur-fast` on color and `--dur` on shadow.
 
 ## Typography
 
-All three families are on Google Fonts and load through `next/font`. The CSS names the
-families; these are the **weights to load**, which it does not carry:
+**Type size and the space palette are fluid, not a fixed step per breakpoint** — both Themes
+share the same `--text-*` scale and the same `--spacing-<name>` palette, declared once in
+`src/styles/tokens.css`; the rule for both is `design/token-contract.md`.
 
-| Token | Family | Weights |
-|---|---|---|
-| `--font-display` | Plus Jakarta Sans | 700, 800 |
-| `--font-ui` | Plus Jakarta Sans | 400, 500, 600 |
-| `--font-meta` | JetBrains Mono | 400, 700 |
-| `--font-reading` | Plus Jakarta Sans | 400, 700 + italic |
-| `--font-code` | JetBrains Mono — _shared_ | 400, 700 |
+The CSS names the families; what loads, and at which weights, is `src/shared/config/fonts.ts`.
 
 **Plus Jakarta Sans carries display and interface from one family**, separated by weight and
-size rather than a second face. **JetBrains Mono carries all metadata** and code inside Notes —
-chosen over a display monospace because code is primary content here, not an accent; caps
-labels take wide tracking, a mono stating a fact does not. **JetBrains Mono is shared with
+size rather than a second face. **JetBrains Mono carries all metadata** and code inside Notes. **JetBrains Mono is shared with
 `dark-fantasy`**; what that constrains is `token-contract.md`.
 
 ### Type scale
 
-**Size and line height are Tailwind's `text-*`, and there is no token for them** —
-`token-contract.md` says why. Tracking is the part that is this Theme's, and the five `--ls-*`
-values are in the CSS.
+Tracking is the part of type that is this Theme's; the five `--ls-*` values are in the CSS.
 
 **Plus Jakarta Sans is tightened as it grows** — that is what separates a display line from a
 heading when one family carries both.
 
 ## Deliberately not settled
 
-**Layout metrics** — sidebar width, rail width, gutters, content max-width. The generated bundle
-has values, but they are a template's geometry: a `280px` sidebar and `76px` rail measured off
-someone else's screenshot. Not contract tokens — the contract covers material, not the shell's
-dimensions, which belong to `docs/features/site-layout.md` and wait on #74.
-
-**Component-level specs.** Applying these tokens to components is #74 and #75, and the coding
-standards.
+**Layout metrics** — sidebar width, rail width, gutters, content max-width. Not contract tokens — the contract covers material, not the shell's
+dimensions, which belong to `docs/features/site-layout.md`.

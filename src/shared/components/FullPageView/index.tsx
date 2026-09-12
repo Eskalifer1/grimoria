@@ -16,7 +16,7 @@ interface FullPageViewProps {
  */
 function FullPageView({ children, className }: FullPageViewProps) {
   return (
-    <main className={cn('flex min-h-dvh items-center justify-center p-6', className)}>
+    <main className={cn('flex min-h-svh items-center justify-center p-6', className)}>
       {children}
     </main>
   );
