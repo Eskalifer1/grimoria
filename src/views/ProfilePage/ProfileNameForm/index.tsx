@@ -37,7 +37,7 @@ function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
     version: updatedAt,
   });
 
-  const { Form } = useOptimisticForm({
+  const { Form, ...binding } = useOptimisticForm({
     schema: updateNameSchema,
     values: { name: displayName.value },
     writeStatus: optimisticFormStatus('name', displayName),
@@ -45,7 +45,7 @@ function ProfileNameForm({ id, name, updatedAt }: ProfileNameFormProps) {
   });
 
   return (
-    <Form.Root>
+    <Form.Root {...binding}>
       <p className="font-ui text-text-title">{displayName.value}</p>
       <Form.Input
         aria-busy={displayName.isPending}

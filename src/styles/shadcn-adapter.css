@@ -102,6 +102,34 @@
 }
 
 /*
+ * A dialog is the contract's modal step — scrim, blur behind, shadow — and the
+ * registry paints it `bg-black/50` and `shadow-lg`, names `tokens.css` drops, in
+ * `ui/` where they are not edited. Unlayered, so it outranks the utilities.
+ */
+[data-slot="dialog-overlay"],
+[data-slot="alert-dialog-overlay"] {
+  background: var(--scrim-modal);
+  backdrop-filter: blur(var(--blur-modal));
+}
+
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"] {
+  box-shadow: var(--shadow-modal);
+}
+
+/*
+ * The arriving-surface step, as for the toast below; `globals.css` sets every
+ * element to `--dur-fast`, and collapses this token with the rest under
+ * `prefers-reduced-motion`.
+ */
+[data-slot="dialog-overlay"],
+[data-slot="alert-dialog-overlay"],
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"] {
+  --tw-animation-duration: var(--dur-slow);
+}
+
+/*
  * `sonner` injects its stylesheet at runtime and unlayered, so it outranks every
  * utility class whatever the specificity — the `html` prefix is what wins back the
  * values it hardcodes. `[data-sonner-theme]` is matched for the same reason: the library

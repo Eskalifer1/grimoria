@@ -40,7 +40,7 @@ by e2e (#39); the pure functions it calls are covered by unit.
 - **Config and constants** — `next.config.ts`, `src/constants/**`, and anything with no branch.
   `src/constants/env.ts` and `securityHeaders.ts` are the exceptions: one parses and defaults, the
   other branches on scope and environment, so both are tested.
-- **Plain re-exports and one-line wrappers** around a library, such as `cn()`.
+- **Plain re-exports and one-line wrappers** around a library.
 
 ## Running
 

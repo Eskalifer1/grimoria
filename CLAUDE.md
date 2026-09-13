@@ -64,6 +64,8 @@ Run `/learn` in the same turn as the fix, and **report its judgment either way**
   `docs/features/forms/controls.md`.
 - **Showing a loading indicator, or drawing a divider between sections**:
   `docs/features/loader-and-rule.md`.
+- **Opening a modal, asking a question the User must answer, or confirming a delete** — `Modal`,
+  `AlertModal`, `ConfirmDialog`, `DestructiveButton confirm`: `docs/features/modals.md`.
 - **Building a surface that must adapt to the viewport, a touch target, a safe area, a fluid size
   or space**: `<standards>/responsive.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file

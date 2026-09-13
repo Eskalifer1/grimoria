@@ -153,7 +153,13 @@ function FormField<TValues extends FieldValues, TName extends FieldPath<TValues>
         );
 
         return (
-          <Field className={className} data-invalid={!!error} orientation={orientation}>
+          <Field
+            // The registry tints an invalid field with the button fill; the label
+            // takes the status the mark and the message already wear.
+            className={cn('data-[invalid=true]:text-status-failed', className)}
+            data-invalid={!!error}
+            orientation={orientation}
+          >
             {isLabelFirst ? drawnLabel : null}
             {description ? (
               <FieldDescription className={cn(isDescriptionHidden && 'sr-only')} id={descriptionId}>

@@ -64,8 +64,8 @@ Held by review.
 
 ## The two scales
 
-Fluid type (`--text-*`) and the space palette (`--spacing-3xs` … `--spacing-3xl`, plus the
-pairs `sm-lg`, `md-lg`, `lg-xl`, `xl-2xl`) both interpolate 320px → 1536px in `tokens.css` — no component writes its own
+Fluid type (`--text-*`) and the space palette (`--spacing-fluid-3xs` … `--spacing-fluid-3xl`, plus the
+pairs `fluid-sm-lg`, `fluid-md-lg`, `fluid-lg-xl`, `fluid-xl-2xl`) both interpolate 320px → 1536px in `tokens.css` — no component writes its own
 `clamp()`. The space palette is for the air around things: section gaps, page gutters, card and
 dialog padding. Everything inside a component — gaps between its items, icon sizes, control
 heights, sidebar width, touch targets — stays on Tailwind's 4px `--spacing` scale, unchanged.

@@ -3,8 +3,8 @@
 import type { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form';
 
 import { VALUE_OWNER } from '@/constants/form';
+import { typedForm } from '@/shared/components/Form/typedForm';
 import { type FormOptions, type FormResult, useFormSeam } from '@/shared/hooks/form/useFormSeam';
-import { useTypedForm } from '@/shared/hooks/form/useTypedForm';
 import type { FormStatus } from '@/shared/lib/formStatus';
 
 interface UseOptimisticFormOptions<
@@ -63,9 +63,7 @@ function useOptimisticForm<TInput extends FieldValues, TOutput extends FieldValu
     releaseFields(form, sent);
   }
 
-  const boundForm = useTypedForm({ form, writeStatus, onSubmit });
-
-  return { form, writeStatus, onSubmit, Form: boundForm };
+  return { form, writeStatus, onSubmit, Form: typedForm<TInput, TOutput>() };
 }
 
 export type { UseOptimisticFormOptions };

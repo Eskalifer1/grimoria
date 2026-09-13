@@ -35,6 +35,37 @@
     "empty": "You haven't written anything down yet.",
     "title": "My notes"
   },
+  "modal": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "modalPlayground": {
+    "closeLabel": "Close",
+    "confirmDefaultDescription": "This can be adjusted later.",
+    "confirmDefaultTitle": "Save this change?",
+    "confirmDestructiveDescription": "This cannot be undone.",
+    "confirmDestructiveTitle": "Delete this item?",
+    "deleteLabel": "Delete",
+    "destructiveDescription": "This cannot be undone.",
+    "destructiveTitle": "Delete this item?",
+    "formLabel": "Note",
+    "formTitle": "A form modal",
+    "infoBody": "This modal has one control: the one that closes it.",
+    "infoTitle": "Information",
+    "openConfirmDefault": "Open confirm (default)",
+    "openConfirmDestructive": "Open confirm (destructive)",
+    "openDestructive": "Open destructive button",
+    "openForm": "Open form modal",
+    "openInfo": "Open info modal",
+    "openLarge": "Open large modal",
+    "openMedium": "Open medium modal",
+    "openSmall": "Open small modal",
+    "openSrOnly": "Open sr-only title modal",
+    "sizeBody": "This modal is drawn at one fixed width.",
+    "sizeTitle": "A sized modal",
+    "srOnlyBody": "This modal's title is read by a screen reader but never drawn.",
+    "srOnlyTitle": "A modal with a screen-reader-only title"
+  },
   "notFoundPage": {
     "description": "The page you asked for isn't here. It may have been moved or deleted.",
     "title": "Page not found"

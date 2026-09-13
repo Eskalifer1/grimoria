@@ -20,17 +20,18 @@ was typed.
   every form, to buy a check the hook can give for free.
 - **A per-form `createForm<Values>()` factory.** One extra line and one extra name per form, for the
   same inference the hook is already holding.
+- **A `Root` built inside the hook, closing over the binding.** It hid the three props, and cost a
+  `useMemo` so React would not remount the form, a ref so the one component saw the live binding,
+  and a subscription once the React Compiler stopped re-rendering it with its parent.
 
 ## Costs accepted
 
 - **`TypedForm<TValues>` is written by hand**, one line per member. A control added to `Form` and not
   listed there fails `tsc` in `tests/shared/components/Form/types.test.tsx`, which is what keeps the
   two namespaces from drifting.
-- **Two `Root` signatures under one name.** The bound one takes `className` and `children`; the
-  untyped one still takes the binding. The import a line above says which is in hand.
+- **The binding is spread by hand.** `Form.Root` is the one root, taking `form`, `writeStatus` and
+  `onSubmit` as props; the hook returns them beside `Form`, and the call site writes
+  `<Form.Root {...binding}>`. The typed namespace is the untyped one narrowed at the type level —
+  nothing is built per form, so nothing has to be memoized or kept live.
 - **The hooks import `shared/components/Form`** — a hook depending on a component, the reverse of the
   usual direction, and the one such exception (`layers.md`).
-- **The bound `Root` is memoized by hand.** It closes over a binding that is a fresh object every
-  render, so built plainly it is a new component type each time and React remounts the whole form,
-  losing focus and the draft. Reading the live binding from a ref is what the React Compiler refuses
-  to compile, so `useTypedForm` alone is not auto-memoized — it holds nothing worth memoizing.

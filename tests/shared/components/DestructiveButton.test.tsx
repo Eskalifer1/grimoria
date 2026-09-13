@@ -1,9 +1,15 @@
-import { screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { DestructiveButton } from '@/shared/components/DestructiveButton';
 
 import { renderWithProviders } from '../../setup/render';
+
+const CONFIRM = {
+  title: 'Delete the note?',
+  confirmLabel: 'Delete',
+  cancelLabel: 'Keep it',
+};
 
 describe('DestructiveButton', () => {
   it('sets both halves of the pair, so neither the fill nor the ink is inherited', () => {
@@ -33,5 +39,70 @@ describe('DestructiveButton', () => {
 
     expect(button).toHaveClass('w-full');
     expect(button).toHaveClass('bg-action-destructive-bg');
+  });
+
+  it('fires onClick directly without confirm', () => {
+    const onClick = vi.fn();
+
+    renderWithProviders(<DestructiveButton onClick={onClick}>Delete</DestructiveButton>);
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it('opens a confirm dialog on click and waits for confirmation', () => {
+    const onClick = vi.fn();
+
+    renderWithProviders(
+      <DestructiveButton confirm={CONFIRM} onClick={onClick}>
+        Delete
+      </DestructiveButton>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(onClick).not.toHaveBeenCalled();
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+  });
+
+  it('does not submit a form around it before the User confirms', () => {
+    const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
+
+    renderWithProviders(
+      <form onSubmit={onSubmit}>
+        <DestructiveButton confirm={CONFIRM}>Delete</DestructiveButton>
+      </form>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
+  });
+
+  it('fires onClick once after the User confirms', () => {
+    const onClick = vi.fn();
+
+    renderWithProviders(
+      <DestructiveButton confirm={CONFIRM} onClick={onClick}>
+        Delete
+      </DestructiveButton>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(screen.getByRole('button', { name: CONFIRM.confirmLabel }));
+
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it('does not fire onClick after cancel', () => {
+    const onClick = vi.fn();
+
+    renderWithProviders(
+      <DestructiveButton confirm={CONFIRM} onClick={onClick}>
+        Delete
+      </DestructiveButton>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(screen.getByRole('button', { name: CONFIRM.cancelLabel }));
+
+    expect(onClick).not.toHaveBeenCalled();
   });
 });

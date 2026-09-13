@@ -45,12 +45,12 @@ interface FormOptions<
 
 interface FormResult<TInput extends FieldValues, TOutput extends FieldValues = TInput> {
   /**
-   * The namespace this form draws with, already bound to it: `Form.Root` needs no
-   * props of the binding, and every `name` under it is checked against `TInput`.
+   * The namespace this form draws with, every `name` under it checked against
+   * `TInput`. `Form.Root` takes the other three as props: `<Form.Root {...binding}>`.
    */
-  Form: TypedForm<TInput>;
+  Form: TypedForm<TInput, TOutput>;
 
-  /** The `useForm` return — `watch`, `setValue`, `formState`. Still handed to the untyped `Form.Root`. */
+  /** The `useForm` return — `watch`, `setValue`, `formState`. */
   form: UseFormReturn<TInput, unknown, TOutput>;
 
   /** What the server has said, handed to `Form.Root`. */

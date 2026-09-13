@@ -78,7 +78,7 @@ animation on cards.
 ## Typography
 
 **Type size and the space palette are fluid, not a fixed step per breakpoint** — both Themes
-share the same `--text-*` scale and the same `--spacing-<name>` palette, declared once in
+share the same `--text-*` scale and the same `--spacing-fluid-<name>` palette, declared once in
 `src/styles/tokens.css`; the rule for both is `design/token-contract.md`.
 
 The CSS names the families; what loads, and at which weights, is `src/shared/config/fonts.ts`.

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { FieldPath, FieldPathByValue, FieldValues } from 'react-hook-form';
 
+import { Form, type FormRootProps } from '@/shared/components/Form';
 import type { FormActions } from '@/shared/components/Form/FormActions';
 import type { FormCancel } from '@/shared/components/Form/FormCancel';
 import type { FormCheckboxProps } from '@/shared/components/Form/FormCheckbox';
@@ -37,26 +38,18 @@ type BoundControl<TValues extends FieldValues, TProps, TValue = unknown> = <
   props: Omit<TProps, 'name'> & { name: TName },
 ) => ReactNode;
 
-/** What the bound `Form.Root` still varies. The binding is the hook's; the rest is layout. */
-interface TypedFormRootProps {
-  /** The content to render inside the form — its fields, and whatever else it holds. */
-  children: ReactNode;
-
-  /** Additional classes, merged onto the root element. */
-  className?: string;
-}
-
 /**
- * The `Form` namespace bound to one form's values, handed back by
+ * The `Form` namespace seen through one form's values, handed back by
  * `useOptimisticForm` and `useActionForm`. A mistyped `name`, or a toggle on a
  * `string` field, fails `tsc` at the call site — which context alone cannot do,
- * since context is not an inference site (ADR 0013).
+ * since context is not an inference site (ADR 0013). Types only: the members are
+ * the untyped namespace's, and `Root` still takes the binding as props.
  *
  * **One line per member, written by hand**: a control added to `Form` and not
  * listed here fails the assertion in `tests/shared/components/Form/types.test.tsx`.
  */
-interface TypedForm<TValues extends FieldValues> {
-  Root: (props: TypedFormRootProps) => ReactNode;
+interface TypedForm<TValues extends FieldValues, TOutput extends FieldValues = TValues> {
+  Root: (props: FormRootProps<TValues, TOutput>) => ReactNode;
   Field: <TName extends FieldPath<TValues>>(props: FormFieldProps<TValues, TName>) => ReactNode;
   Input: BoundControl<TValues, FormInputProps<TValues, FieldPath<TValues>>>;
   Textarea: BoundControl<TValues, FormTextareaProps<TValues, FieldPath<TValues>>>;
@@ -80,4 +73,13 @@ interface TypedForm<TValues extends FieldValues> {
   Footer: typeof FormFooter;
 }
 
-export type { BoundControl, BoundPath, TypedForm, TypedFormRootProps };
+/** The untyped namespace narrowed to one form's values. Types only — nothing is built. */
+function typedForm<TValues extends FieldValues, TOutput extends FieldValues = TValues>(): TypedForm<
+  TValues,
+  TOutput
+> {
+  return Form;
+}
+
+export type { BoundControl, BoundPath, TypedForm };
+export { typedForm };

@@ -35,6 +35,37 @@
     "empty": "No spells are bound to your grimoire yet.",
     "title": "My grimoire"
   },
+  "modal": {
+    "cancel": "Abandon",
+    "confirm": "So be it"
+  },
+  "modalPlayground": {
+    "closeLabel": "Close",
+    "confirmDefaultDescription": "This can be adjusted later.",
+    "confirmDefaultTitle": "Bind this change?",
+    "confirmDestructiveDescription": "This cannot be undone.",
+    "confirmDestructiveTitle": "Unmake this item?",
+    "deleteLabel": "Unmake",
+    "destructiveDescription": "This cannot be undone.",
+    "destructiveTitle": "Unmake this item?",
+    "formLabel": "Note",
+    "formTitle": "A form modal",
+    "infoBody": "This modal has one control: the one that closes it.",
+    "infoTitle": "Information",
+    "openConfirmDefault": "Open confirm (default)",
+    "openConfirmDestructive": "Open confirm (destructive)",
+    "openDestructive": "Open destructive button",
+    "openForm": "Open form modal",
+    "openInfo": "Open info modal",
+    "openLarge": "Open large modal",
+    "openMedium": "Open medium modal",
+    "openSmall": "Open small modal",
+    "openSrOnly": "Open sr-only title modal",
+    "sizeBody": "This modal is drawn at one fixed width.",
+    "sizeTitle": "A sized modal",
+    "srOnlyBody": "This modal's title is read by a screen reader but never drawn.",
+    "srOnlyTitle": "A modal with a screen-reader-only title"
+  },
   "notFoundPage": {
     "description": "The page you sought is not at this address. It was unbound, or never written.",
     "title": "No such page is bound"

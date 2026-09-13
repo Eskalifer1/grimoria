@@ -106,14 +106,14 @@ const profileSchema = z.object({
  * runs these cases.
  */
 function TypedProbe() {
-  const { Form: Bound } = useActionForm({
+  const { Form: Bound, ...binding } = useActionForm({
     schema: profileSchema,
     values: { name: '', bio: '', age: 0, terms: false, rank: 'novice' },
     write: (values) => Promise.resolve(actionSuccess(values)),
   });
 
   return (
-    <Bound.Root>
+    <Bound.Root {...binding}>
       <Bound.Input label={LABEL} name="name" />
       <Bound.Textarea label={LABEL} name="bio" />
       {/* A path, not a value type: a number field takes a text control. */}

@@ -115,7 +115,7 @@ These carry a decision:
 Tailwind's own ratio, riding on the fluid size. The reading sheet's looser measure is
 `leading-relaxed` on the one component that renders Note body.
 
-**The space palette (`--spacing-3xs` … `--spacing-3xl`, plus the pairs `sm-lg`, `md-lg`, `lg-xl`, `xl-2xl`) is the named
+**The space palette (`--spacing-fluid-3xs` … `--spacing-fluid-3xl`, plus the pairs `fluid-sm-lg`, `fluid-md-lg`, `fluid-lg-xl`, `fluid-xl-2xl`) is the named
 exception to "no spacing token"** — also fluid, also in `tokens.css`. Which of the two scales a
 given case takes is `<standards>/responsive.md`.
 

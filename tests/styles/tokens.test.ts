@@ -156,15 +156,15 @@ describe('the Tailwind bridge', () => {
   });
 
   it.each([...SPACE_STEPS, ...SPACE_PAIRS])(
-    'sets --spacing-%s as a clamp with a rem + vw preferred term',
+    'sets --spacing-fluid-%s as a clamp with a rem + vw preferred term',
     (step) => {
-      expect(fluidRange(tokens.get(`--spacing-${step}`))).not.toBeNull();
+      expect(fluidRange(tokens.get(`--spacing-fluid-${step}`))).not.toBeNull();
     },
   );
 
   it('keeps the space steps in order at both ends', () => {
     const steps = ranges(
-      SPACE_STEPS.map((step) => `--spacing-${step}`),
+      SPACE_STEPS.map((step) => `--spacing-fluid-${step}`),
       tokens,
     );
 

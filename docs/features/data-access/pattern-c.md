@@ -52,9 +52,9 @@ not a live binding: nothing outside answers with the value, so a form bound to t
 revert what it just saved.
 
 ```tsx
-const { Form } = useActionForm({ schema, values, write: updateName });
+const { Form, ...binding } = useActionForm({ schema, values, write: updateName });
 
-<Form.Root>
+<Form.Root {...binding}>
   <Form.Input label={t('nameLabel')} name="name" />
   <Form.Footer />
 </Form.Root>;

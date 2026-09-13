@@ -16,8 +16,8 @@ build rather than shipping a value nothing links to the design system. Do not ad
 a value the tokens lack means `design/token-contract.md` is missing a name, and adding one is a
 change to that contract.
 
-**Two scales govern size** — fluid type (`text-*`) and the space palette (`--spacing-3xs` …
-`--spacing-3xl`) vs Tailwind's 4px `--spacing` scale; which a value takes, and everything else
+**Two scales govern size** — fluid type (`text-*`) and the space palette (`--spacing-fluid-3xs` …
+`--spacing-fluid-3xl`) vs Tailwind's 4px `--spacing` scale; which a value takes, and everything else
 responsive beyond mobile-first, is `<standards>/responsive.md`. **Tracking is a token**: the first three `--ls-*` ride on the
 `text-*` step, so `text-3xl` already carries the tracking measured for it, and the two that follow
 a font role rather than a size are `tracking-meta` and `tracking-mono`. Tailwind's own tracking
@@ -70,6 +70,9 @@ holds the rule and when to wrap instead.
 **`cn` from `@/shared/lib/cn` is the only way class names are combined**. Use `cva`
 once a component has more than two or three visual variants; below that inline conditionals are
 clearer.
+
+**A spacing step never takes a `--container-*` key** (`sm`, `lg`, `2xl` …) — `max-w-sm` reads
+`--spacing-sm` before 24rem, and the panel collapses. The fluid steps carry `fluid-` for that.
 
 ## Where the token files live
 

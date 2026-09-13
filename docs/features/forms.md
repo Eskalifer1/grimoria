@@ -15,19 +15,20 @@ surface gets is `docs/features/data-access.md`.
 
 ## The shape
 
-Two calls and a tree. **The hook hands back the namespace the form draws with**, already bound to it:
+Two calls and a tree. **The hook hands back the namespace the form draws with, and the binding
+`Form.Root` takes**:
 
 ```tsx
 'use client';
 
-const { Form } = useOptimisticForm({
+const { Form, ...binding } = useOptimisticForm({
   schema: updateNameSchema,
   values: { name: displayName.value },
   writeStatus: optimisticFormStatus('name', displayName),
   write: (values) => displayName.run(values.name),
 });
 
-<Form.Root>
+<Form.Root {...binding}>
   <Form.Input label={t('nameLabel')} name="name" required />
   <Form.Footer />
 </Form.Root>;
@@ -36,15 +37,15 @@ const { Form } = useOptimisticForm({
 `src/views/ProfilePage/ProfileNameForm/` is that written out, and the file the next form is copied
 from.
 
-**That `Form.Root` takes `className` and `children` and nothing else** — the binding is the hook's.
+**That `Form` is the one namespace, seen through the schema** — types only, no component is built.
 Every `name` under it is checked against the schema's **input** type, so a typo and a toggle on a
 string field both fail `tsc` (ADR 0013). The type is `TypedForm` in
 `src/shared/components/Form/typedForm.ts`; a field rendered by a component the form does not own
 takes it as one prop rather than losing the check.
 
-**The hook also still returns `form`, `writeStatus` and `onSubmit`** — `form` for `watch`,
-`setValue` and `formState`, the three together for the untyped `Form.Root` imported from
-`@/shared/components/Form`, which is what a form built without either hook spreads them onto.
+**The binding is `form`, `writeStatus` and `onSubmit`** — spread onto `Form.Root`, or read apart:
+`form` for `watch`, `setValue` and `formState`. A form built without either hook hands the same
+three to `Form.Root` from `@/shared/components/Form`.
 
 ## The two hooks
 
@@ -132,6 +133,9 @@ says nothing, which is right wherever the changed value is already on screen.
 
 **The cost, accepted:** a form write that answers after the User has navigated away is silent —
 the footer went with the page.
+
+**A form inside a modal changes nothing here** — `Form.Root` wraps the modal's body and footer,
+and every failure lands in the same four places (`docs/features/modals.md`).
 
 - **The server named a field** → beside that field, drawn by `Form.Field`, and nowhere else.
 - **The server named no field** — no session, no right, offline → the footer, drawn by `Form.Error`,

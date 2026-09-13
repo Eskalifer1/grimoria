@@ -5,8 +5,8 @@ import { useState } from 'react';
 import type { FieldValues } from 'react-hook-form';
 
 import { SUBMIT_LOCK, VALUE_OWNER } from '@/constants/form';
+import { typedForm } from '@/shared/components/Form/typedForm';
 import { type FormOptions, type FormResult, useFormSeam } from '@/shared/hooks/form/useFormSeam';
-import { useTypedForm } from '@/shared/hooks/form/useTypedForm';
 import { drawnFieldErrors, type FormFailure } from '@/shared/lib/formStatus';
 
 /**
@@ -46,9 +46,7 @@ function useActionForm<TInput extends FieldValues, TOutput extends FieldValues =
     submitLock: SUBMIT_LOCK.SUBMIT,
   };
 
-  const boundForm = useTypedForm({ form, writeStatus, onSubmit });
-
-  return { form, writeStatus, onSubmit, Form: boundForm };
+  return { form, writeStatus, onSubmit, Form: typedForm<TInput, TOutput>() };
 }
 
 export { useActionForm };

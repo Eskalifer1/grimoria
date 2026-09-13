@@ -1,5 +1,27 @@
 import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/**
+ * The fluid spacing steps `tokens.css` adds beside the numeric scale. Unknown to
+ * tailwind-merge, so `p-fluid-md` and `p-6` would otherwise both survive a merge.
+ */
+const SPACING_STEPS = [
+  'fluid-3xs',
+  'fluid-2xs',
+  'fluid-xs',
+  'fluid-sm',
+  'fluid-md',
+  'fluid-lg',
+  'fluid-xl',
+  'fluid-2xl',
+  'fluid-3xl',
+  'fluid-sm-lg',
+  'fluid-md-lg',
+  'fluid-lg-xl',
+  'fluid-xl-2xl',
+];
+
+const twMerge = extendTailwindMerge({ extend: { theme: { spacing: SPACING_STEPS } } });
 
 /**
  * Joins class names and resolves Tailwind conflicts, so a caller's `className`

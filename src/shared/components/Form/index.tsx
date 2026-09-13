@@ -56,9 +56,8 @@ interface FormRootProps<TValues extends FieldValues, TOutput extends FieldValues
  * is refusing; the refusal itself has to sit on the form, or the Enter key sends
  * a second write no button was ever clicked for.
  *
- * **This is the untyped root**, taking the binding as props. A form built by
- * `useOptimisticForm` or `useActionForm` reaches for the `Form.Root` those hooks
- * hand back instead, which arrives bound and checks its fields' `name`
+ * A form built by `useOptimisticForm` or `useActionForm` draws with the `Form`
+ * those hooks hand back — the same root, its fields' `name` checked
  * (`docs/features/forms.md`).
  */
 function FormRoot<TValues extends FieldValues, TOutput extends FieldValues = TValues>({

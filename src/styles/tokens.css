@@ -40,23 +40,24 @@
 
   /*
    * The air around things — section gaps, gutters, card and dialog padding — as
-   * multiples of `--text-base`'s two ends (16px → 18px), so `p-md` and `gap-lg`
+   * multiples of `--text-base`'s two ends (16px → 18px), so `p-fluid-md` and `gap-fluid-lg`
    * compile beside the numeric `p-4`. The pairs run one step's floor to the next's ceiling.
+   * `fluid-` keeps the keys off `--container-*`: `max-w-sm` reads `--spacing-sm` before 24rem.
    */
-  --spacing-3xs: clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem);
-  --spacing-2xs: clamp(0.5rem, 0.4836rem + 0.0822vw, 0.5625rem);
-  --spacing-xs: clamp(0.75rem, 0.7171rem + 0.1645vw, 0.875rem);
-  --spacing-sm: clamp(1rem, 0.9671rem + 0.1645vw, 1.125rem);
-  --spacing-md: clamp(1.5rem, 1.4507rem + 0.2467vw, 1.6875rem);
-  --spacing-lg: clamp(2rem, 1.9342rem + 0.3289vw, 2.25rem);
-  --spacing-xl: clamp(3rem, 2.9013rem + 0.4934vw, 3.375rem);
-  --spacing-2xl: clamp(4rem, 3.8684rem + 0.6579vw, 4.5rem);
-  --spacing-3xl: clamp(6rem, 5.8026rem + 0.9868vw, 6.75rem);
+  --spacing-fluid-3xs: clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem);
+  --spacing-fluid-2xs: clamp(0.5rem, 0.4836rem + 0.0822vw, 0.5625rem);
+  --spacing-fluid-xs: clamp(0.75rem, 0.7171rem + 0.1645vw, 0.875rem);
+  --spacing-fluid-sm: clamp(1rem, 0.9671rem + 0.1645vw, 1.125rem);
+  --spacing-fluid-md: clamp(1.5rem, 1.4507rem + 0.2467vw, 1.6875rem);
+  --spacing-fluid-lg: clamp(2rem, 1.9342rem + 0.3289vw, 2.25rem);
+  --spacing-fluid-xl: clamp(3rem, 2.9013rem + 0.4934vw, 3.375rem);
+  --spacing-fluid-2xl: clamp(4rem, 3.8684rem + 0.6579vw, 4.5rem);
+  --spacing-fluid-3xl: clamp(6rem, 5.8026rem + 0.9868vw, 6.75rem);
 
-  --spacing-sm-lg: clamp(1rem, 0.6711rem + 1.6447vw, 2.25rem);
-  --spacing-md-lg: clamp(1.5rem, 1.3026rem + 0.9868vw, 2.25rem);
-  --spacing-lg-xl: clamp(2rem, 1.6382rem + 1.8092vw, 3.375rem);
-  --spacing-xl-2xl: clamp(3rem, 2.6053rem + 1.9737vw, 4.5rem);
+  --spacing-fluid-sm-lg: clamp(1rem, 0.6711rem + 1.6447vw, 2.25rem);
+  --spacing-fluid-md-lg: clamp(1.5rem, 1.3026rem + 0.9868vw, 2.25rem);
+  --spacing-fluid-lg-xl: clamp(2rem, 1.6382rem + 1.8092vw, 3.375rem);
+  --spacing-fluid-xl-2xl: clamp(3rem, 2.6053rem + 1.9737vw, 4.5rem);
 }
 
 /*
