@@ -140,7 +140,8 @@ code themselves; a surface passes no strings in.
 The rest of the family: `<StatusDot>` where a sentence does not fit, `<BrickRoadDot>` over a
 collapsed branch (fed by `useBrickRoad`, which answers `null` when nothing below is wrong), and
 `<OfflineIndicator>`, which is signage only — a write made offline still goes out and still fails
-(ADR-0012).
+(ADR-0012). `Page` mounts it once per page (`docs/features/site-layout.md` §Content area); no
+surface places its own.
 
 ## A key is never written by hand
 

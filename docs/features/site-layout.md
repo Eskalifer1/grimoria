@@ -53,8 +53,16 @@ issue and what was rejected.
 ## Content area
 
 - **No global top bar.**
-- **Masthead**: page title plus a monospace count/status line, nothing else in v1. The slot
-  opposite the title is reserved and deliberately empty.
+- **Every routed page renders through `Page`** (`shared/components/Page/`), the one `<main>` and
+  the one `h1`. A boundary page — a 404, a 401, a thrown error — takes `FullPageView` instead: one
+  thing centered, no masthead.
+- **Masthead**, drawn by `Page` from its props: `title` (required) as the `h1` in the display face;
+  `status` as a line beneath in the meta face, rendered only when given; `aside` in a box opposite
+  the title that holds its width empty; closed by `Rule`, which decides the Theme's hairline or
+  mark on its own.
+- **Inside `main`, in order:** `OfflineIndicator`, the masthead, `children`, then `bottomContent`
+  pinned to the foot of the viewport when the content is short. `SyncProgressBar` is the locale
+  layout's, fixed to the top of the viewport, not `Page`'s.
 - **No search and no filters anywhere** — deferred to #4.
 - The Notes list is a **masonry grid of cards**.
 

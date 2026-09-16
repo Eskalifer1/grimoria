@@ -3,6 +3,7 @@ import { unauthorized } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 import { getCurrentUser } from '@/api/user/getCurrentUser';
+import { Page } from '@/shared/components/Page';
 
 import { ProfileNameForm } from './ProfileNameForm';
 
@@ -18,13 +19,11 @@ async function ProfilePage() {
   }
 
   return (
-    <main className="p-8">
+    <Page status={user.email} title={t('title')}>
       <section className="flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6">
-        <h1 className="font-display text-2xl text-text-title">{t('title')}</h1>
-        <p className="font-ui text-text-muted">{user.email}</p>
         <ProfileNameForm id={user.id} name={user.name} updatedAt={user.updatedAt} />
       </section>
-    </main>
+    </Page>
   );
 }
 

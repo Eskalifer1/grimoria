@@ -35,6 +35,16 @@ describe('OfflineIndicator', () => {
     expect(screen.getByRole('status')).toHaveTextContent(copy.offline);
   });
 
+  it('draws its icon only while offline', () => {
+    renderWithProviders(<OfflineIndicator />);
+
+    expect(screen.getByRole('status').querySelector('svg')).toBeNull();
+
+    goOffline();
+
+    expect(screen.getByRole('status').querySelector('svg')).not.toBeNull();
+  });
+
   it('disables nothing — the write still goes out and still fails', () => {
     renderWithProviders(<OfflineIndicator />);
 
