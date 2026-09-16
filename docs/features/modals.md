@@ -51,8 +51,12 @@ errors go with it; called in the page, they come back on reopen.
   render. Any future controlled overlay without a trigger spreads the same pair onto its Content.
 - **Open and close run on `--dur-slow`** in `src/styles/shadcn-adapter.css`, and stop under the
   reduced-motion lever `globals.css` already pulls; no `motion-reduce:` is written.
-- **The `dark-fantasy` frame `design/dark-fantasy-design.md` describes is not drawn**; both
-  Themes render the same panel from `--scrim-modal`, `--blur-modal` and `--shadow-modal`.
+- **The filament frame is `ModalFrame`**, the first child of both panels: two corner vines,
+  `aria-hidden`, drawn in `dark-fantasy` and nothing in `standard`, read from the route's
+  `[theme]` segment. Its marks are
+  `design/marks.md`; the ring between them is the component's own; the overlay's wash is
+  `--wash-modal`. Its own motion runs inside the SVG files under `prefers-reduced-motion:
+  no-preference`.
 
 ## Testing
 

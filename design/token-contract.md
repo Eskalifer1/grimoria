@@ -20,8 +20,10 @@ not carry on its own.
 `none`, `0`, or the nearest neutral — not a missing declaration. `standard` has no glow, so
 `--glow-accent-sm: none`.
 
-**A component never asks which Theme is active.** Any `data-theme` condition inside a component
-is a bug against this contract.
+**A component never asks which Theme is active for a value.** Any `data-theme` condition on a
+color, radius, shadow or duration inside a component is a bug against this contract. A surface one
+Theme lacks outright — the rule mark, the filament frame — is chosen by Theme where it is composed
+(`Rule`, `ModalFrame`).
 
 **A new token is added to both Themes in the same change, or not at all.**
 
@@ -89,6 +91,10 @@ These carry a decision:
   bloom and `standard` with a flat ring.
 - **`--blur-modal` blurs what sits _behind_ a dialog**, where `--blur-card` and `--blur-raised`
   are backdrop blurs on translucent surfaces. A dialog's own body is never translucent.
+- **`--wash-modal` is a `background-image` layered over `--scrim-modal`** — `none` where the scrim
+  is flat. **`--border-modal` is the panel's outline**, and `--filament-ink` and `--filament-edge` the
+  ink and light of the frame that replaces it (`design/marks.md`); `ModalFrame` mounts the frame
+  in `dark-fantasy` alone, and that Theme sets the outline `transparent`.
 - **Disabled is always a color pair, never an `opacity` rule** — `standard-tokens.md` says why.
 - **`--status-failed` is the fourth status, and the only status either Theme may spend a red on.**
   It says what a thing _is_, so it never doubles as the fill of a control that acts.

@@ -104,8 +104,8 @@ negative value.
 
 **Layout metrics** belong to `docs/features/site-layout.md`.
 
-**Runes and the filament modal** — described in the design doc. The divider ornament and the loading rune are drawn
-— `design/marks.md`.
+**Runes** — described in the design doc. The divider ornament, the loading rune and the filament
+frame are drawn — `design/marks.md`.
 
 **Backdrop imagery** — local and dissolving behind mastheads, not the bundle's tiled photograph
 under the whole screen.

@@ -3,12 +3,17 @@
  * the `Theme` type, the User field's options, the copy catalogs under
  * `messages/`, and the token file per Theme in `src/styles/`.
  */
-const THEMES = ['standard', 'dark-fantasy'] as const;
+const THEME = {
+  STANDARD: 'standard',
+  DARK_FANTASY: 'dark-fantasy',
+} as const;
+
+const THEMES = [THEME.STANDARD, THEME.DARK_FANTASY] as const;
 
 type Theme = (typeof THEMES)[number];
 
 /** What a Guest with no cookie, and a User who never chose, is served. */
-const DEFAULT_THEME: Theme = 'standard';
+const DEFAULT_THEME: Theme = THEME.STANDARD;
 
 /**
  * The one thing that decides which Theme renders. `src/proxy.ts` is the only
@@ -25,4 +30,4 @@ const THEME_COOKIE_NAME = 'theme';
 const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 export type { Theme };
-export { DEFAULT_THEME, THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME, THEMES };
+export { DEFAULT_THEME, THEME, THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME, THEMES };

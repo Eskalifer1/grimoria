@@ -7,6 +7,7 @@ import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
 import { ModalAction, type ModalActionProps } from '@/shared/components/ModalAction';
 import { ModalBody } from '@/shared/components/ModalBody';
 import { ModalFooter } from '@/shared/components/ModalFooter';
+import { ModalFrame } from '@/shared/components/ModalFrame';
 import { ModalHeader } from '@/shared/components/ModalHeader';
 import {
   AlertDialog,
@@ -76,6 +77,7 @@ function AlertModalRoot({ open, onOpenChange, size = 'md', children, className }
         data-size="modal"
         {...returnToOpener}
       >
+        <ModalFrame />
         {children}
       </AlertDialogContent>
     </AlertDialog>

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <title>Grimoria filament corner</title>
+  <!-- Filament corner, dark-fantasy execution: a vine at one corner of a modal panel. The panel's
+       corner is the origin; the stem lies on the edge and its leaves and curls turn inward, into
+       the panel's padding. Fades along a radial mask, so no end is cut. Placed at two corners,
+       turned about for the second, per design/marks.md.
+       Color: the CSS custom properties filament-ink and filament-edge, from the Theme. -->
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      .grimoria-filament-halo { animation: grimoria-filament-halo-pulse 4.6s ease-in-out infinite; }
+      .grimoria-filament-buds { animation: grimoria-filament-bud-pulse 3.2s ease-in-out infinite; }
+    }
+    @keyframes grimoria-filament-halo-pulse {
+      0%, 100% { opacity: .22; }
+      50% { opacity: .42; }
+    }
+    @keyframes grimoria-filament-bud-pulse {
+      0%, 100% { opacity: .55; }
+      50% { opacity: 1; }
+    }
+  </style>
+  <defs>
+    <filter id="grimoria-filament-halo" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3.5"/>
+    </filter>
+    <filter id="grimoria-filament-rim" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+    <!-- the vine dims with distance from the corner, so its ends are never cut -->
+    <radialGradient id="grimoria-filament-fade" cx="0" cy="0" r="150" gradientUnits="userSpaceOnUse">
+      <stop offset=".45" stop-color="#fff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <!-- the mask reaches past the box, or it would cut the halo at the panel's edge -->
+    <mask id="grimoria-filament-mask" x="-20" y="-20" width="200" height="200" maskUnits="userSpaceOnUse">
+      <rect x="-20" y="-20" width="200" height="200" fill="url(#grimoria-filament-fade)"/>
+    </mask>
+    <!-- the stem on the edge -->
+    <path id="grimoria-filament-stem" d="M148 1.4 C130 0.8 112 1.8 94 1.2 C76 0.6 58 1.8 40 1.2 C24 0.8 12 1.2 5 5 C1.6 7 1.2 14 1.2 26 C1.2 44 0.6 62 1.4 80 C2 98 0.8 116 1.2 134 C1.3 140 1.2 144 1.4 148"/>
+    <!-- tendrils curling inward, the way a pea's do -->
+    <g id="grimoria-filament-curls">
+      <path d="M104 1.6 C106 7 110 11.5 114.5 10.6 C118 9.8 117.6 5.6 114.6 5.4 C112 5.3 111.6 8.4 113.6 9"/>
+      <path d="M1.4 100 C7 102 11.5 106.5 10.4 111 C9.6 114.4 5.4 114 5.2 111 C5.1 108.6 8.2 108.2 8.8 110.2"/>
+      <path d="M30 1.4 C31 5.6 34 8.6 37.6 7.2 C40 6.2 39.4 3 37.2 3.4"/>
+      <path d="M74 1.4 C76.5 6.5 81 9.5 84.8 8 C87.6 6.8 86.8 3.4 84.4 3.8 C82.6 4.1 83 6.6 84.6 6.8"/>
+      <path d="M1.4 44 C6.2 45.8 9.6 49.6 8.4 53.4 C7.5 56.2 4 55.8 4 53.4 C4 51.6 6.4 51.4 6.8 53"/>
+      <path d="M1.3 118 C6 119.5 9.2 123.4 8 127 C7.1 129.6 3.8 129.2 3.9 127 C4 125.4 6.2 125.2 6.5 126.6"/>
+    </g>
+    <!-- a leaf, drawn along +x with its base at the origin: a pointed blade and its midrib -->
+    <g id="grimoria-filament-leaf">
+      <path d="M0 0 C4 -6.5 12 -7.5 18 -1.5 C12.5 5.5 4.5 5 0 0 Z"/>
+      <path d="M1 0 C6 -1.6 12 -2 17 -1.5" fill="none" stroke-width=".6" opacity=".7"/>
+    </g>
+  </defs>
+  <g mask="url(#grimoria-filament-mask)">
+    <g class="grimoria-filament-halo" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".22" filter="url(#grimoria-filament-halo)" style="stroke: var(--filament-edge, #C4A9FD)">
+      <use href="#grimoria-filament-stem" stroke-width="8"/>
+    </g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".45" filter="url(#grimoria-filament-rim)" style="stroke: var(--filament-edge, #C4A9FD)">
+      <use href="#grimoria-filament-stem" stroke-width="3"/>
+      <use href="#grimoria-filament-curls" stroke-width="2"/>
+    </g>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <use href="#grimoria-filament-stem" stroke-width="1.6" opacity=".8" style="stroke: var(--filament-edge, #C4A9FD)"/>
+      <use href="#grimoria-filament-curls" stroke-width="1.1" opacity=".75" style="stroke: var(--filament-edge, #C4A9FD)"/>
+    </g>
+    <!-- leaves, the ink body with a lit rim, turned inward from the stem -->
+    <g stroke-width=".8" style="fill: var(--filament-ink, #7C3AED); stroke: var(--filament-edge, #C4A9FD)">
+      <use href="#grimoria-filament-leaf" transform="translate(128 1.6) rotate(52) scale(.9)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(90 1.4) rotate(64) scale(1.15)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(60 1.5) rotate(46)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(18 1.8) rotate(58) scale(.8)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(1.5 24) rotate(28) scale(.85)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(1.4 62) rotate(40) scale(1.15)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(1.3 86) rotate(22) scale(.9)"/>
+      <use href="#grimoria-filament-leaf" transform="translate(1.2 126) rotate(34) scale(.8)"/>
+    </g>
+    <!-- buds, the light sources -->
+    <g class="grimoria-filament-buds" opacity=".55" style="fill: var(--filament-edge, #C4A9FD)">
+      <circle cx="104" cy="1.6" r="1.7"/>
+      <circle cx="30" cy="1.4" r="1.5"/>
+      <circle cx="1.4" cy="100" r="1.7"/>
+    </g>
+  </g>
+</svg>

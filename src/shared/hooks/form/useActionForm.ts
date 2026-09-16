@@ -46,7 +46,9 @@ function useActionForm<TInput extends FieldValues, TOutput extends FieldValues =
     submitLock: SUBMIT_LOCK.SUBMIT,
   };
 
-  return { form, writeStatus, onSubmit, Form: typedForm<TInput, TOutput>() };
+  const Form = typedForm<TInput, TOutput>();
+
+  return { form, writeStatus, onSubmit, Form };
 }
 
 export { useActionForm };

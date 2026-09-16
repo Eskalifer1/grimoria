@@ -108,12 +108,13 @@
  */
 [data-slot="dialog-overlay"],
 [data-slot="alert-dialog-overlay"] {
-  background: var(--scrim-modal);
+  background: var(--wash-modal), var(--scrim-modal);
   backdrop-filter: blur(var(--blur-modal));
 }
 
 [data-slot="dialog-content"],
 [data-slot="alert-dialog-content"] {
+  border-color: var(--border-modal);
   box-shadow: var(--shadow-modal);
 }
 

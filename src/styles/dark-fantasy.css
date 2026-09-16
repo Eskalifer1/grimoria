@@ -117,9 +117,20 @@
   --glow-text: 0 0 18px color-mix(in srgb, var(--violet-light) 35%, transparent);
 
   --scrim-modal: color-mix(in srgb, var(--void-abyss) 78%, transparent);
+  --wash-modal: radial-gradient(
+    ellipse 70% 60% at 50% 48%,
+    color-mix(in srgb, var(--violet-light) 14%, transparent),
+    transparent
+  );
+
   --blur-card: 8px;
   --blur-raised: 8px;
   --blur-modal: 14px;
+
+  /* The filament frame on a modal takes the outline's place: ink and light for its marks. */
+  --border-modal: transparent;
+  --filament-ink: var(--violet-core);
+  --filament-edge: var(--violet-light);
 
   --radius-xs: 2px;
   --radius-sm: 4px;

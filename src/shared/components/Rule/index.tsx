@@ -1,3 +1,4 @@
+import { THEME } from '@/constants/theme';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import RuleMark from '@/shared/assets/marks/rule-mark-dark-fantasy.svg';
 import { Separator } from '@/shared/components/ui/separator';
@@ -17,7 +18,7 @@ interface RuleProps {
 async function Rule({ className }: RuleProps) {
   const theme = await resolveTheme();
 
-  if (theme === 'standard') {
+  if (theme === THEME.STANDARD) {
     return <Separator className={cn('bg-border-subtle', className)} />;
   }
 

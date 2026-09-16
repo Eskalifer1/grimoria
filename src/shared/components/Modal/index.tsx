@@ -5,6 +5,7 @@ import type { ComponentProps, ReactNode } from 'react';
 import { ModalAction } from '@/shared/components/ModalAction';
 import { ModalBody } from '@/shared/components/ModalBody';
 import { ModalFooter } from '@/shared/components/ModalFooter';
+import { ModalFrame } from '@/shared/components/ModalFrame';
 import { ModalHeader } from '@/shared/components/ModalHeader';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -72,6 +73,7 @@ function ModalRoot({ open, onOpenChange, size = 'md', children, className }: Mod
         showCloseButton={false}
         {...returnToOpener}
       >
+        <ModalFrame />
         {children}
       </DialogContent>
     </Dialog>

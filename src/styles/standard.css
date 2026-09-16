@@ -108,9 +108,14 @@
   --glow-text: none;
 
   --scrim-modal: color-mix(in srgb, var(--ink-900) 32%, transparent);
+  --wash-modal: none;
   --blur-card: 0;
   --blur-raised: 0;
   --blur-modal: 0;
+
+  --border-modal: var(--border-subtle);
+  --filament-ink: var(--teal-700);
+  --filament-edge: var(--teal-200);
 
   --radius-xs: 6px;
   --radius-sm: 8px;
