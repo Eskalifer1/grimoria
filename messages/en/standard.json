@@ -76,6 +76,20 @@
     "pending": "Saving…",
     "problem": "Something here needs your attention."
   },
+  "primitivesPlayground": {
+    "menuDelete": "Delete",
+    "menuDuplicate": "Duplicate",
+    "menuLabel": "Note actions",
+    "menuRename": "Rename",
+    "menuShare": "Share",
+    "menuTitle": "Note",
+    "publicBadge": "Public",
+    "tagBadge": "research",
+    "textTooltip": "Edited on September 13, 2026",
+    "textWithTooltip": "Edited 3 days ago",
+    "tooltipBody": "About the primitives playground",
+    "tooltipTriggerLabel": "About"
+  },
   "profilePage": {
     "nameHint": "Up to {limit} characters.",
     "nameLabel": "Display name",

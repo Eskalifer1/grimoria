@@ -9,6 +9,7 @@ import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
 import { Toaster } from '@/shared/components/Toaster';
+import { TooltipProvider } from '@/shared/components/ui/tooltip';
 import { FONT_VARIABLES } from '@/shared/config/fonts';
 
 import '../../globals.css';
@@ -70,7 +71,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           {/* At the very top until there is a header to sit under (#1), which is
               where it stays on a small screen either way. */}
           <SyncProgressBar className="fixed inset-x-0 top-0 z-50" />
-          {children}
+          {/* Radix throws on a `Tooltip` outside its provider; one here serves
+              every surface, and the delay is decided once. */}
+          <TooltipProvider>{children}</TooltipProvider>
           {/* Last, so the live region it mounts sits after the page's own
               content in the reading order and a toast is announced where the
               User already is. */}

@@ -76,6 +76,20 @@
     "pending": "Binding…",
     "problem": "Something here demands your attention."
   },
+  "primitivesPlayground": {
+    "menuDelete": "Unmake",
+    "menuDuplicate": "Duplicate",
+    "menuLabel": "Note rites",
+    "menuRename": "Rename",
+    "menuShare": "Share",
+    "menuTitle": "Note",
+    "publicBadge": "Revealed",
+    "tagBadge": "research",
+    "textTooltip": "Inscribed on September 13, 2026",
+    "textWithTooltip": "Inscribed 3 days ago",
+    "tooltipBody": "About the primitives playground",
+    "tooltipTriggerLabel": "About"
+  },
   "profilePage": {
     "nameHint": "{limit} marks at the most.",
     "nameLabel": "Bound name",

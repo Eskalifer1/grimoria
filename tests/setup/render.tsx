@@ -4,17 +4,19 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { expect } from 'vitest';
 
+import { TooltipProvider } from '@/shared/components/ui/tooltip';
+
 import messages from '../../messages/en/standard.json';
 
 /**
- * Renders a component inside the providers every component test needs. The
+ * Renders a component inside the providers the locale layout mounts. The
  * `standard` catalog is the one asserted against — a Theme's own wording is an
  * e2e concern (#39), not a reason for every test to pick a catalog.
  */
 function renderWithProviders(ui: ReactElement) {
   const withProviders = (node: ReactElement) => (
     <NextIntlClientProvider locale="en" messages={messages}>
-      {node}
+      <TooltipProvider>{node}</TooltipProvider>
     </NextIntlClientProvider>
   );
   const result = render(withProviders(ui));

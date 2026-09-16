@@ -50,6 +50,11 @@ lint nor review checks them per use.
 - **A control carries its own state in ARIA**: a rejected input is `aria-invalid` and points at its
   message with `aria-describedby`; a control waiting on a request is `aria-busy`. Visual styling and
   a disabled attribute say nothing to a screen reader (WCAG 2.2 AA, 4.1.2).
+- **A tooltip describes a control that keeps its own name.** The trigger carries `aria-label` or
+  visible text on its own; the tooltip is `aria-describedby`, extra, and a touch User who never
+  sees it loses nothing (WCAG 2.2 AA, 1.4.13).
+- **A tooltip holds no focusable content.** A popup with a link or a button is a `Popover` or a
+  `Dialog`, which can take focus and stay open; a tooltip can do neither.
 - **Both Themes meet it** — `standard` and `dark-fantasy`.
 
 Which diffs earn the axis is decided by `.claude/bin/review-context.sh`, not restated here.

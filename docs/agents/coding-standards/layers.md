@@ -145,4 +145,6 @@ neither**: `sonner` ships its CSS inside the package, so it is overridden in
 `src/styles/shadcn-adapter.css` and wrapped directly, with no file in `ui/` at all.
 
 `components.json` pins every alias, or the CLI writes into the wrong tree. `utils` points at
-`shared/lib/cn.ts`, not a `lib/utils.ts` grab-bag.
+`shared/lib/cn.ts`, not a `lib/utils.ts` grab-bag. **After `shadcn add`, read the diff of
+`package.json`**: the CLI resolves the alias as a package and writes `import { cn } from "cn"` plus a
+stray `cn` dependency — point the import at `@/shared/lib/cn` and revert the dependency.

@@ -55,6 +55,7 @@ necromancer
 neon
 nextjs
 nodeLinker
+noNoninteractiveTabindex
 noopener
 noreferrer
 nosniff

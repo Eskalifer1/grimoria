@@ -5,7 +5,15 @@ import { describe, expect, it } from 'vitest';
 
 // The primitives every control is built from: each grows its hit area to 44px
 // under a coarse pointer, so no feature component has to (`responsive.md`).
-const PRIMITIVES = ['button', 'checkbox', 'radio-group', 'switch', 'input', 'select'] as const;
+const PRIMITIVES = [
+  'button',
+  'checkbox',
+  'radio-group',
+  'switch',
+  'input',
+  'select',
+  'dropdown-menu',
+] as const;
 
 const COARSE_TARGET = /pointer-coarse:(?:before:)?(?:min-h|min-w|h|size)-11\b/;
 
@@ -17,6 +25,19 @@ describe('touch targets in ui/', () => {
     const source = readFileSync(resolve(`src/shared/components/ui/${name}.tsx`), 'utf8');
 
     expect(source).toMatch(COARSE_TARGET);
+  });
+
+  // The file-wide match above is satisfied by one item kind; a menu has four.
+  it('dropdown-menu grows every item kind under a coarse pointer', () => {
+    const source = readFileSync(resolve('src/shared/components/ui/dropdown-menu.tsx'), 'utf8');
+    const itemBlocks = source
+      .split(/^function /m)
+      .filter((block) => /data-slot="dropdown-menu-(?:[a-z]+-)?(?:item|sub-trigger)"/.test(block));
+
+    expect(itemBlocks).toHaveLength(4);
+    for (const block of itemBlocks) {
+      expect(block).toMatch(COARSE_TARGET);
+    }
   });
 
   it.each(TYPED_FIELDS)('%s never sets a size under 16px by viewport', (name) => {

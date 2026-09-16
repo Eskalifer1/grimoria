@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { NODE_ENVIRONMENT } from '@/constants/env.public';
 import { Button } from '@/shared/components/ui/button';
 import { ModalPlayground } from '@/views/HomePage/ModalPlayground';
+import { PrimitivesPlayground } from '@/views/HomePage/PrimitivesPlayground';
 
 // Placeholder surface until real screens exist (#75, #76). Its only job is to
 // prove the pipeline end to end: switching the `theme` cookie changes every
@@ -16,7 +17,12 @@ export default function HomePage() {
         <h1 className="font-display text-2xl text-text-title">{t('title')}</h1>
         <p className="mt-2 font-ui text-text-muted">{t('empty')}</p>
         <Button className="mt-6">{t('createNote')}</Button>
-        {NODE_ENVIRONMENT !== 'production' ? <ModalPlayground /> : null}
+        {NODE_ENVIRONMENT !== 'production' ? (
+          <>
+            <ModalPlayground />
+            <PrimitivesPlayground />
+          </>
+        ) : null}
       </section>
     </main>
   );

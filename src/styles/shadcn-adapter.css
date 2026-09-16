@@ -119,6 +119,44 @@
 }
 
 /*
+ * The registry paints a tooltip as the inverted primary fill, which this contract
+ * has no name for; it is the same material as a menu — popover, subtle edge,
+ * raised shadow — so both Themes read one kind of floating surface. Unlayered.
+ */
+[data-slot="tooltip-content"] {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-raised);
+  backdrop-filter: blur(var(--blur-raised));
+}
+
+/*
+ * A registry menu spells a bare `border`, which is `currentColor` without
+ * shadcn's own base rule. `select-content` shares the class and is outside #117.
+ */
+[data-slot="dropdown-menu-content"] {
+  border-color: var(--border-subtle);
+}
+
+/*
+ * Radix focuses the menu itself on a pointer open, and the global `:focus-visible`
+ * then rings the whole panel until a hover moves focus to an item. Focus is
+ * shown on the item alone; the panel keeps its shadow.
+ */
+[data-slot="dropdown-menu-content"]:focus-visible {
+  box-shadow: var(--shadow-raised);
+}
+
+/*
+ * `text-destructive` is the action *fill* used as ink: 2.2:1 on dark-fantasy's raised
+ * surface (WCAG 2.2 AA, 1.4.3). Failure as ink is `--status-failed`, as in the toast.
+ */
+[data-slot="dropdown-menu-item"][data-variant="destructive"] {
+  color: var(--status-failed);
+}
+
+/*
  * The arriving-surface step, as for the toast below; `globals.css` sets every
  * element to `--dur-fast`, and collapses this token with the rest under
  * `prefers-reduced-motion`.
