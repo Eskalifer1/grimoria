@@ -8,99 +8,60 @@ authentication. Payload's admin at `/cms` is the only admin, for the maintainer 
 
 ## Tooling
 
-**Biome** is the single formatter and linter — `yarn check`, `yarn check:fix`. CI runs `yarn ci`.
-
-**A file written with `Write` or `Edit` comes back formatted, spell-checked and tested** — a
-`PostToolUse` hook (`.claude/hooks/gate-written-file.sh`) runs Biome and cspell on it, the covering
-test when it sits under `src/`, and `git add -N` when it is new. It also **refuses a comment run
-over three lines** outside JSDoc, which Biome cannot see (`<standards>/documentation.md`). **A `Write` that creates a doc gets
-`.claude/rules/writing-docs.md` handed back**. Fix what it hands back; silence means green. **A file created any other way — a heredoc, a generator — gets none of that** and needs
-`yarn check --write` and `git add -N` by hand.
+**Biome** is the single formatter and linter. **A file written with `Write` or `Edit` comes back
+through `.claude/hooks/gate-written-file.sh`** — Biome, cspell, the covering test under `src/`,
+`git add -N` when new, and a refusal of any comment run over three lines outside JSDoc. Fix what it
+hands back; silence means green. **A file created any other way — a heredoc, a generator — gets
+none of that** and needs `yarn check --write` and `git add -N` by hand.
 
 **Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
 version that resolves rather than disabling the gate.
 
 ## Which language to write in
 
-**Talk to the User in Ukrainian** — every reply in the session, in any skill, including the
-questions a flow stops to ask and the report it hands over. This holds whatever language the User
-last typed in.
-
-**Write American English in everything that outlives the session**, guarded by `yarn spellcheck`:
-code, comments, docs, commit messages, issue and PR bodies, labels, titles, and anything else posted
-to GitHub. A path, a symbol, a command and a quoted gate output stay verbatim inside a Ukrainian
-sentence.
+**Talk to the User in Ukrainian** — every reply, in any skill, including a flow's questions and
+its handoff report, whatever language the User last typed in. **Write American English in
+everything that outlives the session** — code, comments, docs, commits, anything posted to GitHub —
+guarded by `yarn spellcheck`. A path, a symbol, a command and a quoted gate output stay verbatim
+inside a Ukrainian sentence.
 
 ## Keep docs current
 
-Run `/docs-sync` once a conversation settles something worth documenting, and again before calling
-done any session that changed behavior, architecture or scope. `/implement-issue`
-runs it at its handoff; nothing else prompts for it.
-
-## A correction becomes a standard
-
-Run `/learn` in the same turn as the fix, and **report its judgment either way** — recorded in
-`<standards>/*.md`, or left local and why.
+A feature gets `docs/features/<slug>.md` **as it is built**. Run `/docs-sync` once a conversation
+settles something worth documenting, and before calling done any session that changed behavior,
+architecture or scope; `/implement-issue` runs it at its handoff, nothing else prompts for it.
+Run `/learn` in the same turn as a correction to how code is written, and **report its judgment
+either way** — recorded in `<standards>/*.md`, or left local and why.
 
 ## Where to look, by task
 
-`<standards>` is `docs/agents/coding-standards/`.
+`<standards>` is `docs/agents/coding-standards/`. `src/api/`, `src/collections/`,
+`src/app/(frontend)/`, `messages/`, component folders and stylesheets are routed by
+`.claude/rules/` on edit instead.
 
 - **Creating a file under `src/`, or deciding where code belongs** — layers, folders, file names,
   imports, comments: `<standards>/layers.md` (lint-enforced), `<standards>/routing.md`,
   `<standards>/naming.md`, `<standards>/imports.md`, `<standards>/documentation.md`.
 - **Writing a type, or reaching for `any`, `as`, `!`, `@ts-ignore`**: `<standards>/typescript.md`.
 - **Writing something a second caller will reuse, repeating a check, or typing a bare string a
-  constant should hold** — wrappers, result unions, shared error codes, documented options:
-  `<standards>/abstraction.md`.
-- **Building a React component** — server/client boundary, state, splitting, loading and error
-  states: `<standards>/components.md`.
-- **Writing styles** — utilities, tokens, shadcn primitives, variants: `<standards>/styling.md`.
-  Values outside the tokens do not compile.
-- **Writing a user-visible string, or editing `messages/`**: `<standards>/i18n.md`.
-- **Building a form, or deciding where a failure is said** — `useOptimisticForm`/`useActionForm`,
-  validation copy, the four-way rule that sends one to a field, a footer, a blocked surface or the
-  toast: `docs/features/forms.md`. **Reaching for a bound control, or one the catalog has no entry for**:
-  `docs/features/forms/controls.md`.
-- **Showing a loading indicator, or drawing a divider between sections**:
-  `docs/features/loader-and-rule.md`.
-- **Opening a modal, asking a question the User must answer, or confirming a delete** — `Modal`,
-  `AlertModal`, `ConfirmDialog`, `DestructiveButton confirm`: `docs/features/modals.md`.
-- **Building a surface that must adapt to the viewport, a touch target, a safe area, a fluid size
-  or space**: `<standards>/responsive.md`.
+  constant should hold** — wrappers, result unions, shared error codes: `<standards>/abstraction.md`.
 - **Needing a fixed value — theme, route, cookie name, duration, limit**: `src/constants/`, one file
   per subject; a route is `ROUTES` in `constants/routes.ts`.
-- **Designing or styling a UI surface**: `design/standard-design.md`,
-  `design/dark-fantasy-design.md`; shared structure in `docs/features/site-layout.md`.
-- **Needing a concrete color, radius, shadow or duration**: `src/styles/standard.css` and
-  `dark-fantasy.css`.
-- **Changing a token value, or asking why one is what it is**: `design/standard-tokens.md`,
-  `design/dark-fantasy-tokens.md`. **Adding or renaming one**: `design/token-contract.md`, both
-  Themes in one change.
-- **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
-- **Setting a page's title, description, social card or `theme-color`, or adding a page under
-  `(frontend)`**: `docs/features/metadata.md`.
-- **Adding a response header, changing the Content Security Policy, or asking why a script, font
-  or frame is refused**: `docs/features/security-headers.md`.
-- **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.
 - **Reading data or writing it back** — where a Payload query lives, what a Server Action returns,
-  optimistic or blocking, rollback on failure, caching a read, naming a cache tag, revalidation:
-  `docs/features/data-access.md`, and `docs/features/data-access/api-local.md` for the `src/api/`
-  layer and the action contract.
-- **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
-- **Working with GitHub issues or PRs**: `docs/agents/issue-tracker.md`; labels:
-  `docs/agents/labels.md`.
-- **Creating a branch for a task, or naming one**: `docs/git-branching.md`.
-- **Committing, commit messages, closing an issue**: `docs/git-workflow.md`. The user commits,
-  never you.
-- **Changing a collection** — a field, collection, index or relationship added, removed or renamed:
-  generate the migration in the same change. `docs/database-migrations.md` also covers proving a
-  rollback and what the production deploy does on its own.
+  optimistic or blocking, rollback, cache tags, revalidation: `docs/features/data-access.md`.
+- **Building a form, or deciding where a failure is said** — field, footer, blocked surface or
+  toast: `docs/features/forms.md`; a bound control: `docs/features/forms/controls.md`.
+- **Opening a modal, asking a question the User must answer, or confirming a delete**:
+  `docs/features/modals.md`. **A loading indicator or a divider**: `docs/features/loader-and-rule.md`.
+- **Designing or styling a UI surface**: `design/standard-design.md`, `design/dark-fantasy-design.md`,
+  `docs/features/site-layout.md`; **adapting it to a viewport, touch target or safe area**:
+  `<standards>/responsive.md`; **what a keyboard or screen-reader User is promised**:
+  `<standards>/accessibility.md`.
+- **Sign-in, sign-up, sessions, `Role`, who may reach `/cms`, or anything reading User input** —
+  a route handler, a Server Action: `docs/features/auth.md`.
 - **Writing or running tests, choosing a test layer, or touching CI**: `docs/testing.md`.
-- **Reviewing a diff, or judging whether a review finding is legitimate**:
-  `<standards>/review-boundaries.md`.
-- **Accessibility — what a keyboard and screen-reader User is promised**, and reviewing a surface
-  against it with `/a11y-review`: `<standards>/accessibility.md`.
-- **Writing a collection's access control, a route handler, a Server Action, or anything reading
-  User input** — who may do what: `docs/features/auth.md`.
-- **Triaging a Dependabot PR**: `docs/dependency-updates.md`.
+- **Exploring the codebase or checking prior decisions**: `docs/agents/domain.md`.
+- **A GitHub issue, PR or label**: `docs/agents/issue-tracker.md`, `docs/agents/labels.md`;
+  **a Dependabot PR**: `docs/dependency-updates.md`.
+- **Naming a branch, committing, closing an issue**: `docs/git-branching.md`, `docs/git-workflow.md`.
+  The user commits, never you.

@@ -21,3 +21,6 @@ Four things the build stays silent about:
   `@theme` resolves once at build time and freezes on `standard`.
 - **The dark-fantasy selector keeps its `:root`.** A bare `[data-theme=…]` carries the same
   specificity, which hands the winner to import order.
+
+**A token's value and the reason for it live in `design/standard-tokens.md` and
+`design/dark-fantasy-tokens.md`; adding or renaming one follows `design/token-contract.md`.**
