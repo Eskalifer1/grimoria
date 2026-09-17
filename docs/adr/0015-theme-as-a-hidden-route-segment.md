@@ -11,7 +11,7 @@ prerender against, and reading it in the root layout made every route under it `
 **`src/i18n/request.ts` reads both segments through `next/root-params`.** Route params reach route
 files only, and next-intl calls that module, so nothing can pass it a prop. The compiler generates
 those accessors from the root layout's own dynamic segments, and reading one is not a request read,
-which is what keeps the page static. It needs `experimental.rootParams` in `next.config.ts` today.
+which is what keeps the page static. `cacheComponents: true` implies `rootParams`.
 
 **No `(frontend)` layout reads the session.** `getCurrentUser()` there is a cookie read and a
 database call, and the only thing that needed it was the scope `OptimisticScope` sets. That scope

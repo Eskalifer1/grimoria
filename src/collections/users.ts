@@ -1,5 +1,6 @@
 import type { CollectionConfig, Field, PayloadRequest } from 'payload';
 
+import { withCacheTagHooks } from '@/collections/revalidateCacheTags';
 import { DEFAULT_THEME, THEMES } from '@/constants/theme';
 import {
   PROFILE_SLUG_MAX_ATTEMPTS,
@@ -91,13 +92,14 @@ const slugField: Field = {
 /**
  * Payload-only additions to the collection `payload-auth` generates. Better
  * Auth knows nothing about either field, which is why neither reaches its
- * session — `resolveTheme()` reads the Theme through `payload.auth()`.
+ * session — `resolveTheme()` reads the Theme through `payload.auth()`. The
+ * cache tag hooks ride along so an admin edit purges every shared read of a User.
  */
 function withProfileFields({ collection }: { collection: CollectionConfig }): CollectionConfig {
-  return {
+  return withCacheTagHooks({
     ...collection,
     fields: [...collection.fields, themeField, slugField],
-  };
+  });
 }
 
 export { buildProfileSlug, normalizeProfileSlug, withProfileFields };

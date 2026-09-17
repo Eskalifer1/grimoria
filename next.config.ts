@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
   // by default only because it runs through Babel and costs build time.
   reactCompiler: true,
 
+  // Every page is a prerendered shell with Suspense holes; a read is cached by
+  // directive and invalidated by tag (ADR-0018). Implies `experimental.rootParams`.
+  cacheComponents: true,
+
   experimental: {
     // What mounts `unauthorized.tsx` and `forbidden.tsx` and gives `unauthorized()`
     // and `forbidden()` a boundary to render — without it both are dead files.
@@ -19,10 +23,6 @@ const nextConfig: NextConfig = {
     // Mounts `app/global-not-found.tsx` for a URL the proxy never rewrote —
     // without it such a URL gets Next's own unstyled 404.
     globalNotFound: true,
-
-    // Lets `resolveTheme()` read the hidden `[theme]` segment instead of a
-    // cookie, which is what keeps a page static. #95 implies it and drops this.
-    rootParams: true,
 
     // TypeScript 7 ships no Compiler API, so `next build` fails outright without
     // this (ADR-0008); it shells out to `tsc` instead. Default in 16.3 — #77.

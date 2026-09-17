@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
 import { updateNameOptimistic } from '@/api/user/updateName/optimistic';
-import { userKey } from '@/api/user/userOptimisticKeys';
+import { recordTag } from '@/constants/cacheTags';
 import { PENDING_ACTION } from '@/constants/optimistic';
 
 const ID = '00000000-0000-4000-8000-000000000001';
 
 describe('updateNameOptimistic', () => {
-  it('addresses the User the input names, through the key module', () => {
-    expect(updateNameOptimistic.key({ id: ID, name: 'Merlin' })).toBe(userKey(ID));
+  it('addresses the User the input names by its cache tag, so the overlay and the cache agree', () => {
+    expect(updateNameOptimistic.key({ id: ID, name: 'Merlin' })).toBe(recordTag('users', ID));
   });
 
   it('is an update, so a failure leaves the row at full opacity', () => {

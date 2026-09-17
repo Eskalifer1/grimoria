@@ -21,7 +21,7 @@ initialization and one session read.
 **An action file declares what differs and nothing else.** `createProtectedAction` (a session is
 required) or `createAction` (a Guest may call it) owns the session, the parse, the authorization
 call, the error mapping, the logging and the revalidation; the file supplies `name`, `schema`,
-`handler`, and optionally `authorize` and `revalidatePaths`.
+`handler`, and optionally `authorize` and `tags`.
 
 ```ts
 'use server';
@@ -29,7 +29,7 @@ call, the error mapping, the logging and the revalidation; the file supplies `na
 const updateName = createProtectedAction({
   name: 'user.updateName',
   schema: updateNameSchema,
-  revalidatePaths: [ROUTE_PATTERNS.PROFILE],
+  tags: ({ user }) => [recordTag('users', user.id), collectionTag('users')],
   handler: async ({ input, user, payload }) => { /* the write, with overrideAccess: false */ },
 });
 ```
@@ -51,10 +51,13 @@ const updateName = createProtectedAction({
   `overrideAccess: false` and the session `user`, so Payload's own rules run underneath. Roles are
   asked through `src/api/core/permissions.ts` — `role` is a list, so `user.role === 'admin'` is
   always wrong.
-- **`revalidatePaths` takes `ROUTE_PATTERNS`, never `ROUTES`.** Next matches the route as it is
-  declared, and every page sits under `[theme]/[locale]`, so `/profile` matches nothing and the
-  screen keeps reading stale data. A failing revalidation is logged and the call still answers success — the row
-  is written, and a failure there would show the User an outcome the database disagrees with.
+- **`tags` names what a write invalidates**, resolved after the handler succeeds — a fixed array,
+  or a function reading the context for a record only the session names. **A mutation of one record
+  names the record tag and its collection tag** (a list carries the field too) —
+  `collectionTag`/`recordTag` from `src/constants/cacheTags.ts` build both. The wrapper calls
+  `updateTag` per tag; one failure is logged and the call still answers
+  success — the row is written, and a failure there would show the User an outcome the database
+  disagrees with.
 - **A handler may navigate.** `redirect` and `notFound` throw a sentinel Next has to see, so the
   wrapper rethrows it before it can be mistaken for a defect.
 
@@ -113,9 +116,28 @@ so one sentence still reaches the screen.
 
 ## Reads
 
-- **A read is a plain async function**, not an action: no directive, `import 'server-only'` at the
-  top, the minimal shape its callers need — not the whole Payload document.
-- **Per-User data is never placed in a shared cache.** It is dynamic, resolved per request.
-- **An action ends with `revalidatePath` for the route it changed**, so a reload agrees with what
-  the screen showed. Shared data moves to `'use cache'` + `cacheTag` + `updateTag` when Cache
-  Components land (#95), which is when these call sites convert.
+A read is a plain async function, `import 'server-only'` at the top, the minimal shape its callers
+need — not the whole Payload document. Which directive it carries follows who the answer depends
+on (ADR-0018):
+
+- **The same for every caller** — `'use cache'` + `cacheTag(...)` + `cacheLife('days')`, the
+  default. A read the shell may hold prerenders this way; the same read inside a live Suspense hole
+  carries `'use cache: remote'` instead, which is never prerendered.
+- **Depends on the caller** — `'use cache: private'` + `cacheLife('hours')`: request-scoped on
+  the server, held in the browser's own router cache for `stale`, never a shared store.
+  `getCurrentUser` (`src/api/user/getCurrentUser.ts`) carries this; every later
+  per-User read copies it. `tests/api/cacheLeakGuard.test.ts` guards a `'use cache'` file under
+  `src/api/` from importing the session module.
+- **Anything else** stays uncached, inside the `Suspense` boundary the view that needs it owns —
+  the view wraps its own dynamic zone with `Loader` as the fallback
+  (`docs/features/loader-and-rule.md`); `ProfilePage` wrapping `ProfileSection` is the pattern.
+
+On Vercel, the platform's Data Cache holds `'use cache'` and `'use cache: remote'`; `private` never
+lands there.
+
+**An admin edit in `/cms` purges the same tags.** `withCacheTagHooks`
+(`src/collections/revalidateCacheTags.ts`) appends `afterChange` and `afterDelete` hooks calling
+`revalidateTag(tag, 'max')` for the record and the collection; `users` carries it, and a collection
+gains it with its first cached read, after an entry in `RECORD_TAG_PREFIX` — the helper throws at
+config time without one. Outside a request — `yarn seed`, a migration — the call throws and
+is logged, never rethrown.

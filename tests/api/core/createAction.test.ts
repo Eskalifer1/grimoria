@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import type { Payload } from 'payload';
@@ -12,7 +12,7 @@ import { ACTION_ERROR, ACTION_STATUS } from '@/constants/action';
 import type { User } from '@/payload-types';
 import { ActionError, forbiddenError } from '@/shared/lib/actionError';
 
-vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
+vi.mock('next/cache', () => ({ updateTag: vi.fn() }));
 vi.mock('@/api/core/session', () => ({
   getSessionUser: vi.fn(),
   requireSessionUser: vi.fn(),
@@ -162,40 +162,52 @@ describe('createProtectedAction', () => {
     expect((await action({ name: 'Merlin' })).error?.code).toBe(ACTION_ERROR.UNEXPECTED);
   });
 
-  it('revalidates only after the write succeeds', async () => {
-    const paths = ['/[locale]/profile'];
+  it('refreshes each tag, in order, only after the write succeeds', async () => {
+    const tags = ['user:42', 'users'];
     const failing = createProtectedAction({
-      name: 'test.noRevalidate',
+      name: 'test.noRefresh',
       schema,
-      revalidatePaths: paths,
+      tags,
       handler: async () => {
         throw forbiddenError();
       },
     });
 
     await failing({ name: 'Merlin' });
-    expect(revalidatePath).not.toHaveBeenCalled();
+    expect(updateTag).not.toHaveBeenCalled();
 
     const succeeding = createProtectedAction({
-      name: 'test.revalidate',
+      name: 'test.refresh',
       schema,
-      revalidatePaths: paths,
+      tags,
       handler: async () => ({ ok: true }),
     });
 
     await succeeding({ name: 'Merlin' });
-    expect(revalidatePath).toHaveBeenCalledWith('/[locale]/profile', 'page');
+    expect(vi.mocked(updateTag).mock.calls).toEqual([['user:42'], ['users']]);
   });
 
-  it('still reports success when revalidation itself fails', async () => {
-    vi.mocked(revalidatePath).mockImplementation(() => {
-      throw new Error('no such route');
+  it('resolves tags from the context when the record is only known to the caller', async () => {
+    const action = createProtectedAction({
+      name: 'test.tagsFromContext',
+      schema,
+      tags: ({ user: caller }) => [`user:${caller.id}`],
+      handler: async () => ({ ok: true }),
+    });
+
+    await action({ name: 'Merlin' });
+    expect(updateTag).toHaveBeenCalledExactlyOnceWith(`user:${user.id}`);
+  });
+
+  it('still reports success when refreshing a tag itself fails', async () => {
+    vi.mocked(updateTag).mockImplementation(() => {
+      throw new Error('updateTag called outside a Server Action');
     });
 
     const action = createProtectedAction({
-      name: 'test.revalidateThrows',
+      name: 'test.updateTagThrows',
       schema,
-      revalidatePaths: ['/[locale]/profile'],
+      tags: ['users'],
       handler: async () => ({ ok: true }),
     });
 

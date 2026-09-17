@@ -26,12 +26,13 @@ segment config live alongside it. Three categories of file:
   `[...rest]/page.tsx` turns an unmatched URL into `notFound()` (ADR-0016).
 - **Vendored** — the `(payload)` route group. None of these conventions apply.
 
-**Every `(frontend)` route sits under `[theme]/[locale]/`, and neither segment is ever visible.**
-`src/proxy.ts` rewrites an incoming request onto the internal path and a request arriving on one
-answers 308 with the clean URL, so `/notes` stays `/notes` while both Themes are prerendered
-(ADR-0015). Two consequences bind every route file: a metadata convention has to sit beside the
-layout that owns those segments, and `revalidatePath` takes `ROUTE_PATTERNS`, whose entries carry
-the segments Next matches on.
+**Every `(frontend)` page sits under `[theme]/[locale]/(site)/`, and neither segment is ever
+visible.** `src/proxy.ts` rewrites an incoming request onto the internal path and a request
+arriving on one answers 308 with the clean URL, so `/notes` stays `/notes` while both Themes are
+prerendered (ADR-0015). `(site)/layout.tsx` is the segment guard — an unknown `theme` or `locale`
+(a dotted path skips the proxy) is `notFound()` there, because a root layout may not throw it.
+The boundary files and the metadata conventions stay beside the root layout. A metadata convention has to sit beside the layout that owns those segments. A write
+invalidates by tag, not by path (`docs/features/data-access/api-local.md`, ADR-0018).
 
 **A route exists twice: as a folder under `app/`, and as a `ROUTES` entry in
 `src/constants/routes.ts`.**

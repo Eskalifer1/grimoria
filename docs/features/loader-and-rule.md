@@ -15,5 +15,8 @@ The two components that carry the decorative marks: `Loader` is the app's one lo
   (`components.md` §The server/client boundary), never by import.
 - **Sizes are the floors `design/marks.md` sets** — `Loader` at 32 px, the rule mark at 24 px — and
   a `size-*` on `Loader` replaces the default rather than adding to it.
+- **`Loader` centers itself** — `m-auto`, so a fallback inside a flex or grid parent such as `Page`
+  sits in the middle of the room left to it with no class at the call site; an inline slot passes
+  `m-0`.
 - **Motion lives inside each SVG**, gated by `prefers-reduced-motion` there; the components carry
   no `animate-*` and no duration class.

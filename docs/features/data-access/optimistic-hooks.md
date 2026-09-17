@@ -37,8 +37,8 @@ against that action's input and result rather than against `unknown`.
 Enforced twice: `biome.json` bans `@/shared/lib/optimistic/store` and `@/shared/lib/optimistic/runOptimistic`
 from `app/`, `views/`, `features/` and `entities/`, and
 `tests/shared/lib/optimistic/storeBoundary.test.ts` fails when any file outside the hooks imports the
-store. The key **format** is enforced the same way: `tests/api/user/userOptimisticKeys.test.ts` fails
-when any file but `src/api/user/userOptimisticKeys.ts` opens a string with `user:`.
+store. The key **format** is enforced the same way: `tests/constants/cacheTags.test.ts` fails
+when any file but `src/constants/cacheTags.ts` opens a string with `user:`.
 
 ## The hooks
 
@@ -49,6 +49,7 @@ when any file but `src/api/user/userOptimisticKeys.ts` opens a string with `user
 | `useOptimisticRecord` | A whole record: several fields, per-field flight state, per-field failures |
 | `useOptimisticList` | A collection: optimistic insert, optimistic removal, merged with the server's list |
 | `useOptimisticEntry` | One key, read-only, for a component that only displays |
+| `useOptimisticRead` | One key, one field, read-only: the store's value over the server's plus the flight state, never the failure. What `<OptimisticText>` draws |
 | `useBrickRoad` | "Is there a problem below this point, and where is it" |
 | `useOptimisticStore` | The store this part of the tree writes through. The singleton unless a provider says otherwise |
 | `useOptimisticScope` | Names whose overlay the store may hold, so one browser does not serve two Users |

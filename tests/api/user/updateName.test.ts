@@ -1,14 +1,17 @@
+import { updateTag } from 'next/cache';
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { requireSessionUser } from '@/api/core/session';
 import { updateName } from '@/api/user/updateName';
 import { updateNameSchema } from '@/api/user/updateName/contract';
 import { ACTION_ERROR, ACTION_STATUS } from '@/constants/action';
+import { collectionTag, recordTag } from '@/constants/cacheTags';
 import { USER_NAME_MAX_LENGTH } from '@/constants/user';
 import type { User } from '@/payload-types';
 import { ActionError } from '@/shared/lib/actionError';
 
-vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
+vi.mock('next/cache', () => ({ updateTag: vi.fn() }));
 vi.mock('@/api/core/session', () => ({ getSessionUser: vi.fn(), requireSessionUser: vi.fn() }));
 
 const update = vi.fn();
@@ -83,6 +86,15 @@ describe('updateName', () => {
       overrideAccess: false,
       user,
     });
+  });
+
+  it('refreshes the session User\u2019s record tag and the collection tag', async () => {
+    await updateName({ name: 'Morgan' });
+
+    expect(vi.mocked(updateTag).mock.calls).toEqual([
+      [recordTag('users', user.id)],
+      [collectionTag('users')],
+    ]);
   });
 
   it('cannot be aimed at another User', async () => {

@@ -49,6 +49,16 @@ pins a stale value on screen.
 `<OptimisticField>` takes the same options and draws the result — value, dimming, error row — for a
 leaf that only displays.
 
+**A second surface showing the same record reads the same key**, and the form's patch shows there
+on the keystroke, because the key is the record and not the form. Which leaf it is follows who owns
+the failure: `<OptimisticField>` where the leaf is the record's only surface — a list row, a value
+with no form beside it — so it must draw "refused" and its dismissal itself; `<OptimisticText>`
+where a form already does. It still dims while a write is out and strikes through while a delete
+is — the state of the record shows wherever the record does. `<OptimisticText>` takes the key from
+`recordTag(...)`, the field, the server's value and its `updatedAt` — strings all, so a Server
+Component renders it in place of the value (`ProfileStatus` in `src/views/ProfilePage/`).
+`<OptimisticField>` takes a descriptor, which holds functions, so it sits in a client leaf.
+
 **A field's dismissal takes that field and nothing else.** The record's copy of the reason goes with
 it when the two share an attempt; another field's unsaved value never does.
 
@@ -113,6 +123,10 @@ Render each row through `<OptimisticRow>`:
 **A pending indicator waits 200 ms**, and errors are never delayed. `usePendingDelay` owns the
 threshold; no surface writes its own.
 
+**Flight is drawn by `<InFlight>` and nowhere else** — the delay, the 70%, the strike-through on a
+delete, `aria-busy`. `<OptimisticText>`, `<OptimisticField>` and `<OptimisticRow>` wrap their value
+in it; a new surface does the same rather than writing an `opacity-*` of its own.
+
 **Dimming never disables.** No component here renders `disabled` or `aria-disabled` from flight.
 
 **Failure rendering follows what the server has.** A failed update or removal returns to full
@@ -147,7 +161,7 @@ surface places its own.
 
 A call site hands over an input and the descriptor builds the key. The store and `runOptimistic` are
 **unreachable from `app/`, `views/`, `features/` and `entities/`** — Biome refuses the import. A key
-format is spelled in exactly one file per domain (`src/api/user/userOptimisticKeys.ts`).
+is the record's cache tag, spelled in one file (`recordTag` in `src/constants/cacheTags.ts`).
 
 **`<OptimisticScope>` is mounted once, in the locale layout**, above everything and before it in the
 JSX. One `localStorage` slot serves the whole browser, so a screen mounting its own would render one

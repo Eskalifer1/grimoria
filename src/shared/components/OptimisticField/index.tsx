@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 
 import { ErrorRow } from '@/shared/components/ErrorRow';
+import { InFlight } from '@/shared/components/InFlight';
 import { useOptimisticValue } from '@/shared/hooks/useOptimisticValue';
-import { usePendingDelay } from '@/shared/hooks/usePendingDelay';
 import { cn } from '@/shared/lib/cn';
 import type { OptimisticDescriptor } from '@/shared/lib/optimistic/descriptor';
 
@@ -37,8 +37,10 @@ interface OptimisticFieldProps<TInput, TData, TField extends Extract<keyof TInpu
 
 /**
  * One field of a record, drawn from the server's value with the store's patch
- * over it. The answer to "a Server Component cannot subscribe": the parent stays
- * on the server and only a string crosses into the browser.
+ * over it, for a leaf that is the record's only surface: it says "saving" and
+ * "refused" itself. Beside a form that already does, `OptimisticText` is the
+ * whole mirror. Rendered from a client leaf that imports the descriptor — a
+ * Server Component cannot hand one over, it holds functions.
  *
  * Read-only by design. See docs/features/data-access/pattern-b.md.
  */
@@ -52,7 +54,6 @@ function OptimisticField<TInput, TData, TField extends Extract<keyof TInput, str
   className,
 }: OptimisticFieldProps<TInput, TData, TField>) {
   const shown = useOptimisticValue({ descriptor, input, field, value, version });
-  const isSlow = usePendingDelay(shown.isPending);
   const error = errorScope === 'field' ? shown.fieldError : shown.error;
   const valueRef = useRef<HTMLSpanElement>(null);
 
@@ -62,14 +63,9 @@ function OptimisticField<TInput, TData, TField extends Extract<keyof TInput, str
       ref={valueRef}
       tabIndex={-1}
     >
-      <span
-        aria-busy={isSlow || undefined}
-        // 70%, not 60%: at 60% the value measured 4.02:1 on the card in
-        // `standard`, under the 4.5:1 `accessibility.md` holds.
-        className={cn('wrap-anywhere transition-opacity', isSlow && 'opacity-70')}
-      >
+      <InFlight pendingAction={shown.pendingAction} className="wrap-anywhere">
         {shown.value}
-      </span>
+      </InFlight>
       <ErrorRow onDismiss={shown.dismiss} returnFocusTo={valueRef} errors={error ? [error] : []} />
     </span>
   );

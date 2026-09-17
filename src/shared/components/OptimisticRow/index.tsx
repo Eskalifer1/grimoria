@@ -2,9 +2,9 @@
 
 import { type ReactNode, useRef } from 'react';
 
-import { PENDING_ACTION, type PendingAction } from '@/constants/optimistic';
+import type { PendingAction } from '@/constants/optimistic';
 import { ErrorRow } from '@/shared/components/ErrorRow';
-import { usePendingDelay } from '@/shared/hooks/usePendingDelay';
+import { InFlight } from '@/shared/components/InFlight';
 import { cn } from '@/shared/lib/cn';
 import type { OptimisticFailure } from '@/shared/lib/optimistic/entry';
 
@@ -46,27 +46,20 @@ function OptimisticRow({
   children,
   className,
 }: OptimisticRowProps) {
-  const isSlow = usePendingDelay(!!pendingAction);
   const isUnconfirmed = !!isDraft && !!error;
   // Where focus lands after a dismissal: the row outlives the button that held it.
   const row = useRef<HTMLLIElement>(null);
 
   return (
-    <li
-      aria-busy={isSlow || undefined}
-      ref={row}
-      tabIndex={-1}
-      className={cn('flex min-w-0 flex-col gap-1', className)}
-    >
-      <div
-        className={cn(
-          'min-w-0 transition-opacity',
-          (isSlow || isUnconfirmed) && 'opacity-70',
-          isSlow && pendingAction === PENDING_ACTION.DELETE && 'line-through',
-        )}
+    <li ref={row} tabIndex={-1} className={cn('flex min-w-0 flex-col gap-1', className)}>
+      <InFlight
+        as="div"
+        pendingAction={pendingAction}
+        isUnconfirmed={isUnconfirmed}
+        className="min-w-0"
       >
         {children}
-      </div>
+      </InFlight>
       {/* No room held for a message that has not arrived: a held line under every
           row of every list is paid for a failure that is rare. */}
       <div className="flex flex-col font-meta text-xs">

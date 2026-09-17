@@ -6,6 +6,4 @@ function CatchAllPage(): never {
   notFound();
 }
 
-// Next parses this off the declaration, so it cannot be re-exported below.
-export const dynamicParams = true;
 export default CatchAllPage;

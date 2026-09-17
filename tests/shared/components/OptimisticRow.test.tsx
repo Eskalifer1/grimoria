@@ -37,7 +37,7 @@ describe('OptimisticRow', () => {
     expect(row).toHaveTextContent(ROW);
     expect(content()).not.toHaveClass('opacity-70');
     expect(content()).not.toHaveClass('line-through');
-    expect(row).not.toHaveAttribute('aria-busy', 'true');
+    expect(content()).not.toHaveAttribute('aria-busy', 'true');
   });
 
   it('renders the failure under the row without taking the row away', () => {
@@ -113,7 +113,7 @@ describe('OptimisticRow', () => {
       advance(100);
 
       expect(content()).not.toHaveClass('opacity-70');
-      expect(screen.getByRole('listitem')).not.toHaveAttribute('aria-busy', 'true');
+      expect(content()).not.toHaveAttribute('aria-busy', 'true');
     });
 
     it('dims a write still running past the threshold', () => {
@@ -122,7 +122,7 @@ describe('OptimisticRow', () => {
       advance(OPTIMISTIC_PENDING_DELAY_MS);
 
       expect(content()).toHaveClass('opacity-70');
-      expect(screen.getByRole('listitem')).toHaveAttribute('aria-busy', 'true');
+      expect(content()).toHaveAttribute('aria-busy', 'true');
     });
 
     it('strikes a row through while its removal is in flight, in place', () => {

@@ -8,8 +8,11 @@ interface PageProps {
   /** The page's one `h1`, in the display face. */
   title: string;
 
-  /** A count or state line under the title, in the meta face. Absent, it takes no space. */
-  status?: string;
+  /**
+   * A count or state line under the title, in the meta face. Absent, it takes no
+   * space. A node, so a per-User line can be its own Suspense hole in the shell.
+   */
+  status?: ReactNode;
 
   /** Rendered opposite the title. The box keeps its width whether or not it is filled (#2). */
   aside?: ReactNode;

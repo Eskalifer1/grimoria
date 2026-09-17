@@ -57,7 +57,8 @@ issue and what was rejected.
   the one `h1`. A boundary page — a 404, a 401, a thrown error — takes `FullPageView` instead: one
   thing centered, no masthead.
 - **Masthead**, drawn by `Page` from its props: `title` (required) as the `h1` in the display face;
-  `status` as a line beneath in the meta face, rendered only when given; `aside` in a box opposite
+  `status` as a line beneath in the meta face, rendered only when given — a node, so a per-User
+  line can be its own `Suspense` hole in the shell; `aside` in a box opposite
   the title that holds its width empty; closed by `Rule`, which decides the Theme's hairline or
   mark on its own.
 - **Inside `main`, in order:** `OfflineIndicator`, the masthead, `children`, then `bottomContent`

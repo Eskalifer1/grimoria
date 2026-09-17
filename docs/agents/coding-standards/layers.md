@@ -96,13 +96,10 @@ api/user/
     index.ts                 "use server" — the action, and its only export
     contract.ts              the Zod schema, because the directive forbids exporting one
     optimistic.ts            the descriptor the action is written through
-  userOptimisticKeys.ts      the domain's key format, shared by every action in it
 ```
 
 Flat, the three files sort apart from each other and a domain with a dozen actions is a drawer
-nobody can read. The key format stays at the domain level because it is the **domain's** vocabulary,
-not one action's — two actions writing one record must not be able to disagree about its key.
-`docs/features/data-access/optimistic-hooks.md` is the reference.
+nobody can read. `docs/features/data-access/optimistic-hooks.md` is the reference.
 
 **`api/core/` is the exception every domain may import** — the Payload client, the session, the
 permission helpers and the action wrapper, none of them domain-bound. Inside a domain, siblings are imported relatively;

@@ -43,6 +43,11 @@ one.
 Server-Action cookie write loops the admin panel's `buildFormState`). Sliding rides on the
 client's own `/api/auth/*` traffic.
 
+`getCurrentUser` (`src/api/user/getCurrentUser.ts`) carries `'use cache: private'` — held in the
+browser's own router cache, never a shared server store. **Sign-in and sign-out both end with
+`router.refresh()`**, an obligation of #1: a cookie change alone does not clear that private cache,
+and the short `stale` window is the second guard.
+
 **A Guest reaching a members-only page gets `unauthorized()`, not a redirect** — a redirect to the
 home page tells them nothing about why they left. `ProfilePage` is the pattern; the 401 surface it
 raises is `docs/features/site-layout.md`.

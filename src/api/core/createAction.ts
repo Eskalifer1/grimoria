@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { revalidatePath } from 'next/cache';
+import { updateTag } from 'next/cache';
 import { unstable_rethrow } from 'next/navigation';
 
 import type { Payload } from 'payload';
@@ -50,12 +50,18 @@ interface ActionDefinition<TSchema extends z.ZodType, TData, TUser extends User 
   handler: (context: ActionContext<z.output<TSchema>, TUser>) => Promise<TData>;
 
   /**
-   * Route patterns whose page data this write invalidates, revalidated only after
-   * it succeeds — `ROUTE_PATTERNS`, not `ROUTES`, since Next matches the route
-   * with its dynamic segments. Becomes tag-based in #95.
+   * Cache tags this write invalidates, refreshed only after it succeeds. A
+   * mutation of one record names the record tag and its collection tag (a list
+   * carries the field too) — `src/constants/cacheTags.ts` builds both. A
+   * function form reads the context, for a record only the session names.
    */
-  revalidatePaths?: readonly string[];
+  tags?: readonly string[] | ActionTags<z.output<TSchema>, TUser>;
 }
+
+/** Tags resolved against the context, for a write whose record id the caller does not pass. */
+type ActionTags<TInput, TUser extends User | null> = (
+  context: ActionContext<TInput, TUser>,
+) => readonly string[];
 
 /** The callable an action file exports: input in, a settled result out, never a throw. */
 type Action<TSchema extends z.ZodType, TData> = (
@@ -77,23 +83,24 @@ function logDefect(payload: Payload | undefined, action: string, error: unknown)
 }
 
 /**
- * Revalidates what a successful write invalidated. A failing revalidation is
- * logged and swallowed: the row is already written, so answering with a failure
- * would show the User an outcome the database disagrees with.
+ * Refreshes what a successful write invalidated, one tag at a time so one that
+ * throws does not skip the rest. A failure is logged and swallowed: the row is
+ * already written, so answering with a failure would show the User an outcome
+ * the database disagrees with.
  */
-function revalidateWritten(paths: readonly string[], payload: Payload, action: string): void {
-  for (const path of paths) {
+function refreshWritten(tags: readonly string[], payload: Payload, action: string): void {
+  for (const tag of tags) {
     try {
-      revalidatePath(path, 'page');
+      updateTag(tag);
     } catch (error) {
-      payload.logger.error({ action, path, err: error }, 'Revalidation failed after a write');
+      payload.logger.error({ action, tag, err: error }, 'Tag refresh failed after a write');
     }
   }
 }
 
 /**
  * The pipeline every action runs: resolve the caller, parse, authorize, handle,
- * revalidate — and turn anything thrown along the way into the failure member.
+ * refresh the tags — and turn anything thrown along the way into the failure member.
  *
  * Bringing up the Payload client is inside the `try` as well, so a database that
  * will not connect answers with `UNEXPECTED` rather than rejecting the promise a
@@ -129,7 +136,10 @@ async function execute<TSchema extends z.ZodType, TData, TUser extends User | nu
 
     const data = await definition.handler(context);
 
-    revalidateWritten(definition.revalidatePaths ?? [], payload, definition.name);
+    const tags =
+      typeof definition.tags === 'function' ? definition.tags(context) : (definition.tags ?? []);
+
+    refreshWritten(tags, payload, definition.name);
 
     return actionSuccess(data);
   } catch (error) {
@@ -187,5 +197,5 @@ function createProtectedAction<TSchema extends z.ZodType, TData>(
   return (input) => execute(definition, input, requireSessionUser);
 }
 
-export type { Action, ActionContext, ActionDefinition };
+export type { Action, ActionContext, ActionDefinition, ActionTags };
 export { createAction, createProtectedAction };

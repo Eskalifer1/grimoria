@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
 import { METADATA_BASE_URL } from '@/constants/env.server';
 import { THEMES, type Theme } from '@/constants/theme';
+import { resolveLocale } from '@/i18n/resolveLocale';
+import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
 import { OptimisticScope } from '@/shared/components/OptimisticScope';
 import { SyncProgressBar } from '@/shared/components/SyncProgressBar';
@@ -51,12 +53,10 @@ export function generateStaticParams(): Array<{ theme: Theme; locale: string }> 
   return THEMES.flatMap((theme) => routing.locales.map((locale) => ({ theme, locale })));
 }
 
-// Neither segment is reachable from outside, so anything not generated above is
-// an address that does not exist — a 404 with no code of ours.
-export const dynamicParams = false;
-
-export default async function LocaleLayout({ children, params }: LayoutProps<'/[theme]/[locale]'>) {
-  const { theme, locale } = await params;
+export default async function LocaleLayout({ children }: LayoutProps<'/[theme]/[locale]'>) {
+  // Narrowed, not raw: a root layout may not throw `notFound()`, so an unknown
+  // segment is refused by `(site)/layout.tsx` below and this html stays valid.
+  const [theme, locale] = await Promise.all([resolveTheme(), resolveLocale()]);
 
   return (
     // `data-theme` is written for `standard` too: #39 asserts on it, and "no

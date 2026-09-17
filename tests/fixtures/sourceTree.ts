@@ -13,7 +13,7 @@ const GENERATED = ['src/payload-types.ts', 'src/migrations', 'src/app/(payload)'
 
 const SOURCE_EXTENSIONS = ['.ts', '.tsx'];
 
-/** The path a rule is written in terms of — `src/api/user/userOptimisticKeys.ts`. */
+/** The path a rule is written in terms of — `src/constants/cacheTags.ts`. */
 function toRepoPath(absolutePath: string): string {
   return join('src', relative(SOURCE_ROOT, absolutePath));
 }
