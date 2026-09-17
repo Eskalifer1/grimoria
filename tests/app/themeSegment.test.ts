@@ -10,14 +10,11 @@ const FRONTEND_ROOT = 'src/app/(frontend)/';
 const THEME_SEGMENT_WRITERS = ['src/proxy.ts'];
 
 /**
- * The pages that inherit the root's metadata rather than naming their own: the
- * home page by design, and the catch-all because Next drops a page's metadata
- * when it throws `notFound()`, so a `generateMetadata` there is dead code.
+ * The one page that inherits the root's metadata rather than naming its own:
+ * the catch-all, because Next drops a page's metadata when it throws
+ * `notFound()`, so a `generateMetadata` there is dead code.
  */
-const INHERITING_PAGES = [
-  `${FRONTEND_ROOT}[theme]/[locale]/(site)/page.tsx`,
-  `${FRONTEND_ROOT}[theme]/[locale]/(site)/[...rest]/page.tsx`,
-];
+const INHERITING_PAGES = [`${FRONTEND_ROOT}[theme]/[locale]/(site)/[...rest]/page.tsx`];
 
 function frontendFiles(): string[] {
   return listSourceFiles().filter((absolutePath) =>
@@ -45,7 +42,7 @@ describe('the hidden Theme segment', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('gives every page its own metadata through pageMetadata, save the two that inherit', () => {
+  it('gives every page its own metadata through pageMetadata, save the catch-all', () => {
     const pages = frontendFiles().filter((absolutePath) => absolutePath.endsWith('/page.tsx'));
     const withoutOwnMetadata = pages
       .filter(

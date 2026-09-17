@@ -1,9 +1,9 @@
 # Metadata
 
-What a page's `<head>` carries — title, description, Open Graph, Twitter card, `theme-color` — and
-the one call that gives a page its own. Indexing controls (`robots`, canonical, `hreflang`) are
-not built; the sitemap and `/llms.txt` are `machine-readable.md`; the icons and the share card
-file are `design/logo.md`.
+What a page's `<head>` carries — title, description, Open Graph, Twitter card, `theme-color`,
+`robots`, canonical, `hreflang` — and the one call that gives a page its own. The sitemap,
+`robots.txt` and `/llms.txt` are `machine-readable.md`; the icons and the share card file are
+`design/logo.md`.
 
 ## The contract
 
@@ -14,7 +14,7 @@ file conventions beside the layout; nothing lists them by hand.
 **A page adds its own with one line and no other metadata code:**
 
 ```ts
-export const generateMetadata = pageMetadata('profilePage');
+export const generateMetadata = pageMetadata('profilePage', 'PROFILE');
 ```
 
 `pageMetadata` (`src/i18n/pageMetadata.ts`) reads the page's `title` and `description` from
@@ -23,14 +23,36 @@ replaces a segment's `openGraph` wholesale rather than filling `og:title` from `
 root's `og:image`, `og:site_name`, `og:locale` and `og:type` would go with it. **The namespace is
 `keyof` the `pages` block of `meta.json`**, so adding a page there is what admits it.
 
-**The optional second argument is `Metadata` minus `title` and `description`** — an image,
-`openGraph.type: 'article'`, `publishedTime` — merged over the mirrored fields. Title and
-description come from the catalog only, or `<title>` and `og:title` would split.
+**The second argument is the page's `FRONTEND_ROUTES` key, and it is required** — the route's
+row in `ROUTE_AUDIENCES` (`src/constants/routes.ts`) decides indexing, so a private screen cannot
+be indexed by omission. A layout group per audience lost: it would declare the same fact twice.
 
-**A page with nothing of its own writes nothing and inherits the root.** Two do: the home page,
-and the catch-all — Next drops a page's metadata when it throws `notFound()`, so a
-`generateMetadata` there is dead code. `tests/app/themeSegment.test.ts` names both and fails on
-any other `page.tsx` under `(frontend)` without the call.
+**The optional third argument is `Metadata` minus `title`, `description`, `robots` and
+`alternates`** — an image, `openGraph.type: 'article'`, `publishedTime` — merged over the
+mirrored fields. Title and description come from the catalog only, or `<title>` and `og:title`
+would split; `robots` and `alternates` come from the route only.
+
+**Every `page.tsx` under `(frontend)` makes the call, save the catch-all** — Next drops a page's
+metadata when it throws `notFound()`, so a `generateMetadata` there is dead code.
+`tests/app/themeSegment.test.ts` fails on any other page without it.
+
+## Indexing
+
+**`ROUTE_AUDIENCE.ANYONE` → `index, follow`**, a self-referencing canonical for the page's own
+locale, and an `hreflang` per `routing.locales` plus `x-default` on the default locale.
+**`GUEST` or `USER` → `noindex, nofollow`** and no `alternates` at all — a canonical on a page
+that asks to be dropped is noise.
+
+**URLs come from `localizedUrl` in `src/i18n/localizedUrl.ts`**, shared with the sitemap: default
+locale bare, other locales prefixed, absolute from `METADATA_BASE_URL`. Theme never enters a URL —
+the proxy 308s any Theme-prefixed path to the visible one. A second locale changes `routing.ts`
+and touches nothing here.
+
+**No page-level `noindex` off production.** Vercel sends `X-Robots-Tag: noindex` on preview URLs
+itself, and `robots.txt` (`machine-readable.md`) covers a preview on a custom domain.
+
+**A signed-out visitor on a `USER` page sees two `robots` tags** — ours, and the `noindex` Next
+adds on its own `unauthorized()` boundary. Both say the same thing.
 
 ## The catalog
 

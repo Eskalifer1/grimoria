@@ -27,6 +27,8 @@ const bootEnvSchema = z
     BETTER_AUTH_URL: z.url().optional(),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     PAYLOAD_MIGRATING: z.stringbool().default(false),
+    // Set by Vercel on every deployment; unset locally is valid.
+    VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
   })
   .superRefine((env, ctx) => {
     if (env.NODE_ENV === 'production' && !env.BETTER_AUTH_URL) {
@@ -62,15 +64,13 @@ function parse<TSchema extends z.ZodType>(schema: TSchema, source: unknown): z.i
 const bootEnv: BootEnv = parse(bootEnvSchema, process.env);
 
 // Neon's pooled endpoint runs PgBouncer in transaction mode, where the `SET`
-// statements schema work relies on do not survive between transactions. Schema
-// work is exactly the two cases the adapter itself checks for: dev push
-// (`NODE_ENV !== 'production'`) and `payload migrate` (`PAYLOAD_MIGRATING`).
+// statements schema work relies on do not survive between transactions. Schema work
+// is what the adapter itself checks for: dev push (`NODE_ENV`) and `PAYLOAD_MIGRATING`.
 const IS_SCHEMA_OPERATION = bootEnv.NODE_ENV !== 'production' || bootEnv.PAYLOAD_MIGRATING;
 
-// Neon hands out `sslmode=require`, which `pg` treats as `verify-full` today and
-// warns about on every boot, because `pg@9` will downgrade it to libpq's weaker
-// meaning. Asking for `verify-full` outright keeps the behavior we already have
-// — Neon's certificates are publicly trusted — and drops the warning.
+// Neon hands out `sslmode=require`, which `pg` treats as `verify-full` today and warns on
+// every boot that `pg@9` will downgrade it to libpq's weaker meaning. Asking for `verify-full`
+// outright keeps today's behavior (Neon's certificates are publicly trusted), minus the warning.
 const DATABASE_URL = (
   IS_SCHEMA_OPERATION
     ? (bootEnv.DATABASE_URL_UNPOOLED ?? bootEnv.DATABASE_URL)
@@ -78,6 +78,10 @@ const DATABASE_URL = (
 ).replace('sslmode=require', 'sslmode=verify-full');
 
 const { BETTER_AUTH_URL, NODE_ENV, PAYLOAD_SECRET } = bootEnv;
+
+// The live site and nothing else. `NODE_ENV` cannot say this: a Vercel preview
+// build reports `production` too, and a preview must stay out of the index (#93).
+const IS_PRODUCTION_DEPLOYMENT = bootEnv.VERCEL_ENV === 'production';
 
 // Open Graph needs an absolute URL and cannot ask the request for one. The
 // fallback only ever fires outside production — the schema refuses it there.
@@ -95,6 +99,7 @@ export {
   BETTER_AUTH_URL,
   bootEnvSchema,
   DATABASE_URL,
+  IS_PRODUCTION_DEPLOYMENT,
   IS_SCHEMA_OPERATION,
   METADATA_BASE_URL,
   NODE_ENV,

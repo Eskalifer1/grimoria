@@ -1,5 +1,9 @@
 {
   "pages": {
+    "homePage": {
+      "description": "Save what you learn, keep it in one place, and find it again when it matters.",
+      "title": "Your personal knowledge base"
+    },
     "profilePage": {
       "description": "Your display name and account details on Grimoria.",
       "title": "My profile"

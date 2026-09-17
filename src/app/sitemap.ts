@@ -1,16 +1,8 @@
 import type { MetadataRoute } from 'next';
 
-import { METADATA_BASE_URL } from '@/constants/env.server';
-import { type FrontendRoute, PUBLIC_ROUTES } from '@/constants/routes';
+import { PUBLIC_ROUTES } from '@/constants/routes';
+import { localizedUrl } from '@/i18n/localizedUrl';
 import { routing } from '@/i18n/routing';
-
-/** The URL a locale serves a route on — the default locale bare, per `localePrefix: 'as-needed'`. */
-function localizedUrl(route: FrontendRoute, locale: string): string {
-  const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
-  const pathname = `${prefix}${route}`.replace(/\/$/, '') || '/';
-
-  return new URL(pathname, METADATA_BASE_URL).href;
-}
 
 // Read once at build, not per request: a `Date` inside the render marks the
 // route dynamic under `cacheComponents`, and a per-request date is noise.

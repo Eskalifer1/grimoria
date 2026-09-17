@@ -24,6 +24,9 @@ const ROUTES = {
 
   /** Payload's admin. Passed to `routes.admin`, which is what mounts it. */
   ADMIN: '/cms',
+
+  /** The route-handler prefix, `src/app/api/`. Not a screen; `robots.txt` disallows it. */
+  API: '/api',
 } as const;
 
 type FrontendRoute = (typeof FRONTEND_ROUTES)[keyof typeof FRONTEND_ROUTES];

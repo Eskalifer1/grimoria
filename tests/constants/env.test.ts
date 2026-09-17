@@ -66,6 +66,23 @@ describe('the boot schema', () => {
     expect(result.error?.issues.map((issue) => issue.path[0])).toEqual(['BETTER_AUTH_URL']);
   });
 
+  it('accepts an unset VERCEL_ENV, so a local boot needs none', () => {
+    expect(bootEnvSchema.parse(COMPLETE_BOOT_ENV).VERCEL_ENV).toBeUndefined();
+  });
+
+  it('accepts a Vercel preview build', () => {
+    expect(bootEnvSchema.parse({ ...COMPLETE_BOOT_ENV, VERCEL_ENV: 'preview' })).toMatchObject({
+      VERCEL_ENV: 'preview',
+    });
+  });
+
+  it('rejects an unknown VERCEL_ENV, naming it', () => {
+    const result = bootEnvSchema.safeParse({ ...COMPLETE_BOOT_ENV, VERCEL_ENV: 'staging' });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.issues.map((issue) => issue.path[0])).toEqual(['VERCEL_ENV']);
+  });
+
   it('reads PAYLOAD_MIGRATING as a boolean', () => {
     expect(bootEnvSchema.parse({ ...COMPLETE_BOOT_ENV, PAYLOAD_MIGRATING: 'true' })).toMatchObject({
       PAYLOAD_MIGRATING: true,
