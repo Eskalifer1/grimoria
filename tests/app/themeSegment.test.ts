@@ -9,6 +9,16 @@ const FRONTEND_ROOT = 'src/app/(frontend)/';
 /** The one segment the visible URL never shows, so only the proxy may write one. */
 const THEME_SEGMENT_WRITERS = ['src/proxy.ts'];
 
+/**
+ * The pages that inherit the root's metadata rather than naming their own: the
+ * home page by design, and the catch-all because Next drops a page's metadata
+ * when it throws `notFound()`, so a `generateMetadata` there is dead code.
+ */
+const INHERITING_PAGES = [
+  `${FRONTEND_ROOT}[theme]/[locale]/(site)/page.tsx`,
+  `${FRONTEND_ROOT}[theme]/[locale]/(site)/[...rest]/page.tsx`,
+];
+
 function frontendFiles(): string[] {
   return listSourceFiles().filter((absolutePath) =>
     toRepoPath(absolutePath).startsWith(FRONTEND_ROOT),
@@ -35,12 +45,15 @@ describe('the hidden Theme segment', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('leaves the head to a static metadata object, so both Themes emit the same one', () => {
-    const offenders = frontendFiles()
-      .filter((absolutePath) => readSource(absolutePath).includes('generateMetadata'))
+  it('gives every page its own metadata through pageMetadata, save the two that inherit', () => {
+    const pages = frontendFiles().filter((absolutePath) => absolutePath.endsWith('/page.tsx'));
+    const withoutOwnMetadata = pages
+      .filter(
+        (absolutePath) => !readSource(absolutePath).includes('generateMetadata = pageMetadata('),
+      )
       .map(toRepoPath);
 
-    expect(offenders).toEqual([]);
+    expect(withoutOwnMetadata.sort()).toEqual([...INHERITING_PAGES].sort());
   });
 });
 

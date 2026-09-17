@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
+import { THEME, THEME_COLOR } from '@/constants/theme';
 
 /**
  * Installed-app metadata. Static and Theme-agnostic: a launcher caches the icon
@@ -16,7 +17,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    background_color: '#fcfcfe',
+    background_color: THEME_COLOR[THEME.STANDARD],
     theme_color: '#0d5a54',
     // One file serves both purposes — its field is opaque to the canvas edge
     // and the mark's furthest point sits at 70% of the width, inside the 80%

@@ -2,9 +2,11 @@ import type { Metadata, Viewport } from 'next';
 
 import { NextIntlClientProvider } from 'next-intl';
 
-import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
+import { APP_NAME } from '@/constants/app';
 import { METADATA_BASE_URL } from '@/constants/env.server';
-import { THEMES, type Theme } from '@/constants/theme';
+import { THEME_COLOR, THEMES, type Theme } from '@/constants/theme';
+import { getMetaMessages } from '@/i18n/metaMessages';
+import { toOpenGraphLocale } from '@/i18n/openGraphLocale';
 import { resolveLocale } from '@/i18n/resolveLocale';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import { routing } from '@/i18n/routing';
@@ -16,36 +18,45 @@ import { FONT_VARIABLES } from '@/shared/config/fonts';
 
 import '../../globals.css';
 
-export const metadata: Metadata = {
-  // `opengraph-image.jpg` sits beside this file, and Open Graph needs absolute
-  // URLs; without a base Next resolves it against localhost and the card 404s
-  // wherever the link is actually shared.
-  metadataBase: new URL(METADATA_BASE_URL),
-  title: APP_NAME,
-  description: APP_DESCRIPTION,
-  openGraph: {
-    type: 'website',
-    siteName: APP_NAME,
-    title: APP_NAME,
-    description: APP_DESCRIPTION,
-  },
-  // Next mirrors the `opengraph-image` file into `twitter:image`, so a second
-  // copy of the same card would only add bytes. This picks the large layout.
-  twitter: { card: 'summary_large_image' },
-  // Without this an iOS shortcut opens in Safari Chrome rather than standalone.
-  appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
-};
+// Every page's head starts here: the base URL, the title template, the default
+// description and the Open Graph and Twitter defaults. A page adds its own with
+// `pageMetadata(namespace)` — `docs/features/metadata.md`.
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, { site }] = await Promise.all([resolveLocale(), getMetaMessages()]);
+  const description = site.description;
+
+  return {
+    // `opengraph-image.jpg` sits beside this file, and Open Graph needs absolute
+    // URLs; without a base Next resolves it against localhost and the card 404s
+    // wherever the link is actually shared.
+    metadataBase: new URL(METADATA_BASE_URL),
+    title: { default: APP_NAME, template: `%s | ${APP_NAME}` },
+    description,
+    openGraph: {
+      type: 'website',
+      siteName: APP_NAME,
+      locale: toOpenGraphLocale(locale),
+      title: APP_NAME,
+      description,
+    },
+    // Next mirrors the `opengraph-image` file into `twitter:image`, so a second
+    // copy of the same card would only add bytes. This picks the large layout.
+    twitter: { card: 'summary_large_image' },
+    // Without this an iOS shortcut opens in Safari Chrome rather than standalone.
+    appleWebApp: { capable: true, title: APP_NAME, statusBarStyle: 'default' },
+  };
+}
 
 // The browser Chrome around the page, which `manifest.ts` cannot reach — that
-// one is read at install time only. Both Themes' `--surface-page`.
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fcfcfe' },
-    { media: '(prefers-color-scheme: dark)', color: '#171614' },
-  ],
-  // Without it every `env(safe-area-inset-*)` reads 0 on a notched phone.
-  viewportFit: 'cover',
-};
+// one is read at install time only. One color per Theme, never per color
+// scheme: the OS picks no Theme here (`docs/features/dark-fantasy-theme.md`).
+export async function generateViewport(): Promise<Viewport> {
+  return {
+    themeColor: THEME_COLOR[await resolveTheme()],
+    // Without it every `env(safe-area-inset-*)` reads 0 on a notched phone.
+    viewportFit: 'cover',
+  };
+}
 
 // The whole product is built ahead of any request: every Theme against every
 // locale, which is only two pages while #18 is open.

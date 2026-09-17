@@ -46,5 +46,6 @@ cost of making `<html lang>` a lie, which breaks hreflang (#93) and a second loc
   layout, which leaves those segments with nothing to generate accessors from — the build fails on
   `Export theme doesn't exist in target module`. ADR-0016 covers what this costs the boundary
   surfaces.
-- **Metadata may not call `t()`.** Both prerendered Themes have to emit an identical `<head>`, or a
-  shared link preview would depend on the Theme of whoever copied the link.
+- **Metadata copy lives outside the Theme catalogs.** Both prerendered Themes have to emit
+  one `<head>` for a URL, or a shared link preview would depend on the Theme of whoever copied the
+  link (`docs/features/metadata.md`).

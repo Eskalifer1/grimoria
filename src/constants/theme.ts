@@ -29,5 +29,15 @@ const THEME_COOKIE_NAME = 'theme';
  */
 const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
+/**
+ * Each Theme's `--surface-page`, as the browser chrome's `theme-color` and the
+ * manifest's background. A hex, not a `var()`: a `<meta>` cannot read CSS, so a
+ * token change in `src/styles/` is mirrored here by hand.
+ */
+const THEME_COLOR: Record<Theme, string> = {
+  [THEME.STANDARD]: '#fcfcfe',
+  [THEME.DARK_FANTASY]: '#171614',
+};
+
 export type { Theme };
-export { DEFAULT_THEME, THEME, THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME, THEMES };
+export { DEFAULT_THEME, THEME, THEME_COLOR, THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME, THEMES };

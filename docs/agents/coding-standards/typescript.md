@@ -54,7 +54,9 @@ so the shorter one wins; a filter that must narrow spells the comparison out (`(
 
 `src/payload-types.ts` is the source of truth for every collection and document shape. Derive from
 it — `type NoteSummary = Pick<Note, 'id' | 'title'>` — because a hand-written parallel
-`interface Note` drifts from the schema the first time a field changes.
+`interface Note` drifts from the schema the first time a field changes. **The same holds for any
+shape that already exists as data** — a catalog, a JSON config: `typeof meta` and `keyof` it
+(`src/i18n/metaMessages.ts`), never an `interface` describing what the file holds.
 
 **Relationship fields carry a `depth` union.** Payload types a relationship as `number | User`
 because the query's `depth` decides which arrives. Resolve it **once, at the data boundary** — in

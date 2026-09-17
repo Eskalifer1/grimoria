@@ -34,7 +34,7 @@ target-size measurements for what is built from them.
 
 ## Safe areas
 
-Root layout exports `viewport.viewportFit = 'cover'`; without it every `env(safe-area-inset-*)`
+The root layout's `generateViewport` sets `viewportFit: 'cover'`; without it every `env(safe-area-inset-*)`
 resolves to 0 (`browser-check`'s safe-area probe catches a regression — `.claude/agents/browser-check.md`).
 A surface touching a screen edge — drawer, sticky footer, toast, bottom action bar, full-bleed
 header — pads with `env(safe-area-inset-*)` on that edge, as `max(<step>, env(…))` or

@@ -112,7 +112,7 @@ which survives an unknown background where `dark-fantasy` disappears on light.
 | `src/app/favicon.ico` | The same slot on everything else — 16, 32 and 48 inside |
 | `src/app/apple-icon.png` | The iOS home-screen shortcut, 180×180 |
 | `public/web-app-manifest-192x192.png`, `-512x512.png` | Installation, either purpose |
-| `src/app/(frontend)/[locale]/opengraph-image.jpg` | The share card, 1200×630 |
+| `src/app/(frontend)/[theme]/[locale]/opengraph-image.jpg` | The share card, 1200×630 |
 | `src/app/manifest.ts` | Names the installable icons and the install-time colors |
 
 **`icon.svg` is the one asset not stuck with a single ink,** so each browser Chrome gets the Theme

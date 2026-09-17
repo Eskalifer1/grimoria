@@ -78,6 +78,8 @@ Run `/learn` in the same turn as the fix, and **report its judgment either way**
   `design/dark-fantasy-tokens.md`. **Adding or renaming one**: `design/token-contract.md`, both
   Themes in one change.
 - **Sign-in, sign-up, sessions, `Role`, or who may reach `/cms`**: `docs/features/auth.md`.
+- **Setting a page's title, description, social card or `theme-color`, or adding a page under
+  `(frontend)`**: `docs/features/metadata.md`.
 - **Adding a response header, changing the Content Security Policy, or asking why a script, font
   or frame is refused**: `docs/features/security-headers.md`.
 - **Building or updating a feature**: create/update `docs/features/<slug>.md` **as it is built**.

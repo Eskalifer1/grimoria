@@ -1,0 +1,11 @@
+{
+  "pages": {
+    "profilePage": {
+      "description": "Your display name and account details on Grimoria.",
+      "title": "My profile"
+    }
+  },
+  "site": {
+    "description": "A personal knowledge base for saving and rediscovering things you've learned."
+  }
+}
