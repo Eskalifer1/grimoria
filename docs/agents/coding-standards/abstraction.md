@@ -12,10 +12,16 @@ written once, in `src/constants/<subject>.ts`, and the union type is derived fro
 
 **A set of related values is one object, not loose names.**
 
-**A value derived from a constant set is derived once, into a second constant.** `ROUTE_PATTERNS.PROFILE`,
-not a `routePattern(ROUTES.PROFILE)` call in every action. The builder stays private to the file,
-and the derived object is typed `Record<keyof typeof SOURCE, …>`, so a member added to the source
-and forgotten here is a compile error rather than a call site that never runs.
+**A step owed on every new member of a set is held by `tsc` or a test, never by memory alone.** The
+doc says what the step is; the type or the test is what names it when it is forgotten. A table
+keyed by the set is typed `Record<keyof typeof SOURCE, …>` (`ROUTE_PATTERNS`, `LLMS_SECTIONS`) or
+`satisfies` it (`ROUTE_AUDIENCES`), so a member added to the source and missing here is a compile
+error rather than a call site that never runs. A subset of the set is derived from the table that
+declares it (`PUBLIC_ROUTES` from `ROUTE_AUDIENCES`), never written twice. Where the member is a
+file rather than a value — a page, a `"use server"` module — the check is a structural test
+(`docs/testing.md` → Structural tests). The builder stays private to the file, and a value derived
+from the set is derived once into a second constant — `ROUTE_PATTERNS.PROFILE`, not a
+`routePattern(ROUTES.PROFILE)` call at every site.
 
 ## Write a cross-cutting step once
 

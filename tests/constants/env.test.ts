@@ -59,6 +59,13 @@ describe('the boot schema', () => {
     expect(parsed.DATABASE_URL_UNPOOLED).toBeUndefined();
   });
 
+  it('requires BETTER_AUTH_URL in production, naming it, so the sitemap never links to localhost', () => {
+    const result = bootEnvSchema.safeParse({ ...COMPLETE_BOOT_ENV, NODE_ENV: 'production' });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.issues.map((issue) => issue.path[0])).toEqual(['BETTER_AUTH_URL']);
+  });
+
   it('reads PAYLOAD_MIGRATING as a boolean', () => {
     expect(bootEnvSchema.parse({ ...COMPLETE_BOOT_ENV, PAYLOAD_MIGRATING: 'true' })).toMatchObject({
       PAYLOAD_MIGRATING: true,

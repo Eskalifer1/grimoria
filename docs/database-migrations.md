@@ -58,7 +58,7 @@ the direct connection string and request traffic down the pooled one.
 | `DATABASE_URL_UNPOOLED` | Neon `main`, direct |
 | `PAYLOAD_SECRET` | A secret of its own, not the one in `.env` |
 | `BETTER_AUTH_SECRET` | Likewise. Nothing passes Better Auth a `secret`, so there is no fallback |
-| `BETTER_AUTH_URL` | The production origin, written out — unset, a post-sign-in redirect can land on a preview URL |
+| `BETTER_AUTH_URL` | The production origin, written out — boot refuses to start without it, since the sitemap, `/llms.txt` and Open Graph link from it |
 
 The function region is set in Vercel's settings to match the Neon project's region, never in a
 committed config file (#82). `package.json` pins `engines.node` to the newest major Vercel offers.

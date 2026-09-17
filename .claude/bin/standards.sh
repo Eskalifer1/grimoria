@@ -19,14 +19,14 @@ s=docs/agents/coding-standards
 # different edge policies, which no gate catches and only a judging round finds.
 core="$s/layers.md $s/naming.md $s/imports.md $s/documentation.md $s/typescript.md $s/abstraction.md"
 
-ui="$core $s/components.md $s/styling.md $s/accessibility.md"
+ui="$core $s/components.md $s/styling.md $s/accessibility.md $s/responsive.md"
 
 profile() {
   case "$1" in
     core)   echo "$core" ;;
     ui)     echo "$ui" ;;
     copy)   echo "$core $s/i18n.md" ;;
-    route)  echo "$core $s/routing.md" ;;
+    route)  echo "$core $s/routing.md docs/features/metadata.md docs/features/machine-readable.md" ;;
     server) echo "$core docs/features/auth.md" ;;
     design) echo "$core design/standard-design.md design/dark-fantasy-design.md design/token-contract.md docs/features/site-layout.md" ;;
     data)   echo "$core docs/features/data-access.md docs/features/data-access/api-local.md" ;;

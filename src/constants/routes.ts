@@ -28,6 +28,64 @@ const ROUTES = {
 
 type FrontendRoute = (typeof FRONTEND_ROUTES)[keyof typeof FRONTEND_ROUTES];
 
+/**
+ * Who may read a route: anyone; a Guest only (sign-in, sign-up — a User is
+ * sent on); or a signed-in User only.
+ */
+const ROUTE_AUDIENCE = {
+  ANYONE: 'anyone',
+  GUEST: 'guest',
+  USER: 'user',
+} as const;
+
+type RouteAudience = (typeof ROUTE_AUDIENCE)[keyof typeof ROUTE_AUDIENCE];
+
+/**
+ * Who may read each frontend route — decided once, here. The `Record` key type
+ * is what makes a route added to `FRONTEND_ROUTES` and left undeclared a
+ * compile error, and `PUBLIC_ROUTES` is checked against the answer.
+ */
+const ROUTE_AUDIENCES = {
+  HOME: ROUTE_AUDIENCE.ANYONE,
+  PROFILE: ROUTE_AUDIENCE.USER,
+} as const satisfies Record<keyof typeof FRONTEND_ROUTES, RouteAudience>;
+
+// Conditional mapped type, justified: the keys of `ROUTE_AUDIENCES` carrying one
+// audience, so a derived route set keeps each route's literal type.
+type RouteKeysFor<TAudience extends RouteAudience> = {
+  [TKey in keyof typeof ROUTE_AUDIENCES]: (typeof ROUTE_AUDIENCES)[TKey] extends TAudience
+    ? TKey
+    : never;
+}[keyof typeof ROUTE_AUDIENCES];
+
+function isFrontendRouteKey(key: string): key is keyof typeof FRONTEND_ROUTES {
+  return key in FRONTEND_ROUTES;
+}
+
+/** The `FRONTEND_ROUTES` rows `ROUTE_AUDIENCES` gives one audience. */
+function routesFor<TAudience extends RouteAudience>(
+  audience: TAudience,
+): Pick<typeof FRONTEND_ROUTES, RouteKeysFor<TAudience>> {
+  const keys = Object.keys(ROUTE_AUDIENCES)
+    .filter(isFrontendRouteKey)
+    .filter((key) => ROUTE_AUDIENCES[key] === audience);
+
+  // The filter above is the runtime proof of the shape `Pick` names.
+  return Object.fromEntries(keys.map((key) => [key, FRONTEND_ROUTES[key]])) as Pick<
+    typeof FRONTEND_ROUTES,
+    RouteKeysFor<TAudience>
+  >;
+}
+
+/**
+ * The frontend routes anyone may read — what the sitemap emits and what the
+ * indexing default (#93) allows. Derived, so `ROUTE_AUDIENCES` is the one place
+ * a route's audience is written.
+ */
+const PUBLIC_ROUTES = routesFor(ROUTE_AUDIENCE.ANYONE);
+
+type PublicRoute = (typeof PUBLIC_ROUTES)[keyof typeof PUBLIC_ROUTES];
+
 /** The two segments the proxy rewrites onto every frontend request. */
 const HIDDEN_SEGMENTS = '/[theme]/[locale]';
 
@@ -56,5 +114,5 @@ const ROUTE_PATTERNS: Record<keyof typeof FRONTEND_ROUTES, string> = {
   PROFILE: routePattern(FRONTEND_ROUTES.PROFILE),
 };
 
-export type { FrontendRoute };
-export { FRONTEND_ROUTES, ROUTE_PATTERNS, ROUTES };
+export type { FrontendRoute, PublicRoute, RouteAudience };
+export { FRONTEND_ROUTES, PUBLIC_ROUTES, ROUTE_AUDIENCE, ROUTE_AUDIENCES, ROUTE_PATTERNS, ROUTES };

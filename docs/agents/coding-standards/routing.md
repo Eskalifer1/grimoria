@@ -38,7 +38,10 @@ invalidates by tag, not by path (`docs/features/data-access/api-local.md`, ADR-0
 `src/constants/routes.ts`.**
 Adding the folder without the entry is half a route — every `href`, `redirect()` and config value
 reads it from `ROUTES` (`ROUTES.HOME`, not `'/'`), and a dynamic route is a function there
-(`PROFILE: (slug) => …`) so no caller ever joins a path itself. Payload's own routes are the one
+(`PROFILE: (slug) => …`) so no caller ever joins a path itself. **The entry is the trigger**: `tsc` then
+names the tables owed a row — `ROUTE_PATTERNS`, who may read it in `ROUTE_AUDIENCES`, and for an `ANYONE`
+route the `/llms.txt` section (`docs/features/machine-readable.md`) — and `tests/app/pageRoutes.test.ts`
+holds the folder and the entry together. Payload's own routes are the one
 exception the file already holds: `ROUTES.ADMIN` is passed to `routes.admin`, and `/api/*` stays
 Payload's.
 
@@ -51,7 +54,7 @@ own handler under `/api` would collide with that catch-all; the escape hatch is
 
 **Payload's GraphQL API is off** — `graphQL.disable` in `src/payload.config.ts`, with its two
 generated route files deleted. The `graphql` package stays in `package.json` regardless: `payload`
-declares it as a peer dependency. #33 settled this.
+declares it as a peer dependency.
 
 `src/app/(payload)/**` and `src/payload-types.ts` are generated: Biome and cspell skip both, and
 both are committed. Regenerate with `yarn generate:types` and

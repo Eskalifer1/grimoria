@@ -2,7 +2,8 @@
 
 What a page's `<head>` carries — title, description, Open Graph, Twitter card, `theme-color` — and
 the one call that gives a page its own. Indexing controls (`robots`, canonical, `hreflang`) are
-not built; the icons and the share card file are `design/logo.md`.
+not built; the sitemap and `/llms.txt` are `machine-readable.md`; the icons and the share card
+file are `design/logo.md`.
 
 ## The contract
 
@@ -41,7 +42,7 @@ handed whole to `NextIntlClientProvider`, so anything in it rides to the client.
 keeps both prerendered Themes emitting one `<head>` (ADR-0015).
 
 `APP_NAME` stays a constant — it is the brand, not copy. `APP_DESCRIPTION` serves the manifest
-alone, which has no locale.
+and `/llms.txt`, neither of which has a locale.
 
 ## `theme-color`
 

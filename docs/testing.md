@@ -42,6 +42,14 @@ by e2e (#39); the pure functions it calls are covered by unit.
   other branches on scope and environment, so both are tested.
 - **Plain re-exports and one-line wrappers** around a library.
 
+## Structural tests
+
+**A rule about which files exist, what they import or what they must contain is a `unit` test over
+`tests/fixtures/sourceTree.ts`**, beside the code it guards — `tests/app/pageRoutes.test.ts` ties
+every `(site)` page to a `FRONTEND_ROUTES` entry, `tests/constants/envBoundary.test.ts` fences the
+raw env. It is the fallback for a step a type cannot see; the standard it holds is
+`docs/agents/coding-standards/abstraction.md`.
+
 ## Running
 
 `yarn test` is what CI (#42) and `/checks` call.

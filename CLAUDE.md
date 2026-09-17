@@ -14,8 +14,8 @@ through `.claude/hooks/gate-written-file.sh`** — Biome, cspell, the covering t
 hands back; silence means green. **A file created any other way — a heredoc, a generator — gets
 none of that** and needs `yarn check --write` and `git add -N` by hand.
 
-**Yarn 4**, `nodeLinker: node-modules`. On `all versions ... are quarantined`, take the newest
-version that resolves rather than disabling the gate.
+On `all versions ... are quarantined`, take the newest version that resolves rather than
+disabling the gate.
 
 ## Which language to write in
 

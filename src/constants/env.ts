@@ -13,21 +13,30 @@ import { z } from 'zod';
 /** Long enough that a token signed with it is not worth attacking. */
 const SECRET_MIN_LENGTH = 32;
 
-const bootEnvSchema = z.object({
-  PAYLOAD_SECRET: z.string().min(SECRET_MIN_LENGTH),
-  DATABASE_URL: z.url(),
-  DATABASE_URL_UNPOOLED: z.url().optional(),
-  // Nothing in our code reads this — Better Auth takes it from the environment
-  // itself. It is required here so an unset secret fails with its own name at
-  // boot rather than somewhere inside Better Auth in production.
-  BETTER_AUTH_SECRET: z.string().min(SECRET_MIN_LENGTH),
-  // Left optional on purpose: unset, Better Auth falls back to the request's own
-  // origin, which is right in production. A default here would pin a deployment
-  // that forgot the variable to localhost, silently and without an error.
-  BETTER_AUTH_URL: z.url().optional(),
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  PAYLOAD_MIGRATING: z.stringbool().default(false),
-});
+const bootEnvSchema = z
+  .object({
+    PAYLOAD_SECRET: z.string().min(SECRET_MIN_LENGTH),
+    DATABASE_URL: z.url(),
+    DATABASE_URL_UNPOOLED: z.url().optional(),
+    // Nothing in our code reads this — Better Auth takes it from the environment
+    // itself. It is required here so an unset secret fails with its own name at
+    // boot rather than somewhere inside Better Auth in production.
+    BETTER_AUTH_SECRET: z.string().min(SECRET_MIN_LENGTH),
+    // Optional locally, where the localhost fallback below is right. Required in
+    // production: unset there, the sitemap and `/llms.txt` would link to localhost.
+    BETTER_AUTH_URL: z.url().optional(),
+    NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+    PAYLOAD_MIGRATING: z.stringbool().default(false),
+  })
+  .superRefine((env, ctx) => {
+    if (env.NODE_ENV === 'production' && !env.BETTER_AUTH_URL) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['BETTER_AUTH_URL'],
+        message: 'Required in production: the sitemap and Open Graph need the site origin',
+      });
+    }
+  });
 
 const seedEnvSchema = z.object({
   SEED_ADMIN_EMAIL: z.email(),
@@ -70,8 +79,8 @@ const DATABASE_URL = (
 
 const { BETTER_AUTH_URL, NODE_ENV, PAYLOAD_SECRET } = bootEnv;
 
-// Open Graph needs an absolute URL and cannot ask the request for one, so this
-// is the one place a localhost fallback is correct rather than a hidden pin.
+// Open Graph needs an absolute URL and cannot ask the request for one. The
+// fallback only ever fires outside production — the schema refuses it there.
 const METADATA_BASE_URL = BETTER_AUTH_URL ?? 'http://localhost:3000';
 
 /**
