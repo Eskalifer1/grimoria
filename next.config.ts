@@ -23,10 +23,6 @@ const nextConfig: NextConfig = {
     // Mounts `app/global-not-found.tsx` for a URL the proxy never rewrote —
     // without it such a URL gets Next's own unstyled 404.
     globalNotFound: true,
-
-    // TypeScript 7 ships no Compiler API, so `next build` fails outright without
-    // this (ADR-0008); it shells out to `tsc` instead. Default in 16.3 — #77.
-    useTypeScriptCli: true,
   },
 
   /**

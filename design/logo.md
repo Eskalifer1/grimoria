@@ -135,7 +135,7 @@ would only shrink the mark in the launcher.
 **The share card is a JPEG** — a photographic texture in a PNG cost four times the bytes, and Next's
 convention takes no WebP, which the Facebook and LinkedIn scrapers reject anyway.
 
-**Write `opengraph-image.alt.txt` with no trailing newline** — `printf`, not `echo`. Next 16.2.12
+**Write `opengraph-image.alt.txt` with no trailing newline** — `printf`, not `echo`. Next
 emits no `og:image:alt` at all when the file ends in one.
 
 **Rasters are committed files.** `ImageResponse` cannot produce a real `.ico`, so they come from an
