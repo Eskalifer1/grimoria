@@ -416,7 +416,12 @@
       }
     },
     {
-      "includes": ["src/constants/env.ts", "src/constants/env.public.ts", "tests/setup/env.ts"],
+      "includes": [
+        "src/constants/env.ts",
+        "src/constants/env.public.ts",
+        "tests/setup/env.ts",
+        "playwright.config.ts"
+      ],
       "linter": {
         "rules": {
           "style": {

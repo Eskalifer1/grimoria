@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
+/playwright/.auth/
 
 # next.js
 /.next/
@@ -34,6 +37,8 @@ yarn-error.log*
 .env*
 # ...which the template is the opt-in for: it names what a clone needs to boot.
 !.env.example
+# ...and the e2e file, whose every value is throwaway (docs/testing.md).
+!.env.e2e
 
 # vercel
 .vercel

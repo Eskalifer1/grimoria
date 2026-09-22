@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import { NODE_ENVIRONMENT } from '@/constants/env.public';
 import { ThemeToggle } from '@/features/theme/components/ThemeToggle';
 import { resolveTheme } from '@/i18n/resolveTheme';
 import { Page } from '@/shared/components/Page';
@@ -21,14 +20,10 @@ async function HomePage() {
       <section className="rounded-lg border border-border-subtle bg-surface-card p-6 shadow-card">
         <p className="font-ui text-text-muted">{t('empty')}</p>
         <Button className="mt-6">{t('createNote')}</Button>
-        {/* {NODE_ENVIRONMENT !== 'production' ? (
-          <> */}
         <ModalPlayground />
         <PrimitivesPlayground />
-        {/* Dev-only preview; the real home for this control is Settings (#5). */}
+        {/* Lives here until Settings (#5); `e2e/theme.spec.ts` drives it on this page. */}
         <ThemeToggle theme={theme} />
-        {/* </>
-        ) : null} */}
       </section>
     </Page>
   );

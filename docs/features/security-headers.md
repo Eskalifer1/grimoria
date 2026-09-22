@@ -50,4 +50,5 @@ is only observable on a real response — `yarn build && yarn start`, then read 
 on `/cms`.
 
 Deferred: `report-uri`/`report-to` until Sentry (#41) lands, so a policy blocking something is
-invisible until a User says so; the HSTS preload submission; an e2e assertion on the set (#39).
+invisible until a User says so; the HSTS preload submission; an e2e assertion on the set, which
+no ticket owns yet.

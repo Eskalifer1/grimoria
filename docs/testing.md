@@ -12,7 +12,7 @@ Each layer is a Vitest project in `vitest.config.ts`, except e2e, which is a sep
 | --- | --- | --- | --- |
 | `unit` | A pure function — no DOM, no database, no `next/headers` | node | `tests/**/*.test.ts` |
 | `component` | A React component's rendered output and its response to interaction | jsdom + React Testing Library | `tests/**/*.test.tsx` |
-| e2e | A journey through the running app in a real browser, in both Themes | Playwright | `e2e/` — not built, #39 |
+| e2e | A journey through the running app in a real browser, in both Themes | Playwright + Chromium | `e2e/**/*.spec.ts` |
 
 **Push a test down to the cheapest layer that still exercises the logic.** Where impure code wraps a
 decision worth testing, extract the decision — `sessionCookiesPlugin` can only run inside Better
@@ -32,7 +32,7 @@ build, or importing the action throws before a test runs. It aliases `next/font/
 anything importing a root layout throws with `Plus_Jakarta_Sans is not a function`.
 
 **An async Server Component cannot be rendered by React Testing Library.** Its behavior is covered
-by e2e (#39); the pure functions it calls are covered by unit.
+by e2e; the pure functions it calls are covered by unit.
 
 ## What is not tested
 
@@ -52,7 +52,7 @@ raw env. It is the fallback for a step a type cannot see; the standard it holds 
 
 ## Running
 
-`yarn test` is what CI (#42) and `/checks` call.
+`yarn test` is what CI (#42) and `/checks` call; it is Vitest only — e2e is its own script, below.
 
 **A file written under `src/` runs its covering test as it is written** — the `PostToolUse` hook,
 `CLAUDE.md` → `## Tooling`.
@@ -66,6 +66,41 @@ something survives a reload would pass without ever touching the slot.
 
 **A value that is both shown and edited is asserted in both places.** A test that reads the rendered
 text alone goes green while the control beside it holds something else.
+
+## e2e
+
+**`yarn test:e2e` runs Playwright against the production build**; `yarn test:e2e:ui` opens the same in
+UI mode. Neither is part of `yarn test` or `/checks`; `/implement-issue` runs them once at its
+handoff through `.claude/bin/gate.sh <n> e2e`, after the adversarial round and the docs pass. With
+nothing answering on the database port that stage prints `e2e: SKIP` and the gate stays green — a
+missing Docker is not a fact about the branch. `playwright.config.ts` is the runner: Chromium
+only, `e2e/` as the test dir, trace on first retry, and `CI` deciding retries (`2` / `0`),
+`forbidOnly` and whether a server already on the e2e port is reused (outside CI it is). The port is
+`PORT` in `.env.e2e` — its own, not `3000`, so a `next dev` on Neon is never the server the run
+lands on; `baseURL` and `BETTER_AUTH_URL` derive from it.
+
+**The database is a throwaway Postgres from `docker-compose.yml`** — `docker compose up -d` once,
+host port `5433` so a Postgres already on `5432` keeps its port. `.env.e2e` is committed and points
+at it; every value in it is throwaway. The config reads that file with `parseEnv` and spreads it
+*over* the shell's environment into `webServer.env`, so neither a Neon secret nor an exported
+`DATABASE_URL` reaches the run. `DATABASE_URL_UNPOOLED` is set there too — `src/constants/env.ts`
+prefers it for schema work, and the local `.env`'s Neon value would otherwise take `payload migrate`.
+The `webServer` command is `yarn build:migrate && yarn start`; in CI (#42) the job builds in its own
+step and the command only migrates and starts.
+
+**The seam is HTTP.** A spec drives the page a Guest sees and reads what the browser rendered; the
+only app code it imports is `src/constants/theme.ts` and the `messages/` catalogs, both data. Any
+pure decision a journey exposes belongs in Vitest, not here.
+
+`e2e/theme.spec.ts` is the one journey: start with no cookie and assert `standard`; for every other
+Theme, check its radio by the catalog label the *current* Theme shows, assert, reload, assert again,
+switch back and assert. Per Theme it asserts `html[data-theme]`, the computed `body` background
+against `THEME_COLOR`, the `h1` against that catalog's `homePage.title`, and the checked radio — so a
+copy or token change moves the test with it. Signed-in journeys, the setup project and
+`storageState` are #119.
+
+**A local Postgres of your own works too** when Docker is absent: any instance on `5433` with the
+role, password and database `.env.e2e` names.
 
 ## Test-first
 

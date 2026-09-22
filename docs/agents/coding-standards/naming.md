@@ -51,7 +51,7 @@ tests/                                        Vitest
   i18n/theme.test.ts                          unit
   features/note/components/NoteCard.test.tsx  component
   setup/  fixtures/
-e2e/                                          Playwright (#39)
+e2e/                                          Playwright — `docs/testing.md` → e2e
 ```
 
 - **`tests/` mirrors `src/`.**

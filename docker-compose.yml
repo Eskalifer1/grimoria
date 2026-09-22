@@ -1,0 +1,17 @@
+# The throwaway Postgres `yarn test:e2e` runs against — `docs/testing.md` → e2e.
+# Same image as the CI service container (#42); credentials mirror `.env.e2e`.
+# Host port 5433, so a Postgres already on 5432 keeps its port.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: grimoria
+      POSTGRES_PASSWORD: grimoria
+      POSTGRES_DB: grimoria_e2e
+    ports:
+      - '5433:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U grimoria -d grimoria_e2e']
+      interval: 2s
+      timeout: 5s
+      retries: 15

@@ -267,11 +267,16 @@ on**, with `yarn payload migrate:create <name>`. It is the ticket's own work, no
 raise; `docs/database-migrations.md` has the naming and the rollback proof.
 
 ```sh
-.claude/bin/gate.sh $0 full
+.claude/bin/gate.sh $0 e2e
 ```
 
 One last time, over code and docs together. **It skips itself when nothing moved since its last
 green run**, and on red it prints the head of every failed log — read none of them back.
+
+**`e2e`, not `full`, and only here.** The Playwright journeys run against a production build, so
+they are worth a minute once — after the adversarial round and the docs pass, where no later edit
+can invalidate them. A machine with no database answering prints `e2e: SKIP` and stays green,
+records the run as `full`, and **that skip is reported in the handoff** like any other.
 
 Then the report, **assembled from `.scratch/$0/` rather than from memory** — the slice files and
 `log.md` together: the standards routed, what the gates and the axes found, which axes were skipped

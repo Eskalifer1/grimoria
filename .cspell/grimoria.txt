@@ -36,10 +36,12 @@ geolocation
 grimoire
 grimoires
 Grimoria
+healthcheck
 HSTS
 IDOR
 importmap
 incantation
+isready
 jsonc
 Leonxlnx
 letterspaced
