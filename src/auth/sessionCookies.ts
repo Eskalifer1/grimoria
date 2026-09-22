@@ -1,6 +1,6 @@
-import { NODE_ENVIRONMENT } from '@/constants/env.public';
+import { BROWSER_COOKIE_OPTIONS } from '@/constants/cookies';
 import { OPTIMISTIC_SCOPE_COOKIE_NAME } from '@/constants/optimistic';
-import { THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME } from '@/constants/theme';
+import { THEME_COOKIE_NAME, THEME_COOKIE_OPTIONS } from '@/constants/theme';
 import { toTheme } from '@/i18n/theme';
 
 /** Better Auth's own sign-out endpoint — the only one that drops *this* device's session. */
@@ -34,7 +34,7 @@ interface SessionCookie {
     /** `lax` — sent on a top-level navigation, which is how the proxy sees it. */
     sameSite: 'lax';
 
-    /** Both are read by the browser — the scope during the first render, the Theme by #78. */
+    /** Both are read by the browser — the scope during the first render, the Theme by the toggle. */
     httpOnly: false;
 
     /** HTTPS-only in production; local development has no certificate. */
@@ -47,13 +47,6 @@ interface SessionCookie {
     expires?: Date;
   };
 }
-
-const SHARED_OPTIONS = {
-  path: '/',
-  sameSite: 'lax',
-  httpOnly: false,
-  secure: NODE_ENVIRONMENT === 'production',
-} as const satisfies SessionCookie['options'];
 
 /**
  * The Theme stored on the profile, narrowed. A row that predates the field, or
@@ -80,12 +73,12 @@ function sessionCookiesFor({ newSession, path }: SessionOutcome): SessionCookie[
       {
         name: THEME_COOKIE_NAME,
         value: toTheme(storedTheme(newSession)),
-        options: { ...SHARED_OPTIONS, maxAge: THEME_COOKIE_MAX_AGE },
+        options: THEME_COOKIE_OPTIONS,
       },
       {
         name: OPTIMISTIC_SCOPE_COOKIE_NAME,
         value: newSession.user.id,
-        options: { ...SHARED_OPTIONS, expires: newSession.session.expiresAt },
+        options: { ...BROWSER_COOKIE_OPTIONS, expires: newSession.session.expiresAt },
       },
     ];
   }
@@ -95,7 +88,7 @@ function sessionCookiesFor({ newSession, path }: SessionOutcome): SessionCookie[
       {
         name: OPTIMISTIC_SCOPE_COOKIE_NAME,
         value: '',
-        options: { ...SHARED_OPTIONS, maxAge: 0 },
+        options: { ...BROWSER_COOKIE_OPTIONS, maxAge: 0 },
       },
     ];
   }

@@ -1,6 +1,6 @@
 # Authentication
 
-How a User signs in, how a session is read, and what guards `role` — the mechanics behind #32.
+How a User signs in, how a session is read, and what guards `role`.
 Why Better Auth rather than Payload's own auth is ADR-0009; what `role` means is ADR-0003.
 
 ## Contents
@@ -39,13 +39,12 @@ const { user } = await payload.auth({ headers: await headers() });
 decides, never `user.role === 'admin'`. A Guest is `user === null`; no stored role stands in for
 one.
 
-**This read does not extend the session** (the strategy passes `disableRefresh: true`, or a
-Server-Action cookie write loops the admin panel's `buildFormState`). Sliding rides on the
-client's own `/api/auth/*` traffic.
+**This read does not extend the session.** Sliding rides on the client's own `/api/auth/*`
+traffic.
 
 `getCurrentUser` (`src/api/user/getCurrentUser.ts`) carries `'use cache: private'` — held in the
 browser's own router cache, never a shared server store. **Sign-in and sign-out both end with
-`router.refresh()`**, an obligation of #1: a cookie change alone does not clear that private cache,
+`router.refresh()`**: a cookie change alone does not clear that private cache,
 and the short `stale` window is the second guard.
 
 **A Guest reaching a members-only page gets `unauthorized()`, not a redirect** — a redirect to the
@@ -70,9 +69,6 @@ own.
 record gets "You are not allowed to perform this action". Adding a self-editable field means adding
 it there, not only to the collection.
 
-`read` being self-or-admin is the known gap: showing an author's name on a public Note needs it
-widened, which lands with the first surface that displays one (#5 / Notes).
-
 ## Rate limiting
 
 Better Auth limits `/api/auth/*` itself, in production only, and nothing outside it. The `rateLimit`
@@ -84,7 +80,7 @@ Sign-up returns a session immediately — **no email verification**, by decision
 still needs an email adapter, chosen in #1 alongside the UI; until then Payload logs mail to the
 console.
 
-That decision has a consequence worth knowing before #1: Better Auth refuses to link a social
+Better Auth refuses to link a social
 account to a local row whose `emailVerified` is false (`requireLocalEmailVerified`), so
 password-then-Google on one address errors rather than merging. The gate stays on — relaxing it is
 the pre-registration takeover ADR-0009 describes.
@@ -112,14 +108,13 @@ which is a device preference and also words the sign-out screen. A Theme changed
 or in Payload's admin, reaches this one at its next session write.
 
 Both cookies are readable by JavaScript by design: the scope during `OptimisticScope`'s first
-render, the Theme by the toggle in #78, which owes a write to `user.theme` and the cookie together.
+render, the Theme by the toggle (`docs/features/theme-toggle.md`), which writes `user.theme` and
+the cookie together.
 
 ## Where it is checked
 
 `/payload-security-review [range]` on demand, and automatically as the `payload` axis in section 5
-of `/verify-branch`. That axis is earned by a diff touching a collection, `payload.config.ts`,
-`proxy.ts`, a route handler, `"use server"`, or a new read of User input — a range touching none of
-them skips it.
+of `/verify-branch`.
 
 ## Gotchas
 
@@ -131,8 +126,7 @@ them skips it.
 - **`BETTER_AUTH_SECRET` is a hard error in production**, not a warning, and rotating it signs
   every live session out.
 - **`withInviteExpiry` keeps a database with no admin able to make one** — without it `/cms` answers
-  400 on a fresh database. Only ever reached before the first admin exists, which is why local work
-  never sees it.
+  400 on a fresh database.
 - `yarn install` prints unmet-peer warnings from `@better-auth/*`; they declare runtime
   dependencies as peers, everything resolves, and adding them to `package.json` would be a lie.
 - **`/cms/signup` answers only to an invite token** from the `admin-invitations` collection, which

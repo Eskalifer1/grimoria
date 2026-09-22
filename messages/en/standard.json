@@ -95,6 +95,13 @@
     "nameLabel": "Display name",
     "title": "My profile"
   },
+  "themeToggle": {
+    "label": "Theme",
+    "option": {
+      "darkFantasy": "Dark fantasy",
+      "standard": "Standard"
+    }
+  },
   "toast": {
     "created": "Created.",
     "dismiss": "Dismiss",

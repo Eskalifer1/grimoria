@@ -9,6 +9,9 @@ const FRONTEND_ROOT = 'src/app/(frontend)/';
 /** The one segment the visible URL never shows, so only the proxy may write one. */
 const THEME_SEGMENT_WRITERS = ['src/proxy.ts'];
 
+/** Who may name the Theme cookie outside `constants/` and `auth/`: the action that writes it (#78) and the proxy that reads it. */
+const THEME_COOKIE_NAMERS = ['src/api/user/setTheme/index.ts', 'src/proxy.ts'];
+
 /**
  * The one page that inherits the root's metadata rather than naming its own:
  * the catch-all, because Next drops a page's metadata when it throws
@@ -84,6 +87,6 @@ describe('the reads that would opt a page out of static rendering', () => {
       .filter((absolutePath) => readSource(absolutePath).includes('THEME_COOKIE_NAME'))
       .map(toRepoPath);
 
-    expect(offenders).toEqual(THEME_SEGMENT_WRITERS);
+    expect(offenders).toEqual(THEME_COOKIE_NAMERS);
   });
 });

@@ -1,3 +1,5 @@
+import { BROWSER_COOKIE_OPTIONS } from '@/constants/cookies';
+
 /**
  * The Themes that exist. Everything else about a Theme derives from this list:
  * the `Theme` type, the User field's options, the copy catalogs under
@@ -30,6 +32,24 @@ const THEME_COOKIE_NAME = 'theme';
 const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 /**
+ * How the Theme cookie is written, wherever it is written — sign-in
+ * (`src/auth/sessionCookies.ts`) and the toggle (`src/api/user/setTheme/`) spell
+ * it once here so the proxy always reads one shape. Readable by the browser on
+ * purpose: the toggle reads it back during the first render.
+ */
+const THEME_COOKIE_OPTIONS = {
+  ...BROWSER_COOKIE_OPTIONS,
+  maxAge: THEME_COOKIE_MAX_AGE,
+} as const;
+
+/**
+ * The optimistic store key the Theme toggle writes under. Device-level rather
+ * than a record tag: a Guest has no record, and the cookie — not the profile —
+ * is what renders, so a User and a Guest overlay the same entry.
+ */
+const THEME_OPTIMISTIC_KEY = 'device:theme';
+
+/**
  * Each Theme's `--surface-page`, as the browser chrome's `theme-color` and the
  * manifest's background. A hex, not a `var()`: a `<meta>` cannot read CSS, so a
  * token change in `src/styles/` is mirrored here by hand.
@@ -40,4 +60,13 @@ const THEME_COLOR: Record<Theme, string> = {
 };
 
 export type { Theme };
-export { DEFAULT_THEME, THEME, THEME_COLOR, THEME_COOKIE_MAX_AGE, THEME_COOKIE_NAME, THEMES };
+export {
+  DEFAULT_THEME,
+  THEME,
+  THEME_COLOR,
+  THEME_COOKIE_MAX_AGE,
+  THEME_COOKIE_NAME,
+  THEME_COOKIE_OPTIONS,
+  THEME_OPTIMISTIC_KEY,
+  THEMES,
+};

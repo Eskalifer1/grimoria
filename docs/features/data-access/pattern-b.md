@@ -53,8 +53,7 @@ leaf that only displays.
 on the keystroke, because the key is the record and not the form. Which leaf it is follows who owns
 the failure: `<OptimisticField>` where the leaf is the record's only surface — a list row, a value
 with no form beside it — so it must draw "refused" and its dismissal itself; `<OptimisticText>`
-where a form already does. It still dims while a write is out and strikes through while a delete
-is — the state of the record shows wherever the record does. `<OptimisticText>` takes the key from
+where a form already does. `<OptimisticText>` takes the key from
 `recordTag(...)`, the field, the server's value and its `updatedAt` — strings all, so a Server
 Component renders it in place of the value (`ProfileStatus` in `src/views/ProfilePage/`).
 `<OptimisticField>` takes a descriptor, which holds functions, so it sits in a client leaf.
@@ -67,8 +66,7 @@ it when the two share an attempt; another field's unsaved value never does.
 **A toggle, a switch, a Theme picker takes `onFailure: 'rollback'`.** The field goes back to the
 server's value and the reason still shows. A switch has nowhere to hold a value the server refused,
 so the default leaves the message explaining a state the User can see is not true.
-`tests/shared/hooks/useOptimisticValue.test.tsx` — "hands the field back to the server and says
-why" — is the shape, until the Theme toggle lands.
+`ThemeToggle` (`docs/features/theme-toggle.md`) is the reference surface.
 
 ## A record
 
@@ -165,7 +163,7 @@ is the record's cache tag, spelled in one file (`recordTag` in `src/constants/ca
 
 **`<OptimisticScope>` is mounted once, in the locale layout**, above everything and before it in the
 JSX. One `localStorage` slot serves the whole browser, so a screen mounting its own would render one
-User's unsaved work to the next on a shared machine. No page mounts its own.
+User's unsaved work to the next on a shared machine.
 
 A descriptor's input is what the key is built from, and it may be **wider than the action's own**:
 `updateName` takes a name and no id, but the key needs a User to point at. The descriptor is
@@ -185,12 +183,10 @@ failure lands, is `docs/features/forms.md`.
 `<SyncProgressBar>` is the one indicator that speaks for the whole store rather than for a key:
 `useIsSyncing` asks `hasPendingEntry` of the snapshot, behind the same
 `OPTIMISTIC_PENDING_DELAY_MS` threshold every other pending state uses, so a save that answers in
-80 ms draws nothing. Mounted once in the locale layout, at the top of the page until there is a
-header for it to sit under.
+80 ms draws nothing. Mounted once in the locale layout.
 
 **It is `aria-hidden`.** Every surface already announces its own flight through `aria-busy` and its
-status region, and a second voice for the same thing says it twice (`accessibility.md`). The bar is
-the glance version of what is already spoken.
+status region, and a second voice for the same thing says it twice (`accessibility.md`).
 
 **Its presence is the signal, not its movement.** A User who asked for reduced motion gets the bar
 without the sweep — `globals.css` switches `--animate-sync-sweep` and `--animate-sync-trail` off by
@@ -199,7 +195,7 @@ name rather than collapsing their duration, which would strobe.
 ## Where it is used
 
 `src/views/ProfilePage/ProfileNameForm/` is the reference, and the file every later form is copied
-from. Sign-in and sign-up (#1) come next. A name has no uniqueness rule and no server-side
+from. A name has no uniqueness rule and no server-side
 transformation — **the day one appears, the form moves to pattern C.**
 
 What proves the list and record hooks is `tests/shared/hooks/*.test.tsx`, running against the notes

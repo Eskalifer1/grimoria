@@ -95,6 +95,13 @@
     "nameLabel": "Bound name",
     "title": "My sigil"
   },
+  "themeToggle": {
+    "label": "Theme",
+    "option": {
+      "darkFantasy": "Dark fantasy",
+      "standard": "Standard"
+    }
+  },
   "toast": {
     "created": "Wrought anew.",
     "dismiss": "Banish",
