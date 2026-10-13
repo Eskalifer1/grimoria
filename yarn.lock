@@ -2552,9 +2552,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@payloadcms/graphql@npm:3.87.1":
-  version: 3.87.1
-  resolution: "@payloadcms/graphql@npm:3.87.1"
+"@payloadcms/graphql@npm:3.88.0":
+  version: 3.88.0
+  resolution: "@payloadcms/graphql@npm:3.88.0"
   dependencies:
     graphql-scalars: "npm:1.22.2"
     pluralize: "npm:8.0.0"
@@ -2562,23 +2562,23 @@ __metadata:
     tsx: "npm:4.22.4"
   peerDependencies:
     graphql: ^16.8.1
-    payload: 3.87.1
+    payload: 3.88.0
   bin:
     payload-graphql: bin.js
-  checksum: 10c0/682b3c8e45a5bde7224564bc7121812d7b07dca9dba5026479f1ad06f751ff6bafbc966bbf3913757debe8316e019c411e884d4aeef12b0353ecdbdb5237bfd3
+  checksum: 10c0/8a4f5e4de365c38bacf43abfbef638f216c651dd437edc2bfde71998f6f92e9550e11a4335a9c9c245b306b5b25eac4ac73af8f96b495e50ad8a428b3960c140
   languageName: node
   linkType: hard
 
-"@payloadcms/next@npm:3.87.1":
-  version: 3.87.1
-  resolution: "@payloadcms/next@npm:3.87.1"
+"@payloadcms/next@npm:3.88.0":
+  version: 3.88.0
+  resolution: "@payloadcms/next@npm:3.88.0"
   dependencies:
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/modifiers": "npm:9.0.0"
     "@dnd-kit/sortable": "npm:10.0.0"
-    "@payloadcms/graphql": "npm:3.87.1"
-    "@payloadcms/translations": "npm:3.87.1"
-    "@payloadcms/ui": "npm:3.87.1"
+    "@payloadcms/graphql": "npm:3.88.0"
+    "@payloadcms/translations": "npm:3.88.0"
+    "@payloadcms/ui": "npm:3.88.0"
     busboy: "npm:^1.6.0"
     dequal: "npm:2.0.3"
     file-type: "npm:21.3.4"
@@ -2592,8 +2592,8 @@ __metadata:
   peerDependencies:
     graphql: ^16.8.1
     next: ">=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.6 <17.0.0"
-    payload: 3.87.1
-  checksum: 10c0/e3db5cf50f6ccb8281c0eb0d0940d53a0082b5fe34a66bea5c4fc650f655203f0fb5a85d23531edf2b2b195d81115ff725254d955dfe3777dcbc3a54ef3c836c
+    payload: 3.88.0
+  checksum: 10c0/14953b5e259b76e6659198a69a70b6f48febabd99a6db17fbe9f343b6315242083e2f0c8ce898a44e101a4f98f90f427f0169e92e7ebaa8afde985e490147dcb
   languageName: node
   linkType: hard
 
@@ -2603,6 +2603,15 @@ __metadata:
   dependencies:
     date-fns: "npm:4.1.0"
   checksum: 10c0/cea09c9b35d5d12cff62bce662406acc390e6a7a8bd263042f91c63ef26c110e51fc72b6d7a77ec74faa61c8de404c7be97aa623d44c7cb552f15cda0312ea65
+  languageName: node
+  linkType: hard
+
+"@payloadcms/translations@npm:3.88.0":
+  version: 3.88.0
+  resolution: "@payloadcms/translations@npm:3.88.0"
+  dependencies:
+    date-fns: "npm:4.1.0"
+  checksum: 10c0/c71f3e22edccae8631c6ddd1fc10559957d149e3be1e326d521c54ed38704fa2fea03a60cb3cfcaaba24b13facc5d789f9cd67b393072c3d1580a6b6a601f60d
   languageName: node
   linkType: hard
 
@@ -2639,6 +2648,42 @@ __metadata:
     react: ^19.0.1 || ^19.1.2 || ^19.2.1
     react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
   checksum: 10c0/1aae6bf194d6e0adfea8d92570ef9af1ffc255841f1a8cbb0e64b27351f8554b64b4e9b48d0baa0a7c0cad3a25ff10f8f0e420276d76ac9f70b9a169a94cb7dc
+  languageName: node
+  linkType: hard
+
+"@payloadcms/ui@npm:3.88.0":
+  version: 3.88.0
+  resolution: "@payloadcms/ui@npm:3.88.0"
+  dependencies:
+    "@date-fns/tz": "npm:1.2.0"
+    "@dnd-kit/core": "npm:6.3.1"
+    "@dnd-kit/sortable": "npm:10.0.0"
+    "@dnd-kit/utilities": "npm:3.2.2"
+    "@faceless-ui/modal": "npm:3.0.0"
+    "@faceless-ui/scroll-info": "npm:2.0.0"
+    "@faceless-ui/window-info": "npm:3.0.1"
+    "@monaco-editor/react": "npm:4.7.0"
+    "@payloadcms/translations": "npm:3.88.0"
+    bson-objectid: "npm:2.0.4"
+    date-fns: "npm:4.1.0"
+    dequal: "npm:2.0.3"
+    md5: "npm:2.3.0"
+    object-to-formdata: "npm:4.5.1"
+    qs-esm: "npm:8.0.1"
+    react-datepicker: "npm:7.6.0"
+    react-image-crop: "npm:10.1.8"
+    react-select: "npm:5.9.0"
+    scheduler: "npm:0.25.0"
+    sonner: "npm:^1.7.2"
+    ts-essentials: "npm:10.0.3"
+    use-context-selector: "npm:2.0.0"
+    uuid: "npm:13.0.2"
+  peerDependencies:
+    next: ">=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.6 <17.0.0"
+    payload: 3.88.0
+    react: ^19.0.1 || ^19.1.2 || ^19.2.1
+    react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
+  checksum: 10c0/7b46208481958c6a8589b074a8195ac835b78e295ff835ebc2a12fb0aae66f77e9d6acb3cae3e08a00bb5412abf680ed43854310beb639ec4adfe6b236aae55b
   languageName: node
   linkType: hard
 
@@ -6548,7 +6593,7 @@ __metadata:
     "@better-auth/passkey": "npm:^1.6.26"
     "@biomejs/biome": "npm:2.5.6"
     "@payloadcms/db-postgres": "npm:3.87.1"
-    "@payloadcms/next": "npm:3.87.1"
+    "@payloadcms/next": "npm:3.88.0"
     "@payloadcms/ui": "npm:3.87.1"
     "@tailwindcss/postcss": "npm:^4.3.3"
     "@testing-library/dom": "npm:^10.4.1"

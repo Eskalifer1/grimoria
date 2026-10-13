@@ -29,7 +29,7 @@
   "dependencies": {
     "@better-auth/passkey": "^1.6.26",
     "@payloadcms/db-postgres": "3.87.1",
-    "@payloadcms/next": "3.87.1",
+    "@payloadcms/next": "3.88.0",
     "@payloadcms/ui": "3.87.1",
     "better-auth": "^1.6.26",
     "class-variance-authority": "^0.7.1",
