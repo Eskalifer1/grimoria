@@ -2606,6 +2606,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@payloadcms/translations@npm:3.90.0":
+  version: 3.90.0
+  resolution: "@payloadcms/translations@npm:3.90.0"
+  dependencies:
+    date-fns: "npm:4.1.0"
+  checksum: 10c0/93054bf680f6bdf5a5aa8f779084215bda3f4a77aba45f17ada8a3f2cae4a4d16c27527bf33ecaced3c1b70b41026897629ce880ca2fe543b7182e5afe2eba23
+  languageName: node
+  linkType: hard
+
 "@payloadcms/ui@npm:3.87.1":
   version: 3.87.1
   resolution: "@payloadcms/ui@npm:3.87.1"
@@ -6566,7 +6575,7 @@ __metadata:
     jsdom: "npm:^30.0.1"
     next: "npm:16.2.12"
     next-intl: "npm:^4.13.4"
-    payload: "npm:3.87.1"
+    payload: "npm:3.90.0"
     payload-auth: "npm:3.0.0"
     radix-ui: "npm:^1.6.7"
     react: "npm:19.2.8"
@@ -7578,12 +7587,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"payload@npm:3.87.1":
-  version: 3.87.1
-  resolution: "payload@npm:3.87.1"
+"payload@npm:3.90.0":
+  version: 3.90.0
+  resolution: "payload@npm:3.90.0"
   dependencies:
     "@next/env": "npm:^15.1.5"
-    "@payloadcms/translations": "npm:3.87.1"
+    "@payloadcms/translations": "npm:3.90.0"
     "@types/busboy": "npm:1.5.4"
     ajv: "npm:8.18.0"
     bson-objectid: "npm:2.0.4"
@@ -7608,6 +7617,7 @@ __metadata:
     qs-esm: "npm:8.0.1"
     range-parser: "npm:1.2.1"
     sanitize-filename: "npm:1.6.3"
+    sax: "npm:1.6.1"
     ts-essentials: "npm:10.0.3"
     tsx: "npm:4.22.4"
     undici: "npm:7.29.0"
@@ -7617,7 +7627,7 @@ __metadata:
     graphql: ^16.8.1
   bin:
     payload: bin.js
-  checksum: 10c0/4b0560e62c253538c2fac4a719866f30e18657fc6913cef0bd738af8952a7fa07b9b09367aaef06819d1f1b4dc411b99e42c1a586d74b30017e41b72797ae2f7
+  checksum: 10c0/0a49f674743a5258e99410f7bd35eb712bfc3cf1f8b6b09253489e55f1bba2ae4f2bdf63c86e9923d261ca3373a23b87180119da21a9561f4b49027bed4d9e8c
   languageName: node
   linkType: hard
 
@@ -8358,6 +8368,13 @@ __metadata:
   bin:
     sass: sass.js
   checksum: 10c0/b9cb4882bded282aabe38d011adfce375e1f282184fcf93dc3da5d5be834c6aa53c474c15634c351ef7bd85146cfd1cc81343654cc3bcf000d78e856da4225ef
+  languageName: node
+  linkType: hard
+
+"sax@npm:1.6.1":
+  version: 1.6.1
+  resolution: "sax@npm:1.6.1"
+  checksum: 10c0/c91a71043d60da50fdf1e2cee936fc7ad4c9376afb8d1022aef5655f279433640859ec06b3b49abfcbe578fc7da2828cc1661e45aaedf835f5393496193437fa
   languageName: node
   linkType: hard
 
